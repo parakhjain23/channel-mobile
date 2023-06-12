@@ -1,27 +1,22 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {
   Image,
   Modal,
   Text,
   TouchableOpacity,
-  Vibration,
   View,
   useWindowDimensions,
 } from 'react-native';
-import {GestureHandlerRootView, Swipeable} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Linking} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import {makeStyles} from '../ChatCardStyles';
-import {ms, s} from 'react-native-size-matters';
+import {ms} from 'react-native-size-matters';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import Clipboard from '@react-native-community/clipboard';
 import HTMLView from 'react-native-htmlview';
 import {RenderHTML} from 'react-native-render-html';
-import * as RootNavigation from '../../../navigation/RootNavigation';
 import {tagsStyles} from '../HtmlStyles';
-import WebView from 'react-native-webview';
 import {formatTime} from '../../../utils/FormatTime';
 import AudioRecordingPlayer from '../../../components/AudioRecorderPlayer';
 
@@ -30,17 +25,13 @@ const ActionMessageCard = ({
   userInfoState,
   orgState,
   chatState,
-  searchUserProfileAction,
   index,
-  setShowActions,
-  setCurrentSelectedChatCard,
 }) => {
   const {colors, dark} = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
-  const [optionsVisible, setOptionsVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const swipeableRef = useRef(null);
   const {width} = useWindowDimensions();
+
   const sameSender =
     typeof chat?.sameSender === 'string'
       ? chat.sameSender === 'true'
@@ -60,13 +51,6 @@ const ActionMessageCard = ({
       return chat?.attachment;
     }
   }, [chat?.attachment]);
-
-  const handleImagePress = useCallback(
-    index => {
-      setSelectedImage(chat?.attachment?.[index]);
-    },
-    [chat?.attachment],
-  );
 
   const handleModalClose = useCallback(() => {
     setSelectedImage(null);
@@ -96,14 +80,6 @@ const ActionMessageCard = ({
     : colors.recivedLinkColor;
 
   const textColor = sentByMe ? colors.sentByMeTextColor : colors?.textColor;
-
-  const openLink = async url => {
-    if (await InAppBrowser.isAvailable()) {
-      const result = InAppBrowser?.open(url);
-    } else {
-      Linking.openURL(url);
-    }
-  };
 
   const htmlStyles = color => ({
     div: {
