@@ -1,6 +1,7 @@
-package com.channel;
+package walkover.space.chat;
 
 import android.app.Application;
+import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
@@ -8,7 +9,13 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import com.airbnb.android.react.lottie.LottiePackage;
+import com.dooboolab.audiorecorderplayer.RNAudioRecorderPlayerPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import com.reactnativecommunity.slider.ReactSliderPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -24,6 +31,8 @@ public class MainApplication extends Application implements ReactApplication {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
+          packages.add(new ReactSliderPackage());
+          packages.add(new LottiePackage());
           // packages.add(new MyReactNativePackage());
           return packages;
         }

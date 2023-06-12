@@ -661,8 +661,6 @@ PODS:
     - RNSound/Core (= 0.11.2)
   - RNSound/Core (0.11.2):
     - React-Core
-  - RNVectorIcons (9.2.0):
-    - React-Core
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
   - SDWebImage/Core (5.11.1)
@@ -768,7 +766,6 @@ DEPENDENCIES:
   - RNScreens (from `../node_modules/react-native-screens`)
   - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNSound (from `../node_modules/react-native-sound`)
-  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -935,8 +932,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@sentry/react-native"
   RNSound:
     :path: "../node_modules/react-native-sound"
-  RNVectorIcons:
-    :path: "../node_modules/react-native-vector-icons"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -1034,7 +1029,6 @@ SPEC CHECKSUMS:
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
   RNSentry: 4fb2cd7d2d6cb94423c24884488206ef881da136
   RNSound: 6c156f925295bdc83e8e422e7d8b38d33bc71852
-  RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   Sentry: 11776f6a25a128808d793d0d41bb7ad873b5ae4f
@@ -1043,6 +1037,6 @@ SPEC CHECKSUMS:
   Yoga: e7ea9e590e27460d28911403b894722354d73479
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 7c40fecec42ef341bbf797fbe2bd2208dd00b24a
+PODFILE CHECKSUM: 2e86c682468b4b438ee6a9a275a3c002f3931d03
 
 COCOAPODS: 1.12.0

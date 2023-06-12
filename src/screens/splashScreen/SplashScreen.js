@@ -27,7 +27,7 @@ const SplashScreenComponent = ({
     checkForApiUpdate();
     networkState?.isInternetConnected && fetchChatResetAction();
     setTimeout(() => {
-      // SplashScreen.hide();
+      SplashScreen.hide();
       setShowSplashScreen(false);
     }, 200);
   }, []);

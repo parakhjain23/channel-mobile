@@ -13,7 +13,7 @@ import { Text } from 'react-native';
 const App = () => {
   useEffect(() => {
     // SplashScreen.hide();
-    // Request();
+    Request();
   }, []);
 
   return (

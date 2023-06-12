@@ -40,6 +40,7 @@ const LoginScreen = ({getSpaceTokenStartAction, setSigningMethodAction}) => {
       );
       try {
         auth().onAuthStateChanged(data => {
+          console.log(data);
           if (data) {
             data.getIdToken()?.then(token => {
               getSpaceTokenStartAction(token);
@@ -62,7 +63,7 @@ const LoginScreen = ({getSpaceTokenStartAction, setSigningMethodAction}) => {
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         alert('Play Services Not Available or Outdated');
       } else {
-        // console.log(error);
+        console.log(error, 'google');
         alert(error.message);
       }
     }
@@ -103,7 +104,7 @@ const LoginScreen = ({getSpaceTokenStartAction, setSigningMethodAction}) => {
           console.warn('INSIDE ELSE PART ');
         }
       } catch (error) {
-        console.warn(error);
+        console.log(error);
       }
     }
   }
