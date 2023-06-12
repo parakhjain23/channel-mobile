@@ -10,17 +10,27 @@ import {subscribeToNotifications} from '../redux/actions/socket/socketActions';
 import {store} from '../redux/Store';
 import {handleNotificationFirebase} from './HandleNotification';
 import * as RootNavigation from '../navigation/RootNavigation';
-import {getChatsReset, sendMessageStart} from '../redux/actions/chat/ChatActions';
+import {
+  getChatsReset,
+  sendMessageStart,
+} from '../redux/actions/chat/ChatActions';
 import {Alert, Platform} from 'react-native';
 import {switchOrgStart} from '../redux/actions/org/changeCurrentOrg';
 import {
   increaseCountOnOrgCard,
   removeCountOnOrgCard,
 } from '../redux/actions/org/UnreadCountOnOrgCardsAction';
-import {moveChannelToTop, resetUnreadCountStart} from '../redux/actions/channels/ChannelsAction';
+import {
+  moveChannelToTop,
+  resetUnreadCountStart,
+} from '../redux/actions/channels/ChannelsAction';
 import {connect} from 'react-redux';
 
-const NotificationSetup = ({userInfoState,resetUnreadCountAction,resetChatsAction}) => {
+const NotificationSetup = ({
+  userInfoState,
+  resetUnreadCountAction,
+  resetChatsAction,
+}) => {
   useEffect(() => {
     if (store.getState()?.userInfoReducer?.accessToken) {
       setNotificationListeners();
@@ -170,7 +180,12 @@ const NotificationSetup = ({userInfoState,resetUnreadCountAction,resetChatsActio
     }
     switch (event?.detail?.pressAction?.id) {
       case 'mark_as_read':
-        resetUnreadCountAction(event?.detail?.notification?.data?.orgId,userInfoState?.user?.id,event?.detail?.notification?.data?.teamId,userInfoState?.user?.accessToken)
+        resetUnreadCountAction(
+          event?.detail?.notification?.data?.orgId,
+          userInfoState?.user?.id,
+          event?.detail?.notification?.data?.teamId,
+          userInfoState?.user?.accessToken,
+        );
         Notifee.cancelNotification(event?.detail?.notification?.id);
         break;
       case 'reply':
@@ -212,7 +227,7 @@ const NotificationSetup = ({userInfoState,resetUnreadCountAction,resetChatsActio
         );
         await store.dispatch(removeCountOnOrgCard(message?.data?.orgId));
       }
-      resetChatsAction()
+      resetChatsAction();
       var teamId = message?.data?.teamId;
       var name = null;
       store.getState()?.channelsReducer?.teamIdAndTypeMapping[teamId] ==
@@ -241,10 +256,27 @@ const NotificationSetup = ({userInfoState,resetUnreadCountAction,resetChatsActio
 const mapStateToProps = state => ({
   userInfoState: state?.userInfoReducer,
 });
-const mapDispatchToProps = dispatch =>{
+const mapDispatchToProps = dispatch => {
   return {
-    resetUnreadCountAction : (currentOrgId, userId, teamId, accessToken,badgeCount,unreadCount) => dispatch(resetUnreadCountStart(currentOrgId, userId, teamId, accessToken,badgeCount,unreadCount)),
+    resetUnreadCountAction: (
+      currentOrgId,
+      userId,
+      teamId,
+      accessToken,
+      badgeCount,
+      unreadCount,
+    ) =>
+      dispatch(
+        resetUnreadCountStart(
+          currentOrgId,
+          userId,
+          teamId,
+          accessToken,
+          badgeCount,
+          unreadCount,
+        ),
+      ),
     resetChatsAction: () => dispatch(getChatsReset()),
-  }
-}
-export default connect(mapStateToProps,mapDispatchToProps)(NotificationSetup);
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationSetup);

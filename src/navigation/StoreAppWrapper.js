@@ -1,7 +1,5 @@
-import NetInfo from '@react-native-community/netinfo';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {networkStatus} from '../redux/actions/network/NetworkActions';
 import {initializeSocket} from '../redux/actions/socket/socketActions';
 import SplashScreenComponent from '../screens/splashScreen/SplashScreen';
 import AuthNavigation from './AuthNavigation';
