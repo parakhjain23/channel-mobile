@@ -11,6 +11,7 @@ const StoreAppWrapper = () => {
   const userInfoState = useSelector(state => state.userInfoReducer);
   const orgsState = useSelector(state => state.orgsReducer);
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (userInfoState?.accessToken) {
       dispatch(

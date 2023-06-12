@@ -8,11 +8,10 @@ import Notifee from '@notifee/react-native';
 import NotificationSetup from './src/utils/NotificationSetup';
 import InternetConnection from './src/utils/InternetConnection';
 import SplashScreen from 'react-native-splash-screen';
-import { Text } from 'react-native';
 
 const App = () => {
   useEffect(() => {
-    // SplashScreen.hide();
+    SplashScreen.hide();
     Request();
   }, []);
 
@@ -24,7 +23,6 @@ const App = () => {
         <StoreAppWrapper />
       </PersistGate>
     </Provider>
-      // <Text style={{color: 'red'}}>hello</Text>
   );
 };
 export default App;
