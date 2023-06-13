@@ -40,7 +40,6 @@ const LoginScreen = ({getSpaceTokenStartAction, setSigningMethodAction}) => {
       );
       try {
         auth().onAuthStateChanged(data => {
-          console.log(data);
           if (data) {
             data.getIdToken()?.then(token => {
               getSpaceTokenStartAction(token);

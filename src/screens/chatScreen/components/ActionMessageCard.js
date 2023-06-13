@@ -19,6 +19,9 @@ import {RenderHTML} from 'react-native-render-html';
 import {tagsStyles} from '../HtmlStyles';
 import {formatTime} from '../../../utils/FormatTime';
 import AudioRecordingPlayer from '../../../components/AudioRecorderPlayer';
+import {reactionOnChatStart} from '../../../redux/actions/chat/ReactionsActions';
+import {connect} from 'react-redux';
+import EmojiPicker from 'rn-emoji-keyboard';
 
 const ActionMessageCard = ({
   chat,
@@ -26,12 +29,14 @@ const ActionMessageCard = ({
   orgState,
   chatState,
   index,
+  reactionAction,
+  setShowActions,
 }) => {
   const {colors, dark} = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const [selectedImage, setSelectedImage] = useState(null);
   const {width} = useWindowDimensions();
-
+  const [emojiModel, setemojiModel] = useState(false);
   const sameSender =
     typeof chat?.sameSender === 'string'
       ? chat.sameSender === 'true'
@@ -106,18 +111,89 @@ const ActionMessageCard = ({
     }
   }
   const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
-
+  let emojiArr = [
+    {reaction_icon: '😄', reaction_name: 'grinning face with smiling eyes'},
+    {reaction_icon: '😂', reaction_name: 'face with tears of joy'},
+    {reaction_icon: '👍', reaction_name: 'thumbs up'},
+    {reaction_icon: '✌️', reaction_name: 'victory hand'},
+    {reaction_icon: '✋', reaction_name: 'raised hand'},
+    {reaction_icon: '👏', reaction_name: 'clapping hands'},
+    {reaction_icon: '🤝', reaction_name: 'handshake'},
+  ];
   if (!isActivity) {
     return (
       <TouchableOpacity activeOpacity={0.6}>
+        <View
+          style={{
+            height: 50,
+            width: '50%',
+            paddingVertical: 2,
+            paddingHorizontal: 5,
+            backgroundColor: 'white',
+            borderRadius: 24,
+            // marginBottom: 5,
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          {emojiArr.map((obj, index) => (
+            <TouchableOpacity
+              onPress={() => {
+                const reactionExists = chat?.reactions.some(
+                  reaction => reaction.reaction_icon === obj.reaction_icon,
+                );
+
+                const actionType = reactionExists ? 'remove' : 'add';
+                reactionAction(
+                  userInfoState?.accessToken,
+                  chat?.teamId,
+                  chat?._id,
+                  obj?.reaction_icon,
+                  obj.reaction_name,
+                  [],
+                  actionType,
+                  userInfoState?.user?.id,
+                ) && setShowActions(false);
+              }}
+              key={index}>
+              <Text style={{fontSize: 30, color: '#ffffff', marginRight: 7}}>
+                {obj.reaction_icon}
+              </Text>
+            </TouchableOpacity>
+          ))}
+
+          <TouchableOpacity
+            onPress={() => setemojiModel(!emojiModel)}
+            style={{marginLeft: -8}}>
+            <Text style={{color: 'gray', fontSize: 30, bottom: -1}}>
+              {'  ...'}
+            </Text>
+          </TouchableOpacity>
+          <EmojiPicker
+            onEmojiSelected={e =>
+              reactionAction(
+                userInfoState?.accessToken,
+                chat?.teamId,
+                chat?._id,
+                e.emoji,
+                e.name,
+                [],
+                'add',
+                userInfoState?.user?.id,
+              ) && setShowActions(false)
+            }
+            open={emojiModel}
+            onClose={() => setemojiModel(false)}
+          />
+        </View>
         <View
           style={[
             styles.container,
             sentByMe ? styles.sentByMe : styles.received,
             {
               backgroundColor: containerBackgroundColor,
-              marginTop: sameSender ? ms(0) : ms(10),
+              marginTop: 5,
               marginBottom: index == 0 ? 10 : 3,
+              alignSelf: 'center',
             },
           ]}>
           <View style={[styles.textContainer, {padding: 10}]}>
@@ -322,4 +398,32 @@ const ActionMessageCard = ({
     );
   }
 };
-export const ActionMessageCardMemo = React.memo(ActionMessageCard);
+const mapDispatchToProps = dispatch => {
+  return {
+    reactionAction: (
+      token,
+      teamId,
+      messageId,
+      reaction_icon,
+      reaction_name,
+      userIds,
+      actionTye,
+      userId,
+    ) =>
+      dispatch(
+        reactionOnChatStart(
+          token,
+          teamId,
+          messageId,
+          reaction_icon,
+          reaction_name,
+          userIds,
+          actionTye,
+          userId,
+        ),
+      ),
+  };
+};
+export const ActionMessageCardMemo = React.memo(
+  connect(null, mapDispatchToProps)(ActionMessageCard),
+);

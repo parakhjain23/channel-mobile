@@ -34,6 +34,7 @@ import {connect, useSelector} from 'react-redux';
 import {setActiveChannelTeamId} from '../../redux/actions/channels/SetActiveChannelId';
 import {formatTime} from '../../utils/FormatTime';
 import FastImage from 'react-native-fast-image';
+import {reactionOnChatStart} from '../../redux/actions/chat/ReactionsActions';
 
 const AddRemoveJoinedMsg = React.memo(({senderName, content, orgState}) => {
   const {colors} = useTheme();
@@ -66,6 +67,7 @@ const ChatCard = ({
   setCurrentSelectedChatCard,
   setChatDetailsForTab,
   setActiveChannelTeamIdAction,
+  reactionAction,
 }) => {
   const deviceType = useSelector(state => state.appInfoReducer.deviceType);
   const {colors, dark} = useTheme();
@@ -75,7 +77,6 @@ const ChatCard = ({
   const swipeableRef = useRef(null);
   const {width} = useWindowDimensions();
   const [showMore, setShoreMore] = useState(false);
-
   const sameSender =
     typeof chat?.sameSender === 'string'
       ? chat.sameSender === 'true'
@@ -259,7 +260,6 @@ const ChatCard = ({
     }
   }
   const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
-
   if (!isActivity) {
     return (
       <GestureHandlerRootView>
@@ -611,6 +611,79 @@ const ChatCard = ({
                   </View>
                 </View>
               </View>
+              {chat?.reactions?.length > 0 && (
+                <View
+                  style={{
+                    alignSelf: sentByMe ? 'flex-end' : 'flex-start',
+                    backgroundColor: '#353535',
+                    paddingHorizontal: 3,
+                    bottom: 1,
+                    borderWidth: 1,
+                    // borderColor: sentByMe ? 'gray' : 'gray',
+                    borderRadius: 10,
+                    flexDirection: 'row',
+                  }}>
+                  {chat?.reactions?.map((reaction, index) => (
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: 'row',
+                        marginHorizontal: 3,
+                        alignItems: 'center',
+                        borderWidth: reaction.users.length > 1 ? 0.6 : 0,
+                        borderRadius: reaction.users.length > 1 ? 40 : 0,
+                      }}
+                      key={index}
+                      onPress={() => {
+                        if (
+                          reaction?.users?.includes(userInfoState?.user?.id)
+                        ) {
+                          reactionAction(
+                            userInfoState?.accessToken,
+                            chat?.teamId,
+                            chat?._id,
+                            reaction.reaction_icon,
+                            reaction.reaction_name,
+                            reaction?.users.filter(
+                              userId => userId !== userInfoState?.user?.id,
+                            ),
+                            'remove',
+                            userInfoState?.user?.id,
+                          );
+                        } else {
+                          reactionAction(
+                            userInfoState?.accessToken,
+                            chat?.teamId,
+                            chat?._id,
+                            reaction.reaction_icon,
+                            reaction.reaction_name,
+                            reaction?.users.filter(
+                              userId => userId !== userInfoState?.user?.id,
+                            ),
+                            'add',
+                            userInfoState?.user?.id,
+                          );
+                        }
+                      }}>
+                      <Text
+                        style={{color: '#ffffff', fontSize: 16}}
+                        key={index}>
+                        {reaction.reaction_icon}
+                      </Text>
+                      {reaction.users.length > 1 && (
+                        <Text
+                          style={{
+                            color: '#E5E4E2',
+                            fontSize: 12,
+                            fontWeight: '700',
+                          }}>
+                          {' '}
+                          {reaction.users.length}
+                        </Text>
+                      )}
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
             </Swipeable>
           </TouchableOpacity>
         </View>
@@ -644,6 +717,28 @@ const mapDispatchToProps = dispatch => {
   return {
     setActiveChannelTeamIdAction: teamId =>
       dispatch(setActiveChannelTeamId(teamId)),
+    reactionAction: (
+      token,
+      teamId,
+      messageId,
+      reaction_icon,
+      reaction_name,
+      userIds,
+      actionTye,
+      userId,
+    ) =>
+      dispatch(
+        reactionOnChatStart(
+          token,
+          teamId,
+          messageId,
+          reaction_icon,
+          reaction_name,
+          userIds,
+          actionTye,
+          userId,
+        ),
+      ),
   };
 };
 export const ChatCardMemo = React.memo(

@@ -71,13 +71,14 @@ const SocketService = socket => {
     if (data?.deleted) {
       store.dispatch(deleteMessageSuccess(data));
     }
-    if (data?.isEdited || data?.attachment[0]?.transcription != undefined) {
-      var newData = data;
-      if (newData?.attachment[0]?.contentType?.includes('audio')) {
-        newData.content = data?.attachment[0]?.transcription;
-      }
-      store.dispatch(messageEditSuccess(newData));
+    var newData = data;
+    if (
+      newData?.attachment[0]?.contentType?.includes('audio') &&
+      data?.attachment[0]?.transcription != undefined
+    ) {
+      newData.content = data?.attachment[0]?.transcription;
     }
+    store.dispatch(messageEditSuccess(newData));
   });
 
   socket.on('chat/team updated', data => {

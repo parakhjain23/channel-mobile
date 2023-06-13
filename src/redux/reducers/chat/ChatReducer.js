@@ -287,6 +287,65 @@ export function chatReducer(state = initialState, action) {
         },
       };
 
+    case Actions.REACTIONS_START:
+      const {
+        teamId,
+        messageId,
+        reaction_icon,
+        reaction_name,
+        userId,
+        actionType,
+      } = action;
+
+      const targetTeam = state?.data[teamId];
+      const targetMessages = targetTeam?.messages;
+      const targetMessageIndex = targetMessages.findIndex(
+        message => message?._id === messageId,
+      );
+
+      if (targetMessageIndex !== -1) {
+        const messageReactionsArr =
+          targetMessages[targetMessageIndex].reactions;
+        if (actionType === 'remove') {
+          const updatedArr = messageReactionsArr?.filter(obj => {
+            if (obj.reaction_icon === reaction_icon) {
+              obj.users = obj.users.filter(id => id !== userId);
+            }
+            return obj.users.length > 0;
+          });
+
+          targetMessages[targetMessageIndex].reactions = updatedArr;
+        } else {
+          if (messageReactionsArr.length == 0) {
+            messageReactionsArr.push({
+              reaction_icon: reaction_icon,
+              reaction_name: reaction_name,
+              users: [],
+            });
+          } else {
+            const existingObject = messageReactionsArr.find(
+              obj => obj.reaction_icon == reaction_icon,
+            );
+            if (!existingObject) {
+              messageReactionsArr.push({
+                reaction_icon: reaction_icon,
+                reaction_name: reaction_name,
+                users: [userId],
+              });
+            }
+          }
+          const updatedArr = messageReactionsArr?.map(obj => {
+            if (obj.reaction_icon === reaction_icon) {
+              !obj.users?.includes(userId) && obj.users.push(userId);
+            }
+            return obj;
+          });
+          targetMessages[targetMessageIndex].reactions = updatedArr;
+        }
+      }
+
+      return {...state};
+
     default:
       return state;
   }
