@@ -12,7 +12,6 @@ const HeaderComponent = ({
   chatHeaderTitle,
   userId,
   channelType,
-  searchUserProfileAction,
   accessToken,
   teamId,
   orgState,
@@ -49,12 +48,11 @@ const HeaderComponent = ({
   };
   const onTitlePress = (chatHeaderTitle, userId, channelType, accessToken) => {
     channelType === 'DIRECT_MESSAGE'
-      ? (RootNavigation.navigate('UserProfiles', {
+      ? RootNavigation.navigate('UserProfiles', {
           displayName: chatHeaderTitle,
           userId: userId,
           setChatDetailsForTab: setChatDetailsForTab,
-        }),
-        searchUserProfileAction(userId, accessToken))
+        })
       : RootNavigation.navigate('ChannelDetails', {
           channelName: chatHeaderTitle,
           teamId: teamId,

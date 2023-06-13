@@ -29,7 +29,6 @@ import {
 import {deleteMessageStart} from '../../redux/actions/chat/DeleteChatAction';
 import {ChatCardMemo} from './ChatCard';
 import {getChannelsByQueryStart} from '../../redux/actions/channels/ChannelsByQueryAction';
-import {fetchSearchedUserProfileStart} from '../../redux/actions/user/searchUserProfileActions';
 import {makeStyles} from './Styles';
 import {
   useNavigation,
@@ -83,7 +82,6 @@ const ChatScreen = ({
   setGlobalMessageToSendAction,
   getChannelsByQueryStartAction,
   channelsByQueryState,
-  searchUserProfileAction,
   setlocalMsgAction,
   resetUnreadCountAction,
   addUsersToChannelAction,
@@ -304,7 +302,6 @@ const ChatScreen = ({
           chatState={chatState}
           setreplyOnMessage={setreplyOnMessage}
           setrepliedMsgDetails={setrepliedMsgDetails}
-          searchUserProfileAction={searchUserProfileAction}
           flatListRef={FlatListRef}
           channelType={channelType}
           index={index}
@@ -450,7 +447,6 @@ const ChatScreen = ({
               chatHeaderTitle={chatHeaderTitle}
               userId={reciverUserId || userId}
               channelType={channelType}
-              searchUserProfileAction={searchUserProfileAction}
               accessToken={accessToken}
               userInfoState={userInfoState}
               teamId={teamId}
@@ -529,7 +525,6 @@ const ChatScreen = ({
                     chatState={chatState}
                     setreplyOnMessage={setreplyOnMessage}
                     setrepliedMsgDetails={setrepliedMsgDetails}
-                    searchUserProfileAction={searchUserProfileAction}
                     flatListRef={FlatListRef}
                     channelType={channelType}
                     setCurrentSelectedChatCard={setCurrentSelectedChatCard}
@@ -938,8 +933,6 @@ const mapDispatchToProps = dispatch => {
       dispatch(setGlobalMessageToSend(messageObj)),
     getChannelsByQueryStartAction: (query, userToken, orgId) =>
       dispatch(getChannelsByQueryStart(query, userToken, orgId)),
-    searchUserProfileAction: (userId, token) =>
-      dispatch(fetchSearchedUserProfileStart(userId, token)),
     resetUnreadCountAction: (
       orgId,
       userId,

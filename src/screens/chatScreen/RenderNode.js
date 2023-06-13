@@ -1,5 +1,5 @@
-import React from 'react'
-import { TouchableOpacity } from 'react-native';
+import React from 'react';
+import {TouchableOpacity} from 'react-native';
 
 export function RenderNode(node, index, siblings, parent, defaultRenderer) {
   if (node.attribs?.class == 'mention') {
@@ -8,15 +8,12 @@ export function RenderNode(node, index, siblings, parent, defaultRenderer) {
       <TouchableOpacity
         onPress={async () => {
           node?.attribs?.['data-id'] != '@all' &&
-            (await searchUserProfileAction(
-              node?.attribs?.['data-id'],
-              userInfoState?.accessToken,
-            )) &&
             RootNavigation.navigate('UserProfiles', {
               displayName:
                 orgState?.userIdAndDisplayNameMapping[
                   node?.attribs?.['data-id']
                 ],
+              userId: node?.attribs?.['data-id'],
             });
         }}>
         <Text style={{color: 'white', textDecorationLine: 'underline'}}>

@@ -58,7 +58,6 @@ const ChatCard = ({
   chatState,
   setreplyOnMessage,
   setrepliedMsgDetails,
-  searchUserProfileAction,
   flatListRef,
   channelType,
   index,
@@ -213,15 +212,12 @@ const ChatCard = ({
           key={index}
           onPress={async () => {
             node?.attribs?.['data-id'] != '@all' &&
-              (await searchUserProfileAction(
-                node?.attribs?.['data-id'],
-                userInfoState?.accessToken,
-              )) &&
               RootNavigation.navigate('UserProfiles', {
                 displayName:
                   orgState?.userIdAndDisplayNameMapping[
                     node?.attribs?.['data-id']
                   ],
+                userId: node?.attribs?.['data-id'],
                 setChatDetailsForTab: setChatDetailsForTab,
               });
           }}>
@@ -297,13 +293,10 @@ const ChatCard = ({
             <TouchableOpacity
               onPress={async () => {
                 chat?.senderId != '0' &&
-                  (await searchUserProfileAction(
-                    chat?.senderId,
-                    userInfoState?.accessToken,
-                  )) &&
                   RootNavigation.navigate('UserProfiles', {
                     displayName:
                       orgState?.userIdAndDisplayNameMapping[chat?.senderId],
+                    userId: chat?.senderId,
                     setChatDetailsForTab: setChatDetailsForTab,
                   });
               }}>

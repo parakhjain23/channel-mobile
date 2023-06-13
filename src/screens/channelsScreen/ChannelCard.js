@@ -12,11 +12,9 @@ import {
   View,
   Button,
   TouchableNativeFeedback,
-  Animated,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {connect} from 'react-redux';
-import {fetchSearchedUserProfileStart} from '../../redux/actions/user/searchUserProfileActions';
 import * as RootNavigation from '../../navigation/RootNavigation';
 import {GestureHandlerRootView, Swipeable} from 'react-native-gesture-handler';
 import {resetUnreadCountStart} from '../../redux/actions/channels/ChannelsAction';
@@ -234,7 +232,6 @@ const SearchChannelCard = ({
   navigation,
   props,
   userInfoState,
-  searchUserProfileAction,
   orgsState,
   getChannelByTeamIdAction,
 }) => {
@@ -387,15 +384,12 @@ const SearchChannelCard = ({
               <Button
                 title="Profile"
                 onPress={async () => {
-                  await searchUserProfileAction(
-                    item?._source?.userId,
-                    userInfoState?.accessToken,
-                  );
                   navigation.navigate('UserProfiles', {
                     displayName:
                       orgsState?.userIdAndDisplayNameMapping[
                         item?._source?.userId
                       ],
+                    userId: item?._source?.userId,
                     setChatDetailsForTab: props?.setChatDetailsForTab,
                   });
                 }}
@@ -476,8 +470,6 @@ const mapDispatchToProps = dispatch => {
   return {
     getChannelByTeamIdAction: (accessToken, teamId, userId) =>
       dispatch(getChannelByTeamIdStart(accessToken, teamId, userId)),
-    searchUserProfileAction: (userId, token) =>
-      dispatch(fetchSearchedUserProfileStart(userId, token)),
     markAsUnreadAction: (
       orgId,
       userId,

@@ -19,6 +19,7 @@ import {createNewDmChannelStart} from '../../redux/actions/channels/CreateNewDmC
 import {Button} from 'react-native';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import signOut from '../../redux/actions/user/userAction';
+import {fetchSearchedUserProfileStart} from '../../redux/actions/user/searchUserProfileActions';
 
 const ContactDetailsPage = ({
   userInfoState,
@@ -28,6 +29,7 @@ const ContactDetailsPage = ({
   orgsState,
   route,
   appInfoState,
+  searchUserProfileAction,
 }) => {
   const {displayName, userId, setChatDetailsForTab} = route?.params;
   const {colors} = useTheme();
@@ -37,6 +39,10 @@ const ContactDetailsPage = ({
       userInfoState?.searchedUserProfile?.id
     ];
   const navigation = useNavigation();
+
+  useEffect(() => {
+    searchUserProfileAction(userId, userInfoState?.accessToken);
+  }, []);
   const handleListItemPress = (
     teamId,
     channelType,
@@ -212,6 +218,8 @@ const mapStateToPros = state => ({
 });
 const mapDispatchToProps = dispatch => {
   return {
+    searchUserProfileAction: (userId, token) =>
+      dispatch(fetchSearchedUserProfileStart(userId, token)),
     createDmChannelAction: (token, orgId, title, reciverUserId) =>
       dispatch(createNewDmChannelStart(token, orgId, title, reciverUserId)),
     signOutAction: () => dispatch(signOut()),
