@@ -124,10 +124,7 @@ const ActionMessageCard = ({
 
   if (!isActivity) {
     return (
-      <TouchableOpacity
-        activeOpacity={0.6}
-        // style={{marginBottom: chat?.reactions?.length > 0 ? 15 : 0}}
-      >
+      <TouchableOpacity activeOpacity={1}>
         <View
           style={{
             height: 50,
@@ -136,7 +133,6 @@ const ActionMessageCard = ({
             paddingHorizontal: 5,
             backgroundColor: 'white',
             borderRadius: 24,
-            // marginBottom: 5,
             flexDirection: 'row',
             alignItems: 'center',
           }}>
@@ -152,7 +148,6 @@ const ActionMessageCard = ({
                     : false;
 
                 const actionType = reactionExists ? 'remove' : 'add';
-                console.log(actionType, 'tihs is action type');
                 reactionAction(
                   userInfoState?.accessToken,
                   chat?.teamId,
@@ -173,9 +168,7 @@ const ActionMessageCard = ({
           <TouchableOpacity
             onPress={() => setemojiModel(!emojiModel)}
             style={{marginLeft: -8}}>
-            <Text style={{color: 'gray', fontSize: 30, bottom: -1}}>
-              {'  ...'}
-            </Text>
+            <Text style={{color: 'gray', fontSize: 30, marginLeft: 5}}>+</Text>
           </TouchableOpacity>
           <EmojiPicker
             onEmojiSelected={e =>
@@ -365,7 +358,7 @@ const ActionMessageCard = ({
               }}>
               {chat?.content?.includes('<span class="mention"') ? (
                 <HTMLView
-                  value={`<div>${chat?.content}</div>`}
+                  value={`<div>${chat?.content?.slice(0, 400)}</div>`}
                   renderNode={renderNode}
                   stylesheet={htmlStyles(textColor)}
                 />
@@ -386,7 +379,7 @@ const ActionMessageCard = ({
             )}
           </View>
           {chat?.reactions?.length > 0 && (
-            <TouchableOpacity
+            <View
               style={{
                 alignSelf: sentByMe ? 'flex-end' : 'flex-start',
                 backgroundColor: '#353535',
@@ -396,37 +389,63 @@ const ActionMessageCard = ({
                 borderWidth: 1,
                 borderRadius: 10,
                 flexDirection: 'row',
-                // marginBottom: 15,
               }}>
               {chat?.reactions?.map((reaction, index) => (
-                <View
+                <TouchableOpacity
                   style={{
                     flexDirection: 'row',
-                    marginHorizontal: 5,
+                    marginHorizontal: 3,
                     alignItems: 'center',
+                  }}
+                  key={index}
+                  onPress={() => {
+                    if (reaction?.users?.includes(userInfoState?.user?.id)) {
+                      reactionAction(
+                        userInfoState?.accessToken,
+                        chat?.teamId,
+                        chat?._id,
+                        reaction.reaction_icon,
+                        reaction.reaction_name,
+                        reaction?.users.filter(
+                          userId => userId !== userInfoState?.user?.id,
+                        ),
+                        'remove',
+                        userInfoState?.user?.id,
+                      );
+                    } else {
+                      reactionAction(
+                        userInfoState?.accessToken,
+                        chat?.teamId,
+                        chat?._id,
+                        reaction.reaction_icon,
+                        reaction.reaction_name,
+                        reaction?.users.filter(
+                          userId => userId !== userInfoState?.user?.id,
+                        ),
+                        'add',
+                        userInfoState?.user?.id,
+                      );
+                    }
                   }}>
-                  {reaction.users.length > 1 && sentByMe && (
-                    <Text style={{color: '#E5E4E2', fontSize: 12}}>
-                      {reaction.users.length}{' '}
-                    </Text>
-                  )}
                   <Text style={{color: '#ffffff', fontSize: 16}} key={index}>
                     {reaction.reaction_icon}
                   </Text>
-                  {reaction.users.length > 1 && !sentByMe && (
+                  {reaction.users.length > 1 && (
                     <Text
                       style={{
                         color: '#E5E4E2',
-                        fontSize: 12,
+                        fontSize: 14,
                         fontWeight: '700',
+                        marginRight: 2,
+                        marginLeft: -3,
                       }}>
                       {' '}
                       {reaction.users.length}
                     </Text>
                   )}
-                </View>
+                </TouchableOpacity>
               ))}
-            </TouchableOpacity>
+            </View>
           )}
         </View>
       </TouchableOpacity>

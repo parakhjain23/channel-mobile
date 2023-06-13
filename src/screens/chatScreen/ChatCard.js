@@ -619,7 +619,6 @@ const ChatCard = ({
                     paddingHorizontal: 3,
                     bottom: 1,
                     borderWidth: 1,
-                    // borderColor: sentByMe ? 'gray' : 'gray',
                     borderRadius: 10,
                     flexDirection: 'row',
                   }}>
@@ -629,8 +628,6 @@ const ChatCard = ({
                         flexDirection: 'row',
                         marginHorizontal: 3,
                         alignItems: 'center',
-                        // borderWidth: reaction.users.length > 1 ? 0.6 : 0,
-                        // borderRadius: reaction.users.length > 1 ? 40 : 0,
                       }}
                       key={index}
                       onPress={() => {
