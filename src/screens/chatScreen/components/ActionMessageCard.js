@@ -120,9 +120,17 @@ const ActionMessageCard = ({
     {reaction_icon: '👏', reaction_name: 'clapping hands'},
     {reaction_icon: '🤝', reaction_name: 'handshake'},
   ];
+
+  const isLimitExceed =
+    parentId == null
+      ? chat?.content?.length > 400
+      : chatState?.data[chat.teamId]?.parentMessages[parentId]?.content > 400;
+
   if (!isActivity) {
     return (
-      <TouchableOpacity activeOpacity={0.6}>
+      <TouchableOpacity
+        activeOpacity={0.6}
+        style={{marginBottom: chat?.reactions?.length > 0 ? 15 : 0}}>
         <View
           style={{
             height: 50,
@@ -160,7 +168,6 @@ const ActionMessageCard = ({
               </Text>
             </TouchableOpacity>
           ))}
-
           <TouchableOpacity
             onPress={() => setemojiModel(!emojiModel)}
             style={{marginLeft: -8}}>
@@ -247,10 +254,9 @@ const ActionMessageCard = ({
                     source={{
                       html: chatState?.data[chat.teamId]?.parentMessages[
                         parentId
-                      ]?.content?.replace(
-                        emailRegex,
-                        '<a href="mailTo:$&">$&</a>',
-                      ),
+                      ]?.content
+                        ?.slice(0, 400)
+                        ?.replace(emailRegex, '<a href="mailTo:$&">$&</a>'),
                     }}
                     contentWidth={width}
                     tagsStyles={{body: {color: 'black'}}}
@@ -365,34 +371,63 @@ const ActionMessageCard = ({
               ) : (
                 <RenderHTML
                   source={{
-                    html: chat?.content?.replace(
-                      emailRegex,
-                      '<a href="mailTo:$&">$&</a>',
-                    ),
+                    html: chat?.content
+                      ?.slice(0, 400)
+                      .replace(emailRegex, '<a href="mailTo:$&">$&</a>'),
                   }}
                   contentWidth={width}
                   tagsStyles={tagsStyles(textColor, linkColor)}
                 />
               )}
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'flex-end',
-                }}>
-                {chat?.randomId != null && (
-                  <View
-                    style={{
-                      flexDirection: 'column',
-                      alignItems: 'flex-end',
-                      width: 20,
-                    }}>
-                    <Icon name="access-time" color={'white'} />
-                  </View>
-                )}
-              </View>
             </View>
+            {isLimitExceed && (
+              <Text style={{color: 'white', fontSize: 20}}>.....</Text>
+            )}
             {/* </View> */}
           </View>
+          {chat?.reactions?.length > 0 && (
+            <TouchableOpacity
+              style={{
+                alignSelf: sentByMe ? 'flex-end' : 'flex-start',
+                backgroundColor: '#353535',
+                paddingHorizontal: 5,
+                paddingVertical: 2,
+                top: 35,
+                borderWidth: 1,
+                borderRadius: 10,
+                flexDirection: 'row',
+                marginBottom: 25,
+              }}>
+              {chat?.reactions?.map((reaction, index) => (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginHorizontal: 5,
+                    alignItems: 'center',
+                  }}>
+                  {reaction.users.length > 1 && sentByMe && (
+                    <Text style={{color: '#E5E4E2', fontSize: 12}}>
+                      {reaction.users.length}{' '}
+                    </Text>
+                  )}
+                  <Text style={{color: '#ffffff', fontSize: 16}} key={index}>
+                    {reaction.reaction_icon}
+                  </Text>
+                  {reaction.users.length > 1 && !sentByMe && (
+                    <Text
+                      style={{
+                        color: '#E5E4E2',
+                        fontSize: 12,
+                        fontWeight: '700',
+                      }}>
+                      {' '}
+                      {reaction.users.length}
+                    </Text>
+                  )}
+                </View>
+              ))}
+            </TouchableOpacity>
+          )}
         </View>
       </TouchableOpacity>
     );

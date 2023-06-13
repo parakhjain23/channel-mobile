@@ -629,8 +629,8 @@ const ChatCard = ({
                         flexDirection: 'row',
                         marginHorizontal: 3,
                         alignItems: 'center',
-                        borderWidth: reaction.users.length > 1 ? 0.6 : 0,
-                        borderRadius: reaction.users.length > 1 ? 40 : 0,
+                        // borderWidth: reaction.users.length > 1 ? 0.6 : 0,
+                        // borderRadius: reaction.users.length > 1 ? 40 : 0,
                       }}
                       key={index}
                       onPress={() => {
@@ -673,8 +673,10 @@ const ChatCard = ({
                         <Text
                           style={{
                             color: '#E5E4E2',
-                            fontSize: 12,
+                            fontSize: 14,
                             fontWeight: '700',
+                            marginRight: 2,
+                            marginLeft: -3,
                           }}>
                           {' '}
                           {reaction.users.length}
