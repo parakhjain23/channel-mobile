@@ -37,10 +37,6 @@ const ActionMessageCard = ({
   const [selectedImage, setSelectedImage] = useState(null);
   const {width} = useWindowDimensions();
   const [emojiModel, setemojiModel] = useState(false);
-  const sameSender =
-    typeof chat?.sameSender === 'string'
-      ? chat.sameSender === 'true'
-      : chat?.sameSender;
   const isSameDate =
     typeof chat?.isSameDate === 'string'
       ? chat.isSameDate === 'true'
@@ -130,7 +126,8 @@ const ActionMessageCard = ({
     return (
       <TouchableOpacity
         activeOpacity={0.6}
-        style={{marginBottom: chat?.reactions?.length > 0 ? 15 : 0}}>
+        // style={{marginBottom: chat?.reactions?.length > 0 ? 15 : 0}}
+      >
         <View
           style={{
             height: 50,
@@ -146,11 +143,16 @@ const ActionMessageCard = ({
           {emojiArr.map((obj, index) => (
             <TouchableOpacity
               onPress={() => {
-                const reactionExists = chat?.reactions.some(
-                  reaction => reaction.reaction_icon === obj.reaction_icon,
-                );
+                const reactionExists =
+                  chat?.reactions?.length > 0
+                    ? chat?.reactions?.some(
+                        reaction =>
+                          reaction.reaction_icon === obj.reaction_icon,
+                      )
+                    : false;
 
                 const actionType = reactionExists ? 'remove' : 'add';
+                console.log(actionType, 'tihs is action type');
                 reactionAction(
                   userInfoState?.accessToken,
                   chat?.teamId,
@@ -193,44 +195,43 @@ const ActionMessageCard = ({
           />
         </View>
         <View
-          style={[
-            styles.container,
-            sentByMe ? styles.sentByMe : styles.received,
-            {
-              backgroundColor: containerBackgroundColor,
-              marginTop: 5,
-              marginBottom: index == 0 ? 10 : 3,
-              alignSelf: 'center',
-            },
-          ]}>
-          <View style={[styles.textContainer, {padding: 10}]}>
-            {
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}>
-                <Text
-                  style={[
-                    styles.nameText,
-                    {color: textColor, marginRight: 10, fontSize: 18},
-                  ]}>
-                  {SenderName}
-                </Text>
-                <Text
-                  style={[
-                    styles.timeText,
-                    styles.text,
-                    {
-                      color: sentByMe ? '#cccccc' : dark ? '#cccccc' : 'black',
-                      fontSize: 13,
-                    },
-                  ]}>
-                  {time}
-                </Text>
-              </View>
-            }
+          style={{
+            marginTop: 5,
+            alignSelf: 'center',
+          }}>
+          <View
+            style={[
+              styles.textContainer,
+              styles.container,
+              sentByMe ? styles.sentByMe : styles.received,
+              {padding: 10, backgroundColor: containerBackgroundColor},
+            ]}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <Text
+                style={[
+                  styles.nameText,
+                  {color: textColor, marginRight: 10, fontSize: 18},
+                ]}>
+                {SenderName}
+              </Text>
+              <Text
+                style={[
+                  styles.timeText,
+                  styles.text,
+                  {
+                    color: sentByMe ? '#cccccc' : dark ? '#cccccc' : 'black',
+                    fontSize: 13,
+                  },
+                ]}>
+                {time}
+              </Text>
+            </View>
+
             {parentId != null && (
               <TouchableOpacity style={[styles.repliedContainer]}>
                 {chatState?.data[chat.teamId]?.parentMessages[parentId]
@@ -383,7 +384,6 @@ const ActionMessageCard = ({
             {isLimitExceed && (
               <Text style={{color: 'white', fontSize: 20}}>.....</Text>
             )}
-            {/* </View> */}
           </View>
           {chat?.reactions?.length > 0 && (
             <TouchableOpacity
@@ -392,11 +392,11 @@ const ActionMessageCard = ({
                 backgroundColor: '#353535',
                 paddingHorizontal: 5,
                 paddingVertical: 2,
-                top: 35,
+                top: -5,
                 borderWidth: 1,
                 borderRadius: 10,
                 flexDirection: 'row',
-                marginBottom: 25,
+                // marginBottom: 15,
               }}>
               {chat?.reactions?.map((reaction, index) => (
                 <View

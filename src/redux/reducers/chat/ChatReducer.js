@@ -305,7 +305,7 @@ export function chatReducer(state = initialState, action) {
 
       if (targetMessageIndex !== -1) {
         const messageReactionsArr =
-          targetMessages[targetMessageIndex].reactions;
+          targetMessages[targetMessageIndex].reactions || [];
         if (actionType === 'remove') {
           const updatedArr = messageReactionsArr?.filter(obj => {
             if (obj.reaction_icon === reaction_icon) {
@@ -320,20 +320,20 @@ export function chatReducer(state = initialState, action) {
             messageReactionsArr.push({
               reaction_icon: reaction_icon,
               reaction_name: reaction_name,
-              users: [],
+              users: [userId],
             });
-          } else {
-            const existingObject = messageReactionsArr.find(
-              obj => obj.reaction_icon == reaction_icon,
-            );
-            if (!existingObject) {
-              messageReactionsArr.push({
-                reaction_icon: reaction_icon,
-                reaction_name: reaction_name,
-                users: [userId],
-              });
-            }
           }
+          const existingObject = messageReactionsArr.find(
+            obj => obj.reaction_icon == reaction_icon,
+          );
+          if (!existingObject) {
+            messageReactionsArr.push({
+              reaction_icon: reaction_icon,
+              reaction_name: reaction_name,
+              users: [userId],
+            });
+          }
+
           const updatedArr = messageReactionsArr?.map(obj => {
             if (obj.reaction_icon === reaction_icon) {
               !obj.users?.includes(userId) && obj.users.push(userId);
