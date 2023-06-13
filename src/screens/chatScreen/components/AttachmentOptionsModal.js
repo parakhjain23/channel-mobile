@@ -5,7 +5,7 @@ import AttachmentOptions from './AttachmentOptions';
 import {useTheme} from '@react-navigation/native';
 import {listStyles} from './AttachmentStyles';
 
-const AttachmentOptionsModal = ({AttachmentObject}) => {
+const AttachmentOptionsModal = React.memo(({AttachmentObject}) => {
   const {modalizeRef} = AttachmentObject;
   const {colors} = useTheme();
   const listStyle = listStyles(colors);
@@ -35,6 +35,6 @@ const AttachmentOptionsModal = ({AttachmentObject}) => {
       </View>
     </Modalize>
   );
-};
+});
 
 export default AttachmentOptionsModal;

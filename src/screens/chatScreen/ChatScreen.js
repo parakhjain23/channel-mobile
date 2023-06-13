@@ -438,6 +438,7 @@ const ChatScreen = ({
     setAttachment,
     setAttachmentLoading,
   };
+
   return (
     <AppProvider>
       <GestureHandlerRootView style={{flex: 1}}>
@@ -953,19 +954,7 @@ const mapDispatchToProps = dispatch => {
       ),
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(ChatScreen);
-const styless = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-  },
-  modalContent: {
-    width: '80%',
-    backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 20,
-    alignItems: 'center',
-  },
-});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(React.memo(ChatScreen));

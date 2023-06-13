@@ -1,5 +1,5 @@
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import React, {useRef, useState} from 'react';
+import {View, Text, TouchableOpacity} from 'react-native';
+import React from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Animated} from 'react-native';
 import {useTheme} from '@react-navigation/native';
@@ -7,32 +7,25 @@ import {pickDocument} from '../DocumentPicker';
 import {launchCameraForPhoto, launchGallery} from '../ImagePicker';
 import {listStyles} from './AttachmentStyles';
 
-const AttachmentTile = ({
-  onPress,
-  iconName,
-  iconSize,
-  tileText,
-  listStyles,
-}) => {
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={listStyles?.attachmentTile}
-      activeOpacity={0.8}>
-      <MaterialIcons
-        name={iconName}
-        size={iconSize}
-        style={listStyles.attachIcon}
-      />
-      <Text style={listStyles?.text}>{tileText}</Text>
-    </TouchableOpacity>
-  );
-};
+const AttachmentTile = React.memo(
+  ({onPress, iconName, iconSize, tileText, listStyles}) => {
+    return (
+      <TouchableOpacity
+        onPress={onPress}
+        style={listStyles?.attachmentTile}
+        activeOpacity={0.8}>
+        <MaterialIcons
+          name={iconName}
+          size={iconSize}
+          style={listStyles.attachIcon}
+        />
+        <Text style={listStyles?.text}>{tileText}</Text>
+      </TouchableOpacity>
+    );
+  },
+);
 
-const AttachmentOptions = ({
-  AttachmentObject,
-  // setShowOptions,
-}) => {
+const AttachmentOptions = React.memo(({AttachmentObject}) => {
   const {modalizeRef, accessToken, setAttachment, setAttachmentLoading} =
     AttachmentObject;
   const {colors} = useTheme();
@@ -81,6 +74,6 @@ const AttachmentOptions = ({
       </View>
     </View>
   );
-};
+});
 
 export default AttachmentOptions;

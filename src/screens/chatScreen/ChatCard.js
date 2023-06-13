@@ -556,7 +556,11 @@ const ChatCard = ({
 
                     {chat?.content?.includes('<span class="mention"') ? (
                       <HTMLView
-                        value={`<div>${chat?.content}</div>`}
+                        value={
+                          !showMore
+                            ? `<div>${chat?.content?.slice(0, 400)}</div>`
+                            : `<div>${chat?.content}</div>`
+                        }
                         renderNode={renderNode}
                         stylesheet={htmlStyles(textColor)}
                       />
@@ -588,7 +592,7 @@ const ChatCard = ({
                             marginTop: 5,
                           }}
                           onPress={() => setShoreMore(!showMore)}>
-                          Shore Less
+                          Show Less
                         </Text>
                       ) : (
                         <Text

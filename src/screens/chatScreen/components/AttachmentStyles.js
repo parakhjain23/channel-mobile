@@ -3,7 +3,6 @@ export const listStyles = colors =>
   StyleSheet.create({
     attachmentTile: {
       flexDirection: 'row',
-      // backgroundColor: colors?.primaryColor,
       alignItems: 'center',
       marginBottom: 5,
       borderRadius: 5,
@@ -17,11 +16,8 @@ export const listStyles = colors =>
       marginLeft: 3,
     },
     attachIcon: {
-      // marginRight: 5,
       color: colors?.color,
-      // backgroundColor: colors?.primaryColor,
       padding: 8,
-      // borderRadius: 25,
     },
     text: {
       color: colors?.color,
