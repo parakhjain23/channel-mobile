@@ -114,60 +114,56 @@ const ChannelsScreen = props => {
             behavior={Platform.OS === 'ios' ? 'padding' : null}
             keyboardVerticalOffset={offset}
             style={{flex: 1}}>
-            {props?.channelsState?.isLoading ? (
-              <ActivityIndicator size={'large'} color={colors?.textColor} />
-            ) : (
-              <View style={{flex: 1}}>
-                {searchValue != '' ? (
-                  props?.channelsByQueryState?.channels?.length > 0 ? (
-                    <SearchChannelList props={props} navigation={navigation} />
-                  ) : (
-                    <NoChannelsFound
-                      modalizeRef={modalizeRef}
-                      setsearchValue={setsearchValue}
-                    />
-                  )
-                ) : props?.channelsState?.recentChannels?.length > 0 ||
-                  props?.channelsState?.channels?.length > 0 ? (
-                  <RecentChannelsList
-                    props={props}
-                    navigation={navigation}
-                    onScroll={onScroll}
-                    onRefresh={onRefresh}
-                    refreshing={refreshing}
-                  />
+            <View style={{flex: 1}}>
+              {searchValue != '' ? (
+                props?.channelsByQueryState?.channels?.length > 0 ? (
+                  <SearchChannelList props={props} navigation={navigation} />
                 ) : (
-                  <NoInternetComponent
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
+                  <NoChannelsFound
+                    modalizeRef={modalizeRef}
+                    setsearchValue={setsearchValue}
                   />
-                )}
-                {isScrolling && (
-                  <View
-                    style={{
-                      position: 'absolute',
-                      bottom: 0,
-                      width: '100%',
-                      zIndex: 1,
-                      opacity: isScrolling ? 1 : 0,
-                    }}>
-                    <SearchBox
-                      textInputRef={textInputRef}
-                      searchValue={searchValue}
-                      changeText={changeText}
-                      isSearchFocus={false}
-                    />
-                  </View>
-                )}
-                <AddFabButton onOpen={onOpen} />
-                {!isScrolling && (
-                  <SearchFabButton
-                    setIsScrolling={setIsScrolling}
+                )
+              ) : props?.channelsState?.recentChannels?.length > 0 ||
+                props?.channelsState?.channels?.length > 0 ? (
+                <RecentChannelsList
+                  props={props}
+                  navigation={navigation}
+                  onScroll={onScroll}
+                  onRefresh={onRefresh}
+                  refreshing={refreshing}
+                />
+              ) : (
+                <NoInternetComponent
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                />
+              )}
+              {isScrolling && (
+                <View
+                  style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    width: '100%',
+                    zIndex: 1,
+                    opacity: isScrolling ? 1 : 0,
+                  }}>
+                  <SearchBox
                     textInputRef={textInputRef}
+                    searchValue={searchValue}
+                    changeText={changeText}
+                    isSearchFocus={false}
                   />
-                )}
-              </View>
-            )}
+                </View>
+              )}
+              <AddFabButton onOpen={onOpen} />
+              {!isScrolling && (
+                <SearchFabButton
+                  setIsScrolling={setIsScrolling}
+                  textInputRef={textInputRef}
+                />
+              )}
+            </View>
           </KeyboardAvoidingView>
           <CreateChannelModal modalizeRef={modalizeRef} props={props} />
         </View>
