@@ -114,6 +114,9 @@ const ChannelsScreen = props => {
             behavior={Platform.OS === 'ios' ? 'padding' : null}
             keyboardVerticalOffset={offset}
             style={{flex: 1}}>
+            {props?.channelsState?.isLoading && (
+              <ActivityIndicator size={'small'} color={colors?.color} />
+            )}
             <View style={{flex: 1}}>
               {searchValue != '' ? (
                 props?.channelsByQueryState?.channels?.length > 0 ? (
