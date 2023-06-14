@@ -7,20 +7,22 @@ import * as RootNavigation from '../navigation/RootNavigation';
 import {useTheme} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import {DEVICE_TYPES} from '../constants/Constants';
+import {connect} from 'react-redux';
 
 const HeaderComponent = ({
   chatHeaderTitle,
   userId,
   channelType,
-  accessToken,
   teamId,
   orgState,
   channelsState,
   userInfoState,
-  deviceType,
+  appInfoState,
   setChatDetailsForTab,
 }) => {
   const {colors} = useTheme();
+  const accessToken = userInfoState?.accessToken;
+  const deviceType = appInfoState?.deviceType;
   const handleGoBack = () => {
     RootNavigation?.goBack();
   };
@@ -288,5 +290,15 @@ const ChannelImageComponent = ({
     </View>
   );
 };
+
+const mapStateToProps = state => ({
+  userInfoState: state.userInfoReducer,
+  channelsState: state.channelsReducer,
+  orgState: state.orgsReducer,
+  appInfoState: state.appInfoReducer,
+});
 export const ChannelHeaderImage = React.memo(ChannelImageComponent);
-export const Header = React.memo(HeaderComponent);
+export const Header = connect(
+  mapStateToProps,
+  null,
+)(React.memo(HeaderComponent));

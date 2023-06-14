@@ -85,6 +85,7 @@ const RightSwipeActionComponent = ({
     </Animated.View>
   );
 };
+
 const mapStateToProps = state => ({
   userInfoState: state.userInfoReducer,
   channelsState: state.channelsReducer,

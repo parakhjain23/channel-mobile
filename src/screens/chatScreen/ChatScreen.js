@@ -449,12 +449,7 @@ const ChatScreen = ({
               chatHeaderTitle={chatHeaderTitle}
               userId={reciverUserId || userId}
               channelType={channelType}
-              accessToken={accessToken}
-              userInfoState={userInfoState}
               teamId={teamId}
-              orgState={orgState}
-              channelsState={channelsState}
-              deviceType={deviceType}
               setChatDetailsForTab={setChatDetailsForTab}
             />
           )}
