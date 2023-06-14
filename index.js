@@ -8,4 +8,4 @@ import {name as appName} from './app.json';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 AppRegistry.registerComponent(appName, () => App);
-AsyncStorage.clear();
+// AsyncStorage.clear();

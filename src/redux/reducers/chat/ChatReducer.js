@@ -268,7 +268,7 @@ export function chatReducer(state = initialState, action) {
       ) {
         action.newMessage['sameSender'] = false;
       } else {
-        action.newMessage['sameSender'] = true;
+        action.newMessage['sameSender'] = false;
       }
       action.newMessage['isSameDate'] = true;
       return {

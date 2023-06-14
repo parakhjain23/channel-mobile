@@ -68,7 +68,6 @@ const ChatCard = ({
   setActiveChannelTeamIdAction,
   reactionAction,
 }) => {
-  console.log('chat card');
   const deviceType = useSelector(state => state.appInfoReducer.deviceType);
   const {colors, dark} = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
@@ -257,6 +256,7 @@ const ChatCard = ({
     }
   }
   const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
+  SenderName != 'You' && console.log(SenderName, channelType, sameSender);
   if (!isActivity) {
     return (
       <GestureHandlerRootView>

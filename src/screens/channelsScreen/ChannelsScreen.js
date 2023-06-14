@@ -39,6 +39,8 @@ const ChannelsScreen = props => {
   const scrollY = new Animated.Value(0);
   const {height} = Dimensions.get('window');
   const textInputRef = useRef(null);
+  const [refreshing, setRefreshing] = useState(false);
+
   const offset = height * 0.12;
 
   const onScroll = Animated.event(
@@ -51,12 +53,14 @@ const ChannelsScreen = props => {
       },
     },
   );
+
   useEffect(() => {
     if (isFocused) {
       searchValue?.length > 0 && textInputRef?.current?.focus();
       props?.resetActiveChannelTeamIdAction();
     }
   }, [isFocused]);
+
   useEffect(() => {
     if (searchValue != '') {
       props.getChannelsByQueryStartAction(
@@ -66,6 +70,23 @@ const ChannelsScreen = props => {
       );
     }
   }, [searchValue]);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await props?.getChannelsAction(
+      props?.userInfoState?.accessToken,
+      props?.orgsState?.currentOrgId,
+      props?.userInfoState?.user?.id,
+      props?.userInfoState?.user?.displayName
+        ? props?.userInfoState?.user?.displayName
+        : props?.userInfoState?.user?.firstName,
+    );
+    await props?.getAllUsersOfOrgAction(
+      props?.userInfoState?.accessToken,
+      props?.orgsState?.currentOrgId,
+    );
+    setRefreshing(false);
+  }, [props?.orgsState?.currentOrgId]);
 
   const changeText = value => {
     setsearchValue(value);
@@ -109,9 +130,13 @@ const ChannelsScreen = props => {
                     setsearchValue={setsearchValue}
                   />
                 )
-              ) : props?.channelsState?.recentChannels ||
-                props?.channelsState?.channels ? (
-                <RecentChannelsList onScroll={onScroll} />
+              ) : props?.channelsState?.recentChannels?.length > 0 ||
+                props?.channelsState?.channels?.length > 0 ? (
+                <RecentChannelsList
+                  onScroll={onScroll}
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                />
               ) : (
                 <NoInternetComponent
                   refreshing={refreshing}
@@ -171,6 +196,10 @@ const mapDispatchToProps = dispatch => {
       dispatch(setActiveChannelTeamId(teamId)),
     resetActiveChannelTeamIdAction: () => dispatch(resetActiveChannelTeamId()),
     fetchChatResetAction: () => dispatch(getChatsReset()),
+    getChannelsAction: (token, orgId, userId, userName) =>
+      dispatch(getChannelsStart(token, orgId, userId, userName)),
+    getAllUsersOfOrgAction: (accessToken, orgId) =>
+      dispatch(getAllUsersOfOrgStart(accessToken, orgId)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ChannelsScreen);

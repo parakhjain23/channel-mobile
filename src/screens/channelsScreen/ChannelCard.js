@@ -33,19 +33,11 @@ const ChannelCard = ({
   userInfoState,
   orgsState,
   channelsState,
-  // props,
   markAsUnreadAction,
   closeChannelAction,
   appInfoState,
 }) => {
   const navigation = useNavigation();
-  const props = {
-    userInfoState,
-    orgsState,
-    channelsState,
-  };
-  console.log('channel card');
-  // const {deviceType} = useContext(AppContext);
   const deviceType = appInfoState?.deviceType;
 
   const handleListItemPress = (
@@ -63,17 +55,15 @@ const ChannelCard = ({
   };
 
   const {colors} = useTheme();
-  const userIdAndDisplayNameMapping =
-    props.orgsState?.userIdAndDisplayNameMapping;
-  const userIdAndNameMapping = props.orgsState?.userIdAndNameMapping;
+  const userIdAndDisplayNameMapping = orgsState?.userIdAndDisplayNameMapping;
+  const userIdAndNameMapping = orgsState?.userIdAndNameMapping;
   const teamIdAndUnreadCountMapping =
-    props.channelsState?.teamIdAndUnreadCountMapping;
-  const teamIdAndBadgeCountMapping =
-    props?.channelsState?.teamIdAndBadgeCountMapping;
-  const highlightChannel = props.channelsState?.highlightChannel;
-  const user = props.userInfoState?.user;
-  const accessToken = props.userInfoState?.accessToken;
-  const currentOrgId = props.orgsState?.currentOrgId;
+    channelsState?.teamIdAndUnreadCountMapping;
+  const teamIdAndBadgeCountMapping = channelsState?.teamIdAndBadgeCountMapping;
+  const highlightChannel = channelsState?.highlightChannel;
+  const user = userInfoState?.user;
+  const accessToken = userInfoState?.accessToken;
+  const currentOrgId = orgsState?.currentOrgId;
   const userId =
     item?.userIds[0] !== user?.id ? item?.userIds[0] : item?.userIds[1];
   const swipeableRef = useRef(null);
@@ -130,13 +120,12 @@ const ChannelCard = ({
         extrapolate: 'clamp',
       });
       return item?.type !== 'PUBLIC' &&
-        (props?.channelsState?.teamIdAndUnreadCountMapping[item?._id] > 0 ||
-          props?.channelsState?.teamIdAndBadgeCountMapping[item?._id] >
-            0) ? null : (
+        (channelsState?.teamIdAndUnreadCountMapping[item?._id] > 0 ||
+          channelsState?.teamIdAndBadgeCountMapping[item?._id] > 0) ? null : (
         <RightSwipeAction
           scale={scale}
           swipeableRef={swipeableRef}
-          props={props}
+          // props={props}
           markAsUnreadAction={markAsUnreadAction}
           closeChannelAction={closeChannelAction}
           item={item}
@@ -144,7 +133,7 @@ const ChannelCard = ({
         />
       );
     },
-    [props, item, swipeableRef, markAsUnreadAction, closeChannelAction, Name],
+    [item, swipeableRef, markAsUnreadAction, closeChannelAction, Name],
   );
 
   useLayoutEffect(() => {
@@ -476,7 +465,7 @@ const UsersToAddCard = ({
 const mapStateToProps = state => ({
   userInfoState: state.userInfoReducer,
   orgsState: state.orgsReducer,
-  channelsState: state.channelReducer,
+  // channelsState: state.channelsReducer,
   appInfoState: state.appInfoReducer,
 });
 const mapDispatchToProps = dispatch => {
