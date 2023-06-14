@@ -262,14 +262,7 @@ export function chatReducer(state = initialState, action) {
           break;
         }
       }
-      if (
-        action?.newMessage?.senderId !=
-        state?.data[action?.newMessage?.teamId]?.messages[0]?.senderId
-      ) {
-        action.newMessage['sameSender'] = false;
-      } else {
-        action.newMessage['sameSender'] = false;
-      }
+      action.newMessage['sameSender'] = false;
       action.newMessage['isSameDate'] = true;
       return {
         ...state,
