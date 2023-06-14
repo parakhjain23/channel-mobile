@@ -36,6 +36,7 @@ const ChannelCard = ({
   markAsUnreadAction,
   closeChannelAction,
   appInfoState,
+  setChatDetailsForTab,
 }) => {
   const navigation = useNavigation();
   console.log('channel card');
@@ -49,7 +50,7 @@ const ChannelCard = ({
     userId,
     searchedChannel,
   ) => {
-    props?.setChatDetailsForTab({
+    setChatDetailsForTab({
       teamId: teamId,
       channelType: channelType,
       userId: userId,

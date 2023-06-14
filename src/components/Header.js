@@ -123,7 +123,7 @@ const HeaderComponent = ({
   const platform = Platform.OS === 'ios' ? 'ios' : 'android';
   return (
     <>
-      {platform !== 'ios' ? (
+      {platform !== 'ios' && deviceType != DEVICE_TYPES[1] ? (
         <SafeAreaView style={{backgroundColor: colors?.headerColor}}>
           <MainComponent />
         </SafeAreaView>

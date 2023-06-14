@@ -138,6 +138,7 @@ const ChannelsScreen = props => {
                   onScroll={onScroll}
                   refreshing={refreshing}
                   onRefresh={onRefresh}
+                  setChatDetailsForTab={props?.setChatDetailsForTab}
                 />
               ) : (
                 <NoInternetComponent
