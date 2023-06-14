@@ -312,7 +312,7 @@ const ChatScreen = ({
         />
       );
     },
-    [chatState, userInfoState, orgState, deleteMessageAction],
+    [chatState, orgState, deleteMessageAction],
   );
 
   const onEndReached = useCallback(() => {

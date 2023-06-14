@@ -31,6 +31,7 @@ const ContactDetailsPage = ({
   appInfoState,
   searchUserProfileAction,
 }) => {
+  console.log('insider user profile screen');
   const {displayName, userId, setChatDetailsForTab} = route?.params;
   const {colors} = useTheme();
   const styles = makeStyles(colors);
@@ -43,6 +44,7 @@ const ContactDetailsPage = ({
   useEffect(() => {
     searchUserProfileAction(userId, userInfoState?.accessToken);
   }, []);
+
   const handleListItemPress = (
     teamId,
     channelType,
@@ -56,6 +58,7 @@ const ContactDetailsPage = ({
       searchedChannel: searchedChannel,
     });
   };
+
   useEffect(() => {
     if (userInfoState?.searchedUserProfile != null) {
       if (teamId == undefined) {
@@ -68,6 +71,7 @@ const ContactDetailsPage = ({
       }
     }
   }, [userInfoState?.searchedUserProfile]);
+
   let FirstName = '',
     LastName = '',
     Email = '',
@@ -225,5 +229,8 @@ const mapDispatchToProps = dispatch => {
     signOutAction: () => dispatch(signOut()),
   };
 };
-export default connect(mapStateToPros, mapDispatchToProps)(ContactDetailsPage);
+export default connect(
+  mapStateToPros,
+  mapDispatchToProps,
+)(React.memo(ContactDetailsPage));
 // export default ContactDetailsPage;
