@@ -17,8 +17,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {connect} from 'react-redux';
 import * as RootNavigation from '../../navigation/RootNavigation';
 import {GestureHandlerRootView, Swipeable} from 'react-native-gesture-handler';
-import {resetUnreadCountStart} from '../../redux/actions/channels/ChannelsAction';
-import {closeChannelStart} from '../../redux/actions/channels/CloseChannelActions';
 import {AppContext} from '../appProvider/AppProvider';
 import {DEVICE_TYPES} from '../../constants/Constants';
 import {RightSwipeAction} from './components/RightActionsForChatCard';
@@ -38,10 +36,8 @@ const ChannelCard = ({
   appInfoState,
   setChatDetailsForTab,
 }) => {
-  const navigation = useNavigation();
   console.log('channel card');
-  // console.log(item);
-  // const {deviceType} = useContext(AppContext);
+  const navigation = useNavigation();
   const deviceType = appInfoState?.deviceType;
 
   const handleListItemPress = (
@@ -129,9 +125,6 @@ const ChannelCard = ({
         <RightSwipeAction
           scale={scale}
           swipeableRef={swipeableRef}
-          // props={props}
-          markAsUnreadAction={markAsUnreadAction}
-          closeChannelAction={closeChannelAction}
           item={item}
           Name={Name}
         />
@@ -469,33 +462,12 @@ const UsersToAddCard = ({
 const mapStateToProps = state => ({
   userInfoState: state.userInfoReducer,
   orgsState: state.orgsReducer,
-  // channelsState: state.channelsReducer,
   appInfoState: state.appInfoReducer,
 });
 const mapDispatchToProps = dispatch => {
   return {
     getChannelByTeamIdAction: (accessToken, teamId, userId) =>
       dispatch(getChannelByTeamIdStart(accessToken, teamId, userId)),
-    markAsUnreadAction: (
-      orgId,
-      userId,
-      teamId,
-      accessToken,
-      badgeCount,
-      unreadCount,
-    ) =>
-      dispatch(
-        resetUnreadCountStart(
-          orgId,
-          userId,
-          teamId,
-          accessToken,
-          badgeCount,
-          unreadCount,
-        ),
-      ),
-    closeChannelAction: (name, teamId, type, accessToken) =>
-      dispatch(closeChannelStart(name, teamId, type, accessToken)),
   };
 };
 export const RenderChannels = React.memo(
