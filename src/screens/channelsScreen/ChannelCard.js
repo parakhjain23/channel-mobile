@@ -1,4 +1,4 @@
-import {useTheme} from '@react-navigation/native';
+import {useNavigation, useTheme} from '@react-navigation/native';
 import React, {
   useCallback,
   useContext,
@@ -30,12 +30,23 @@ const TouchableItem =
 
 const ChannelCard = ({
   item,
-  navigation,
-  props,
+  userInfoState,
+  orgsState,
+  channelsState,
+  // props,
   markAsUnreadAction,
   closeChannelAction,
+  appInfoState,
 }) => {
-  const {deviceType} = useContext(AppContext);
+  const navigation = useNavigation();
+  const props = {
+    userInfoState,
+    orgsState,
+    channelsState,
+  };
+  console.log('channel card');
+  // const {deviceType} = useContext(AppContext);
+  const deviceType = appInfoState?.deviceType;
 
   const handleListItemPress = (
     teamId,
@@ -465,6 +476,8 @@ const UsersToAddCard = ({
 const mapStateToProps = state => ({
   userInfoState: state.userInfoReducer,
   orgsState: state.orgsReducer,
+  channelsState: state.channelReducer,
+  appInfoState: state.appInfoReducer,
 });
 const mapDispatchToProps = dispatch => {
   return {

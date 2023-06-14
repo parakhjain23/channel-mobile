@@ -66,6 +66,7 @@ const ChatCard = ({
   setChatDetailsForTab,
   setActiveChannelTeamIdAction,
 }) => {
+  console.log('chat card');
   const deviceType = useSelector(state => state.appInfoReducer.deviceType);
   const {colors, dark} = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
