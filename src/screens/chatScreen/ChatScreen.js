@@ -104,6 +104,7 @@ const ChatScreen = ({
     var {teamId, reciverUserId, channelType, searchedChannel, chatHeaderTitle} =
       route.params;
   }
+
   if (teamId == undefined) {
     teamId = channelsState?.userIdAndTeamIdMapping[reciverUserId];
   }

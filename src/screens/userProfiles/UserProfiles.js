@@ -177,7 +177,7 @@ const ContactDetailsPage = ({
                         teamId: teamId,
                         channelType:
                           channelsState?.teamIdAndTypeMapping[teamId],
-                        userId: UserId,
+                        reciverUserId: UserId,
                       })
                     : (handleListItemPress(
                         teamId,
