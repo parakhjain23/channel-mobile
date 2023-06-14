@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {
   Image,
   Modal,
@@ -8,11 +8,9 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {Linking} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import {makeStyles} from '../ChatCardStyles';
 import {ms} from 'react-native-size-matters';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import HTMLView from 'react-native-htmlview';
 import {RenderHTML} from 'react-native-render-html';

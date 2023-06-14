@@ -7,25 +7,12 @@ import ChatScreen from '../screens/chatScreen/ChatScreen';
 import ExploreChannels from '../screens/channelsScreen/ExploreChannels';
 import ContactDetailsPage from '../screens/userProfiles/UserProfiles';
 import {useTheme} from '@react-navigation/native';
-import {
-  TouchableOpacity,
-  Text,
-  Platform,
-  View,
-  Dimensions,
-  StatusBar,
-  SafeAreaView,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import * as RootNavigation from '../navigation/RootNavigation';
-import {fetchSearchedUserProfileStart} from '../redux/actions/user/searchUserProfileActions';
-import {ms} from 'react-native-size-matters';
+import {Platform, Dimensions} from 'react-native';
 import SelectWorkSpaceScreen from '../screens/selectWorkSpaceScreen/SelectWorkSpaceScreen';
 import IpadScreen from '../screens/ipadScreen/IpadScreen';
 import {DEVICE_TYPES} from '../constants/Constants';
 import * as Actions from '../redux/Enums';
 import ChannelDetailsScreen from '../screens/channelDetails/ChannelDetails';
-import {Header} from '../components/Header';
 
 const ProtectedNavigation = props => {
   const Stack = createNativeStackNavigator();
@@ -130,8 +117,6 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => {
   return {
-    searchUserProfileAction: (userId, token) =>
-      dispatch(fetchSearchedUserProfileStart(userId, token)),
     setDeviceTypeAction: deviceType =>
       dispatch({type: Actions.SET_DEVICE_TYPE, deviceType: deviceType}),
   };

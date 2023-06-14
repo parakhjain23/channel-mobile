@@ -117,7 +117,9 @@ const ChannelDetailsScreen = ({
     );
   };
   return (
-    <ScrollView style={{flex: 1, backgroundColor: colors?.primaryColor}}>
+    <ScrollView
+      style={{flex: 1, backgroundColor: colors?.primaryColor}}
+      keyboardDismissMode="on-drag">
       <View style={styles.container}>
         <View style={styles.content}>
           {Purpose?.length > 0 && (

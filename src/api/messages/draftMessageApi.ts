@@ -1,12 +1,12 @@
 export const draftMessageApi = async (
-  message,
-  teamId,
-  accessToken,
-  orgId,
-  userId,
-) => {
+  message: string | any,
+  teamId: string,
+  accessToken: string,
+  orgId: string,
+  userId: string
+): Promise<void> => {
   try {
-    var response = await fetch(
+    await fetch(
       `https://api.intospace.io/chat/teamUser?orgId=${orgId}&userId=${userId}&teamId=${teamId}`,
       {
         method: 'PATCH',
@@ -22,7 +22,7 @@ export const draftMessageApi = async (
           teamId: teamId,
           userId: userId,
         }),
-      },
+      }
     );
   } catch (error) {
     console.warn(error);

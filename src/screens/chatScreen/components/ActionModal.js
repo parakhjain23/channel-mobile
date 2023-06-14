@@ -16,7 +16,6 @@ const ActionModal = ({
   chatState,
   setreplyOnMessage,
   setrepliedMsgDetails,
-  searchUserProfileAction,
   flatListRef,
   channelType,
   setCurrentSelectedChatCard,
@@ -57,7 +56,6 @@ const ActionModal = ({
                 chatState={chatState}
                 setreplyOnMessage={setreplyOnMessage}
                 setrepliedMsgDetails={setrepliedMsgDetails}
-                searchUserProfileAction={searchUserProfileAction}
                 flatListRef={flatListRef}
                 channelType={channelType}
                 setShowActions={setShowActions}

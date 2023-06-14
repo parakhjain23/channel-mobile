@@ -1,4 +1,4 @@
-import {useTheme} from '@react-navigation/native';
+import {useNavigation, useTheme} from '@react-navigation/native';
 import React, {
   useCallback,
   useContext,
@@ -12,11 +12,9 @@ import {
   View,
   Button,
   TouchableNativeFeedback,
-  Animated,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {connect} from 'react-redux';
-import {fetchSearchedUserProfileStart} from '../../redux/actions/user/searchUserProfileActions';
 import * as RootNavigation from '../../navigation/RootNavigation';
 import {GestureHandlerRootView, Swipeable} from 'react-native-gesture-handler';
 import {resetUnreadCountStart} from '../../redux/actions/channels/ChannelsAction';
@@ -32,12 +30,23 @@ const TouchableItem =
 
 const ChannelCard = ({
   item,
-  navigation,
-  props,
+  userInfoState,
+  orgsState,
+  channelsState,
+  // props,
   markAsUnreadAction,
   closeChannelAction,
+  appInfoState,
 }) => {
-  const {deviceType} = useContext(AppContext);
+  const navigation = useNavigation();
+  const props = {
+    userInfoState,
+    orgsState,
+    channelsState,
+  };
+  console.log('channel card');
+  // const {deviceType} = useContext(AppContext);
+  const deviceType = appInfoState?.deviceType;
 
   const handleListItemPress = (
     teamId,
@@ -234,7 +243,6 @@ const SearchChannelCard = ({
   navigation,
   props,
   userInfoState,
-  searchUserProfileAction,
   orgsState,
   getChannelByTeamIdAction,
 }) => {
@@ -387,15 +395,12 @@ const SearchChannelCard = ({
               <Button
                 title="Profile"
                 onPress={async () => {
-                  await searchUserProfileAction(
-                    item?._source?.userId,
-                    userInfoState?.accessToken,
-                  );
                   navigation.navigate('UserProfiles', {
                     displayName:
                       orgsState?.userIdAndDisplayNameMapping[
                         item?._source?.userId
                       ],
+                    userId: item?._source?.userId,
                     setChatDetailsForTab: props?.setChatDetailsForTab,
                   });
                 }}
@@ -471,13 +476,13 @@ const UsersToAddCard = ({
 const mapStateToProps = state => ({
   userInfoState: state.userInfoReducer,
   orgsState: state.orgsReducer,
+  channelsState: state.channelReducer,
+  appInfoState: state.appInfoReducer,
 });
 const mapDispatchToProps = dispatch => {
   return {
     getChannelByTeamIdAction: (accessToken, teamId, userId) =>
       dispatch(getChannelByTeamIdStart(accessToken, teamId, userId)),
-    searchUserProfileAction: (userId, token) =>
-      dispatch(fetchSearchedUserProfileStart(userId, token)),
     markAsUnreadAction: (
       orgId,
       userId,

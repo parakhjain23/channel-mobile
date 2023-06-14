@@ -32,7 +32,6 @@ import {CreateChannelModal} from './components/CreateChannelComponent';
 const ChannelsScreen = props => {
   const {colors} = useTheme();
   const [searchValue, setsearchValue] = useState('');
-  const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
   const modalizeRef = useRef(null);
   const isFocused = useIsFocused();
@@ -41,9 +40,6 @@ const ChannelsScreen = props => {
   const {height} = Dimensions.get('window');
   const textInputRef = useRef(null);
   const offset = height * 0.12;
-  useEffect(() => {
-    props.networkState?.isInternetConnected && props.fetchChatResetAction();
-  }, []);
 
   const onScroll = Animated.event(
     [{nativeEvent: {contentOffset: {y: scrollY}}}],
@@ -70,28 +66,14 @@ const ChannelsScreen = props => {
       );
     }
   }, [searchValue]);
+
   const changeText = value => {
     setsearchValue(value);
   };
+
   const onOpen = () => {
     modalizeRef.current?.open();
   };
-  const onRefresh = useCallback(async () => {
-    setRefreshing(true);
-    await props.getChannelsAction(
-      props?.userInfoState?.accessToken,
-      props?.orgsState?.currentOrgId,
-      props?.userInfoState?.user?.id,
-      props?.userInfoState?.user?.displayName
-        ? props?.userInfoState?.user?.displayName
-        : props?.userInfoState?.user?.firstName,
-    );
-    await props.getAllUsersOfOrgAction(
-      props?.userInfoState?.accessToken,
-      props?.orgsState?.currentOrgId,
-    );
-    setRefreshing(false);
-  }, [props?.orgsState?.currentOrgId]);
 
   return (
     <AppProvider>
@@ -114,60 +96,53 @@ const ChannelsScreen = props => {
             behavior={Platform.OS === 'ios' ? 'padding' : null}
             keyboardVerticalOffset={offset}
             style={{flex: 1}}>
-            {props?.channelsState?.isLoading ? (
-              <ActivityIndicator size={'large'} color={colors?.textColor} />
-            ) : (
-              <View style={{flex: 1}}>
-                {searchValue != '' ? (
-                  props?.channelsByQueryState?.channels?.length > 0 ? (
-                    <SearchChannelList props={props} navigation={navigation} />
-                  ) : (
-                    <NoChannelsFound
-                      modalizeRef={modalizeRef}
-                      setsearchValue={setsearchValue}
-                    />
-                  )
-                ) : props?.channelsState?.recentChannels?.length > 0 ||
-                  props?.channelsState?.channels?.length > 0 ? (
-                  <RecentChannelsList
-                    props={props}
-                    navigation={navigation}
-                    onScroll={onScroll}
-                    onRefresh={onRefresh}
-                    refreshing={refreshing}
-                  />
-                ) : (
-                  <NoInternetComponent
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />
-                )}
-                {isScrolling && (
-                  <View
-                    style={{
-                      position: 'absolute',
-                      bottom: 0,
-                      width: '100%',
-                      zIndex: 1,
-                      opacity: isScrolling ? 1 : 0,
-                    }}>
-                    <SearchBox
-                      textInputRef={textInputRef}
-                      searchValue={searchValue}
-                      changeText={changeText}
-                      isSearchFocus={false}
-                    />
-                  </View>
-                )}
-                <AddFabButton onOpen={onOpen} />
-                {!isScrolling && (
-                  <SearchFabButton
-                    setIsScrolling={setIsScrolling}
-                    textInputRef={textInputRef}
-                  />
-                )}
-              </View>
+            {props?.channelsState?.isLoading && (
+              <ActivityIndicator size={'small'} color={colors?.color} />
             )}
+            <View style={{flex: 1}}>
+              {searchValue != '' ? (
+                props?.channelsByQueryState?.channels?.length > 0 ? (
+                  <SearchChannelList props={props} navigation={navigation} />
+                ) : (
+                  <NoChannelsFound
+                    modalizeRef={modalizeRef}
+                    setsearchValue={setsearchValue}
+                  />
+                )
+              ) : props?.channelsState?.recentChannels ||
+                props?.channelsState?.channels ? (
+                <RecentChannelsList onScroll={onScroll} />
+              ) : (
+                <NoInternetComponent
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                />
+              )}
+              {isScrolling && (
+                <View
+                  style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    width: '100%',
+                    zIndex: 1,
+                    opacity: isScrolling ? 1 : 0,
+                  }}>
+                  <SearchBox
+                    textInputRef={textInputRef}
+                    searchValue={searchValue}
+                    changeText={changeText}
+                    isSearchFocus={false}
+                  />
+                </View>
+              )}
+              <AddFabButton onOpen={onOpen} />
+              {!isScrolling && (
+                <SearchFabButton
+                  setIsScrolling={setIsScrolling}
+                  textInputRef={textInputRef}
+                />
+              )}
+            </View>
           </KeyboardAvoidingView>
           <CreateChannelModal modalizeRef={modalizeRef} props={props} />
         </View>
@@ -184,8 +159,6 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => {
   return {
-    getChannelsAction: (token, orgId, userId, userName) =>
-      dispatch(getChannelsStart(token, orgId, userId, userName)),
     getChannelsByQueryStartAction: (query, userToken, orgId) =>
       dispatch(getChannelsByQueryStart(query, userToken, orgId)),
     createNewChannelAction: (token, orgId, title, channelType, userIds) =>
@@ -197,8 +170,6 @@ const mapDispatchToProps = dispatch => {
     setActiveChannelTeamIdAction: teamId =>
       dispatch(setActiveChannelTeamId(teamId)),
     resetActiveChannelTeamIdAction: () => dispatch(resetActiveChannelTeamId()),
-    getAllUsersOfOrgAction: (accessToken, orgId) =>
-      dispatch(getAllUsersOfOrgStart(accessToken, orgId)),
     fetchChatResetAction: () => dispatch(getChatsReset()),
   };
 };

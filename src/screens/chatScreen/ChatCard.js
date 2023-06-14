@@ -59,7 +59,6 @@ const ChatCard = ({
   chatState,
   setreplyOnMessage,
   setrepliedMsgDetails,
-  searchUserProfileAction,
   flatListRef,
   channelType,
   index,
@@ -69,6 +68,7 @@ const ChatCard = ({
   setActiveChannelTeamIdAction,
   reactionAction,
 }) => {
+  console.log('chat card');
   const deviceType = useSelector(state => state.appInfoReducer.deviceType);
   const {colors, dark} = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
@@ -214,15 +214,12 @@ const ChatCard = ({
           key={index}
           onPress={async () => {
             node?.attribs?.['data-id'] != '@all' &&
-              (await searchUserProfileAction(
-                node?.attribs?.['data-id'],
-                userInfoState?.accessToken,
-              )) &&
               RootNavigation.navigate('UserProfiles', {
                 displayName:
                   orgState?.userIdAndDisplayNameMapping[
                     node?.attribs?.['data-id']
                   ],
+                userId: node?.attribs?.['data-id'],
                 setChatDetailsForTab: setChatDetailsForTab,
               });
           }}>
@@ -297,13 +294,10 @@ const ChatCard = ({
             <TouchableOpacity
               onPress={async () => {
                 chat?.senderId != '0' &&
-                  (await searchUserProfileAction(
-                    chat?.senderId,
-                    userInfoState?.accessToken,
-                  )) &&
                   RootNavigation.navigate('UserProfiles', {
                     displayName:
                       orgState?.userIdAndDisplayNameMapping[chat?.senderId],
+                    userId: chat?.senderId,
                     setChatDetailsForTab: setChatDetailsForTab,
                   });
               }}>
@@ -563,7 +557,11 @@ const ChatCard = ({
 
                     {chat?.content?.includes('<span class="mention"') ? (
                       <HTMLView
-                        value={`<div>${chat?.content}</div>`}
+                        value={
+                          !showMore
+                            ? `<div>${chat?.content?.slice(0, 400)}</div>`
+                            : `<div>${chat?.content}</div>`
+                        }
                         renderNode={renderNode}
                         stylesheet={htmlStyles(textColor)}
                       />
@@ -595,7 +593,7 @@ const ChatCard = ({
                             marginTop: 5,
                           }}
                           onPress={() => setShoreMore(!showMore)}>
-                          Shore Less
+                          Show Less
                         </Text>
                       ) : (
                         <Text

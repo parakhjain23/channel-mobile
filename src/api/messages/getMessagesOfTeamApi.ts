@@ -1,4 +1,4 @@
-export const getMessagesOfTeamApi = async (teamId, token, skip) => {
+export const getMessagesOfTeamApi = async (teamId: string, token: string, skip: number): Promise<any> => {
   try {
     var response = await fetch(
       `https://api.intospace.io/chat//message?teamId=${teamId}&deleted=false&$limit=30&$paginate=false&parentMessages=true&$skip=${skip}`,

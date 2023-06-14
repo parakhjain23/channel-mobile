@@ -3,7 +3,6 @@ import React from 'react';
 import {Text} from 'react-native';
 import {connect} from 'react-redux';
 import * as RootNavigation from '../navigation/RootNavigation';
-import {fetchSearchedUserProfileStart} from '../redux/actions/user/searchUserProfileActions';
 import {useTheme} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -25,7 +24,7 @@ const ChatHeaderForTab = props => {
         borderBottomWidth: 1,
         borderTopColor: 'black',
         borderBottomColor: 'black',
-        backgroundColor: colors.primaryColor
+        backgroundColor: colors.primaryColor,
       }}>
       <TouchableOpacity
         style={{
@@ -36,18 +35,14 @@ const ChatHeaderForTab = props => {
         }}
         onPress={async () => {
           props?.chatDetailsForTab.channelType == 'DIRECT_MESSAGE' &&
-            (RootNavigation.navigate('UserProfiles', {
+            RootNavigation.navigate('UserProfiles', {
               displayName:
                 props?.orgsState?.userIdAndDisplayNameMapping[
                   props?.chatDetailsForTab?.userId
                 ],
               userId: props?.chatDetailsForTab.userId,
-              setChatDetailsForTab: props?.setChatDetailsForTab
-            }),
-            await props?.searchUserProfileAction(
-              props?.chatDetailsForTab?.userId,
-              props?.userInfoState?.accessToken,
-            ));
+              setChatDetailsForTab: props?.setChatDetailsForTab,
+            });
         }}>
         <Icon
           name={IconName}
@@ -75,10 +70,4 @@ const mapStateToProps = state => ({
   channelsState: state.channelsReducer,
   orgsState: state.orgsReducer,
 });
-const mapDispatchToProps = dispatch => {
-  return {
-    searchUserProfileAction: (userId, token) =>
-      dispatch(fetchSearchedUserProfileStart(userId, token)),
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(ChatHeaderForTab);
+export default connect(mapStateToProps, null)(ChatHeaderForTab);
