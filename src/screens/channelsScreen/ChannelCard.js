@@ -17,8 +17,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {connect} from 'react-redux';
 import * as RootNavigation from '../../navigation/RootNavigation';
 import {GestureHandlerRootView, Swipeable} from 'react-native-gesture-handler';
-import {resetUnreadCountStart} from '../../redux/actions/channels/ChannelsAction';
-import {closeChannelStart} from '../../redux/actions/channels/CloseChannelActions';
 import {AppContext} from '../appProvider/AppProvider';
 import {DEVICE_TYPES} from '../../constants/Constants';
 import {RightSwipeAction} from './components/RightActionsForChatCard';
@@ -30,13 +28,16 @@ const TouchableItem =
 
 const ChannelCard = ({
   item,
-  userInfoState,
+  accessToken,
+  currentUserId,
   orgsState,
   channelsState,
   markAsUnreadAction,
   closeChannelAction,
   appInfoState,
+  setChatDetailsForTab,
 }) => {
+  console.log('channel card');
   const navigation = useNavigation();
   const deviceType = appInfoState?.deviceType;
 
@@ -46,7 +47,7 @@ const ChannelCard = ({
     userId,
     searchedChannel,
   ) => {
-    props?.setChatDetailsForTab({
+    setChatDetailsForTab({
       teamId: teamId,
       channelType: channelType,
       userId: userId,
@@ -61,11 +62,9 @@ const ChannelCard = ({
     channelsState?.teamIdAndUnreadCountMapping;
   const teamIdAndBadgeCountMapping = channelsState?.teamIdAndBadgeCountMapping;
   const highlightChannel = channelsState?.highlightChannel;
-  const user = userInfoState?.user;
-  const accessToken = userInfoState?.accessToken;
   const currentOrgId = orgsState?.currentOrgId;
   const userId =
-    item?.userIds[0] !== user?.id ? item?.userIds[0] : item?.userIds[1];
+    item?.userIds[0] !== currentUserId ? item?.userIds[0] : item?.userIds[1];
   const swipeableRef = useRef(null);
 
   const Name =
@@ -107,7 +106,7 @@ const ChannelCard = ({
     item?._id,
     item?.type,
     teamIdAndUnreadCountMapping,
-    user?.id,
+    currentUserId,
     userId,
     accessToken,
     // networkState,
@@ -125,9 +124,6 @@ const ChannelCard = ({
         <RightSwipeAction
           scale={scale}
           swipeableRef={swipeableRef}
-          // props={props}
-          markAsUnreadAction={markAsUnreadAction}
-          closeChannelAction={closeChannelAction}
           item={item}
           Name={Name}
         />
@@ -235,6 +231,9 @@ const SearchChannelCard = ({
   orgsState,
   getChannelByTeamIdAction,
 }) => {
+  if (item?._source?.status?.toLowerCase() === 'invited') {
+    return null;
+  }
   const {deviceType} = useContext(AppContext);
   const {colors} = useTheme();
   const handleListItemPress = (
@@ -465,38 +464,22 @@ const UsersToAddCard = ({
 const mapStateToProps = state => ({
   userInfoState: state.userInfoReducer,
   orgsState: state.orgsReducer,
-  // channelsState: state.channelsReducer,
+  appInfoState: state.appInfoReducer,
+});
+const mapStateToPropsForChannelCard = state => ({
+  orgsState: state.orgsReducer,
   appInfoState: state.appInfoReducer,
 });
 const mapDispatchToProps = dispatch => {
   return {
     getChannelByTeamIdAction: (accessToken, teamId, userId) =>
       dispatch(getChannelByTeamIdStart(accessToken, teamId, userId)),
-    markAsUnreadAction: (
-      orgId,
-      userId,
-      teamId,
-      accessToken,
-      badgeCount,
-      unreadCount,
-    ) =>
-      dispatch(
-        resetUnreadCountStart(
-          orgId,
-          userId,
-          teamId,
-          accessToken,
-          badgeCount,
-          unreadCount,
-        ),
-      ),
-    closeChannelAction: (name, teamId, type, accessToken) =>
-      dispatch(closeChannelStart(name, teamId, type, accessToken)),
   };
 };
 export const RenderChannels = React.memo(
-  connect(mapStateToProps, mapDispatchToProps)(ChannelCard),
+  connect(mapStateToPropsForChannelCard, mapDispatchToProps)(ChannelCard),
 );
+// export const RenderChannels = React.memo(ChannelCard);
 export const RenderSearchChannels = React.memo(
   connect(mapStateToProps, mapDispatchToProps)(SearchChannelCard),
 );

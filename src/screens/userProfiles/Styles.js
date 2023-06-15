@@ -29,7 +29,7 @@ export const makeStyles = colors =>
       fontSize: 18,
       color: colors?.textColor,
       marginBottom: 15,
-      flexDirection:'row'
+      flexDirection: 'row',
     },
     phone: {
       fontSize: 18,
@@ -37,14 +37,13 @@ export const makeStyles = colors =>
       marginBottom: 20,
     },
     button: {
-      height: 40,
-      width: 150,
+      minHeight: 40,
+      maxWidth: 350,
       borderRadius: 3,
       borderWidth: 2,
       borderColor: colors?.color,
       justifyContent: 'center',
-      alignItems: 'center',
-      margin: 15,
+      padding: 10,
     },
     callButton: {
       backgroundColor: colors?.color,
@@ -54,7 +53,8 @@ export const makeStyles = colors =>
     },
     buttonText: {
       fontSize: 16,
-      color:colors?.primaryColor
+      color: colors?.primaryColor,
+      textAlign: 'center',
     },
     buttonTextWhite: {
       color: colors?.primaryColor,

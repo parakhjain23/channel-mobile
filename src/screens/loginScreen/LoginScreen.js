@@ -62,7 +62,6 @@ const LoginScreen = ({getSpaceTokenStartAction, setSigningMethodAction}) => {
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         alert('Play Services Not Available or Outdated');
       } else {
-        console.log(error, 'google');
         alert(error.message);
       }
     }

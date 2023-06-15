@@ -30,19 +30,27 @@ const ContactDetailsPage = ({
   route,
   appInfoState,
   searchUserProfileAction,
+  searchedUserInfoState,
 }) => {
+  console.log('insider user profile screen');
   const {displayName, userId, setChatDetailsForTab} = route?.params;
   const {colors} = useTheme();
   const styles = makeStyles(colors);
   const teamId =
     channelsState?.userIdAndTeamIdMapping[
-      userInfoState?.searchedUserProfile?.id
+      searchedUserInfoState?.searchedUserProfile?.[userId]?.id
     ];
   const navigation = useNavigation();
 
   useEffect(() => {
-    searchUserProfileAction(userId, userInfoState?.accessToken);
+    if (
+      userId !== userInfoState?.user?.id &&
+      !searchedUserInfoState?.searchedUserProfile?.[userId]
+    ) {
+      searchUserProfileAction(userId, userInfoState?.accessToken);
+    }
   }, []);
+
   const handleListItemPress = (
     teamId,
     channelType,
@@ -56,42 +64,39 @@ const ContactDetailsPage = ({
       searchedChannel: searchedChannel,
     });
   };
+
   useEffect(() => {
-    if (userInfoState?.searchedUserProfile != null) {
+    if (searchedUserInfoState?.searchedUserProfile?.[userId] != null) {
       if (teamId == undefined) {
         createDmChannelAction(
           userInfoState?.accessToken,
           orgsState?.currentOrgId,
           '',
-          userInfoState?.searchedUserProfile?.id,
+          searchedUserInfoState?.searchedUserProfile?.[userId]?.id,
         );
       }
     }
-  }, [userInfoState?.searchedUserProfile]);
-  let FirstName = '',
-    LastName = '',
-    Email = '',
-    MobileNumber = '',
-    Avtar = '',
-    DisplayName = '',
-    UserId = '';
-  if (userId === userInfoState?.user?.id) {
-    Email = userInfoState?.user?.email;
-    FirstName = userInfoState?.user?.firstName;
-    LastName = userInfoState?.user?.lastName;
-    MobileNumber = userInfoState?.user?.mobileNumber;
-    Avtar = userInfoState?.user?.avatarKey;
-    DisplayName = displayName;
-    UserId = userId;
-  } else {
-    Email = userInfoState?.searchedUserProfile?.email;
-    FirstName = userInfoState?.searchedUserProfile?.firstName;
-    LastName = userInfoState?.searchedUserProfile?.lastName;
-    MobileNumber = userInfoState?.searchedUserProfile?.mobileNumber;
-    Avtar = userInfoState?.searchedUserProfile?.avatarKey;
-    DisplayName = userInfoState?.searchedUserProfile?.displayName;
-    UserId = userInfoState?.searchedUserProfile?.id;
-  }
+  }, [searchedUserInfoState?.searchedUserProfile]);
+
+  const {
+    email: userEmail,
+    firstName: userFirstName,
+    lastName: userLastName,
+    mobileNumber: userMobileNumber,
+    avatarKey: userAvatarKey,
+    displayName: userDisplayName,
+    id: user_id,
+  } = userId === userInfoState?.user?.id
+    ? userInfoState?.user || {}
+    : searchedUserInfoState?.searchedUserProfile?.[userId] || {};
+
+  const Email = userEmail || '';
+  const FirstName = userFirstName || '';
+  const LastName = userLastName || '';
+  const MobileNumber = userMobileNumber || '';
+  const Avtar = userAvatarKey || '';
+  const DisplayName = userDisplayName || '';
+  const UserId = user_id || '';
 
   const _signOut = async () => {
     if (userInfoState?.siginInMethod == 'Google') {
@@ -102,7 +107,7 @@ const ContactDetailsPage = ({
 
   return (
     <View style={styles.container}>
-      {userInfoState?.isLoading ? (
+      {searchedUserInfoState?.isLoading ? (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <AnimatedLottieView
             source={require('../../assests/images/attachments/loading.json')}
@@ -142,19 +147,15 @@ const ContactDetailsPage = ({
             {'  '}
             {FirstName} {LastName}
           </Text>
-          <TouchableOpacity
-            onPress={() =>
-              Linking.openURL(
-                `mailto:${userInfoState?.searchedUserProfile?.email}`,
-              )
-            }>
+          <TouchableOpacity onPress={() => Linking.openURL(`mailto:${Email}`)}>
             <Text style={[styles.email]}>
               <Icon name="envelope" size={16} color={colors.textColor} />
               {'  '}
               {Email}
             </Text>
           </TouchableOpacity>
-          {userInfoState?.searchedUserProfile?.mobileNumber && (
+          {searchedUserInfoState?.searchedUserProfile?.[userId]
+            ?.mobileNumber && (
             <TouchableOpacity
               onPress={() => Linking.openURL(`tel:${MobileNumber}`)}>
               <View style={styles.email}>
@@ -177,7 +178,7 @@ const ContactDetailsPage = ({
                         teamId: teamId,
                         channelType:
                           channelsState?.teamIdAndTypeMapping[teamId],
-                        userId: UserId,
+                        reciverUserId: UserId,
                       })
                     : (handleListItemPress(
                         teamId,
@@ -215,6 +216,7 @@ const mapStateToPros = state => ({
   channelsState: state.channelsReducer,
   orgsState: state.orgsReducer,
   appInfoState: state.appInfoReducer,
+  searchedUserInfoState: state.searchedUserInfoReducer,
 });
 const mapDispatchToProps = dispatch => {
   return {
@@ -225,5 +227,8 @@ const mapDispatchToProps = dispatch => {
     signOutAction: () => dispatch(signOut()),
   };
 };
-export default connect(mapStateToPros, mapDispatchToProps)(ContactDetailsPage);
+export default connect(
+  mapStateToPros,
+  mapDispatchToProps,
+)(React.memo(ContactDetailsPage));
 // export default ContactDetailsPage;

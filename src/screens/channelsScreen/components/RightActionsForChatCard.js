@@ -1,14 +1,18 @@
 import React from 'react';
 import {Text} from 'react-native';
 import {Animated, TouchableOpacity} from 'react-native';
+import {connect} from 'react-redux';
+import {resetUnreadCountStart} from '../../../redux/actions/channels/ChannelsAction';
+import {closeChannelStart} from '../../../redux/actions/channels/CloseChannelActions';
 const RightSwipeActionComponent = ({
   scale,
   item,
-  closeChannelAction,
-  markAsUnreadAction,
-  props,
   Name,
   swipeableRef,
+  markAsUnreadAction,
+  closeChannelAction,
+  channelsState,
+  userInfoState,
 }) => {
   return (
     <Animated.View
@@ -33,7 +37,7 @@ const RightSwipeActionComponent = ({
                 Name,
                 item?._id,
                 item?.type,
-                props?.userInfoState?.accessToken,
+                userInfoState?.accessToken,
               ),
                 swipeableRef?.current?.close();
             }}>
@@ -48,7 +52,7 @@ const RightSwipeActionComponent = ({
             </Text>
           </TouchableOpacity>
         )}
-      {props?.channelsState?.teamIdAndBadgeCountMapping[item?._id] == 0 && (
+      {channelsState?.teamIdAndBadgeCountMapping[item?._id] == 0 && (
         <TouchableOpacity
           style={{
             backgroundColor: '#ff9800',
@@ -59,9 +63,9 @@ const RightSwipeActionComponent = ({
           onPress={() => {
             markAsUnreadAction(
               item?.orgId,
-              props?.userInfoState?.user?.id,
+              userInfoState?.user?.id,
               item?._id,
-              props?.userInfoState?.accessToken,
+              userInfoState?.accessToken,
               1,
               0,
             ),
@@ -81,4 +85,36 @@ const RightSwipeActionComponent = ({
     </Animated.View>
   );
 };
-export const RightSwipeAction = React.memo(RightSwipeActionComponent);
+
+const mapStateToProps = state => ({
+  userInfoState: state.userInfoReducer,
+  channelsState: state.channelsReducer,
+});
+const mapDispatchToProps = dispatch => {
+  return {
+    markAsUnreadAction: (
+      orgId,
+      userId,
+      teamId,
+      accessToken,
+      badgeCount,
+      unreadCount,
+    ) =>
+      dispatch(
+        resetUnreadCountStart(
+          orgId,
+          userId,
+          teamId,
+          accessToken,
+          badgeCount,
+          unreadCount,
+        ),
+      ),
+    closeChannelAction: (name, teamId, type, accessToken) =>
+      dispatch(closeChannelStart(name, teamId, type, accessToken)),
+  };
+};
+export const RightSwipeAction = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(React.memo(RightSwipeActionComponent));

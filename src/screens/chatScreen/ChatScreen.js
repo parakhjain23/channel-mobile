@@ -104,6 +104,7 @@ const ChatScreen = ({
     var {teamId, reciverUserId, channelType, searchedChannel, chatHeaderTitle} =
       route.params;
   }
+
   if (teamId == undefined) {
     teamId = channelsState?.userIdAndTeamIdMapping[reciverUserId];
   }
@@ -448,12 +449,7 @@ const ChatScreen = ({
               chatHeaderTitle={chatHeaderTitle}
               userId={reciverUserId || userId}
               channelType={channelType}
-              accessToken={accessToken}
-              userInfoState={userInfoState}
               teamId={teamId}
-              orgState={orgState}
-              channelsState={channelsState}
-              deviceType={deviceType}
               setChatDetailsForTab={setChatDetailsForTab}
             />
           )}
