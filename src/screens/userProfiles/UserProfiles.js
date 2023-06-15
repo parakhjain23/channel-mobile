@@ -30,6 +30,7 @@ const ContactDetailsPage = ({
   route,
   appInfoState,
   searchUserProfileAction,
+  searchedUserInfoState,
 }) => {
   console.log('insider user profile screen');
   const {displayName, userId, setChatDetailsForTab} = route?.params;
@@ -37,12 +38,15 @@ const ContactDetailsPage = ({
   const styles = makeStyles(colors);
   const teamId =
     channelsState?.userIdAndTeamIdMapping[
-      userInfoState?.searchedUserProfile?.id
+      searchedUserInfoState?.searchedUserProfile?.[userId]?.id
     ];
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (userId !== userInfoState?.user?.id) {
+    if (
+      userId !== userInfoState?.user?.id &&
+      !searchedUserInfoState?.searchedUserProfile?.[userId]
+    ) {
       searchUserProfileAction(userId, userInfoState?.accessToken);
     }
   }, []);
@@ -62,17 +66,17 @@ const ContactDetailsPage = ({
   };
 
   useEffect(() => {
-    if (userInfoState?.searchedUserProfile != null) {
+    if (searchedUserInfoState?.searchedUserProfile?.[userId] != null) {
       if (teamId == undefined) {
         createDmChannelAction(
           userInfoState?.accessToken,
           orgsState?.currentOrgId,
           '',
-          userInfoState?.searchedUserProfile?.id,
+          searchedUserInfoState?.searchedUserProfile?.[userId]?.id,
         );
       }
     }
-  }, [userInfoState?.searchedUserProfile]);
+  }, [searchedUserInfoState?.searchedUserProfile]);
 
   const {
     email: userEmail,
@@ -84,7 +88,7 @@ const ContactDetailsPage = ({
     id: user_id,
   } = userId === userInfoState?.user?.id
     ? userInfoState?.user || {}
-    : userInfoState?.searchedUserProfile || {};
+    : searchedUserInfoState?.searchedUserProfile?.[userId] || {};
 
   const Email = userEmail || '';
   const FirstName = userFirstName || '';
@@ -103,7 +107,7 @@ const ContactDetailsPage = ({
 
   return (
     <View style={styles.container}>
-      {userInfoState?.isLoading ? (
+      {searchedUserInfoState?.isLoading ? (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <AnimatedLottieView
             source={require('../../assests/images/attachments/loading.json')}
@@ -143,19 +147,15 @@ const ContactDetailsPage = ({
             {'  '}
             {FirstName} {LastName}
           </Text>
-          <TouchableOpacity
-            onPress={() =>
-              Linking.openURL(
-                `mailto:${userInfoState?.searchedUserProfile?.email}`,
-              )
-            }>
+          <TouchableOpacity onPress={() => Linking.openURL(`mailto:${Email}`)}>
             <Text style={[styles.email]}>
               <Icon name="envelope" size={16} color={colors.textColor} />
               {'  '}
               {Email}
             </Text>
           </TouchableOpacity>
-          {userInfoState?.searchedUserProfile?.mobileNumber && (
+          {searchedUserInfoState?.searchedUserProfile?.[userId]
+            ?.mobileNumber && (
             <TouchableOpacity
               onPress={() => Linking.openURL(`tel:${MobileNumber}`)}>
               <View style={styles.email}>
@@ -216,6 +216,7 @@ const mapStateToPros = state => ({
   channelsState: state.channelsReducer,
   orgsState: state.orgsReducer,
   appInfoState: state.appInfoReducer,
+  searchedUserInfoState: state.searchedUserInfoReducer,
 });
 const mapDispatchToProps = dispatch => {
   return {

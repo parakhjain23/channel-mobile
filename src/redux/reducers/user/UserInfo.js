@@ -23,11 +23,11 @@ export function userInfoReducer(state = initialState, action) {
     case Actions.SIGN_OUT:
       return initialState;
 
-    case Actions.SEARCH_USER_PROFILE_START:
-      return {...state, searchedUserProfile: null, isLoading: true};
+    // case Actions.SEARCH_USER_PROFILE_START:
+    //   return {...state, searchedUserProfile: null, isLoading: true};
 
-    case Actions.SEARCH_USER_PROFILE_SUCCESS:
-      return {...state, searchedUserProfile: action?.data, isLoading: false};
+    // case Actions.SEARCH_USER_PROFILE_SUCCESS:
+    //   return {...state, searchedUserProfile: action?.data, isLoading: false};
 
     default:
       return state;
