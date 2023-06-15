@@ -258,12 +258,14 @@ export function chatReducer(state = initialState, action) {
     case Actions.CHAT_EDIT_SUCCESS:
       for (let i = 0; i < state?.data[action.teamId]?.messages?.length; i++) {
         if (state?.data[action.teamId]?.messages[i]._id == action.msgIdToEdit) {
+          action.newMessage['sameSender'] =
+            state.data[action.teamId].messages[i].sameSender;
+          action.newMessage['isSameDate'] =
+            state.data[action.teamId].messages[i].isSameDate;
           state.data[action.teamId].messages[i] = action?.newMessage;
           break;
         }
       }
-      action.newMessage['sameSender'] = false;
-      action.newMessage['isSameDate'] = true;
       return {
         ...state,
       };

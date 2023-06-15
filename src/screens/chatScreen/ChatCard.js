@@ -613,6 +613,8 @@ const ChatCard = ({
                     borderWidth: 1,
                     borderRadius: 10,
                     flexDirection: 'row',
+                    maxWidth: '90%',
+                    flex: 1,
                   }}>
                   {chat?.reactions?.map((reaction, index) => (
                     <TouchableOpacity
