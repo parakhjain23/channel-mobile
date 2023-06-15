@@ -167,8 +167,11 @@ export function chatReducer(state = initialState, action) {
       if (!isSameDate) {
         const prevDateString = date?.toDateString();
         displayDate = `${prevDateString}`;
-        action.message['isSameDate'] = false;
-        action.message['timeToShow'] = displayDate;
+        state.data[action?.message?.teamId].messages[0].isSameDate = false;
+        state.data[action?.message?.teamId].messages[0].timeToShow =
+          displayDate;
+        action.message['isSameDate'] = true;
+        action.message['timeToShow'] = '';
       } else {
         action.message['isSameDate'] = true;
         action.message['timeToShow'] = '';
@@ -213,6 +216,7 @@ export function chatReducer(state = initialState, action) {
       return initialState;
 
     case Actions.ADD_LOCAL_MESSAGE:
+      console.log('[-=-=-=-=-=-=]');
       const {data} = action;
       let parentKey = data?.parentId;
       let parentObj = {};

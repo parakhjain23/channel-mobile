@@ -609,7 +609,7 @@ const ChatCard = ({
                     alignSelf: sentByMe ? 'flex-end' : 'flex-start',
                     backgroundColor: '#353535',
                     paddingHorizontal: 3,
-                    bottom: 1,
+                    bottom: 3,
                     borderWidth: 1,
                     borderRadius: 10,
                     flexDirection: 'row',
