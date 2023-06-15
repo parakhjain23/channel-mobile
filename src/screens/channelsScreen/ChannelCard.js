@@ -28,7 +28,8 @@ const TouchableItem =
 
 const ChannelCard = ({
   item,
-  userInfoState,
+  accessToken,
+  currentUserId,
   orgsState,
   channelsState,
   markAsUnreadAction,
@@ -61,11 +62,9 @@ const ChannelCard = ({
     channelsState?.teamIdAndUnreadCountMapping;
   const teamIdAndBadgeCountMapping = channelsState?.teamIdAndBadgeCountMapping;
   const highlightChannel = channelsState?.highlightChannel;
-  const user = userInfoState?.user;
-  const accessToken = userInfoState?.accessToken;
   const currentOrgId = orgsState?.currentOrgId;
   const userId =
-    item?.userIds[0] !== user?.id ? item?.userIds[0] : item?.userIds[1];
+    item?.userIds[0] !== currentUserId ? item?.userIds[0] : item?.userIds[1];
   const swipeableRef = useRef(null);
 
   const Name =
@@ -107,7 +106,7 @@ const ChannelCard = ({
     item?._id,
     item?.type,
     teamIdAndUnreadCountMapping,
-    user?.id,
+    currentUserId,
     userId,
     accessToken,
     // networkState,
@@ -232,7 +231,6 @@ const SearchChannelCard = ({
   orgsState,
   getChannelByTeamIdAction,
 }) => {
-  console.log(item);
   if (item?._source?.status?.toLowerCase() === 'invited') {
     return null;
   }
@@ -468,6 +466,10 @@ const mapStateToProps = state => ({
   orgsState: state.orgsReducer,
   appInfoState: state.appInfoReducer,
 });
+const mapStateToPropsForChannelCard = state => ({
+  orgsState: state.orgsReducer,
+  appInfoState: state.appInfoReducer,
+});
 const mapDispatchToProps = dispatch => {
   return {
     getChannelByTeamIdAction: (accessToken, teamId, userId) =>
@@ -475,8 +477,9 @@ const mapDispatchToProps = dispatch => {
   };
 };
 export const RenderChannels = React.memo(
-  connect(mapStateToProps, mapDispatchToProps)(ChannelCard),
+  connect(mapStateToPropsForChannelCard, mapDispatchToProps)(ChannelCard),
 );
+// export const RenderChannels = React.memo(ChannelCard);
 export const RenderSearchChannels = React.memo(
   connect(mapStateToProps, mapDispatchToProps)(SearchChannelCard),
 );

@@ -42,7 +42,9 @@ const ContactDetailsPage = ({
   const navigation = useNavigation();
 
   useEffect(() => {
-    searchUserProfileAction(userId, userInfoState?.accessToken);
+    if (userId !== userInfoState?.user?.id) {
+      searchUserProfileAction(userId, userInfoState?.accessToken);
+    }
   }, []);
 
   const handleListItemPress = (
@@ -72,30 +74,25 @@ const ContactDetailsPage = ({
     }
   }, [userInfoState?.searchedUserProfile]);
 
-  let FirstName = '',
-    LastName = '',
-    Email = '',
-    MobileNumber = '',
-    Avtar = '',
-    DisplayName = '',
-    UserId = '';
-  if (userId === userInfoState?.user?.id) {
-    Email = userInfoState?.user?.email;
-    FirstName = userInfoState?.user?.firstName;
-    LastName = userInfoState?.user?.lastName;
-    MobileNumber = userInfoState?.user?.mobileNumber;
-    Avtar = userInfoState?.user?.avatarKey;
-    DisplayName = displayName;
-    UserId = userId;
-  } else {
-    Email = userInfoState?.searchedUserProfile?.email;
-    FirstName = userInfoState?.searchedUserProfile?.firstName;
-    LastName = userInfoState?.searchedUserProfile?.lastName;
-    MobileNumber = userInfoState?.searchedUserProfile?.mobileNumber;
-    Avtar = userInfoState?.searchedUserProfile?.avatarKey;
-    DisplayName = userInfoState?.searchedUserProfile?.displayName;
-    UserId = userInfoState?.searchedUserProfile?.id;
-  }
+  const {
+    email: userEmail,
+    firstName: userFirstName,
+    lastName: userLastName,
+    mobileNumber: userMobileNumber,
+    avatarKey: userAvatarKey,
+    displayName: userDisplayName,
+    id: user_id,
+  } = userId === userInfoState?.user?.id
+    ? userInfoState?.user || {}
+    : userInfoState?.searchedUserProfile || {};
+
+  const Email = userEmail || '';
+  const FirstName = userFirstName || '';
+  const LastName = userLastName || '';
+  const MobileNumber = userMobileNumber || '';
+  const Avtar = userAvatarKey || '';
+  const DisplayName = userDisplayName || '';
+  const UserId = user_id || '';
 
   const _signOut = async () => {
     if (userInfoState?.siginInMethod == 'Google') {

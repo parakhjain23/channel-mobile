@@ -7,7 +7,14 @@ import {RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
 
 const RecentChannelsListComponent = React.memo(
-  ({channelsState, onScroll, refreshing, onRefresh, setChatDetailsForTab}) => {
+  ({
+    channelsState,
+    onScroll,
+    refreshing,
+    onRefresh,
+    setChatDetailsForTab,
+    userInfoState,
+  }) => {
     console.log('recent channelt list');
 
     const memoizedData = useMemo(
@@ -24,6 +31,8 @@ const RecentChannelsListComponent = React.memo(
               item={item}
               channelsState={channelsState}
               setChatDetailsForTab={setChatDetailsForTab}
+              accessToken={userInfoState?.accessToekn}
+              currentUserId={userInfoState?.user?.id}
             />
           )
         );
@@ -54,6 +63,7 @@ const RecentChannelsListComponent = React.memo(
 );
 const mapStateToProps = state => ({
   channelsState: state.channelsReducer,
+  userInfoState: state.userInfoReducer,
 });
 
 export default RecentChannelsList = connect(
