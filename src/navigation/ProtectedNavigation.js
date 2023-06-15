@@ -110,7 +110,6 @@ const ProtectedNavigation = props => {
 };
 
 const mapStateToProps = state => ({
-  userInfoState: state.userInfoReducer,
   channelsState: state.channelsReducer,
   orgsState: state.orgsReducer,
   appInfoState: state.appInfoReduer,

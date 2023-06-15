@@ -311,7 +311,7 @@ const ChatScreen = ({
         />
       );
     },
-    [chatState, userInfoState, orgState, deleteMessageAction],
+    [chatState, orgState, deleteMessageAction],
   );
 
   const onEndReached = useCallback(() => {
@@ -889,7 +889,6 @@ const mapStateToProps = state => ({
   chatState: state.chatReducer,
   channelsState: state.channelsReducer,
   channelsByQueryState: state.channelsByQueryReducer,
-  socketState: state.socketReducer,
 });
 const mapDispatchToProps = dispatch => {
   return {

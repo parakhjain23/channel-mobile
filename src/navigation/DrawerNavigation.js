@@ -68,7 +68,6 @@ const DrawerNavigation = ({orgsState, appInfoState}) => {
   );
 };
 const mapStateToProps = state => ({
-  userInfoState: state.userInfoReducer,
   orgsState: state.orgsReducer,
   appInfoState: state.appInfoReducer,
 });

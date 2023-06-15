@@ -107,11 +107,6 @@ const ChatCard = ({
     setSelectedImage(null);
   }, []);
 
-  useEffect(() => {
-    setOptionsVisible(false);
-    setShowActions(false);
-  }, [chatState?.data[chat?.teamId]?.messages]);
-
   const onLongPress = () => {
     setCurrentSelectedChatCard(chat);
     setShowActions(true);
@@ -134,7 +129,7 @@ const ChatCard = ({
     } else {
       return orgState?.userIdAndNameMapping[chat?.senderId];
     }
-  }, [chat?.senderId, orgState, userInfoState]);
+  }, [chat?.senderId, orgState]);
   const linkColor = sentByMe
     ? colors.sentByMeLinkColor
     : colors.recivedLinkColor;
@@ -256,7 +251,6 @@ const ChatCard = ({
     }
   }
   const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
-  SenderName != 'You' && console.log(SenderName, channelType, sameSender);
   if (!isActivity) {
     return (
       <GestureHandlerRootView>

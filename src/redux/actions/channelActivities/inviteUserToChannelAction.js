@@ -4,10 +4,6 @@ import {
   addUsersToChannelApi,
   removeUserFromChannelApi,
 } from '../../../api/channelsApi/AddUsersToChannel';
-import {
-  addUserSuccess,
-  removeUserSuccess,
-} from '../channels/CloseChannelActions';
 
 export function* addUserToChannel({userIds, teamId, orgId, accessToken}) {
   try {
@@ -18,12 +14,13 @@ export function* addUserToChannel({userIds, teamId, orgId, accessToken}) {
       orgId,
       accessToken,
     );
-    yield put(addUserSuccess(response[0]));
+    // yield put(addUserSuccess(response[0]));
   } catch (error) {
     console.warn(error);
   }
 }
 export function addUserToChannelStart(userIds, teamId, orgId, accessToken) {
+  console.log(teamId, userIds);
   return {
     type: Actions.ADD_USER_TO_CHANNEL,
     userIds,
@@ -32,6 +29,15 @@ export function addUserToChannelStart(userIds, teamId, orgId, accessToken) {
     accessToken,
   };
 }
+
+// export function addUserSuccess(data) {
+//   console.log(data?.teamId, data?.userId);
+//   return {
+//     type: Actions.ADD_USER_SUCCESS,
+//     channelId: data?.teamId,
+//     userIdToAdd: data?.userId,
+//   };
+// }
 
 export function* removeUserFromChannel({userIds, teamId, orgId, accessToken}) {
   try {
@@ -42,7 +48,7 @@ export function* removeUserFromChannel({userIds, teamId, orgId, accessToken}) {
       orgId,
       accessToken,
     );
-    yield put(removeUserSuccess(response[0]));
+    // yield put(removeUserSuccess(response[0]));
   } catch (error) {
     console.warn(error);
   }
@@ -61,3 +67,10 @@ export function removeUserFromChannelStart(
     accessToken,
   };
 }
+// export function removeUserSuccess(data) {
+//   return {
+//     type: Actions.REMOVE_USER_SUCCESS,
+//     teamId: data?.teamId,
+//     userIdToRemove: data?.userId,
+//   };
+// }

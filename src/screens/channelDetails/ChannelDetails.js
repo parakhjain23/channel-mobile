@@ -119,7 +119,8 @@ const ChannelDetailsScreen = ({
   return (
     <ScrollView
       style={{flex: 1, backgroundColor: colors?.primaryColor}}
-      keyboardDismissMode="on-drag">
+      keyboardDismissMode="on-drag"
+      keyboardShouldPersistTaps="always">
       <View style={styles.container}>
         <View style={styles.content}>
           {Purpose?.length > 0 && (
