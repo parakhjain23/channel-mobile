@@ -38,22 +38,22 @@ const ChannelsScreen = props => {
   const modalizeRef = useRef(null);
   const isFocused = useIsFocused();
   const [isScrolling, setIsScrolling] = useState(false);
-  const scrollY = new Animated.Value(0);
+  const scrollY = useRef(new Animated.Value(0));
   const {height} = Dimensions.get('window');
   const textInputRef = useRef(null);
   const [refreshing, setRefreshing] = useState(false);
 
   const offset = height * 0.12;
 
-  const onScroll = Animated.event(
-    [{nativeEvent: {contentOffset: {y: scrollY}}}],
-    {
+  const onScroll = useCallback(
+    Animated.event([{nativeEvent: {contentOffset: {y: scrollY?.current}}}], {
       useNativeDriver: true,
       listener: event => {
         const offsetY = event.nativeEvent.contentOffset.y;
         setIsScrolling(offsetY > height / 4);
       },
-    },
+    }),
+    [scrollY?.current, height, setIsScrolling],
   );
 
   useEffect(() => {
