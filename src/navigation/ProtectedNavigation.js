@@ -96,7 +96,7 @@ const ProtectedNavigation = props => {
         })}
       />
       <Stack.Screen
-        name="ChannelDetails"
+        name="Channel Details"
         component={ChannelDetailsScreen}
         options={({route}) => ({
           // header: () => <CustomHeader route={route} />,

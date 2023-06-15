@@ -55,7 +55,7 @@ const HeaderComponent = ({
           userId: userId,
           setChatDetailsForTab: setChatDetailsForTab,
         })
-      : RootNavigation.navigate('ChannelDetails', {
+      : RootNavigation.navigate('Channel Details', {
           channelName: chatHeaderTitle,
           teamId: teamId,
         });
