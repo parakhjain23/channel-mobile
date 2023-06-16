@@ -20,7 +20,6 @@ export function* addUserToChannel({userIds, teamId, orgId, accessToken}) {
   }
 }
 export function addUserToChannelStart(userIds, teamId, orgId, accessToken) {
-  console.log(teamId, userIds);
   return {
     type: Actions.ADD_USER_TO_CHANNEL,
     userIds,

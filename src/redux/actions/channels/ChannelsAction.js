@@ -49,6 +49,15 @@ export function moveChannelToTop(channelId, senderId = '', userId = '') {
   };
 }
 
+export function increaseUnreadCount(channelId, senderId = '', userId = '') {
+  return {
+    type: Actions.INCREASE_UNREAD_COUNT,
+    channelId: channelId,
+    senderId: senderId,
+    userId: userId,
+  };
+}
+
 export function* getChannelDetails({accessToken, orgId, userId}) {
   try {
     var response = yield call(getChannelDetailsApi, accessToken, orgId, userId);

@@ -60,6 +60,7 @@ export function channelsReducer(state = initialState, action) {
         teamIdAndTypeMapping,
         channelIdAndDataMapping,
       };
+
     case Actions.FETCH_CHANNEL_DETAILS_SUCCESS:
       let teamIdAndUnreadCountMapping = {};
       let teamIdAndBadgeCountMapping = {};
@@ -86,23 +87,8 @@ export function channelsReducer(state = initialState, action) {
       return {...state, channels: [], isLoading: false};
 
     case Actions.MOVE_CHANNEL_TO_TOP:
-      var tempHighlightChannels = {};
-      let teamIdAndUnreadCountMappingLocal = {};
-      let teamIdAndBadgeCountMappingLocal = {};
       var newRecentChannels = state?.recentChannels;
       action?.channelId.forEach(id => {
-        if (state?.activeChannelTeamId != id) {
-          tempHighlightChannels[id] = true;
-          if (action?.senderId != action?.userId) {
-            teamIdAndUnreadCountMappingLocal[id] =
-              state?.teamIdAndUnreadCountMapping[id] != undefined
-                ? state?.teamIdAndUnreadCountMapping[id] + 1
-                : 1;
-            teamIdAndBadgeCountMappingLocal[id] = 0;
-          }
-        } else {
-          tempHighlightChannels[id] = false;
-        }
         const channelToAddInRecentChannels = state?.channels.find(
           obj => obj['_id'] === id,
         );
@@ -125,18 +111,6 @@ export function channelsReducer(state = initialState, action) {
       return {
         ...state,
         recentChannels: newRecentChannels,
-        highlightChannel: {
-          ...state?.highlightChannel,
-          ...tempHighlightChannels,
-        },
-        teamIdAndUnreadCountMapping: {
-          ...state?.teamIdAndUnreadCountMapping,
-          ...teamIdAndUnreadCountMappingLocal,
-        },
-        teamIdAndBadgeCountMapping: {
-          ...state?.teamIdAndBadgeCountMapping,
-          ...teamIdAndBadgeCountMappingLocal,
-        },
       };
 
     case Actions.CREATE_NEW_CHANNEL_SUCCESS:
@@ -192,6 +166,40 @@ export function channelsReducer(state = initialState, action) {
         ...state,
         activeChannelTeamId: action?.teamId,
         highlightChannel: tempHighlightChannels,
+      };
+
+    case Actions.INCREASE_UNREAD_COUNT:
+      var tempHighlightChannels = {};
+      var teamIdAndUnreadCountMappingLocal = {};
+      var teamIdAndBadgeCountMappingLocal = {};
+      action?.channelId?.forEach(id => {
+        if (state?.activeChannelTeamId != id) {
+          tempHighlightChannels[id] = true;
+          if (action?.senderId != action?.userId) {
+            teamIdAndUnreadCountMappingLocal[id] =
+              state?.teamIdAndUnreadCountMapping[id] != undefined
+                ? state?.teamIdAndUnreadCountMapping[id] + 1
+                : 1;
+            teamIdAndBadgeCountMappingLocal[id] = 0;
+          }
+        } else {
+          tempHighlightChannels[id] = false;
+        }
+      });
+      return {
+        ...state,
+        highlightChannel: {
+          ...state?.highlightChannel,
+          ...tempHighlightChannels,
+        },
+        teamIdAndUnreadCountMapping: {
+          ...state?.teamIdAndUnreadCountMapping,
+          ...teamIdAndUnreadCountMappingLocal,
+        },
+        teamIdAndBadgeCountMapping: {
+          ...state?.teamIdAndBadgeCountMapping,
+          ...teamIdAndBadgeCountMappingLocal,
+        },
       };
 
     case Actions.RESET_UNREAD_COUNT_SUCCESS:
@@ -250,6 +258,7 @@ export function channelsReducer(state = initialState, action) {
           ...channelIdAndDataMapping,
         },
       };
+
     case Actions.CLOSE_CHANNEL_SUCCESS:
       for (let i = 0; i < state?.recentChannels?.length; i++) {
         if (action?.teamId == state?.recentChannels[i]?._id) {
@@ -258,6 +267,31 @@ export function channelsReducer(state = initialState, action) {
         }
       }
       return {...state};
+
+    case Actions.JOIN_CHANNEL_SUCCESS:
+      var tempChannelIdAndDataMap = state?.channelIdAndDataMapping;
+      if (
+        !tempChannelIdAndDataMap[action?.teamId]?.userIds?.includes(
+          action?.userId,
+        )
+      ) {
+        tempChannelIdAndDataMap[action?.teamId]?.userIds?.push(action?.userId);
+      }
+      return {
+        ...state,
+        channelIdAndDataMapping: tempChannelIdAndDataMap,
+      };
+
+    case Actions.CHANNEL_PATCHED_EVENT:
+      var tempChannelIdAndDataMap = state?.channelIdAndDataMapping;
+      tempChannelIdAndDataMap[action?.response?._id] = action?.response;
+      return {
+        ...state,
+        channelIdAndDataMapping: tempChannelIdAndDataMap,
+      };
+
+    case Actions.SIGN_OUT:
+      return initialState;
 
     // case Actions.ADD_USER_SUCCESS:
     //   const {userIdToAdd, channelId} = action;
@@ -281,28 +315,6 @@ export function channelsReducer(state = initialState, action) {
     //     channelIdAndDataMapping: tempChannelIdAndDataMap,
     //   };
 
-    case Actions.JOIN_CHANNEL_SUCCESS:
-      var tempChannelIdAndDataMap = state?.channelIdAndDataMapping;
-      if (
-        !tempChannelIdAndDataMap[action?.teamId]?.userIds?.includes(
-          action?.userId,
-        )
-      ) {
-        tempChannelIdAndDataMap[action?.teamId]?.userIds?.push(action?.userId);
-      }
-      return {
-        ...state,
-        channelIdAndDataMapping: tempChannelIdAndDataMap,
-      };
-    case Actions.CHANNEL_PATCHED_EVENT:
-      var tempChannelIdAndDataMap = state?.channelIdAndDataMapping;
-      tempChannelIdAndDataMap[action?.response?._id] = action?.response;
-      return {
-        ...state,
-        channelIdAndDataMapping: tempChannelIdAndDataMap,
-      };
-    case Actions.SIGN_OUT:
-      return initialState;
     default:
       return state;
   }
