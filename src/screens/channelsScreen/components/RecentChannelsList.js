@@ -42,7 +42,6 @@ const RecentChannelsListComponent = React.memo(
         channelsState?.channels,
         channelsState?.teamIdAndUnreadCountMapping,
         channelsState?.teamIdAndBadgeCountMapping,
-        channelsState?.highlightChannel,
       ],
     );
     return (
