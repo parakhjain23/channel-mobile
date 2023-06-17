@@ -63,7 +63,6 @@ export function* sendMessage({
       attachment,
       mentionsArr,
     );
-    yield put(moveChannelToTop([teamId]));
   } catch (error) {
     console.warn(error);
   }

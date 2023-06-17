@@ -89,6 +89,7 @@ const ChatScreen = ({
   draftMessageAction,
   joinChannelAction,
 }) => {
+  console.log('chat-screen');
   var teamId, channelType, chatHeaderTitle, userId;
   if (deviceType === DEVICE_TYPES[1]) {
     userId = chatDetailsForTab?.userId;
@@ -383,7 +384,6 @@ const ChatScreen = ({
   const onSendPress = async () => {
     const localMessage = message;
     onChangeMessage('');
-    console.log(showPlayer, 'inside on sendpress');
     if (localMessage?.trim() !== '' || showPlayer || attachment?.length > 0) {
       const randomId = uuid.v4();
       const messageContent = {
