@@ -1,5 +1,8 @@
 import {channelPatchedEvent} from '../redux/actions/channels/ChannelPatchedEvent';
-import {moveChannelToTop} from '../redux/actions/channels/ChannelsAction';
+import {
+  increaseUnreadCount,
+  moveChannelToTop,
+} from '../redux/actions/channels/ChannelsAction';
 import {closeChannelSuccess} from '../redux/actions/channels/CloseChannelActions';
 import {createNewChannelSuccess} from '../redux/actions/channels/CreateNewChannelAction';
 import {getChannelByTeamIdStart} from '../redux/actions/channels/GetChannelByTeamId';
@@ -48,7 +51,27 @@ const SocketService = socket => {
     );
     newData?.content == 'closed this channel' && newData?.isActivity
       ? null
-      : store.dispatch(
+      : store.getState()?.channelsReducer?.activeChannelTeamId !=
+        newData?.teamId
+      ? (store.getState()?.channelsReducer?.recentChannels?.[0]?._id !=
+          newData?.teamId &&
+          store.dispatch(
+            moveChannelToTop(
+              [newData?.teamId],
+              newData?.senderId,
+              store?.getState()?.userInfoReducer?.user?.id,
+            ),
+          ),
+        store.dispatch(
+          increaseUnreadCount(
+            [newData?.teamId],
+            newData?.senderId,
+            store?.getState()?.userInfoReducer?.user?.id,
+          ),
+        ))
+      : store.getState()?.channelsReducer?.recentChannels?.[0]?._id !=
+          newData?.teamId &&
+        store.dispatch(
           moveChannelToTop(
             [newData?.teamId],
             newData?.senderId,

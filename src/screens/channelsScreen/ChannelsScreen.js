@@ -30,6 +30,7 @@ import {AddFabButton, SearchFabButton} from './components/AddAndSearchFab';
 import {CreateChannelModal} from './components/CreateChannelComponent';
 
 const ChannelsScreen = props => {
+  console.log('channel-screen');
   const {colors} = useTheme();
   const [searchValue, setsearchValue] = useState('');
   const navigation = useNavigation();
@@ -57,7 +58,9 @@ const ChannelsScreen = props => {
   useEffect(() => {
     if (isFocused) {
       searchValue?.length > 0 && textInputRef?.current?.focus();
-      props?.resetActiveChannelTeamIdAction();
+      setTimeout(() => {
+        props?.resetActiveChannelTeamIdAction();
+      }, 400);
     }
   }, [isFocused]);
 

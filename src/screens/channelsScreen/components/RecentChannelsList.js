@@ -24,6 +24,7 @@ const RecentChannelsListComponent = React.memo(
 
     const renderItemChannels = useCallback(
       ({item, index}) => {
+        console.log(index);
         return (
           !item?.isArchived && (
             <RenderChannels
@@ -41,7 +42,6 @@ const RecentChannelsListComponent = React.memo(
         channelsState?.channels,
         channelsState?.teamIdAndUnreadCountMapping,
         channelsState?.teamIdAndBadgeCountMapping,
-        // channelsState?.highlightChannel,
       ],
     );
     return (
