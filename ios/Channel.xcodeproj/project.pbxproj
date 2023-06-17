@@ -588,11 +588,13 @@
 				DEVELOPMENT_TEAM = F3U6Z5L2EJ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Channel/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Channel;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.2.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -617,11 +619,13 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = F3U6Z5L2EJ;
 				INFOPLIST_FILE = Channel/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Channel;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.2.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
