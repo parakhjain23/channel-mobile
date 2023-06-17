@@ -33,6 +33,17 @@ const AudioRecordingPlayer = ({remoteUrl}) => {
     setIsPlaying(true);
     setCurrentPositionSec(value);
   };
+  const onProgress = data => {
+    setCurrentPositionSec(data.currentTime);
+  };
+  const onLoad = duration => {
+    setCurrentDurationSec(duration.duration);
+  };
+  const onEnd = () => {
+    setCurrentPositionSec(0);
+    setIsPlaying(false);
+    setaudioKey(!audioKey);
+  };
 
   const renderPlayButton = () => {
     if (isPlaying) {
@@ -54,17 +65,6 @@ const AudioRecordingPlayer = ({remoteUrl}) => {
     }
   };
 
-  const onProgress = data => {
-    setCurrentPositionSec(data.currentTime);
-  };
-  const onLoad = duration => {
-    setCurrentDurationSec(duration.duration);
-  };
-  const onEnd = () => {
-    setCurrentPositionSec(0);
-    setIsPlaying(false);
-    setaudioKey(!audioKey);
-  };
   return (
     <View style={styles.container}>
       <View style={styles.playerContainer}>
