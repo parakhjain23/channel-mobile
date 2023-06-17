@@ -3,61 +3,50 @@ import React, {useState, useEffect} from 'react';
 import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import Slider from '@react-native-community/slider';
+import Video from 'react-native-video';
 
 const AudioRecordingPlayer = ({remoteUrl}) => {
-  const audioRecorderPlayer = new AudioRecorderPlayer();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentPositionSec, setCurrentPositionSec] = useState(0);
   const [currentDurationSec, setCurrentDurationSec] = useState(0);
-  useEffect(() => {
-    return () => {
-      onStopPlay();
-    };
-  }, []);
-
-  const onStartPlay = async () => {
-    try {
-      const msg = await audioRecorderPlayer.startPlayer(`${remoteUrl}`);
-      setIsPlaying(true);
-      audioRecorderPlayer.addPlayBackListener(({currentPosition, duration}) => {
-        setCurrentPositionSec(currentPosition);
-        setCurrentDurationSec(duration);
-      });
-    } catch (error) {
-      console.error('Failed to start playing:', error);
-    }
+  const [audioKey, setaudioKey] = useState(0);
+  const padZero = number => {
+    return number.toString().padStart(2, '0');
   };
+  const formatTime = seconds => {
+    const totalSeconds = Math.floor(seconds);
+    const minutes = Math.floor(totalSeconds / 60);
+    const remainingSeconds = totalSeconds % 60;
+    return `${padZero(minutes)}:${padZero(remainingSeconds)}`;
+  };
+  const onStartPlay = () => {
+    setIsPlaying(true);
+  };
+  useEffect(() => {}, []);
 
-  const onStopPlay = async () => {
-    try {
-      await audioRecorderPlayer.stopPlayer();
-      setIsPlaying(false);
-    } catch (error) {
-      console.error('Failed to stop playing:', error);
-    }
+  const onStopPlay = () => {
+    setIsPlaying(false);
   };
 
   const handleSeek = value => {
-    audioRecorderPlayer.seekToPlayer(value);
+    this.player.seek(value);
+    setIsPlaying(true);
+    setCurrentPositionSec(value);
   };
 
   const renderPlayButton = () => {
     if (isPlaying) {
       return (
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity
-            style={[styles.buttons, {marginRight: 10}]}
-            onPress={onStopPlay}>
+        <View style={[styles.buttonsContainer]}>
+          <TouchableOpacity style={[styles.buttons]} onPress={onStopPlay}>
             <Icon name="stop-circle" size={28} color={'black'} />
           </TouchableOpacity>
         </View>
       );
     } else {
       return (
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity
-            style={[styles.buttons, {marginRight: 10}]}
-            onPress={onStartPlay}>
+        <View style={[styles.buttonsContainer]}>
+          <TouchableOpacity style={[styles.buttons]} onPress={onStartPlay}>
             <Icon name="play-circle" size={28} color={'black'} />
           </TouchableOpacity>
         </View>
@@ -65,17 +54,17 @@ const AudioRecordingPlayer = ({remoteUrl}) => {
     }
   };
 
-  const formatTime = milliseconds => {
-    const totalSeconds = Math.floor(milliseconds / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
-    const remainingSeconds = totalSeconds % 60;
-    return `${padZero(minutes)}:${padZero(remainingSeconds)}`;
+  const onProgress = data => {
+    setCurrentPositionSec(data.currentTime);
   };
-
-  const padZero = number => {
-    return number.toString().padStart(2, '0');
+  const onLoad = duration => {
+    setCurrentDurationSec(duration.duration);
   };
-
+  const onEnd = () => {
+    setCurrentPositionSec(0);
+    setIsPlaying(false);
+    setaudioKey(!audioKey);
+  };
   return (
     <View style={styles.container}>
       <View style={styles.playerContainer}>
@@ -89,14 +78,24 @@ const AudioRecordingPlayer = ({remoteUrl}) => {
           thumbTintColor="#000"
           minimumTrackTintColor="#000"
           maximumTrackTintColor="#888"
-          disabled={!isPlaying}
+          // disabled={!isPlaying}
         />
-        {isPlaying && (
-          <Text style={styles.timeText}>
-            {formatTime(currentPositionSec)} / {formatTime(currentDurationSec)}
-          </Text>
-        )}
+        <Text style={styles.timeText}>
+          {formatTime(currentPositionSec)} / {formatTime(currentDurationSec)}
+        </Text>
       </View>
+      <Video
+        key={audioKey}
+        source={{uri: remoteUrl}}
+        paused={!isPlaying}
+        onProgress={onProgress}
+        onLoad={onLoad}
+        ref={ref => {
+          this.player = ref;
+        }}
+        onEnd={onEnd}
+        audioOnly={true}
+      />
     </View>
   );
 };
@@ -133,7 +132,7 @@ const styles = StyleSheet.create({
   buttons: {
     backgroundColor: '#fff',
     borderRadius: 60,
-    padding: 8,
+    padding: 5,
   },
 });
 
