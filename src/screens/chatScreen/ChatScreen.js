@@ -113,9 +113,15 @@ const ChatScreen = ({
   if (teamId == 'demo') {
     return <FirstTabChatScreen />;
   }
+
   useEffect(() => {
     const fetchData = () => {
-      fetchChatsOfTeamAction(teamId, userInfoState?.accessToken);
+      fetchChatsOfTeamAction(
+        teamId,
+        userInfoState?.accessToken,
+        0,
+        chatState?.data[teamId]?.messages[0]?.['_id'],
+      );
       setActiveChannelTeamIdAction(teamId);
     };
     if (
@@ -128,6 +134,7 @@ const ChatScreen = ({
       return () => clearTimeout(timeoutId);
     }
   }, [networkState?.isInternetConnected, teamId, chatDetailsForTab]);
+
   const {colors} = useTheme();
   const styles = makeStyles(colors);
   const listStyle = listStyles(colors);
@@ -304,6 +311,7 @@ const ChatScreen = ({
 
   const renderItem = useCallback(
     ({item, index}) => {
+      console.log(index);
       return (
         <ChatCardMemo
           chat={item}
@@ -323,7 +331,7 @@ const ChatScreen = ({
         />
       );
     },
-    [chatState, orgState, deleteMessageAction],
+    [chatState?.data[teamId]?.messages],
   );
 
   const onEndReached = useCallback(() => {
@@ -868,8 +876,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(joinChannelStart(orgId, teamId, userId, accessToken)),
     draftMessageAction: (message, teamId, accessToken, orgId, userId) =>
       dispatch(addDraftMessage(message, teamId, accessToken, orgId, userId)),
-    fetchChatsOfTeamAction: (teamId, token, skip) =>
-      dispatch(getChatsStart(teamId, token, skip)),
+    fetchChatsOfTeamAction: (teamId, token, skip, lastMessageId) =>
+      dispatch(getChatsStart(teamId, token, skip, lastMessageId)),
     sendMessageAction: (
       message,
       teamId,

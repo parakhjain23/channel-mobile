@@ -60,14 +60,14 @@ const HeaderComponent = ({
           teamId: teamId,
         });
   };
-
+  const headerHeight = 60;
   const MainComponent = () => {
     return (
       <View
         style={{
           // flex: 1,
           flexDirection: 'row',
-          minHeight: 60,
+          minHeight: headerHeight,
           backgroundColor: colors?.headerColor,
           borderBottomColor: 'gray',
           borderBottomWidth: 0.5,
@@ -78,10 +78,10 @@ const HeaderComponent = ({
             style={{
               paddingLeft: 15,
               paddingRight: 50,
-              paddingVertical: 16,
+              paddingVertical: headerHeight / 3,
               position: 'absolute',
               left: 0,
-              bottom: 10,
+              // bottom: 1,
               zIndex: 1,
             }}>
             <Icon name="chevron-left" size={15} color={colors?.color} />
