@@ -52,6 +52,9 @@ const RecentChannelsListComponent = React.memo(
           onScroll={onScroll}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="always"
+          removeClippedSubviews={true}
+          maxToRenderPerBatch={20}
+          initialNumToRender={20}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }

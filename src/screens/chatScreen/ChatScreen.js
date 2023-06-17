@@ -483,11 +483,14 @@ const ChatScreen = ({
                           chatState?.data[teamId]?.messages?.length > 20 &&
                           onEndReached
                         }
-                        onEndReachedThreshold={0.1}
+                        onEndReachedThreshold={0.9}
                         keyboardDismissMode="on-drag"
                         keyboardShouldPersistTaps="always"
                         onScroll={onScroll}
                         showsVerticalScrollIndicator={false}
+                        removeClippedSubviews={true}
+                        maxToRenderPerBatch={20}
+                        initialNumToRender={20}
                         refreshControl={
                           <RefreshControl
                             refreshing={refreshing}

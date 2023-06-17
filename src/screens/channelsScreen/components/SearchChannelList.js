@@ -32,6 +32,9 @@ const SearchChannelListComponent = ({props, navigation}) => {
         renderItem={renderItemSearchChannels}
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="always"
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={20}
+        initialNumToRender={20}
       />
     </View>
   );
