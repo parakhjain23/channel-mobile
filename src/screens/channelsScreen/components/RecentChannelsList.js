@@ -15,7 +15,7 @@ const RecentChannelsListComponent = React.memo(
     setChatDetailsForTab,
     userInfoState,
   }) => {
-    console.log('recent channelt list');
+    // console.log('recent channelt list');
 
     const memoizedData = useMemo(
       () => channelsState?.recentChannels || channelsState?.channels || [],

@@ -30,7 +30,7 @@ import {AddFabButton, SearchFabButton} from './components/AddAndSearchFab';
 import {CreateChannelModal} from './components/CreateChannelComponent';
 
 const ChannelsScreen = props => {
-  console.log('channel-screen');
+  // console.log('channel-screen');
   const {colors} = useTheme();
   const [searchValue, setsearchValue] = useState('');
   const navigation = useNavigation();

@@ -29,15 +29,6 @@ export function addUserToChannelStart(userIds, teamId, orgId, accessToken) {
   };
 }
 
-// export function addUserSuccess(data) {
-//   console.log(data?.teamId, data?.userId);
-//   return {
-//     type: Actions.ADD_USER_SUCCESS,
-//     channelId: data?.teamId,
-//     userIdToAdd: data?.userId,
-//   };
-// }
-
 export function* removeUserFromChannel({userIds, teamId, orgId, accessToken}) {
   try {
     var response = yield call(

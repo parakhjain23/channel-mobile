@@ -89,7 +89,7 @@ const ChatScreen = ({
   draftMessageAction,
   joinChannelAction,
 }) => {
-  console.log('chat-screen');
+  // console.log('chat-screen');
   var teamId, channelType, chatHeaderTitle, userId;
   if (deviceType === DEVICE_TYPES[1]) {
     userId = chatDetailsForTab?.userId;
@@ -311,7 +311,7 @@ const ChatScreen = ({
 
   const renderItem = useCallback(
     ({item, index}) => {
-      console.log(index);
+      // console.log(index);
       return (
         <ChatCardMemo
           chat={item}

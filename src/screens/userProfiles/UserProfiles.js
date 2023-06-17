@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Image,
@@ -18,8 +18,12 @@ import {s, vs, ms, mvs} from 'react-native-size-matters';
 import {createNewDmChannelStart} from '../../redux/actions/channels/CreateNewDmChannelAction';
 import {Button} from 'react-native';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import signOut from '../../redux/actions/user/userAction';
+import signOut, {
+  updateUserDetailsStart,
+} from '../../redux/actions/user/userAction';
 import {fetchSearchedUserProfileStart} from '../../redux/actions/user/searchUserProfileActions';
+import ListFooterComponent from '../../components/ListFooterComponent';
+import {launchGallery} from '../chatScreen/ImagePicker';
 
 const ContactDetailsPage = ({
   userInfoState,
@@ -31,9 +35,12 @@ const ContactDetailsPage = ({
   appInfoState,
   searchUserProfileAction,
   searchedUserInfoState,
+  updateUserDetailsAction,
 }) => {
-  console.log('insider user profile screen');
+  // console.log('insider user profile screen');
   const {displayName, userId, setChatDetailsForTab} = route?.params;
+  const [attachment, setAttachment] = useState([]);
+  const [attachmentLoading, setAttachmentLoading] = useState(false);
   const {colors} = useTheme();
   const styles = makeStyles(colors);
   const teamId =
@@ -104,7 +111,19 @@ const ContactDetailsPage = ({
     }
     signOutAction();
   };
-
+  useEffect(() => {
+    if (attachment?.length == 1) {
+      updateUserDetailsAction(userInfoState?.accessToken, userId, attachment);
+      setAttachment([]);
+    }
+  }, [attachment]);
+  const updatePhoto = () => {
+    launchGallery(
+      userInfoState?.accessToken,
+      setAttachment,
+      setAttachmentLoading,
+    );
+  };
   return (
     <View style={styles.container}>
       {searchedUserInfoState?.isLoading ? (
@@ -125,7 +144,7 @@ const ContactDetailsPage = ({
           <View
             style={{
               marginTop: 20,
-              flexDirection: 'row',
+              // flexDirection: 'row',
               justifyContent: 'center',
             }}>
             <Image
@@ -141,6 +160,12 @@ const ContactDetailsPage = ({
                 marginBottom: 20,
               }}
             />
+            {userId == userInfoState?.user?.id &&
+              (attachmentLoading ? (
+                <ListFooterComponent />
+              ) : (
+                <Button title="Change Photo" onPress={updatePhoto} />
+              ))}
           </View>
           <Text style={styles.name}>
             <Icon name="user" size={16} color={colors.textColor} />
@@ -225,6 +250,8 @@ const mapDispatchToProps = dispatch => {
     createDmChannelAction: (token, orgId, title, reciverUserId) =>
       dispatch(createNewDmChannelStart(token, orgId, title, reciverUserId)),
     signOutAction: () => dispatch(signOut()),
+    updateUserDetailsAction: (token, userId, attachment) =>
+      dispatch(updateUserDetailsStart(token, userId, attachment)),
   };
 };
 export default connect(
