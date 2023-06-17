@@ -68,6 +68,7 @@ const ChatCard = ({
   setActiveChannelTeamIdAction,
   reactionAction,
 }) => {
+  console.log('chat-card');
   const deviceType = useSelector(state => state.appInfoReducer.deviceType);
   const {colors, dark} = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
@@ -609,10 +610,12 @@ const ChatCard = ({
                     alignSelf: sentByMe ? 'flex-end' : 'flex-start',
                     backgroundColor: '#353535',
                     paddingHorizontal: 3,
-                    bottom: 1,
+                    bottom: 3,
                     borderWidth: 1,
                     borderRadius: 10,
                     flexDirection: 'row',
+                    maxWidth: '90%',
+                    flex: 1,
                   }}>
                   {chat?.reactions?.map((reaction, index) => (
                     <TouchableOpacity
