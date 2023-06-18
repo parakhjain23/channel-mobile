@@ -120,7 +120,7 @@ android {
             keyPassword 'android'
         }
         release {
-            storeFile file('./walkover_channel.keystore')
+            storeFile file('./walkover_channel_mobile.keystore')
             storePassword "walkover101"
             keyAlias "space"
             keyPassword "walkover101"
