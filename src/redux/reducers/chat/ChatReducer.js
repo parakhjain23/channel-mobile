@@ -218,6 +218,12 @@ export function chatReducer(state = initialState, action) {
 
     case Actions.ADD_LOCAL_MESSAGE:
       const {data} = action;
+      const renderTextWithBreaks = text => {
+        const htmlString = text?.replace(/\n/g, '<br/>');
+        return htmlString;
+      };
+      data.content = renderTextWithBreaks(data?.content);
+      console.log(data, '-0-0-0 local -0-0-0');
       let parentKey = data?.parentId;
       let parentObj = {};
       if (data?.parentMessage != undefined) {

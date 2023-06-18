@@ -13,6 +13,11 @@ function mentionHTML(userId, teamId, type, match, username, mentionsArrToSend) {
   }
 }
 
+const renderTextWithBreaks = text => {
+  const htmlString = text.replace(/\n/g, '<br/>');
+  return htmlString;
+};
+
 export const sendMessageApi = async (
   message,
   teamId,
@@ -45,6 +50,7 @@ export const sendMessageApi = async (
         return mentionHtml;
       });
     }
+    message = renderTextWithBreaks(message);
 
     var response = await fetch('https://api.intospace.io/chat/message', {
       method: 'POST',
@@ -94,6 +100,8 @@ export const sendGlobalMessageApi = async messageObj => {
         },
       );
     }
+    message = renderTextWithBreaks(message);
+
     var response = await fetch('https://api.intospace.io/chat/message', {
       method: 'POST',
       headers: {
