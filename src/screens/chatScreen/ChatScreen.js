@@ -733,16 +733,23 @@ const ChatScreen = ({
 
                       {!showPlayer && (
                         <View style={styles.inputContainer}>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                            }}>
-                            {isRecording && (
-                              <View
-                                style={{
-                                  flex: 1,
-                                  alignItems: 'center',
+                          {isRecording ? (
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                margin: 4,
+                              }}>
+                              <TouchableOpacity
+                                style={{flex: 1, alignItems: 'center'}}
+                                onPress={() => {
+                                  onStopRecord(
+                                    setrecordingUrl,
+                                    setvoiceAttachment,
+                                    isMountedRef,
+                                  ),
+                                    setisRecording(false),
+                                    setShowPlayer(true);
                                 }}>
                                 <AnimatedLottieView
                                   source={require('../../assests/images/attachments/recordingJson2.json')}
@@ -754,17 +761,40 @@ const ChatScreen = ({
                                     // backgroundColor: 'blue',
                                   }}
                                 />
-                              </View>
-                            )}
-                            {!isRecording && (
+                              </TouchableOpacity>
+                              <Button
+                                mode="contained"
+                                icon="microphone-off"
+                                buttonColor={colors?.sentByMeCardColor}
+                                onPress={() => {
+                                  onStopRecord(
+                                    setrecordingUrl,
+                                    setvoiceAttachment,
+                                    isMountedRef,
+                                  ),
+                                    setisRecording(false),
+                                    setShowPlayer(true);
+                                }}>
+                                STOP
+                              </Button>
+                            </View>
+                          ) : (
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                // backgroundColor: 'red',
+                              }}>
                               <View
                                 style={{
                                   alignSelf: 'flex-end',
+                                  // backgroundColor: 'red',
                                   marginBottom: 3,
                                 }}>
                                 <TouchableOpacity
                                   style={{
                                     borderRadius: 30,
+                                    // backgroundColor: 'grey',
                                     margin: 3,
                                   }}
                                   activeOpacity={0.9}>
@@ -779,8 +809,6 @@ const ChatScreen = ({
                                   />
                                 </TouchableOpacity>
                               </View>
-                            )}
-                            {!isRecording && (
                               <TextInput
                                 ref={textInputRef}
                                 editable
@@ -796,55 +824,62 @@ const ChatScreen = ({
                                   {color: colors.textColor},
                                 ]}
                               />
-                            )}
-                            <View
-                              style={{
-                                alignSelf: 'flex-end',
-                                // margin: 1,
-                                marginBottom: 3,
-                              }}>
-                              {message?.length > 0 ||
-                              showPlayer ||
-                              attachment?.length > 0 ? (
-                                <TouchableOpacity
-                                  onPress={
-                                    !action ? onSendPress : onSendWithAction
-                                  }
-                                  style={{
-                                    backgroundColor: colors?.sentByMeCardColor,
-                                    borderRadius: 30,
-                                  }}
-                                  activeOpacity={0.9}>
-                                  <MaterialIcons
-                                    name="send"
-                                    size={20}
+                              <View
+                                style={{
+                                  alignSelf: 'flex-end',
+                                  // margin: 1,
+                                  marginBottom: 3,
+                                }}>
+                                {message?.length > 0 ||
+                                showPlayer ||
+                                attachment?.length > 0 ? (
+                                  <TouchableOpacity
+                                    onPress={
+                                      !action ? onSendPress : onSendWithAction
+                                    }
                                     style={{
-                                      color: colors.sentByMeTextColor,
-                                      padding: 12,
+                                      backgroundColor:
+                                        colors?.sentByMeCardColor,
+                                      borderRadius: 30,
+                                      margin: 3,
                                     }}
-                                  />
-                                </TouchableOpacity>
-                              ) : (
-                                <TouchableOpacity
-                                  onLongPress={handleLongPress}
-                                  onPressOut={handlePressOut}
-                                  style={{
-                                    borderRadius: 30,
-                                    backgroundColor: colors?.sentByMeCardColor,
-                                  }}
-                                  activeOpacity={0.9}>
-                                  <MaterialIcons
-                                    name="mic"
-                                    size={20}
-                                    style={{
-                                      color: colors.sentByMeTextColor,
-                                      padding: !isRecording ? 12 : 15,
-                                    }}
-                                  />
-                                </TouchableOpacity>
-                              )}
+                                    activeOpacity={0.9}>
+                                    <MaterialIcons
+                                      name="send"
+                                      size={20}
+                                      style={{
+                                        color: colors.sentByMeTextColor,
+                                        padding: 12,
+                                      }}
+                                    />
+                                  </TouchableOpacity>
+                                ) : (
+                                  !isRecording && (
+                                    <TouchableOpacity
+                                      onPress={() => {
+                                        onStartRecord(setisRecording);
+                                      }}
+                                      style={{
+                                        borderRadius: 30,
+                                        margin: 3,
+                                        backgroundColor:
+                                          colors?.sentByMeCardColor,
+                                      }}
+                                      activeOpacity={0.9}>
+                                      <MaterialIcons
+                                        name="mic"
+                                        size={20}
+                                        style={{
+                                          color: colors.sentByMeTextColor,
+                                          padding: 12,
+                                        }}
+                                      />
+                                    </TouchableOpacity>
+                                  )
+                                )}
+                              </View>
                             </View>
-                          </View>
+                          )}
                           {showOptions &&
                             message?.length == 1 &&
                             setShowOptions(false)}
