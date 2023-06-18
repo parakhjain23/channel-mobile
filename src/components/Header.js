@@ -41,8 +41,10 @@ const HeaderComponent = ({
             color: colors?.color,
             fontSize: 13,
             textAlignVertical: 'center',
-          }}>
-          {chatHeaderTitle}
+          }}
+          numberOfLines={1}
+          ellipsizeMode="tail">
+          {chatHeaderTitle?.toString()?.slice(0, 30)}
           <Entypo name="chevron-small-right" color={colors?.color} size={13} />
         </Text>
       </View>

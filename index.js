@@ -8,7 +8,7 @@ import {name as appName} from './app.json';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppSentry from './AppSentry';
 
-if (!__DEV__) {
+if (__DEV__) {
   AppRegistry.registerComponent(appName, () => App);
 } else {
   AppRegistry.registerComponent(appName, () => AppSentry);
