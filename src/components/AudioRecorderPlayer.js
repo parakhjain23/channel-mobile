@@ -1,5 +1,5 @@
 import Icon from 'react-native-vector-icons/FontAwesome';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import Slider from '@react-native-community/slider';
@@ -10,6 +10,7 @@ const AudioRecordingPlayer = ({remoteUrl}) => {
   const [currentPositionSec, setCurrentPositionSec] = useState(0);
   const [currentDurationSec, setCurrentDurationSec] = useState(0);
   const [audioKey, setaudioKey] = useState(0);
+  const playerRef = useRef();
   const padZero = number => {
     return number.toString().padStart(2, '0');
   };
@@ -29,7 +30,7 @@ const AudioRecordingPlayer = ({remoteUrl}) => {
   };
 
   const handleSeek = value => {
-    this.player.seek(value);
+    playerRef.current.seek(value);
     setIsPlaying(true);
     setCurrentPositionSec(value);
   };
@@ -90,9 +91,7 @@ const AudioRecordingPlayer = ({remoteUrl}) => {
         paused={!isPlaying}
         onProgress={onProgress}
         onLoad={onLoad}
-        ref={ref => {
-          this.player = ref;
-        }}
+        ref={playerRef}
         onEnd={onEnd}
         audioOnly={true}
       />
