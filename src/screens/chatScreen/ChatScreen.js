@@ -11,10 +11,8 @@ import {
   SafeAreaView,
   useWindowDimensions,
   Platform,
-  StyleSheet,
   RefreshControl,
   Keyboard,
-  StatusBar,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -64,6 +62,7 @@ import {addDraftMessage} from '../../redux/actions/chat/DraftMessageAction';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Header} from '../../components/Header';
 import {joinChannelStart} from '../../redux/actions/channels/JoinChannelActions';
+import {VirtualizedList} from 'react-native';
 
 const ChatScreen = ({
   chatDetailsForTab,
@@ -293,16 +292,22 @@ const ChatScreen = ({
     FlatListRef?.current?.scrollToOffset({animating: true, offset: 0});
   };
 
-  const onScroll = Animated.event(
-    [{nativeEvent: {contentOffset: {y: scrollY}}}],
-    {
-      useNativeDriver: true,
-      listener: ({nativeEvent}) => {
-        const offsetY = nativeEvent.contentOffset.y;
-        setIsScrolling(offsetY >= 0.7 * screenHeight);
-      },
-    },
-  );
+  // const onScroll = Animated.event(
+  //   [{nativeEvent: {contentOffset: {y: scrollY}}}],
+  //   {
+  //     useNativeDriver: true,
+  //     listener: ({nativeEvent}) => {
+  //       const offsetY = nativeEvent.contentOffset.y;
+  //       setIsScrolling(offsetY >= 0.7 * screenHeight);
+  //     },
+  //   },
+  // );
+
+  const handleScroll = event => {
+    const {contentOffset, contentSize, layoutMeasurement} = event.nativeEvent;
+    const offsetY = contentOffset.y;
+    setIsScrolling(offsetY >= 0.7 * layoutMeasurement.height);
+  };
 
   const memoizedData = useMemo(
     () => chatState?.data[teamId]?.messages || [],
@@ -487,9 +492,12 @@ const ChatScreen = ({
                     </View>
                   ) : (
                     <>
-                      <Animated.FlatList
+                      <VirtualizedList
                         ref={FlatListRef}
                         data={memoizedData}
+                        getItemCount={data => data.length}
+                        getItem={(data, index) => data[index]}
+                        keyExtractor={(item, index) => index.toString()}
                         renderItem={renderItem}
                         inverted
                         ListFooterComponent={
@@ -503,7 +511,7 @@ const ChatScreen = ({
                         onEndReachedThreshold={0.9}
                         keyboardDismissMode="on-drag"
                         keyboardShouldPersistTaps="always"
-                        onScroll={onScroll}
+                        onScroll={handleScroll}
                         showsVerticalScrollIndicator={false}
                         removeClippedSubviews={true}
                         maxToRenderPerBatch={20}
