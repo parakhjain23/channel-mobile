@@ -28,7 +28,6 @@ import {RenderHTML} from 'react-native-render-html';
 import * as RootNavigation from '../../navigation/RootNavigation';
 import {tagsStyles} from './HtmlStyles';
 import AudioRecordingPlayer from '../../components/AudioRecorderPlayer';
-import {AppContext} from '../appProvider/AppProvider';
 import {DEVICE_TYPES} from '../../constants/Constants';
 import {connect, useSelector} from 'react-redux';
 import {setActiveChannelTeamId} from '../../redux/actions/channels/SetActiveChannelId';

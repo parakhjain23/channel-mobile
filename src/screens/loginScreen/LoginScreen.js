@@ -102,7 +102,7 @@ const LoginScreen = ({getSpaceTokenStartAction, setSigningMethodAction}) => {
           console.warn('INSIDE ELSE PART ');
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     }
   }
