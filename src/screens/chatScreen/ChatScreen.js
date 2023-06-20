@@ -64,6 +64,7 @@ import {addDraftMessage} from '../../redux/actions/chat/DraftMessageAction';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Header} from '../../components/Header';
 import {joinChannelStart} from '../../redux/actions/channels/JoinChannelActions';
+import {FlashList} from '@shopify/flash-list';
 
 const ChatScreen = ({
   chatDetailsForTab,
@@ -184,7 +185,7 @@ const ChatScreen = ({
   const skip = chatState?.data[teamId]?.messages?.length ?? 0;
 
   const path = Platform.select({
-    ios: `sound.m4a`,
+    ios: `${RNFetchBlob.fs.dirs.CacheDir}/sound.m4a`,
     android: `${RNFetchBlob.fs.dirs.CacheDir}/sound.mp3`,
   });
   useEffect(() => {
@@ -303,6 +304,13 @@ const ChatScreen = ({
       },
     },
   );
+  const handleScroll = event => {
+    // Access scroll-related information from the event object
+    const {contentOffset, contentSize, layoutMeasurement} = event.nativeEvent;
+    const offsetY = contentOffset.y;
+    setIsScrolling(offsetY >= 0.7 * screenHeight);
+    // ...
+  };
 
   const memoizedData = useMemo(
     () => chatState?.data[teamId]?.messages || [],
@@ -336,7 +344,7 @@ const ChatScreen = ({
 
   const onEndReached = useCallback(() => {
     fetchChatsOfTeamAction(teamId, userInfoState?.accessToken, skip);
-  }, [teamId, userInfoState?.accessToken, skip, fetchChatsOfTeamAction]);
+  }, [teamId, userInfoState?.accessToken, skip]);
 
   function renderNode(node, index, siblings, parent, defaultRenderer) {
     const attribs = node?.attribs;
@@ -487,27 +495,29 @@ const ChatScreen = ({
                     </View>
                   ) : (
                     <>
-                      <Animated.FlatList
+                      <FlashList
                         ref={FlatListRef}
                         data={memoizedData}
                         renderItem={renderItem}
+                        estimatedItemSize={200}
                         inverted
                         ListFooterComponent={
                           chatState?.data[teamId]?.messages?.length > 15 &&
                           ListFooterComponent
                         }
                         onEndReached={
-                          chatState?.data[teamId]?.messages?.length > 20 &&
-                          onEndReached
+                          chatState?.data[teamId]?.messages?.length > 20
+                            ? onEndReached
+                            : null
                         }
                         onEndReachedThreshold={0.9}
                         keyboardDismissMode="on-drag"
                         keyboardShouldPersistTaps="always"
-                        onScroll={onScroll}
+                        onScroll={handleScroll}
                         showsVerticalScrollIndicator={false}
                         removeClippedSubviews={true}
-                        maxToRenderPerBatch={20}
-                        initialNumToRender={20}
+                        // maxToRenderPerBatch={20}
+                        // initialNumToRender={20}
                         refreshControl={
                           <RefreshControl
                             refreshing={refreshing}
