@@ -64,6 +64,7 @@ import {addDraftMessage} from '../../redux/actions/chat/DraftMessageAction';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Header} from '../../components/Header';
 import {joinChannelStart} from '../../redux/actions/channels/JoinChannelActions';
+import {FlashList} from '@shopify/flash-list';
 
 const ChatScreen = ({
   chatDetailsForTab,
@@ -286,6 +287,13 @@ const ChatScreen = ({
       },
     },
   );
+  const handleScroll = event => {
+    // Access scroll-related information from the event object
+    const {contentOffset, contentSize, layoutMeasurement} = event.nativeEvent;
+    const offsetY = contentOffset.y;
+    setIsScrolling(offsetY >= 0.7 * screenHeight);
+    // ...
+  };
 
   const memoizedData = useMemo(
     () => chatState?.data[teamId]?.messages || [],
@@ -294,6 +302,7 @@ const ChatScreen = ({
 
   const renderItem = useCallback(
     ({item, index}) => {
+      console.log(index);
       return (
         <ChatCardMemo
           chat={item}
@@ -470,7 +479,36 @@ const ChatScreen = ({
                     </View>
                   ) : (
                     <>
-                      <Animated.FlatList
+                      <FlashList
+                        ref={FlatListRef}
+                        data={memoizedData}
+                        renderItem={renderItem}
+                        estimatedItemSize={200}
+                        inverted
+                        ListFooterComponent={
+                          chatState?.data[teamId]?.messages?.length > 15 &&
+                          ListFooterComponent
+                        }
+                        onEndReached={
+                          chatState?.data[teamId]?.messages?.length > 20 &&
+                          onEndReached
+                        }
+                        onEndReachedThreshold={0.9}
+                        keyboardDismissMode="on-drag"
+                        keyboardShouldPersistTaps="always"
+                        onScroll={handleScroll}
+                        showsVerticalScrollIndicator={false}
+                        removeClippedSubviews={true}
+                        maxToRenderPerBatch={20}
+                        initialNumToRender={20}
+                        refreshControl={
+                          <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={handleRefresh}
+                          />
+                        }
+                      />
+                      {/* <Animated.FlatList
                         ref={FlatListRef}
                         data={memoizedData}
                         renderItem={renderItem}
@@ -497,7 +535,7 @@ const ChatScreen = ({
                             onRefresh={handleRefresh}
                           />
                         }
-                      />
+                      /> */}
                     </>
                   )}
                   <ScrollDownButton
