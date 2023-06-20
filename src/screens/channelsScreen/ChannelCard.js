@@ -229,11 +229,12 @@ const SearchChannelCard = ({
   userInfoState,
   orgsState,
   getChannelByTeamIdAction,
+  appInfoState,
 }) => {
   if (item?._source?.status?.toLowerCase() === 'invited') {
     return null;
   }
-  const {deviceType} = useContext(AppContext);
+  const deviceType = appInfoState?.deviceType;
   const {colors} = useTheme();
   const handleListItemPress = (
     teamId,
