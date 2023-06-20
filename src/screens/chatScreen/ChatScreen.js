@@ -178,7 +178,7 @@ const ChatScreen = ({
   const skip = chatState?.data[teamId]?.messages?.length ?? 0;
 
   const path = Platform.select({
-    ios: `sound.m4a`,
+    ios: `${RNFetchBlob.fs.dirs.CacheDir}/sound.m4a`,
     android: `${RNFetchBlob.fs.dirs.CacheDir}/sound.mp3`,
   });
   useEffect(() => {
