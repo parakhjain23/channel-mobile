@@ -327,7 +327,7 @@ const ChatScreen = ({
 
   const onEndReached = useCallback(() => {
     fetchChatsOfTeamAction(teamId, userInfoState?.accessToken, skip);
-  }, [teamId, userInfoState?.accessToken, skip, fetchChatsOfTeamAction]);
+  }, [teamId, userInfoState?.accessToken, skip]);
 
   function renderNode(node, index, siblings, parent, defaultRenderer) {
     const attribs = node?.attribs;
@@ -490,8 +490,9 @@ const ChatScreen = ({
                           ListFooterComponent
                         }
                         onEndReached={
-                          chatState?.data[teamId]?.messages?.length > 20 &&
-                          onEndReached
+                          chatState?.data[teamId]?.messages?.length > 20
+                            ? onEndReached
+                            : null
                         }
                         onEndReachedThreshold={0.9}
                         keyboardDismissMode="on-drag"
@@ -499,8 +500,8 @@ const ChatScreen = ({
                         onScroll={handleScroll}
                         showsVerticalScrollIndicator={false}
                         removeClippedSubviews={true}
-                        maxToRenderPerBatch={20}
-                        initialNumToRender={20}
+                        // maxToRenderPerBatch={20}
+                        // initialNumToRender={20}
                         refreshControl={
                           <RefreshControl
                             refreshing={refreshing}
@@ -508,34 +509,6 @@ const ChatScreen = ({
                           />
                         }
                       />
-                      {/* <Animated.FlatList
-                        ref={FlatListRef}
-                        data={memoizedData}
-                        renderItem={renderItem}
-                        inverted
-                        ListFooterComponent={
-                          chatState?.data[teamId]?.messages?.length > 15 &&
-                          ListFooterComponent
-                        }
-                        onEndReached={
-                          chatState?.data[teamId]?.messages?.length > 20 &&
-                          onEndReached
-                        }
-                        onEndReachedThreshold={0.9}
-                        keyboardDismissMode="on-drag"
-                        keyboardShouldPersistTaps="always"
-                        onScroll={onScroll}
-                        showsVerticalScrollIndicator={false}
-                        removeClippedSubviews={true}
-                        maxToRenderPerBatch={20}
-                        initialNumToRender={20}
-                        refreshControl={
-                          <RefreshControl
-                            refreshing={refreshing}
-                            onRefresh={handleRefresh}
-                          />
-                        }
-                      /> */}
                     </>
                   )}
                   <ScrollDownButton
