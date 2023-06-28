@@ -58,6 +58,9 @@ const RecentChannelsListComponent = React.memo(
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
+          ListFooterComponent={() => {
+            return <View style={{height: 100}} />;
+          }}
         />
       </View>
     );
