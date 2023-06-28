@@ -4,7 +4,7 @@ export const makeStyles = colors =>
     taskContainer: {
       width: '100%',
       alignItems: 'center',
-      marginBottom: 10,
+      marginTop: 5,
     },
     cardStyle: {
       flexDirection: 'row',
@@ -40,5 +40,37 @@ export const makeStyles = colors =>
       right: '10%',
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    markUnreadButton: {
+      backgroundColor: 'red',
+      borderRadius: 50,
+      minWidth: 12,
+      height: 12,
+    },
+    unreadButton: {
+      backgroundColor: '#73e1ff',
+      paddingHorizontal: 5,
+      paddingVertical: 2,
+      borderRadius: 5,
+      overflow: 'hidden',
+    },
+    unreadButtonText: {
+      color: 'black',
+      fontSize: 14,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      minWidth: 15,
+      height: 20,
+      lineHeight: 20,
+    },
+    channelIcon: {
+      backgroundColor: '#D3D3D3',
+      padding: 10,
+      borderRadius: 50,
+    },
+    userIcon: {
+      width: 30,
+      height: 30,
+      borderRadius: 50,
     },
   });

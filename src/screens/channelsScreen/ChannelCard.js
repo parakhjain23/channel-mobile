@@ -264,55 +264,24 @@ const ChannelCard = ({
                       : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVe0cFaZ9e5Hm9X-tdWRLSvoZqg2bjemBABA&usqp=CAU',
                     priority: FastImage.priority.normal,
                   }}
-                  style={{
-                    width: 30,
-                    height: 30,
-                    borderRadius: 50,
-                  }}
+                  style={styles.userIcon}
                 />
               ) : (
-                <View
-                  style={{
-                    backgroundColor: '#D3D3D3',
-                    padding: 10,
-                    borderRadius: 50,
-                  }}>
+                <View style={styles.channelIcon}>
                   <Icon name={iconName} size={14} color={'#000000'} />
                 </View>
               )}
               <Text style={styles.taskTitle}>{Name}</Text>
               <View style={{marginLeft: 'auto', marginRight: 10}}>
                 {teamIdAndUnreadCountMapping?.[item?._id] > 0 ? (
-                  <View
-                    style={{
-                      backgroundColor: '#73e1ff',
-                      paddingHorizontal: 5,
-                      paddingVertical: 2,
-                      borderRadius: 5,
-                      overflow: 'hidden',
-                    }}>
-                    <Text
-                      style={{
-                        color: 'black',
-                        fontSize: 14,
-                        fontWeight: 'bold',
-                        textAlign: 'center',
-                        minWidth: 15,
-                        height: 20,
-                        lineHeight: 20,
-                      }}>
+                  <View style={styles.unreadButton}>
+                    <Text style={styles.unreadButtonText}>
                       {teamIdAndUnreadCountMapping?.[item?._id]}
                     </Text>
                   </View>
                 ) : (
                   teamIdAndBadgeCountMapping?.[item?._id] > 0 && (
-                    <View
-                      style={{
-                        backgroundColor: 'red',
-                        borderRadius: 50,
-                        minWidth: 12,
-                        height: 12,
-                      }}></View>
+                    <View style={styles.markUnreadButton} />
                   )
                 )}
               </View>
