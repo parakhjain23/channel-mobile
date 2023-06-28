@@ -31,7 +31,7 @@ const RecentChannelsListComponent = React.memo(
               item={item}
               channelsState={channelsState}
               setChatDetailsForTab={setChatDetailsForTab}
-              accessToken={userInfoState?.accessToekn}
+              accessToken={userInfoState?.accessToken}
               currentUserId={userInfoState?.user?.id}
             />
           )
