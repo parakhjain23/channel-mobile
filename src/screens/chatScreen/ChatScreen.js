@@ -120,7 +120,7 @@ const ChatScreen = ({
         teamId,
         userInfoState?.accessToken,
         0,
-        chatState?.data[teamId]?.messages[0]?.['_id'],
+        chatState?.data?.[teamId]?.messages[0]?.['_id'],
       );
       setActiveChannelTeamIdAction(teamId);
     };

@@ -6,6 +6,7 @@ import SplashScreen from 'react-native-splash-screen';
 import DeviceInfo from 'react-native-device-info';
 import {SIGN_OUT, UPDATE_APP_VERSION} from '../../redux/Enums';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {storage} from '../../redux/reducers/Index';
 
 const SplashScreenComponent = ({
   setShowSplashScreen,
@@ -18,7 +19,8 @@ const SplashScreenComponent = ({
   const checkForApiUpdate = async () => {
     const version = DeviceInfo.getReadableVersion();
     if (appInfoState.appVersion === '' || appInfoState.appVersion !== version) {
-      await AsyncStorage.clear();
+      // await AsyncStorage.clear();
+      storage.clearAll();
       signOutAction();
       setNewVersionOfApp(version);
     }
