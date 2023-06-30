@@ -105,7 +105,6 @@ export function setGlobalMessageToSend(messageObj) {
 }
 
 export function addNewMessage(message, userid) {
-  console.log(message, '-0-0-0-0-');
   return {
     type: Actions.ADD_NEW_MESSAGE,
     teamId: message?.teamId,
