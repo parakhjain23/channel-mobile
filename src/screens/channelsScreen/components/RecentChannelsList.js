@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react';
-import {Animated, FlatList} from 'react-native';
+import {Animated, FlatList, Text} from 'react-native';
 import {useCallback} from 'react';
 import {RenderChannels} from '../ChannelCard';
 import {View} from 'react-native';
@@ -55,9 +55,9 @@ const RecentChannelsListComponent = React.memo(
           removeClippedSubviews={true}
           maxToRenderPerBatch={20}
           initialNumToRender={20}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
+          // refreshControl={
+          //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          // }
           ListFooterComponent={() => {
             return <View style={{height: 100}} />;
           }}
