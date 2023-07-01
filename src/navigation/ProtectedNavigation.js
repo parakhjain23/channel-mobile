@@ -29,7 +29,7 @@ const ProtectedNavigation = props => {
 
   const getHeader = {
     headerTintColor: colors.textColor,
-    animation: 'none',
+    // animation: '',
     headerStyle: {
       color: colors.textColor,
       backgroundColor: colors.headerColor,
