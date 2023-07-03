@@ -24,10 +24,11 @@ const CredHomeScreen = () => {
 
   const userInfoState = useSelector(state => state.userInfoReducer);
   const onPositionChange = position => {
-    // console.log(e, '=-=-=-');
+    console.log(position, '=-=-=-');
     setPosition(position === 'top');
   };
   const onLayout = e => {
+    console.log(e);
     console.log(modalizeRef?.current, 'layout');
   };
   const DATA = [
@@ -39,6 +40,9 @@ const CredHomeScreen = () => {
     {index: 1, name: 'New Channel'},
     {index: 2, name: 'Search'},
   ];
+  const onscroll = event => {
+    console.log(event, '=-=-=');
+  };
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <View style={styles.container}>
@@ -113,7 +117,7 @@ const CredHomeScreen = () => {
       </View>
       <Modalize
         // ref={modalizeRef}
-        alwaysOpen={Number(Dimensions.get('screen').height * 0.6)}
+        alwaysOpen={Number(Dimensions.get('screen').height * 0.5)}
         snapPoint={300}
         withOverlay={false}
         onLayout={onLayout}
@@ -122,6 +126,7 @@ const CredHomeScreen = () => {
         handleStyle={styles.handle}
         avoidKeyboardLikeIOS={true}
         scrollViewProps={{scrollEnabled: position}}
+        closeOnOverlayTap={false}
         handlePosition="outside">
         <ScrollView>
           <View style={styles.modalContent}>
@@ -157,12 +162,14 @@ const styles = StyleSheet.create({
   modal: {
     borderTopLeftRadius: 2,
     borderTopRightRadius: 2,
+    marginTop: 0,
   },
   handle: {
     backgroundColor: '#CCCCCC',
     width: 40,
     height: 2,
     borderRadius: 3,
+    display: 'none',
     // bottom: 0,
     // top: 0,
   },

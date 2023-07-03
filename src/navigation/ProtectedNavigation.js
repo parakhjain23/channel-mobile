@@ -14,6 +14,7 @@ import {DEVICE_TYPES} from '../constants/Constants';
 import * as Actions from '../redux/Enums';
 import ChannelDetailsScreen from '../screens/channelDetails/ChannelDetails';
 import Home from '../screens/home/Home';
+import Demo from '../screens/home/Demo';
 
 const ProtectedNavigation = props => {
   const Stack = createNativeStackNavigator();
@@ -57,6 +58,14 @@ const ProtectedNavigation = props => {
       <Stack.Screen
         name="Home"
         component={Home}
+        options={{
+          headerShown: false,
+          // ...getHeader,
+        }}
+      />
+      <Stack.Screen
+        name="Demo"
+        component={Demo}
         options={{
           headerShown: false,
           // ...getHeader,
