@@ -66,7 +66,7 @@ const Reactions = React.memo(props => {
           onPress={() => {
             onPress(reaction);
           }}>
-          <Text style={{color: '#ffffff', fontSize: 16}} key={index}>
+          <Text style={{color: '#ffffff', fontSize: 14}} key={index}>
             {reaction.reaction_icon}
           </Text>
           {reaction.users.length > 1 && (
