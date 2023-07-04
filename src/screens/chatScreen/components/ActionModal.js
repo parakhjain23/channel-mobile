@@ -4,7 +4,7 @@ import {Modal} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import {makeStyles} from '../Styles';
-import ActionList from './ActionList';
+import ActionList from './actionList/ActionList';
 import {ActionMessageCardMemo} from './ActionMessageCard';
 
 const ActionModal = ({

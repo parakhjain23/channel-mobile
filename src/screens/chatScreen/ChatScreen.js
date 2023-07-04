@@ -36,14 +36,13 @@ import {
   useTheme,
 } from '@react-navigation/native';
 import AnimatedLottieView from 'lottie-react-native';
-import {ms} from 'react-native-size-matters';
+import {ms, s} from 'react-native-size-matters';
 import {setLocalMsgStart} from '../../redux/actions/chat/LocalMessageActions';
 import {resetUnreadCountStart} from '../../redux/actions/channels/ChannelsAction';
 import HTMLView from 'react-native-htmlview';
 import RenderHTML from 'react-native-render-html';
 import {tagsStyles} from './HtmlStyles';
 import {onStartRecord, onStopRecord} from './VoiceRecording';
-import RNFetchBlob from 'rn-fetch-blob';
 import {uploadRecording} from './VoicePicker';
 import {
   addUserToChannelStart,
@@ -63,7 +62,8 @@ import {addDraftMessage} from '../../redux/actions/chat/DraftMessageAction';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Header} from '../../components/Header';
 import {joinChannelStart} from '../../redux/actions/channels/JoinChannelActions';
-import {FlashList} from '@shopify/flash-list';
+import {AnimatedFlashList, FlashList} from '@shopify/flash-list';
+import {LOCAL_PATH} from '../../utils/Path';
 
 const ChatScreen = ({
   chatDetailsForTab,
@@ -152,7 +152,7 @@ const ChatScreen = ({
   const [mentionsArr, setMentionsArr] = useState([]);
   const [isScrolling, setIsScrolling] = useState(false);
   const [mentions, setMentions] = useState([]);
-  const FlatListRef = useRef(null);
+  const FlashListRef = useRef(null);
   const textInputRef = useRef(null);
   const scrollY = new Animated.Value(0);
   const {height} = Dimensions.get('window');
@@ -183,10 +183,7 @@ const ChatScreen = ({
     teamIdAndBadgeCountMapping?.[teamId] > 0;
   const skip = chatState?.data[teamId]?.messages?.length ?? 0;
 
-  const path = Platform.select({
-    ios: `${RNFetchBlob.fs.dirs.CacheDir}/sound.m4a`,
-    android: `${RNFetchBlob.fs.dirs.CacheDir}/sound.mp3`,
-  });
+  const path = LOCAL_PATH;
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', e => {
       e.preventDefault();
@@ -244,16 +241,6 @@ const ChatScreen = ({
     }
   }, [channelsByQueryState?.mentionChannels]);
 
-  const handlePressOut = () => {
-    setShowPlayer(true),
-      onStopRecord(setrecordingUrl, setvoiceAttachment, isMountedRef),
-      setisRecording(false);
-  };
-
-  const handleLongPress = () => {
-    onStartRecord(setisRecording);
-  };
-
   const handleInputChange = useCallback(
     async text => {
       onChangeMessage(text);
@@ -290,7 +277,7 @@ const ChatScreen = ({
   );
 
   const scrollToBottom = () => {
-    FlatListRef?.current?.scrollToOffset({animating: true, offset: 0});
+    FlashListRef?.current?.scrollToOffset({animating: true, offset: 0});
   };
 
   const onScroll = Animated.event(
@@ -303,13 +290,6 @@ const ChatScreen = ({
       },
     },
   );
-  const handleScroll = event => {
-    // Access scroll-related information from the event object
-    const {contentOffset, contentSize, layoutMeasurement} = event.nativeEvent;
-    const offsetY = contentOffset.y;
-    setIsScrolling(offsetY >= 0.7 * screenHeight);
-    // ...
-  };
 
   const memoizedData = useMemo(
     () => chatState?.data[teamId]?.messages || [],
@@ -329,7 +309,7 @@ const ChatScreen = ({
           chatState={chatState}
           setreplyOnMessage={setreplyOnMessage}
           setrepliedMsgDetails={setrepliedMsgDetails}
-          flatListRef={FlatListRef}
+          FlashListRef={FlashListRef}
           channelType={channelType}
           index={index}
           setShowActions={setShowActions}
@@ -493,8 +473,8 @@ const ChatScreen = ({
                   </View>
                 ) : (
                   <>
-                    <FlashList
-                      ref={FlatListRef}
+                    <AnimatedFlashList
+                      ref={FlashListRef}
                       data={memoizedData}
                       renderItem={renderItem}
                       estimatedItemSize={200}
@@ -511,7 +491,7 @@ const ChatScreen = ({
                       onEndReachedThreshold={0.9}
                       keyboardDismissMode="on-drag"
                       keyboardShouldPersistTaps="always"
-                      onScroll={handleScroll}
+                      onScroll={onScroll}
                       showsVerticalScrollIndicator={false}
                       removeClippedSubviews={true}
                       // maxToRenderPerBatch={20}
@@ -551,7 +531,7 @@ const ChatScreen = ({
                   chatState={chatState}
                   setreplyOnMessage={setreplyOnMessage}
                   setrepliedMsgDetails={setrepliedMsgDetails}
-                  flatListRef={FlatListRef}
+                  FlashListRef={FlashListRef}
                   channelType={channelType}
                   setCurrentSelectedChatCard={setCurrentSelectedChatCard}
                   currentSelectChatCard={currentSelectChatCard}
