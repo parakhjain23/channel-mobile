@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 
-export const makeStyles = colors =>
+export const makeStyles = (colors: any) =>
   StyleSheet.create({
     optionText: {
       fontSize: 16,
