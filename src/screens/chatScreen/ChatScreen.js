@@ -52,7 +52,7 @@ import {ACTIVITIES, DEVICE_TYPES} from '../../constants/Constants';
 import ScrollDownButton from '../../components/ScrollDownButton';
 import AudioRecordingPlayer from '../../components/AudioRecorderPlayer';
 import FirstTabChatScreen from './FirstTabChatScreen';
-import ActivityList from './components/ActivityList';
+import ActivityList from './components/acitivityList/ActivityList';
 import MentionList from './components/MentionList';
 import ActionModal from './components/ActionModal';
 import {Button} from 'react-native-paper';

@@ -106,7 +106,29 @@ const ActionMessageCard = ({
     parentId == null
       ? chat?.content?.length > 400
       : chatState?.data[chat.teamId]?.parentMessages[parentId]?.content > 400;
-  console.log('action message card');
+
+  const EmojiPicerComponent = () => {
+    return (
+      <EmojiPicker
+        onEmojiSelected={e =>
+          reactionAction(
+            userInfoState?.accessToken,
+            chat?.teamId,
+            chat?._id,
+            e.emoji,
+            e.name,
+            [],
+            'add',
+            userInfoState?.user?.id,
+          ) && setShowActions(false)
+        }
+        open={emojiModel}
+        onClose={() => setemojiModel(false)}
+        enableSearchBar={true}
+      />
+    );
+  };
+
   if (!isActivity) {
     return (
       <TouchableOpacity activeOpacity={1}>
@@ -153,23 +175,7 @@ const ActionMessageCard = ({
           <TouchableOpacity onPress={() => setemojiModel(!emojiModel)}>
             <Text style={{color: 'black', fontSize: 30, marginLeft: 5}}>+</Text>
           </TouchableOpacity>
-          <EmojiPicker
-            onEmojiSelected={e =>
-              reactionAction(
-                userInfoState?.accessToken,
-                chat?.teamId,
-                chat?._id,
-                e.emoji,
-                e.name,
-                [],
-                'add',
-                userInfoState?.user?.id,
-              ) && setShowActions(false)
-            }
-            open={emojiModel}
-            onClose={() => setemojiModel(false)}
-            enableSearchBar={true}
-          />
+          <EmojiPicerComponent />
         </View>
         <View
           style={{
@@ -340,6 +346,7 @@ const ActionMessageCard = ({
                 />
               )}
             </View>
+
             {isLimitExceed && (
               <Text style={{color: 'white', fontSize: 20}}>.....</Text>
             )}
