@@ -43,7 +43,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
             activeOpacity={0.9}>
             <View style={styles.container}>
               <Image
-                source={require('../../../assests/images/appIcon/icon48size.png')}
+                source={require('../../../../assests/images/appIcon/icon48size.png')}
                 style={styles.appIcon}
               />
               <View>
