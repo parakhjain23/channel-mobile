@@ -20,6 +20,7 @@ import {reactionOnChatStart} from '../../../redux/actions/chat/ReactionsActions'
 import {connect} from 'react-redux';
 import EmojiPicker from 'rn-emoji-keyboard';
 import {EMOJI_ARRAY} from '../../../constants/Constants';
+import Reactions from '../../../components/Reactions';
 
 const ActionMessageCard = ({
   chat,
@@ -105,7 +106,7 @@ const ActionMessageCard = ({
     parentId == null
       ? chat?.content?.length > 400
       : chatState?.data[chat.teamId]?.parentMessages[parentId]?.content > 400;
-
+  console.log('action message card');
   if (!isActivity) {
     return (
       <TouchableOpacity activeOpacity={1}>
@@ -345,76 +346,7 @@ const ActionMessageCard = ({
           </View>
         </View>
         {chat?.reactions?.length > 0 && (
-          <View
-            style={{
-              alignSelf: 'center',
-              backgroundColor: '#353535',
-              paddingHorizontal: 5,
-              paddingVertical: 5,
-              top: -5,
-              borderWidth: 1,
-              borderRadius: 20,
-              flexDirection: 'row',
-            }}>
-            {chat?.reactions?.map(
-              (reaction, index) =>
-                index < 8 && (
-                  <TouchableOpacity
-                    style={{
-                      flexDirection: 'row',
-                      paddingHorizontal: 3,
-                      alignItems: 'center',
-                    }}
-                    key={index}
-                    onPress={() => {
-                      if (reaction?.users?.includes(userInfoState?.user?.id)) {
-                        reactionAction(
-                          userInfoState?.accessToken,
-                          chat?.teamId,
-                          chat?._id,
-                          reaction.reaction_icon,
-                          reaction.reaction_name,
-                          reaction?.users.filter(
-                            userId => userId !== userInfoState?.user?.id,
-                          ),
-                          'remove',
-                          userInfoState?.user?.id,
-                        );
-                      } else {
-                        reactionAction(
-                          userInfoState?.accessToken,
-                          chat?.teamId,
-                          chat?._id,
-                          reaction.reaction_icon,
-                          reaction.reaction_name,
-                          reaction?.users.filter(
-                            userId => userId !== userInfoState?.user?.id,
-                          ),
-                          'add',
-                          userInfoState?.user?.id,
-                        );
-                      }
-                    }}>
-                    <Text style={{color: '#ffffff', fontSize: 16}} key={index}>
-                      {reaction.reaction_icon}
-                    </Text>
-                    {reaction.users.length > 1 && (
-                      <Text
-                        style={{
-                          color: '#E5E4E2',
-                          fontSize: 14,
-                          fontWeight: '700',
-                          marginRight: 2,
-                          marginLeft: -3,
-                        }}>
-                        {' '}
-                        {reaction.users.length}
-                      </Text>
-                    )}
-                  </TouchableOpacity>
-                ),
-            )}
-          </View>
+          <Reactions chat={chat} setShowActions={setShowActions} />
         )}
       </TouchableOpacity>
     );
