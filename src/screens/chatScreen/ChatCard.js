@@ -609,18 +609,20 @@ const ChatCard = ({
                     alignSelf: sentByMe ? 'flex-end' : 'flex-start',
                     backgroundColor: '#353535',
                     paddingHorizontal: 3,
+                    paddingVertical: 1,
                     bottom: 3,
                     borderWidth: 1,
-                    borderRadius: 10,
+                    borderRadius: 20,
                     flexDirection: 'row',
-                    maxWidth: '90%',
+                    maxWidth: '95%',
                     flex: 1,
+                    overflow: 'scroll',
                   }}>
                   {chat?.reactions?.map((reaction, index) => (
                     <TouchableOpacity
                       style={{
                         flexDirection: 'row',
-                        marginHorizontal: 3,
+                        paddingHorizontal: 3,
                         alignItems: 'center',
                       }}
                       key={index}
