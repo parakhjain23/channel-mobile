@@ -39,6 +39,7 @@ import Animated, {
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {resetUnreadCountStart} from '../../redux/actions/channels/ChannelsAction';
 import {makeStyles} from './ChannelCardStyles';
+import {ChannelHeaderImage} from '../../components/Header';
 
 const TouchableItem =
   Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity;
@@ -267,9 +268,20 @@ const ChannelCard = ({
                   style={styles.userIcon}
                 />
               ) : (
-                <View style={styles.channelIcon}>
-                  <Icon name={iconName} size={14} color={'#000000'} />
-                </View>
+                // <FastImage
+                //   source={{
+                //     uri: orgsState?.userIdAndImageUrlMapping[userId]
+                //       ? orgsState?.userIdAndImageUrlMapping[userId]
+                //       : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVe0cFaZ9e5Hm9X-tdWRLSvoZqg2bjemBABA&usqp=CAU',
+                //     priority: FastImage.priority.normal,
+                //   }}
+                //   style={styles.userIcon}
+                // />
+                <ChannelHeaderImage
+                  channelsState={channelsState}
+                  teamId={item?._id}
+                  orgState={orgsState}
+                />
               )}
               <Text style={styles.taskTitle}>{Name}</Text>
               <View style={{marginLeft: 'auto', marginRight: 10}}>

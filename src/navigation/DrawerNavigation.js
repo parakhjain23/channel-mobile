@@ -15,6 +15,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomDrawerScreen from '../screens/drawer/CustomDrawerScreen';
 import IpadScreen from '../screens/ipadScreen/IpadScreen';
 import {DEVICE_TYPES} from '../constants/Constants';
+import Demo from '../screens/channelsScreen/Demo';
+import Demo1 from '../screens/channelsScreen/Demo1';
 
 const Drawer = createDrawerNavigator();
 const DrawerNavigation = ({orgsState, appInfoState}) => {
@@ -33,7 +35,7 @@ const DrawerNavigation = ({orgsState, appInfoState}) => {
       drawerContent={props => (
         <CustomDrawerScreen {...props} deviceType={deviceType} />
       )}>
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name={ScreenName}
         component={ScreenComponent}
         options={({route, navigation}) => ({
@@ -63,6 +65,11 @@ const DrawerNavigation = ({orgsState, appInfoState}) => {
             </TouchableOpacity>
           ),
         })}
+      /> */}
+      <Drawer.Screen
+        name={'Demo1'}
+        component={Demo1}
+        options={({route, navigation}) => ({headerShown: false})}
       />
     </Drawer.Navigator>
   );

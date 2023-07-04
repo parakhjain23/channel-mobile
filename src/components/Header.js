@@ -160,7 +160,7 @@ export const UserImageComponent = ({
     />
   );
 };
-const ChannelImageComponent = ({
+export const ChannelImageComponent = ({
   userInfoState,
   teamId,
   orgState,
@@ -282,13 +282,13 @@ const ChannelImageComponent = ({
           </View>
         </View>
       </View>
-      {userImagesArray?.length - userImages?.length > 0 && (
+      {/* {userImagesArray?.length - userImages?.length > 0 && (
         <View style={{marginLeft: 3}}>
           <Text style={{color: colors?.color, fontSize: 8}}>
             +{userImagesArray?.length - userImages?.length}
           </Text>
         </View>
-      )}
+      )} */}
     </View>
   );
 };

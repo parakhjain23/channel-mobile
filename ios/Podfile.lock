@@ -500,6 +500,8 @@ PODS:
     - react-native-video/Video (= 5.2.1)
   - react-native-video/Video (5.2.1):
     - React-Core
+  - react-native-webview (13.2.2):
+    - React-Core
   - React-perflogger (0.71.10)
   - React-RCTActionSheet (0.71.10):
     - React-Core/RCTActionSheetHeaders (= 0.71.10)
@@ -741,6 +743,7 @@ DEPENDENCIES:
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-video (from `../node_modules/react-native-video`)
+  - react-native-webview (from `../node_modules/react-native-webview`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -877,6 +880,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-splash-screen"
   react-native-video:
     :path: "../node_modules/react-native-video"
+  react-native-webview:
+    :path: "../node_modules/react-native-webview"
   React-perflogger:
     :path: "../node_modules/react-native/ReactCommon/reactperflogger"
   React-RCTActionSheet:
@@ -1010,6 +1015,7 @@ SPEC CHECKSUMS:
   react-native-slider: 33b8d190b59d4f67a541061bb91775d53d617d9d
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253
+  react-native-webview: b8ec89966713985111a14d6e4bf98d8b54bced0d
   React-perflogger: 217095464d5c4bb70df0742fa86bf2a363693468
   React-RCTActionSheet: 8deae9b85a4cbc6a2243618ea62a374880a2c614
   React-RCTAnimation: 59c62353a8b59ce206044786c5d30e4754bffa64
@@ -1054,4 +1060,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 2e86c682468b4b438ee6a9a275a3c002f3931d03
 
-COCOAPODS: 1.12.0
+COCOAPODS: 1.12.1
