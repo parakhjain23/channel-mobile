@@ -35,6 +35,7 @@ import {formatTime} from '../../utils/FormatTime';
 import FastImage from 'react-native-fast-image';
 import {reactionOnChatStart} from '../../redux/actions/chat/ReactionsActions';
 import Reactions from '../../components/Reactions';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const AddRemoveJoinedMsg = React.memo(({senderName, content, orgState}) => {
   const {colors} = useTheme();
@@ -252,6 +253,25 @@ const ChatCard = ({
     }
   }
   const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
+
+  const renderImageviewerHeader = () => (
+    <View
+      style={{
+        height: '7%',
+        alignItems: 'flex-end',
+        width: '100%',
+        paddingVertical: 5,
+        paddingHorizontal: 15,
+        position: 'absolute',
+        zIndex: 99,
+        justifyContent: 'center',
+      }}>
+      <TouchableOpacity onPress={handleModalClose}>
+        <AntDesign name={'closecircleo'} size={25} color={'gray'} />
+      </TouchableOpacity>
+    </View>
+    
+  );
   if (!isActivity) {
     return (
       <GestureHandlerRootView>
@@ -444,6 +464,7 @@ const ChatCard = ({
                           ]}
                           enableSwipeDown={true}
                           onSwipeDown={handleModalClose}
+                          renderHeader={renderImageviewerHeader}
                         />
                       </Modal>
                     </View>
@@ -611,7 +632,7 @@ const ChatCard = ({
           </TouchableOpacity>
         </View>
         {!isSameDate && (
-          <View>
+          <View> 
             <Text
               style={{
                 color: '#808080',
