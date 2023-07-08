@@ -3,7 +3,7 @@ import React from 'react';
 import {Modal} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native';
 import ActionList from './actionList/ActionList';
-import {ActionMessageCardMemo} from './ActionMessageCard';
+import {ActionMessageCardMemo} from './longPressCard/LongPressCard';
 
 const {height} = Dimensions.get('window');
 

@@ -2,7 +2,7 @@ import React, {useMemo} from 'react';
 import {FlatList, TouchableOpacity, View, Text, Image} from 'react-native';
 import {ACTIVITIES} from '../../../../constants/Constants';
 import {useTheme} from '@react-navigation/native';
-import {makeStyles} from './ActivityList-Style';
+import {makeStyles} from './ActivityList-Styles';
 
 interface Activity {
   name: string;

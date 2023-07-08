@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useTheme} from '@react-navigation/native';
 import {connect} from 'react-redux';
 import {deleteMessageStart} from '../../../../redux/actions/chat/DeleteChatAction';
-import {makeStyles} from './ActionList-Style';
+import {makeStyles} from './ActionList-Styles';
 import ClipboardUtils from '../../../../components/CopyClipboard';
 
 const ActionList = React.memo(

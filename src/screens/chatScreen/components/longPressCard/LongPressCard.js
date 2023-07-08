@@ -9,18 +9,18 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useTheme} from '@react-navigation/native';
-import {makeStyles} from '../ChatCardStyles';
 import {ms} from 'react-native-size-matters';
 import HTMLView from 'react-native-htmlview';
 import {RenderHTML} from 'react-native-render-html';
-import {tagsStyles} from '../HtmlStyles';
-import {formatTime} from '../../../utils/FormatTime';
-import AudioRecordingPlayer from '../../../components/AudioRecorderPlayer';
-import {reactionOnChatStart} from '../../../redux/actions/chat/ReactionsActions';
+import {tagsStyles} from '../../HtmlStyles';
+import {formatTime} from '../../../../utils/FormatTime';
+import AudioRecordingPlayer from '../../../../components/AudioRecorderPlayer';
+import {reactionOnChatStart} from '../../../../redux/actions/chat/ReactionsActions';
 import {connect} from 'react-redux';
 import EmojiPicker from 'rn-emoji-keyboard';
-import {EMOJI_ARRAY} from '../../../constants/Constants';
-import Reactions from '../../../components/Reactions';
+import {EMOJI_ARRAY} from '../../../../constants/Constants';
+import Reactions from '../../../../components/Reactions';
+import {makeStyles} from './LongPressCard-Styles';
 
 const ActionMessageCard = ({
   chat,
@@ -107,6 +107,51 @@ const ActionMessageCard = ({
       ? chat?.content?.length > 400
       : chatState?.data[chat.teamId]?.parentMessages[parentId]?.content > 400;
 
+  const Attachments = () => {
+    {
+      attachment?.map((item, index) => {
+        return item?.contentType?.includes('image') ? (
+          <View key={index} style={styles.imageAttchContainer}>
+            <Image
+              source={{uri: item?.resourceUrl}}
+              style={styles.imageAttchment}
+            />
+          </View>
+        ) : item?.contentType?.includes('audio') ? (
+          <View key={index} style={audioAttachContainer}>
+            <AudioRecordingPlayer remoteUrl={item?.resourceUrl} />
+          </View>
+        ) : (
+          <View
+            key={index}
+            style={[styles.repliedContainer, styles.docContainer]}>
+            <View style={styles.docContentContainer}>
+              {item?.contentType?.includes('pdf') && (
+                <Image
+                  source={require('../../../assests/images/attachments/pdfLogo.png')}
+                  style={styles.attachmentIcon}
+                />
+              )}
+              {item?.contentType?.includes('doc') && (
+                <Image
+                  source={require('../../../assests/images/attachments/docLogo.png')}
+                  style={styles.attachmentIcon}
+                />
+              )}
+              <View>
+                <Text style={{color: 'black'}}>
+                  {item?.title?.slice(0, 15) + '...'}
+                </Text>
+                <Text style={{color: 'black'}}>
+                  {'...' + item?.contentType?.slice(-15)}
+                </Text>
+              </View>
+            </View>
+          </View>
+        );
+      });
+    }
+  };
   const EmojiPicerComponent = () => {
     return (
       <EmojiPicker
@@ -129,54 +174,41 @@ const ActionMessageCard = ({
     );
   };
 
+  const onEmojiPress = () => {
+    const reactionExists =
+      chat?.reactions?.length > 0
+        ? chat?.reactions?.some(
+            reaction => reaction.reaction_icon === obj.reaction_icon,
+          )
+        : false;
+
+    const actionType = reactionExists ? 'remove' : 'add';
+    reactionAction(
+      userInfoState?.accessToken,
+      chat?.teamId,
+      chat?._id,
+      obj?.reaction_icon,
+      obj.reaction_name,
+      [],
+      actionType,
+      userInfoState?.user?.id,
+    ) && setShowActions(false);
+  };
   if (!isActivity) {
     return (
       <TouchableOpacity activeOpacity={1}>
-        <View
-          style={{
-            minHeight: 40,
-            width: '50%',
-            paddingVertical: 3,
-            paddingHorizontal: 10,
-            backgroundColor: 'white',
-            borderRadius: 25,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
+        <View style={styles.emojiContainer}>
           {EMOJI_ARRAY?.map((obj, index) => (
-            <TouchableOpacity
-              onPress={() => {
-                const reactionExists =
-                  chat?.reactions?.length > 0
-                    ? chat?.reactions?.some(
-                        reaction =>
-                          reaction.reaction_icon === obj.reaction_icon,
-                      )
-                    : false;
-
-                const actionType = reactionExists ? 'remove' : 'add';
-                reactionAction(
-                  userInfoState?.accessToken,
-                  chat?.teamId,
-                  chat?._id,
-                  obj?.reaction_icon,
-                  obj.reaction_name,
-                  [],
-                  actionType,
-                  userInfoState?.user?.id,
-                ) && setShowActions(false);
-              }}
-              key={index}>
-              <Text style={{fontSize: 30, color: '#ffffff', marginRight: 7}}>
-                {obj.reaction_icon}
-              </Text>
+            <TouchableOpacity onPress={onEmojiPress} key={index}>
+              <Text style={styles.emojiIcon}>{obj.reaction_icon}</Text>
             </TouchableOpacity>
           ))}
           <TouchableOpacity onPress={() => setemojiModel(!emojiModel)}>
-            <Text style={{color: 'black', fontSize: 30, marginLeft: 5}}>+</Text>
+            <Text style={styles.emojiPlusText}>+</Text>
           </TouchableOpacity>
           <EmojiPicerComponent />
         </View>
+
         <View
           style={{
             marginTop: 5,
@@ -184,7 +216,6 @@ const ActionMessageCard = ({
           }}>
           <View
             style={[
-              styles.textContainer,
               styles.container,
               sentByMe ? styles.sentByMe : styles.received,
               {padding: 10, backgroundColor: containerBackgroundColor},
@@ -220,7 +251,7 @@ const ActionMessageCard = ({
                 {chatState?.data[chat.teamId]?.parentMessages[parentId]
                   ?.attachment?.length > 0 ? (
                   <Text style={{color: 'black'}}>
-                    <Icon name="attach-file" size={ms(14)} /> attachment
+                    <Icon name="attach-file" size={14} /> attachment
                   </Text>
                 ) : chatState?.data[chat.teamId]?.parentMessages[
                     parentId
@@ -248,80 +279,8 @@ const ActionMessageCard = ({
                 )}
               </TouchableOpacity>
             )}
-            {attachment?.length > 0 &&
-              attachment?.map((item, index) => {
-                return item?.contentType?.includes('image') ? (
-                  <View
-                    key={index}
-                    style={{marginVertical: 5, alignItems: 'center'}}>
-                    <Image
-                      source={{uri: item?.resourceUrl}}
-                      style={{
-                        height: ms(150),
-                        width: ms(150),
-                      }}
-                    />
-                  </View>
-                ) : item?.contentType?.includes('audio') ? (
-                  <View
-                    key={index}
-                    style={{
-                      flexDirection: 'row',
-                      height: 50,
-                      width: ms(280),
-                    }}>
-                    <AudioRecordingPlayer remoteUrl={item?.resourceUrl} />
-                  </View>
-                ) : (
-                  <View
-                    key={index}
-                    style={[
-                      styles.repliedContainer,
-                      {
-                        borderWidth: ms(0.5),
-                        borderColor: 'gray',
-                        borderRadius: ms(5),
-                        padding: ms(10),
-                      },
-                    ]}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                      }}>
-                      {item?.contentType?.includes('pdf') && (
-                        <Image
-                          source={require('../../../assests/images/attachments/pdfLogo.png')}
-                          style={{
-                            width: 40,
-                            height: 40,
-                            marginRight: 15,
-                          }}
-                        />
-                      )}
-                      {item?.contentType?.includes('doc') && (
-                        <Image
-                          source={require('../../../assests/images/attachments/docLogo.png')}
-                          style={{
-                            width: 40,
-                            height: 40,
-                            marginRight: 15,
-                          }}
-                        />
-                      )}
-                      <View>
-                        <Text style={{color: 'black'}}>
-                          {item?.title?.slice(0, 15) + '...'}
-                        </Text>
-                        <Text style={{color: 'black'}}>
-                          {'...' + item?.contentType?.slice(-15)}
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                );
-              })}
+
+            {attachment?.length > 0 && <Attachments />}
 
             <View
               style={{
