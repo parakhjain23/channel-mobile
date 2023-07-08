@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     // backfaceVisibility: true,
+    // backgroundColor: 'black',
   },
   slider: {
     // alignItems: 'center',

@@ -68,7 +68,7 @@ const DrawerNavigation = ({orgsState, appInfoState}) => {
       /> */}
       <Drawer.Screen
         name={'Demo1'}
-        component={Demo1}
+        component={Demo}
         options={({route, navigation}) => ({headerShown: false})}
       />
     </Drawer.Navigator>

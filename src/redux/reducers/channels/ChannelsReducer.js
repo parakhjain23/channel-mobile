@@ -3,6 +3,7 @@ import * as Actions from '../../Enums';
 const initialState = {
   channels: [],
   recentChannels: [],
+  dmChannels: [],
   isLoading: false,
   activeChannelTeamId: null,
   highlightChannel: {},
@@ -76,12 +77,20 @@ export function channelsReducer(state = initialState, action) {
 
     case Actions.FETCH_RECENT_CHANNELS_SUCCESS:
       var tempRecentChannels = [];
+      var tempDmChannels = [];
       var key = null;
       for (let i = 0; i < action?.recentChannels?.length; i++) {
         key = action?.recentChannels[i]?.teamId;
+        if (state?.teamIdAndTypeMapping[key] == 'DIRECT_MESSAGE') {
+          tempDmChannels.push(state.channelIdAndDataMapping[key]);
+        }
         tempRecentChannels.push(state?.channelIdAndDataMapping[key]);
       }
-      return {...state, recentChannels: tempRecentChannels};
+      return {
+        ...state,
+        recentChannels: tempRecentChannels,
+        dmChannels: tempDmChannels,
+      };
 
     case Actions.FETCH_CHANNELS_ERROR:
       return {...state, channels: [], isLoading: false};
