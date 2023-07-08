@@ -1,7 +1,6 @@
 import React, {useMemo, useState} from 'react';
 import {
   Image,
-  Modal,
   Text,
   TouchableOpacity,
   View,
@@ -9,7 +8,6 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useTheme} from '@react-navigation/native';
-import {ms} from 'react-native-size-matters';
 import HTMLView from 'react-native-htmlview';
 import {RenderHTML} from 'react-native-render-html';
 import {tagsStyles} from '../../HtmlStyles';

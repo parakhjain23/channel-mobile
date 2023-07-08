@@ -3,6 +3,7 @@ import {FlatList, TouchableOpacity, View, Text, Image} from 'react-native';
 import {ACTIVITIES} from '../../../../constants/Constants';
 import {useTheme} from '@react-navigation/native';
 import {makeStyles} from './ActivityList-Styles';
+import {Icon48} from '../../../../assests/images/appIcon';
 
 interface Activity {
   name: string;
@@ -42,10 +43,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
             key={index}
             activeOpacity={0.9}>
             <View style={styles.container}>
-              <Image
-                source={require('../../../../assests/images/appIcon/icon48size.png')}
-                style={styles.appIcon}
-              />
+              <Image source={Icon48} style={styles.appIcon} />
               <View>
                 <Text style={styles.title}>{item?.name}</Text>
                 <Text style={styles.description}>{item?.desc}</Text>
