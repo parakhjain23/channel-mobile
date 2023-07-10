@@ -19,6 +19,7 @@ import EmojiPicker from 'rn-emoji-keyboard';
 import {EMOJI_ARRAY} from '../../../../constants/Constants';
 import Reactions from '../../../../components/Reactions';
 import {makeStyles} from './LongPressCard-Styles';
+import {DocLogo, PdfLogo} from '../../../../assests/images/attachments';
 
 const ActionMessageCard = ({
   chat,
@@ -105,51 +106,48 @@ const ActionMessageCard = ({
       ? chat?.content?.length > 400
       : chatState?.data[chat.teamId]?.parentMessages[parentId]?.content > 400;
 
-  const Attachments = () => {
-    {
-      attachment?.map((item, index) => {
-        return item?.contentType?.includes('image') ? (
-          <View key={index} style={styles.imageAttchContainer}>
-            <Image
-              source={{uri: item?.resourceUrl}}
-              style={styles.imageAttchment}
-            />
-          </View>
-        ) : item?.contentType?.includes('audio') ? (
-          <View key={index} style={audioAttachContainer}>
-            <AudioRecordingPlayer remoteUrl={item?.resourceUrl} />
-          </View>
-        ) : (
-          <View
-            key={index}
-            style={[styles.repliedContainer, styles.docContainer]}>
-            <View style={styles.docContentContainer}>
-              {item?.contentType?.includes('pdf') && (
-                <Image
-                  source={require('../../../assests/images/attachments/pdfLogo.png')}
-                  style={styles.attachmentIcon}
-                />
-              )}
-              {item?.contentType?.includes('doc') && (
-                <Image
-                  source={require('../../../assests/images/attachments/docLogo.png')}
-                  style={styles.attachmentIcon}
-                />
-              )}
-              <View>
-                <Text style={{color: 'black'}}>
-                  {item?.title?.slice(0, 15) + '...'}
-                </Text>
-                <Text style={{color: 'black'}}>
-                  {'...' + item?.contentType?.slice(-15)}
-                </Text>
+  const Attachments = React.memo(() => {
+    return (
+      <>
+        {attachment?.map((item, index) => {
+          return item?.contentType?.includes('image') ? (
+            <View key={index} style={styles.imageAttachContainer}>
+              <Image
+                source={{uri: item?.resourceUrl}}
+                style={styles.imageAttachment}
+              />
+            </View>
+          ) : item?.contentType?.includes('audio') ? (
+            <View key={index} style={styles.audioAttachContainer}>
+              <AudioRecordingPlayer remoteUrl={item?.resourceUrl} />
+            </View>
+          ) : (
+            <View
+              key={index}
+              style={[styles.repliedContainer, styles.docContainer]}>
+              <View style={styles.docContentContainer}>
+                {item?.contentType?.includes('pdf') && (
+                  <Image source={PdfLogo} style={styles.attachmentIcon} />
+                )}
+                {item?.contentType?.includes('doc') && (
+                  <Image source={DocLogo} style={styles.attachmentIcon} />
+                )}
+                <View>
+                  <Text style={{color: 'black'}}>
+                    {item?.title?.slice(0, 15) + '...'}
+                  </Text>
+                  <Text style={{color: 'black'}}>
+                    {'...' + item?.contentType?.slice(-15)}
+                  </Text>
+                </View>
               </View>
             </View>
-          </View>
-        );
-      });
-    }
-  };
+          );
+        })}
+      </>
+    );
+  });
+
   const EmojiPicerComponent = () => {
     return (
       <EmojiPicker
@@ -172,7 +170,7 @@ const ActionMessageCard = ({
     );
   };
 
-  const onEmojiPress = () => {
+  const onEmojiPress = obj => {
     const reactionExists =
       chat?.reactions?.length > 0
         ? chat?.reactions?.some(
@@ -197,7 +195,11 @@ const ActionMessageCard = ({
       <TouchableOpacity activeOpacity={1}>
         <View style={styles.emojiContainer}>
           {EMOJI_ARRAY?.map((obj, index) => (
-            <TouchableOpacity onPress={onEmojiPress} key={index}>
+            <TouchableOpacity
+              onPress={() => {
+                onEmojiPress(obj);
+              }}
+              key={index}>
               <Text style={styles.emojiIcon}>{obj.reaction_icon}</Text>
             </TouchableOpacity>
           ))}
