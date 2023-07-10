@@ -23,6 +23,14 @@ export const makeStyles = (colors: any) =>
       fontSize: 30,
       marginLeft: 5,
     },
+    dataContainer: {
+      marginTop: 5,
+      alignSelf: 'center',
+    },
+    textContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
     text: {
       color: colors.color,
     },
@@ -96,14 +104,15 @@ export const makeStyles = (colors: any) =>
     },
     nameText: {
       fontWeight: '600',
-      fontSize: 16,
       marginBottom: 2,
+      marginRight: 10,
+      fontSize: 18,
     },
     messageText: {
       fontSize: 16,
     },
     timeText: {
-      fontSize: 11,
+      fontSize: 13,
     },
     imageAttachContainer: {
       marginVertical: 5,
@@ -133,5 +142,10 @@ export const makeStyles = (colors: any) =>
       width: 40,
       height: 40,
       marginRight: 15,
+    },
+    nameTimeContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
     },
   });

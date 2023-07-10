@@ -209,37 +209,20 @@ const ActionMessageCard = ({
           <EmojiPicerComponent />
         </View>
 
-        <View
-          style={{
-            marginTop: 5,
-            alignSelf: 'center',
-          }}>
+        <View style={styles.dataContainer}>
           <View
             style={[
               styles.container,
               sentByMe ? styles.sentByMe : styles.received,
               {padding: 10, backgroundColor: containerBackgroundColor},
             ]}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}>
-              <Text
-                style={[
-                  styles.nameText,
-                  {color: textColor, marginRight: 10, fontSize: 18},
-                ]}>
-                {SenderName}
-              </Text>
+            <View style={[styles.nameTimeContainer, {color: textColor}]}>
+              <Text style={[styles.nameText]}>{SenderName}</Text>
               <Text
                 style={[
                   styles.timeText,
-                  styles.text,
                   {
                     color: sentByMe ? '#cccccc' : dark ? '#cccccc' : 'black',
-                    fontSize: 13,
                   },
                 ]}>
                 {time}
@@ -282,11 +265,7 @@ const ActionMessageCard = ({
 
             {attachment?.length > 0 && <Attachments />}
 
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
+            <View style={styles.textContainer}>
               {chat?.content?.includes('<span class="mention"') ? (
                 <HTMLView
                   value={`<div>${chat?.content?.slice(0, 400)}</div>`}
@@ -307,7 +286,7 @@ const ActionMessageCard = ({
             </View>
 
             {isLimitExceed && (
-              <Text style={{color: 'white', fontSize: 20}}>.....</Text>
+              <Text style={{color: colors.color, fontSize: 20}}>.....</Text>
             )}
           </View>
         </View>
