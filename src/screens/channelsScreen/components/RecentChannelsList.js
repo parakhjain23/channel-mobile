@@ -163,7 +163,7 @@ const RecentChannelsListComponent = React.memo(
         // console.log(index);
         return (
           !item?.isArchived &&
-          index < 20 &&
+          index < 5 &&
           item?.type != 'DIRECT_MESSAGE' && (
             <RenderChannels
               item={item}

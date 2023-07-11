@@ -54,9 +54,9 @@ const Demo = () => {
             setChatDetailsForTab={false}
           />
         </View>
-        {/* <View style={{position: 'absolute', bottom: 0}}>
+        <View style={{position: 'absolute', bottom: 0}}>
           <Slider />
-        </View> */}
+        </View>
         {isScrolling && (
           <View
             style={{
