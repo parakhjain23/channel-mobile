@@ -18,7 +18,7 @@ const App = () => {
     Request();
     codePush.sync({
       updateDialog: true,
-      installMode: codePush.InstallMode.IMMEDIATE,
+      installMode: codePush.InstallMode.ON_NEXT_RESTART,
     });
   }, []);
 
