@@ -13,7 +13,8 @@ import {Checkbox, RadioButton} from 'react-native-paper';
 const JSON = [
   {
     type: 'quill',
-    content: '<h1>heading</h1><p>My Name is Parakh Jain. Text from quilll</p>',
+    content:
+      '<h1>Hii Rudra</h1><p>My Name is Parakh Jain. Text from quilll</p>',
   },
   {
     type: 'plain_text',

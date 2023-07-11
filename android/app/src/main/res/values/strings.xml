@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Channel</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">2a_zQ1-Qm-QJBnJPUiZs8-GHAY5AcVMZGU8J0</string>
 </resources>

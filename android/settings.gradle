@@ -24,3 +24,6 @@ project(':rn-fetch-blob').projectDir = new File(rootProject.projectDir, '../node
 
 include ':react-native-slider'
 project(':react-native-slider').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-community/slider/android')
+
+include ':app', ':react-native-code-push'
+project(':react-native-code-push').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-code-push/android/app')
