@@ -114,22 +114,26 @@ const Home = () => {
           <View
             style={{flexDirection: 'row', alignItems: 'center'}}
             key={index}>
-            <Text>{item.content}</Text>
             <Checkbox
               status={data[index] ? 'checked' : 'unchecked'}
               onPress={() => handleCheckboxToggle(index)}
             />
+            <Text>{item.content}</Text>
           </View>
         );
       case 'radioBtn':
         return (
           <RadioButton.Group
-            // onValueChange={newValue => setValue(newValue)}
+            onValueChange={newValue => setValue(newValue)}
             value={value}>
             <View>
-              <Text>First</Text>
               {item?.values?.map(item => {
-                <RadioButton value={item} />;
+                return (
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <RadioButton value={item} />
+                    <Text>{item}</Text>
+                  </View>
+                );
               })}
             </View>
           </RadioButton.Group>
