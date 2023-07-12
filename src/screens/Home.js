@@ -13,37 +13,110 @@ import RenderHTML from 'react-native-render-html';
 import {Checkbox, RadioButton, TextInput} from 'react-native-paper';
 
 const JSON = [
+  // {
+  //   type: 'Quill',
+  //   content:
+  //     '<h1>Hii Rudra</h1><p>My Name is Parakh Jain. Text from Quilll</p>',
+  // },
+  // {
+  //   type: 'Plain_Text',
+  //   content: 'Plain Text',
+  // },
+  // {
+  //   type: 'Button_with_url',
+  //   content: 'Url button',
+  //   url: 'https://google.com',
+  // },
+  // {
+  //   type: 'Button',
+  //   content: 'Normal Button',
+  // },
   {
-    type: 'Quill',
-    content:
-      '<h1>Hii Rudra</h1><p>My Name is Parakh Jain. Text from Quilll</p>',
+    type: 'Card',
+    elements: [
+      {
+        type: 'Section',
+        content: 'Normal Button',
+        elements: [
+          {
+            type: 'Plain_Text',
+            content:
+              'hello A boolean that indicates whether the input element may be empty when a user submits the modal. Defaults toA boolean that indicates whether the input element may be empty when a user submits the modal. Defaults to',
+          },
+          {
+            type: 'Image',
+            url: 'https://images.everydayhealth.com/homepage/health-topics-2.jpg?w=720',
+            height: 90,
+            width: 50,
+          },
+        ],
+      },
+      {
+        type: 'Section',
+        content: 'hello',
+        elements: [
+          {
+            type: 'Button',
+            content: 'Normal Button',
+          },
+          {
+            type: 'Button',
+            content: 'Normal Button',
+          },
+        ],
+      },
+    ],
   },
-  {
-    type: 'Plain_Text',
-    content: 'Plain Text',
-  },
-  {
-    type: 'Button_with_url',
-    content: 'Url button',
-    url: 'https://google.com',
-  },
-  {
-    type: 'Button',
-    content: 'Normal Button',
-  },
-  {
-    type: 'Checkbox',
-    content: 'hello',
-  },
-  {
-    type: 'Checkbox',
-    content: 'hello',
-  },
-  {
-    type: 'RadioButton',
-    content: 'hello',
-    values: ['first', 'second', 'third'],
-  },
+  // {
+  //   type: 'Card',
+  //   elements: [
+  //     {
+  //       type: 'Image',
+  //       url: 'https://pipedream.com/s.v0/app_1xoha0/logo/orig',
+  //       height: 50,
+  //       width: 50,
+  //       radius: 10,
+  //     },
+  //     {
+  //       type: 'Input_Box',
+  //       placeholder: 'First Name',
+  //       label: 'Name',
+  //     },
+  //     {
+  //       type: 'Input_Box',
+  //       placeholder: 'Last Name',
+  //       label: 'Name',
+  //     },
+  //     {
+  //       type: 'Input_Box',
+  //       placeholder: 'Age',
+  //       label: 'Age',
+  //     },
+  //     {
+  //       type: 'Input_Box',
+  //       placeholder: 'What are your expectations.',
+  //       label: 'Ex.',
+  //     },
+  //     {
+  //       type: 'Button',
+  //       content: 'Submit',
+  //     },
+  //   ],
+  // },
+  // {
+  //   type: 'Checkbox',
+  //   content: 'hello',
+  // },
+  // {
+  //   type: 'Checkbox',
+  //   content: 'hello',
+  // },
+  // {
+  //   type: 'RadioButton',
+  //   content: 'hello',
+  //   values: ['first', 'second', 'third'],
+  // },
+
   {
     type: 'Image',
     url: 'https://png.pngtree.com/element_our/20190530/ourmid/pngtree-correct-icon-image_1267804.jpg',
@@ -51,80 +124,73 @@ const JSON = [
     width: 50,
   },
   {
-    type: 'Section',
-    content: 'hello',
-    elements: [
-      {
-        type: 'Button',
-        content: 'Normal Button',
-      },
-      {
-        type: 'Button',
-        content: 'Normal Button',
-      },
-      {
-        type: 'Button',
-        content: 'Normal Button',
-      },
-      {
-        type: 'Checkbox',
-        content: 'hello',
-      },
-      {
-        type: 'Checkbox',
-        content: 'hello',
-      },
-    ],
+    type: 'Plain_Text',
+    content:
+      'hello A boolean that indicates whether the input element may be empty when a user submits the modal. Defaults toA boolean that indicates whether the input element may be empty when a user submits the modal. Defaults to',
   },
+  // {
+  //   type: 'Section',
+  //   content: 'hello',
+  //   elements: [
+  //     {
+  //       type: 'Button',
+  //       content: 'Normal Button',
+  //     },
+  //     {
+  //       type: 'Button',
+  //       content: 'Normal Button',
+  //     },
+  //   ],
+  // },
   {
     type: 'Input_Box',
     placeholder: 'hello',
     label: 'hello',
   },
-  {
-    type: 'Card',
-    elements: [
-      {
-        type: 'Section',
-        elements: [
-          {
-            type: 'Image',
-            url: 'https://images.everydayhealth.com/homepage/health-topics-2.jpg?w=720',
-            height: 90,
-            width: '100%',
-          },
-          // {
-          //   type: 'Image',
-          //   url: 'https://png.pngtree.com/element_our/20190530/ourmid/pngtree-correct-icon-image_1267804.jpg',
-          //   height: 50,
-          //   width: 50,
-          // },
-        ],
-      },
-      {
-        type: 'Plain_Text',
-        content:
-          'Health is wealth" emphasizes the value of good health for a fulfilling life. As for protein vs. carbs, both macronutrients are important for different bodily functions and should be balanced in a healthy diet.',
-      },
-      {
-        type: 'Section',
-        elements: [
-          {
-            type: 'Checkbox',
-            content: 'Protein',
-          },
-          {
-            type: 'Checkbox',
-            content: 'Carbs',
-          },
-        ],
-      },
-      {
-        type: 'Button',
-        content: 'Health Is Wealth',
-      },
-    ],
-  },
+  // {
+  //   type: 'Card',
+  //   elements: [
+  //     {
+  //       type: 'Section',
+  //       elements: [
+  //         {
+  //           type: 'Image',
+  //           url: 'https://images.everydayhealth.com/homepage/health-topics-2.jpg?w=720',
+  //           height: 90,
+  //           width: '100%',
+  //         },
+  //         // {
+  //         //   type: 'Image',
+  //         //   url: 'https://png.pngtree.com/element_our/20190530/ourmid/pngtree-correct-icon-image_1267804.jpg',
+  //         //   height: 50,
+  //         //   width: 50,
+  //         // },
+  //       ],
+  //     },
+  //     {
+  //       type: 'Plain_Text',
+  //       content:
+  //         'Health is wealth" emphasizes the value of good health for a fulfilling life. As for protein vs. carbs, both macronutrients are important for different bodily functions and should be balanced in a healthy diet.',
+  //     },
+  //     {
+  //       type: 'Section',
+  //       elements: [
+  //         {
+  //           type: 'Checkbox',
+  //           content: 'Protein',
+  //         },
+  //         {
+  //           type: 'Checkbox',
+  //           content: 'Carbs',
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       type: 'Button',
+  //       content: 'Health Is Wealth',
+  //     },
+  //   ],
+  // },
 ];
 
 const Home = () => {
@@ -132,14 +198,14 @@ const Home = () => {
   const [value, setValue] = React.useState('');
   console.log(data, '=-=-');
 
-  const handleCheckboxToggle = index => {
+  const handleCheckboxToggle = currentElementId => {
     setData(prevData => ({
       ...prevData,
-      [index]: !prevData[index],
+      [currentElementId]: !prevData[currentElementId],
     }));
   };
 
-  const renderComponent = (item, index, elementIndex) => {
+  const renderComponent = (item, index, currentElementId) => {
     const {width} = useWindowDimensions();
 
     switch (item.type) {
@@ -154,8 +220,8 @@ const Home = () => {
         );
       case 'Plain_Text':
         return (
-          <View>
-            <Text key={index}>{item.content}</Text>
+          <View style={{flexShrink: 1, minWidth: 0}}>
+            <Text key={index}>{item?.content}</Text>
           </View>
         );
       case 'Button_with_url':
@@ -166,33 +232,48 @@ const Home = () => {
           />
         );
       case 'Button':
-        return <Button title={item?.content} />;
+        return (
+          <View style={{flexShrink: 1}}>
+            <Button title={item?.content} />
+          </View>
+        );
 
       case 'Section':
         return (
-          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-            {item?.elements?.map((element, elementIndex) =>
-              renderComponent(element, index, elementIndex),
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              // flexWrap: 'wrap',
+            }}>
+            {item?.elements?.map((element, index) =>
+              renderComponent(
+                element,
+                index,
+                currentElementId + '.elements' + `[${index}]`,
+              ),
             )}
           </View>
         );
-      // json[index].checkbox =
-      // json[index].section.element[index].checkbox
+
       case 'Checkbox':
-        if (typeof data[index] === 'undefined') {
+        if (typeof data[currentElementId] === 'undefined') {
           setData(prevData => ({
             ...prevData,
-            [index]: false,
+            [currentElementId]: false,
           }));
         }
 
         return (
           <TouchableOpacity
-            onPress={() => handleCheckboxToggle(index)}
+            onPress={() => handleCheckboxToggle(currentElementId)}
             style={{flexDirection: 'row', alignItems: 'center'}}
             key={index}>
-            <Checkbox status={data[index] ? 'checked' : 'unchecked'} />
-            <Text>{item.content}</Text>
+            <Checkbox
+              status={data[currentElementId] ? 'checked' : 'unchecked'}
+            />
+            <Text>{item?.content}</Text>
           </TouchableOpacity>
         );
       case 'RadioButton':
@@ -222,6 +303,7 @@ const Home = () => {
               height: item?.height || 50,
               width: item?.width || 50,
               marginRight: 8,
+              borderRadius: item?.radius || 0,
             }}
           />
         );
@@ -239,7 +321,7 @@ const Home = () => {
             style={{
               // flexDirection: 'row',
               justifyContent: 'center',
-              alignItems: 'center',
+              // alignItems: 'center',
               padding: 20,
               backgroundColor: 'white', // Change background color if desired
               // flexWrap: 'wrap',
@@ -253,8 +335,12 @@ const Home = () => {
               },
               elevation: 5,
             }}>
-            {item?.elements?.map((element, elementIndex) =>
-              renderComponent(element, index, elementIndex),
+            {item?.elements?.map((element, index) =>
+              renderComponent(
+                element,
+                index,
+                currentElementId + '.elements' + `[${index}]`,
+              ),
             )}
           </View>
         );
@@ -266,7 +352,7 @@ const Home = () => {
   return (
     <ScrollView>
       <View style={{marginHorizontal: 20}}>
-        {JSON.map((item, index) => renderComponent(item, index))}
+        {JSON.map((item, index) => renderComponent(item, index, `[${index}]`))}
       </View>
     </ScrollView>
   );
