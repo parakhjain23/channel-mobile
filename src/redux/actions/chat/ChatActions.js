@@ -19,6 +19,7 @@ export function* getChats({teamId, token, skip, lastMessageId}) {
 }
 
 export function getChatsStart(teamId, token, skip, lastMessageId) {
+  console.log('fetch chat start');
   return {
     type: Actions.FETCH_CHAT_START,
     teamId,

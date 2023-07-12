@@ -1,6 +1,7 @@
 import Notifee, {AndroidImportance} from '@notifee/react-native';
 import {store} from '../redux/Store';
 import cheerio, {text} from 'cheerio';
+import uuid from 'react-native-uuid';
 
 export const handleNotificationFromEvents = async (
   data,
@@ -95,7 +96,7 @@ export const handleNotificationFromEvents = async (
   await Notifee.displayNotification({
     title: title,
     body: body,
-    id: 'foreground',
+    id: uuid.v1(),
     data: data,
     android: {
       channelId: 'foreground',
@@ -164,7 +165,7 @@ export const handleNotificationFirebase = async firebaseData => {
   await Notifee.displayNotification({
     title: title,
     body: body,
-    id: 'fcm_channel',
+    id: uuid.v1(),
     data: firebaseData?.data,
     android: {
       channelId: 'fcm_channel',
