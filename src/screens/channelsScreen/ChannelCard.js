@@ -12,6 +12,9 @@ import {
   View,
   Button,
   TouchableNativeFeedback,
+  Dimensions,
+  StyleSheet,
+  Vibration,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {connect} from 'react-redux';
@@ -21,9 +24,28 @@ import {DEVICE_TYPES} from '../../constants/Constants';
 import {RightSwipeAction} from './components/RightActionsForChatCard';
 import FastImage from 'react-native-fast-image';
 import {getChannelByTeamIdStart} from '../../redux/actions/channels/GetChannelByTeamId';
+import {
+  PanGestureHandler,
+  PanGestureHandlerGestureEvent,
+  PanGestureHandlerProps,
+} from 'react-native-gesture-handler';
+import Animated, {
+  runOnJS,
+  useAnimatedGestureHandler,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {resetUnreadCountStart} from '../../redux/actions/channels/ChannelsAction';
+import {makeStyles} from './ChannelCardStyles';
 
 const TouchableItem =
   Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity;
+
+const LIST_ITEM_HEIGHT = 60;
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const TRANSLATE_X_THRESHOLD = -SCREEN_WIDTH * 0.4;
 
 const ChannelCard = ({
   item,
@@ -55,6 +77,7 @@ const ChannelCard = ({
   };
 
   const {colors} = useTheme();
+  const styles = makeStyles(colors);
   const userIdAndDisplayNameMapping = orgsState?.userIdAndDisplayNameMapping;
   const userIdAndNameMapping = orgsState?.userIdAndNameMapping;
   const teamIdAndUnreadCountMapping =
@@ -137,88 +160,217 @@ const ChannelCard = ({
     });
   }, [Name, navigation]);
 
+  const translateX = useSharedValue(0);
+  const itemHeight = useSharedValue(LIST_ITEM_HEIGHT);
+  const marginVertical = useSharedValue(5);
+  const opacity = useSharedValue(1);
+
+  const panGesture = useAnimatedGestureHandler({
+    onActive: event => {
+      translateX.value = event.translationX;
+    },
+    onEnd: () => {
+      const shouldBeDismissed = translateX.value < TRANSLATE_X_THRESHOLD;
+      if (shouldBeDismissed) {
+        // translateX.value = withTiming(-SCREEN_WIDTH);
+        translateX.value = withTiming(0);
+        // itemHeight.value = withTiming(0);
+        // marginVertical.value = withTiming(0);
+        // runOnJS(
+        //   markAsUnreadAction(item?.orgId, userId, item?._id, accessToken, 1, 0),
+        // );
+        runOnJS(markAsUnreadAction)(
+          item?.orgId,
+          currentUserId,
+          item?._id,
+          accessToken,
+          1,
+          0,
+        );
+        runOnJS(Vibration.vibrate)([10, 100]);
+        // opacity.value = withTiming(0, undefined, isFinished => {
+        //   if (isFinished) {
+        //     console.log(isFinished, '=-=-=-=-=-=');
+        //     runOnJS(
+        //       markAsUnreadAction(
+        //         item?.orgId,
+        //         userId,
+        //         item?._id,
+        //         accessToken,
+        //         1,
+        //         0,
+        //       ),
+        //     );
+        //   }
+        // });
+      } else {
+        translateX.value = withTiming(0);
+      }
+    },
+  });
+
+  const rStyle = useAnimatedStyle(() => ({
+    transform: [
+      {
+        translateX: translateX.value,
+      },
+    ],
+  }));
+
+  const rIconContainerStyle = useAnimatedStyle(() => {
+    const opacity = withTiming(
+      translateX.value < TRANSLATE_X_THRESHOLD ? 1 : 0,
+    );
+    return {opacity};
+  });
+
+  const rTaskContainerStyle = useAnimatedStyle(() => {
+    return {
+      height: itemHeight.value,
+      // marginVertical: marginVertical.value,
+      opacity: opacity.value,
+    };
+  });
+
   return (
-    <GestureHandlerRootView>
-      <Swipeable renderRightActions={renderRightActions} ref={swipeableRef}>
-        <TouchableItem
-          onPress={onPress}
-          background={
-            Platform.OS === 'android'
-              ? TouchableNativeFeedback.Ripple('#00000033')
-              : null
-          }
-          activeOpacity={0.8}>
-          <View
-            style={{
-              borderTopWidth: 0.3,
-              borderTopColor: '#B3B3B3',
-              backgroundColor: colors.primaryColor,
-              width: '100%',
-              flexDirection: 'column',
-              justifyContent: 'center',
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: 20,
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  maxWidth: '85%',
-                }}>
-                <Icon name={iconName} size={14} color={colors.textColor} />
-                <Text>{'  '}</Text>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: unread ? '700' : '400',
-                    color: colors.textColor,
+    <TouchableItem onPress={onPress}>
+      <Animated.View style={[styles.taskContainer, rTaskContainerStyle]}>
+        <Animated.View
+          style={[
+            styles.iconContainer,
+            rIconContainerStyle,
+            {height: LIST_ITEM_HEIGHT, width: LIST_ITEM_HEIGHT},
+          ]}>
+          <FontAwesome5
+            name={'eye-slash'}
+            size={LIST_ITEM_HEIGHT * 0.3}
+            color={'red'}
+          />
+          <Text style={{color: 'red', fontSize: 8}}>Mark as Unread</Text>
+        </Animated.View>
+        <PanGestureHandler
+          failOffsetY={[-5, 5]}
+          activeOffsetX={[-5, 5]}
+          // simultaneousHandlers={simultaneousHandlers}
+          onGestureEvent={panGesture}>
+          <Animated.View
+            style={[styles.task, rStyle, {minHeight: LIST_ITEM_HEIGHT}]}>
+            <View style={styles.cardStyle}>
+              {item?.type === 'DIRECT_MESSAGE' ? (
+                <FastImage
+                  source={{
+                    uri: orgsState?.userIdAndImageUrlMapping[userId]
+                      ? orgsState?.userIdAndImageUrlMapping[userId]
+                      : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVe0cFaZ9e5Hm9X-tdWRLSvoZqg2bjemBABA&usqp=CAU',
+                    priority: FastImage.priority.normal,
                   }}
-                  numberOfLines={1}
-                  ellipsizeMode="tail">{`${Name}`}</Text>
-              </View>
-              {teamIdAndUnreadCountMapping?.[item?._id] > 0 ? (
-                <View
-                  style={{
-                    backgroundColor: '#73e1ff',
-                    paddingHorizontal: 5,
-                    paddingVertical: 2,
-                    borderRadius: 5,
-                    overflow: 'hidden',
-                  }}>
-                  <Text
-                    style={{
-                      color: 'black',
-                      fontSize: 14,
-                      fontWeight: 'bold',
-                      textAlign: 'center',
-                      minWidth: 15,
-                      height: 20,
-                      lineHeight: 20,
-                    }}>
-                    {teamIdAndUnreadCountMapping?.[item?._id]}
-                  </Text>
-                </View>
+                  style={styles.userIcon}
+                />
               ) : (
-                teamIdAndBadgeCountMapping?.[item?._id] > 0 && (
-                  <View
-                    style={{
-                      backgroundColor: 'red',
-                      borderRadius: 5,
-                      minWidth: 20,
-                      height: 20,
-                    }}></View>
-                )
+                <View style={styles.channelIcon}>
+                  <Icon name={iconName} size={14} color={'#000000'} />
+                </View>
               )}
+              <Text style={styles.taskTitle}>{Name}</Text>
+              <View style={{marginLeft: 'auto', marginRight: 10}}>
+                {teamIdAndUnreadCountMapping?.[item?._id] > 0 ? (
+                  <View style={styles.unreadButton}>
+                    <Text style={styles.unreadButtonText}>
+                      {teamIdAndUnreadCountMapping?.[item?._id]}
+                    </Text>
+                  </View>
+                ) : (
+                  teamIdAndBadgeCountMapping?.[item?._id] > 0 && (
+                    <View style={styles.markUnreadButton} />
+                  )
+                )}
+              </View>
             </View>
-          </View>
-        </TouchableItem>
-      </Swipeable>
-    </GestureHandlerRootView>
+          </Animated.View>
+        </PanGestureHandler>
+      </Animated.View>
+    </TouchableItem>
+    // <GestureHandlerRootView>
+    //   <Swipeable renderRightActions={renderRightActions} ref={swipeableRef}>
+    //     <TouchableItem
+    //       onPress={onPress}
+    //       background={
+    //         Platform.OS === 'android'
+    //           ? TouchableNativeFeedback.Ripple('#00000033')
+    //           : null
+    //       }
+    //       activeOpacity={0.8}>
+    //       <View
+    //         style={{
+    //           borderTopWidth: 0.3,
+    //           borderTopColor: '#B3B3B3',
+    //           backgroundColor: colors.primaryColor,
+    //           width: '100%',
+    //           flexDirection: 'column',
+    //           justifyContent: 'center',
+    //         }}>
+    //         <View
+    //           style={{
+    //             flexDirection: 'row',
+    //             alignItems: 'center',
+    //             justifyContent: 'space-between',
+    //             padding: 20,
+    //           }}>
+    //           <View
+    //             style={{
+    //               flexDirection: 'row',
+    //               alignItems: 'center',
+    //               maxWidth: '85%',
+    //             }}>
+    //             <Icon name={iconName} size={14} color={colors.textColor} />
+    //             <Text>{'  '}</Text>
+    //             <Text
+    //               style={{
+    //                 fontSize: 16,
+    //                 fontWeight: unread ? '700' : '400',
+    //                 color: colors.textColor,
+    //               }}
+    //               numberOfLines={1}
+    //               ellipsizeMode="tail">{`${Name}`}</Text>
+    //           </View>
+    //           {teamIdAndUnreadCountMapping?.[item?._id] > 0 ? (
+    //             <View
+    //               style={{
+    //                 backgroundColor: '#73e1ff',
+    //                 paddingHorizontal: 5,
+    //                 paddingVertical: 2,
+    //                 borderRadius: 5,
+    //                 overflow: 'hidden',
+    //               }}>
+    //               <Text
+    //                 style={{
+    //                   color: 'black',
+    //                   fontSize: 14,
+    //                   fontWeight: 'bold',
+    //                   textAlign: 'center',
+    //                   minWidth: 15,
+    //                   height: 20,
+    //                   lineHeight: 20,
+    //                 }}>
+    //                 {teamIdAndUnreadCountMapping?.[item?._id]}
+    //               </Text>
+    //             </View>
+    //           ) : (
+    //             teamIdAndBadgeCountMapping?.[item?._id] > 0 && (
+    //               <View
+    //                 style={{
+    //                   backgroundColor: 'red',
+    //                   borderRadius: 5,
+    //                   minWidth: 20,
+    //                   height: 20,
+    //                 }}></View>
+    //             )
+    //           )}
+    //         </View>
+    //       </View>
+    //     </TouchableItem>
+    //   </Swipeable>
+    // </GestureHandlerRootView>
   );
 };
 
@@ -474,6 +626,24 @@ const mapDispatchToProps = dispatch => {
   return {
     getChannelByTeamIdAction: (accessToken, teamId, userId) =>
       dispatch(getChannelByTeamIdStart(accessToken, teamId, userId)),
+    markAsUnreadAction: (
+      orgId,
+      userId,
+      teamId,
+      accessToken,
+      badgeCount,
+      unreadCount,
+    ) =>
+      dispatch(
+        resetUnreadCountStart(
+          orgId,
+          userId,
+          teamId,
+          accessToken,
+          badgeCount,
+          unreadCount,
+        ),
+      ),
   };
 };
 export const RenderChannels = React.memo(

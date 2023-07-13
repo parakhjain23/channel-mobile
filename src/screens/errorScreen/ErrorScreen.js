@@ -4,12 +4,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Sentry from '@sentry/react-native';
 import {ms} from 'react-native-size-matters';
 import AnimatedLottieView from 'lottie-react-native';
+import {storage} from '../../redux/reducers/Index';
 
 const ErrorScreen = () => {
   const message1 = 'Encountered an error,',
     message2 = 'Please try again later.';
   useEffect(() => {
-    AsyncStorage.clear();
+    // AsyncStorage.clear();
+    storage.clearAll();
     setTimeout(() => {
       Sentry.nativeCrash();
     }, 3500);

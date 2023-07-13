@@ -168,9 +168,11 @@ export function chatReducer(state = initialState, action) {
       if (!isSameDate) {
         const prevDateString = date?.toDateString();
         displayDate = `${prevDateString}`;
-        state.data[action?.message?.teamId].messages[0].isSameDate = false;
-        state.data[action?.message?.teamId].messages[0].timeToShow =
-          displayDate;
+        if (state.data[action?.message?.teamId])
+          state.data[action?.message?.teamId].messages[0].isSameDate = false;
+        if (state.data[action?.message?.teamId])
+          state.data[action?.message?.teamId].messages[0].timeToShow =
+            displayDate;
         action.message['isSameDate'] = true;
         action.message['timeToShow'] = '';
       } else {
