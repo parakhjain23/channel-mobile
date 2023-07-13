@@ -12,123 +12,96 @@ import React, {useState} from 'react';
 import RenderHTML from 'react-native-render-html';
 import {Checkbox, RadioButton, TextInput} from 'react-native-paper';
 
-const JSON = [
+let JSON = [
   // {
-  //   type: 'Quill',
-  //   content:
-  //     '<h1>Hii Rudra</h1><p>My Name is Parakh Jain. Text from Quilll</p>',
-  // },
-  // {
-  //   type: 'Plain_Text',
-  //   content: 'Plain Text',
-  // },
-  // {
-  //   type: 'Button_with_url',
-  //   content: 'Url button',
-  //   url: 'https://google.com',
-  // },
-  // {
-  //   type: 'Button',
-  //   content: 'Normal Button',
-  // },
-  // {
-  //   type: 'Card',
+  //   type: 'Section',
   //   elements: [
   //     {
-  //       type: 'Section',
-  //       content: 'Normal Button',
-  //       elements: [
+  //       type: 'Checkbox',
+  //       value: 'Protein',
+  //       options: [
   //         {
-  //           type: 'Plain_Text',
-  //           content:
-  //             'hello A boolean that indicates whether the input element may be empty when a user submits the modal. Defaults toA boolean that indicates whether the input element may be empty when a user submits the modal. Defaults to',
+  //           type: 'plain_text',
+  //           value: 'first',
   //         },
   //         {
-  //           type: 'Image',
-  //           url: 'https://images.everydayhealth.com/homepage/health-topics-2.jpg?w=720',
-  //           height: 90,
-  //           width: 50,
+  //           type: 'plain_text',
+  //           value: 'Second',
   //         },
   //       ],
-  //     },
-  //     {
-  //       type: 'Section',
-  //       content: 'hello',
-  //       elements: [
-  //         {
-  //           type: 'Button',
-  //           content: 'Normal Button',
-  //         },
-  //         {
-  //           type: 'Button',
-  //           content: 'Normal Button',
-  //         },
-  //       ],
+  //       action_id: 123,
   //     },
   //   ],
   // },
   // {
-  //   type: 'Card',
-  //   elements: [
+  //   type: 'Checkbox',
+  //   value: 'Protein',
+  //   options: [
   //     {
-  //       type: 'Image',
-  //       url: 'https://pipedream.com/s.v0/app_1xoha0/logo/orig',
-  //       height: 50,
-  //       width: 50,
-  //       radius: 10,
+  //       type: 'plain_text',
+  //       value: 'first',
   //     },
   //     {
-  //       type: 'Input_Box',
-  //       placeholder: 'First Name',
-  //       label: 'Name',
-  //     },
-  //     {
-  //       type: 'Input_Box',
-  //       placeholder: 'Last Name',
-  //       label: 'Name',
-  //     },
-  //     {
-  //       type: 'Input_Box',
-  //       placeholder: 'Age',
-  //       label: 'Age',
-  //     },
-  //     {
-  //       type: 'Input_Box',
-  //       placeholder: 'What are your expectations.',
-  //       label: 'Ex.',
-  //     },
-  //     {
-  //       type: 'Button',
-  //       content: 'Submit',
+  //       type: 'plain_text',
+  //       value: 'Second',
   //     },
   //   ],
+  //   action_id: 123,
   // },
   {
     type: 'Checkbox',
-    content: 'hello',
-    values: ['first', 'second', 'third'],
+    value: 'Protein',
+    options: [
+      {
+        type: 'plain_text',
+        value: 'first',
+      },
+      {
+        type: 'plain_text',
+        value: 'Second',
+      },
+    ],
+    action_id: 123,
+  },
+  {
+    type: 'Button',
+    value: 'Submit',
   },
   {
     type: 'RadioButton',
-    content: 'hello',
-    values: ['first', 'second', 'third'],
+    value: 'Protein',
+    options: [
+      {
+        type: 'plain_text',
+        value: 'Protein',
+      },
+      {
+        type: 'plain_text',
+        value: 'Carbs',
+      },
+    ],
+    action_id: 345,
   },
-  // {
-  //   type: 'Image',
-  //   url: 'https://png.pngtree.com/element_our/20190530/ourmid/pngtree-correct-icon-image_1267804.jpg',
-  //   height: 50,
-  //   width: 50,
-  // },
-  // {
-  //   type: 'Plain_Text',
-  //   content:
-  //     'hello A boolean that indicates whether the input element may be empty when a user submits the modal. Defaults toA boolean that indicates whether the input element may be empty when a user submits the modal. Defaults to',
-  // },
-  // {
-  //   type: 'Input_Box',
-  //   placeholder: 'hello',
-  //   label: 'hello',
-  // },
+  {
+    type: 'Section',
+    elements: [
+      {
+        type: 'RadioButton',
+        value: 'Protein',
+        options: [
+          {
+            type: 'plain_text',
+            value: 'Protein',
+          },
+          {
+            type: 'plain_text',
+            value: 'Carbs',
+          },
+        ],
+        action_id: 11,
+      },
+    ],
+  },
   {
     type: 'Card',
     elements: [
@@ -136,79 +109,107 @@ const JSON = [
         type: 'Section',
         elements: [
           {
-            type: 'Image',
-            url: 'https://images.everydayhealth.com/homepage/health-topics-2.jpg?w=720',
-            height: 90,
-            width: '100%',
-          },
-          // {
-          //   type: 'Image',
-          //   url: 'https://png.pngtree.com/element_our/20190530/ourmid/pngtree-correct-icon-image_1267804.jpg',
-          //   height: 50,
-          //   width: 50,
-          // },
-        ],
-      },
-      {
-        type: 'Plain_Text',
-        content:
-          'Health is wealth" emphasizes the value of good health for a fulfilling life. As for protein vs. carbs, both macronutrients are important for different bodily functions and should be balanced in a healthy diet.',
-      },
-      {
-        type: 'Section',
-        elements: [
-          {
-            type: 'Checkbox',
-            content: 'Protein',
-            values: ['Protein', 'Carbs'],
+            type: 'RadioButton',
+            value: 'Protein',
+            options: [
+              {
+                type: 'plain_text',
+                value: 'Protein',
+              },
+              {
+                type: 'plain_text',
+                value: 'Carbs',
+              },
+            ],
+            action_id: 567,
           },
         ],
       },
       {
         type: 'Button',
-        content: 'Health Is Wealth',
+        value: 'hello',
       },
     ],
+  },
+  {
+    type: 'Input_Box',
+    value: 'Name',
+    label: 'Name',
+    action_id: 1111,
+  },
+  {
+    type: 'Input_Box',
+    value: 'Name',
+    label: 'Name',
+    action_id: 1010,
+  },
+  {
+    type: 'Input_Box',
+    value: 'Name',
+    label: 'Name',
+    action_id: 10111,
   },
 ];
 
 const Home = () => {
   const [data, setData] = useState({});
-  const [value, setValue] = React.useState('');
-  console.log(data, '=-=-');
+  const [value, setValue] = React.useState({});
 
-  const handleCheckboxToggle = currentElementId => {
+  const handleCheckboxToggle = (action_id, name) => {
+    // setData(prevData => ({
+    //   ...prevData,
+    //   [currentElementId]: !prevData[currentElementId],
+    // }));
+
     setData(prevData => ({
       ...prevData,
-      [currentElementId]: !prevData[currentElementId],
+      [action_id]: {
+        ...prevData[action_id],
+        [name]: !prevData[action_id]?.[name] || false,
+      },
     }));
   };
 
-  const renderComponent = (item, index, currentElementId) => {
-    const {width} = useWindowDimensions();
+  const handleRadioButtonToggle = (action_id, name) => {
+    setValue(prevData => ({
+      ...prevData,
+      [action_id]: name,
+    }));
+  };
+  console.log(data, '=-=-');
+  console.log(value, '=-=-');
 
+  const onChange = (action_id, text) => {
+    console.log(text, 'taljdl;jal;kjfl;kdj');
+    setData(prevData => ({
+      ...prevData,
+      [action_id]: text,
+    }));
+  };
+  const renderComponent = (item, index) => {
+    const {width} = useWindowDimensions();
     switch (item.type) {
       case 'Quill':
         return (
           <RenderHTML
             source={{
-              html: item?.content,
+              html: item?.value,
             }}
-            contentWidth={width}
+            valueWidth={width}
           />
         );
 
-      case 'Plain_Text':
+      case 'plain_text':
         return (
           <View style={{flexShrink: 1, minWidth: 0}}>
-            <Text key={index}>{item?.content}</Text>
+            <Text key={index}>{item?.value}</Text>
           </View>
         );
 
       case 'Button_with_url':
         return (
           <Button
-            title={item?.content}
+            title={item?.value}
             onPress={() => Linking.openURL(item?.url)}
           />
         );
@@ -216,7 +217,10 @@ const Home = () => {
       case 'Button':
         return (
           <View style={{flexShrink: 1}}>
-            <Button title={item?.content} />
+            <Button
+              title={item?.value}
+              onPress={() => console.log(JSON[0]?.options)}
+            />
           </View>
         );
 
@@ -230,31 +234,38 @@ const Home = () => {
               // flexWrap: 'wrap',
             }}>
             {item?.elements?.map((element, index) =>
-              renderComponent(
-                element,
-                index,
-                currentElementId + '.elements' + `[${index}]`,
-              ),
+              renderComponent(element, index),
             )}
           </View>
         );
 
       case 'Checkbox':
-        // if (typeof data[currentElementId] === 'undefined') {
-        //   setData(prevData => ({
-        //     ...prevData,
-        //     [currentElementId]: false,
-        //   }));
-        // }
-
-        return item?.values?.map((element, elementIndex) => {
+        if (typeof data[item?.action_id] === 'undefined') {
+          setData(prevData => ({
+            ...prevData,
+            [item.action_id]: {},
+          }));
+        }
+        return item?.options?.map((element, elementIndex) => {
           return (
             <TouchableOpacity
-              // onPress={() => handleCheckboxToggle(elementIndex)}
-              style={{flexDirection: 'row', alignItems: 'center'}}
+              onPress={() =>
+                handleCheckboxToggle(item?.action_id, element?.value)
+              }
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginBottom: 5,
+              }}
               key={elementIndex}>
-              <Checkbox status={true ? 'checked' : 'unchecked'} />
-              <Text>{element}</Text>
+              <Checkbox
+                status={
+                  data[item?.action_id]?.[element?.value]
+                    ? 'checked'
+                    : 'unchecked'
+                }
+              />
+              <View>{renderComponent(element, index)}</View>
             </TouchableOpacity>
           );
         });
@@ -262,14 +273,17 @@ const Home = () => {
       case 'RadioButton':
         return (
           <RadioButton.Group
-            onValueChange={newValue => setValue(newValue)}
-            value={value}>
+            onValueChange={value =>
+              handleRadioButtonToggle(item?.action_id, value)
+            }
+            // onValueChange={newValue => setValue(newValue)}
+            value={value[item?.action_id]}>
             <View>
-              {item?.values?.map(item => {
+              {item?.options?.map(element => {
                 return (
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <RadioButton value={item} />
-                    <Text>{item}</Text>
+                    <RadioButton value={element?.value} />
+                    <Text>{element?.value}</Text>
                   </View>
                 );
               })}
@@ -298,6 +312,7 @@ const Home = () => {
             mode="outlined"
             label={item?.label || ''}
             placeholder={item?.placeholder || ''}
+            onChangeText={text => onChange(item?.action_id, text)}
           />
         );
 
@@ -322,11 +337,7 @@ const Home = () => {
               elevation: 5,
             }}>
             {item?.elements?.map((element, index) =>
-              renderComponent(
-                element,
-                index,
-                currentElementId + '.elements' + `[${index}]`,
-              ),
+              renderComponent(element, index),
             )}
           </View>
         );
