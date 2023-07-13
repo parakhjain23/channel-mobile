@@ -31,42 +31,42 @@ const JSON = [
   //   type: 'Button',
   //   content: 'Normal Button',
   // },
-  {
-    type: 'Card',
-    elements: [
-      {
-        type: 'Section',
-        content: 'Normal Button',
-        elements: [
-          {
-            type: 'Plain_Text',
-            content:
-              'hello A boolean that indicates whether the input element may be empty when a user submits the modal. Defaults toA boolean that indicates whether the input element may be empty when a user submits the modal. Defaults to',
-          },
-          {
-            type: 'Image',
-            url: 'https://images.everydayhealth.com/homepage/health-topics-2.jpg?w=720',
-            height: 90,
-            width: 50,
-          },
-        ],
-      },
-      {
-        type: 'Section',
-        content: 'hello',
-        elements: [
-          {
-            type: 'Button',
-            content: 'Normal Button',
-          },
-          {
-            type: 'Button',
-            content: 'Normal Button',
-          },
-        ],
-      },
-    ],
-  },
+  // {
+  //   type: 'Card',
+  //   elements: [
+  //     {
+  //       type: 'Section',
+  //       content: 'Normal Button',
+  //       elements: [
+  //         {
+  //           type: 'Plain_Text',
+  //           content:
+  //             'hello A boolean that indicates whether the input element may be empty when a user submits the modal. Defaults toA boolean that indicates whether the input element may be empty when a user submits the modal. Defaults to',
+  //         },
+  //         {
+  //           type: 'Image',
+  //           url: 'https://images.everydayhealth.com/homepage/health-topics-2.jpg?w=720',
+  //           height: 90,
+  //           width: 50,
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       type: 'Section',
+  //       content: 'hello',
+  //       elements: [
+  //         {
+  //           type: 'Button',
+  //           content: 'Normal Button',
+  //         },
+  //         {
+  //           type: 'Button',
+  //           content: 'Normal Button',
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
   // {
   //   type: 'Card',
   //   elements: [
@@ -103,94 +103,73 @@ const JSON = [
   //     },
   //   ],
   // },
-  // {
-  //   type: 'Checkbox',
-  //   content: 'hello',
-  // },
-  // {
-  //   type: 'Checkbox',
-  //   content: 'hello',
-  // },
-  // {
-  //   type: 'RadioButton',
-  //   content: 'hello',
-  //   values: ['first', 'second', 'third'],
-  // },
-
   {
-    type: 'Image',
-    url: 'https://png.pngtree.com/element_our/20190530/ourmid/pngtree-correct-icon-image_1267804.jpg',
-    height: 50,
-    width: 50,
+    type: 'Checkbox',
+    content: 'hello',
+    values: ['first', 'second', 'third'],
   },
   {
-    type: 'Plain_Text',
-    content:
-      'hello A boolean that indicates whether the input element may be empty when a user submits the modal. Defaults toA boolean that indicates whether the input element may be empty when a user submits the modal. Defaults to',
+    type: 'RadioButton',
+    content: 'hello',
+    values: ['first', 'second', 'third'],
   },
   // {
-  //   type: 'Section',
-  //   content: 'hello',
-  //   elements: [
-  //     {
-  //       type: 'Button',
-  //       content: 'Normal Button',
-  //     },
-  //     {
-  //       type: 'Button',
-  //       content: 'Normal Button',
-  //     },
-  //   ],
+  //   type: 'Image',
+  //   url: 'https://png.pngtree.com/element_our/20190530/ourmid/pngtree-correct-icon-image_1267804.jpg',
+  //   height: 50,
+  //   width: 50,
+  // },
+  // {
+  //   type: 'Plain_Text',
+  //   content:
+  //     'hello A boolean that indicates whether the input element may be empty when a user submits the modal. Defaults toA boolean that indicates whether the input element may be empty when a user submits the modal. Defaults to',
+  // },
+  // {
+  //   type: 'Input_Box',
+  //   placeholder: 'hello',
+  //   label: 'hello',
   // },
   {
-    type: 'Input_Box',
-    placeholder: 'hello',
-    label: 'hello',
+    type: 'Card',
+    elements: [
+      {
+        type: 'Section',
+        elements: [
+          {
+            type: 'Image',
+            url: 'https://images.everydayhealth.com/homepage/health-topics-2.jpg?w=720',
+            height: 90,
+            width: '100%',
+          },
+          // {
+          //   type: 'Image',
+          //   url: 'https://png.pngtree.com/element_our/20190530/ourmid/pngtree-correct-icon-image_1267804.jpg',
+          //   height: 50,
+          //   width: 50,
+          // },
+        ],
+      },
+      {
+        type: 'Plain_Text',
+        content:
+          'Health is wealth" emphasizes the value of good health for a fulfilling life. As for protein vs. carbs, both macronutrients are important for different bodily functions and should be balanced in a healthy diet.',
+      },
+      {
+        type: 'Section',
+        elements: [
+          {
+            type: 'Checkbox',
+            content: 'Protein',
+            values: ['Protein', 'Carbs'],
+          },
+        ],
+      },
+      {
+        type: 'Button',
+        content: 'Health Is Wealth',
+      },
+    ],
   },
-  // {
-  //   type: 'Card',
-  //   elements: [
-  //     {
-  //       type: 'Section',
-  //       elements: [
-  //         {
-  //           type: 'Image',
-  //           url: 'https://images.everydayhealth.com/homepage/health-topics-2.jpg?w=720',
-  //           height: 90,
-  //           width: '100%',
-  //         },
-  //         // {
-  //         //   type: 'Image',
-  //         //   url: 'https://png.pngtree.com/element_our/20190530/ourmid/pngtree-correct-icon-image_1267804.jpg',
-  //         //   height: 50,
-  //         //   width: 50,
-  //         // },
-  //       ],
-  //     },
-  //     {
-  //       type: 'Plain_Text',
-  //       content:
-  //         'Health is wealth" emphasizes the value of good health for a fulfilling life. As for protein vs. carbs, both macronutrients are important for different bodily functions and should be balanced in a healthy diet.',
-  //     },
-  //     {
-  //       type: 'Section',
-  //       elements: [
-  //         {
-  //           type: 'Checkbox',
-  //           content: 'Protein',
-  //         },
-  //         {
-  //           type: 'Checkbox',
-  //           content: 'Carbs',
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       type: 'Button',
-  //       content: 'Health Is Wealth',
-  //     },
-  //   ],
-  // },
 ];
 
 const Home = () => {
@@ -218,12 +197,14 @@ const Home = () => {
             contentWidth={width}
           />
         );
+
       case 'Plain_Text':
         return (
           <View style={{flexShrink: 1, minWidth: 0}}>
             <Text key={index}>{item?.content}</Text>
           </View>
         );
+
       case 'Button_with_url':
         return (
           <Button
@@ -231,6 +212,7 @@ const Home = () => {
             onPress={() => Linking.openURL(item?.url)}
           />
         );
+
       case 'Button':
         return (
           <View style={{flexShrink: 1}}>
@@ -258,24 +240,25 @@ const Home = () => {
         );
 
       case 'Checkbox':
-        if (typeof data[currentElementId] === 'undefined') {
-          setData(prevData => ({
-            ...prevData,
-            [currentElementId]: false,
-          }));
-        }
+        // if (typeof data[currentElementId] === 'undefined') {
+        //   setData(prevData => ({
+        //     ...prevData,
+        //     [currentElementId]: false,
+        //   }));
+        // }
 
-        return (
-          <TouchableOpacity
-            onPress={() => handleCheckboxToggle(currentElementId)}
-            style={{flexDirection: 'row', alignItems: 'center'}}
-            key={index}>
-            <Checkbox
-              status={data[currentElementId] ? 'checked' : 'unchecked'}
-            />
-            <Text>{item?.content}</Text>
-          </TouchableOpacity>
-        );
+        return item?.values?.map((element, elementIndex) => {
+          return (
+            <TouchableOpacity
+              // onPress={() => handleCheckboxToggle(elementIndex)}
+              style={{flexDirection: 'row', alignItems: 'center'}}
+              key={elementIndex}>
+              <Checkbox status={true ? 'checked' : 'unchecked'} />
+              <Text>{element}</Text>
+            </TouchableOpacity>
+          );
+        });
+
       case 'RadioButton':
         return (
           <RadioButton.Group
@@ -293,6 +276,7 @@ const Home = () => {
             </View>
           </RadioButton.Group>
         );
+
       case 'Image':
         return (
           <Image
@@ -307,6 +291,7 @@ const Home = () => {
             }}
           />
         );
+
       case 'Input_Box':
         return (
           <TextInput
@@ -315,6 +300,7 @@ const Home = () => {
             placeholder={item?.placeholder || ''}
           />
         );
+
       case 'Card':
         return (
           <View
