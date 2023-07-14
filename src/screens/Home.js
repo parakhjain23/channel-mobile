@@ -258,6 +258,7 @@ const Home = () => {
             />
           </View>
         );
+
       case 'form':
         return (
           <View style={styles.cardContainer}>
@@ -333,10 +334,17 @@ const Home = () => {
             <View>
               {item?.options?.map(element => {
                 return (
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      handleradio_buttonsToggle(
+                        item?.action_id || 'radio_buttons',
+                        element?.value,
+                      )
+                    }
+                    style={{flexDirection: 'row', alignItems: 'center'}}>
                     <RadioButton value={element?.value} />
                     <Text>{element?.value}</Text>
-                  </View>
+                  </TouchableOpacity>
                 );
               })}
             </View>
