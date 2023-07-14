@@ -7,47 +7,13 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  StyleSheet,
 } from 'react-native';
 import React, {useState} from 'react';
 import RenderHTML from 'react-native-render-html';
 import {Checkbox, RadioButton, TextInput} from 'react-native-paper';
 
 let JSON = [
-  // {
-  //   type: 'Section',
-  //   elements: [
-  //     {
-  //       type: 'Checkbox',
-  //       value: 'Protein',
-  //       options: [
-  //         {
-  //           type: 'plain_text',
-  //           value: 'first',
-  //         },
-  //         {
-  //           type: 'plain_text',
-  //           value: 'Second',
-  //         },
-  //       ],
-  //       action_id: 123,
-  //     },
-  //   ],
-  // },
-  // {
-  //   type: 'Checkbox',
-  //   value: 'Protein',
-  //   options: [
-  //     {
-  //       type: 'plain_text',
-  //       value: 'first',
-  //     },
-  //     {
-  //       type: 'plain_text',
-  //       value: 'Second',
-  //     },
-  //   ],
-  //   action_id: 123,
-  // },
   {
     type: 'Checkbox',
     value: 'Protein',
@@ -64,91 +30,84 @@ let JSON = [
     action_id: 123,
   },
   {
-    type: 'Button',
-    value: 'Submit',
-  },
-  {
-    type: 'RadioButton',
-    value: 'Protein',
-    options: [
-      {
-        type: 'plain_text',
-        value: 'Protein',
-      },
-      {
-        type: 'plain_text',
-        value: 'Carbs',
-      },
-    ],
-    action_id: 345,
-  },
-  {
-    type: 'Section',
+    type: 'form',
+    action_id: 'form',
     elements: [
       {
-        type: 'RadioButton',
-        value: 'Protein',
-        options: [
-          {
-            type: 'plain_text',
-            value: 'Protein',
-          },
-          {
-            type: 'plain_text',
-            value: 'Carbs',
-          },
-        ],
-        action_id: 11,
+        type: 'Image',
+        url: 'https://photos.prnewswire.com/prnfull/20150402/10119680',
+        width: 90,
       },
-    ],
-  },
-  {
-    type: 'Card',
-    elements: [
+      {
+        type: 'input',
+        value: 'First Name',
+        label: 'Name',
+        placeholder: 'First Name',
+        action_id: 'fname',
+      },
+      {
+        type: 'input',
+        value: 'Last Name',
+        label: 'Name',
+        placeholder: 'Last Name',
+        action_id: 'lname',
+      },
       {
         type: 'Section',
         elements: [
           {
-            type: 'RadioButton',
+            type: 'Checkbox',
             value: 'Protein',
             options: [
               {
                 type: 'plain_text',
-                value: 'Protein',
+                value: 'first',
               },
               {
                 type: 'plain_text',
-                value: 'Carbs',
+                value: 'Second',
               },
             ],
-            action_id: 567,
+            action_id: 123,
           },
         ],
       },
       {
         type: 'Button',
-        value: 'hello',
+        value: 'Submit',
+        action_id: 'button',
       },
     ],
   },
-  {
-    type: 'Input_Box',
-    value: 'Name',
-    label: 'Name',
-    action_id: 1111,
-  },
-  {
-    type: 'Input_Box',
-    value: 'Name',
-    label: 'Name',
-    action_id: 1010,
-  },
-  {
-    type: 'Input_Box',
-    value: 'Name',
-    label: 'Name',
-    action_id: 10111,
-  },
+  // {
+  //   type: 'Card',
+  //   elements: [
+  //     {
+  //       type: 'Section',
+  //       elements: [
+  //         {
+  //           type: 'RadioButton',
+  //           value: 'Protein',
+  //           options: [
+  //             {
+  //               type: 'plain_text',
+  //               value: 'Protein',
+  //             },
+  //             {
+  //               type: 'plain_text',
+  //               value: 'Carbs',
+  //             },
+  //           ],
+  //           action_id: 567,
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       type: 'Button',
+  //       value: 'Submit',
+  //     },
+  //   ],
+  // },
 ];
 
 const Home = () => {
@@ -156,11 +115,6 @@ const Home = () => {
   const [value, setValue] = React.useState({});
 
   const handleCheckboxToggle = (action_id, name) => {
-    // setData(prevData => ({
-    //   ...prevData,
-    //   [currentElementId]: !prevData[currentElementId],
-    // }));
-
     setData(prevData => ({
       ...prevData,
       [action_id]: {
@@ -176,11 +130,8 @@ const Home = () => {
       [action_id]: name,
     }));
   };
-  console.log(data, '=-=-');
-  console.log(value, '=-=-');
 
   const onChange = (action_id, text) => {
-    console.log(text, 'taljdl;jal;kjfl;kdj');
     setData(prevData => ({
       ...prevData,
       [action_id]: text,
@@ -218,9 +169,17 @@ const Home = () => {
         return (
           <View style={{flexShrink: 1}}>
             <Button
-              title={item?.value}
+              title={item?.value || 'Submit'}
               onPress={() => console.log(JSON[0]?.options)}
             />
+          </View>
+        );
+      case 'form':
+        return (
+          <View style={styles.cardContainer}>
+            {item?.elements?.map((element, index) =>
+              renderComponent(element, index),
+            )}
           </View>
         );
 
@@ -306,7 +265,7 @@ const Home = () => {
           />
         );
 
-      case 'Input_Box':
+      case 'input':
         return (
           <TextInput
             mode="outlined"
@@ -318,24 +277,7 @@ const Home = () => {
 
       case 'Card':
         return (
-          <View
-            style={{
-              // flexDirection: 'row',
-              justifyContent: 'center',
-              // alignItems: 'center',
-              padding: 20,
-              backgroundColor: 'white', // Change background color if desired
-              // flexWrap: 'wrap',
-              borderRadius: 10,
-              shadowColor: 'black',
-              shadowRadius: 5,
-              shadowOpacity: 0.2,
-              shadowOffset: {
-                width: 0,
-                height: 3,
-              },
-              elevation: 5,
-            }}>
+          <View style={styles.cardContainer}>
             {item?.elements?.map((element, index) =>
               renderComponent(element, index),
             )}
@@ -356,3 +298,22 @@ const Home = () => {
 };
 
 export default Home;
+
+const styles = StyleSheet.create({
+  cardContainer: {
+    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: 'white', // Change background color if desired
+    // flexWrap: 'wrap',
+    marginVertical: 5,
+    borderRadius: 10,
+    shadowColor: 'black',
+    shadowRadius: 5,
+    shadowOpacity: 0.2,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    elevation: 5,
+  },
+});
