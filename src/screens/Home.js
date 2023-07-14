@@ -14,6 +14,30 @@ import RenderHTML from 'react-native-render-html';
 import {Checkbox, RadioButton, TextInput} from 'react-native-paper';
 
 let JSON = [
+  {type: 'Quill', value: '<h1>hello</h1>'},
+  {type: 'plain_text', value: 'hello'},
+  {type: 'Button', value: 'hello'},
+  {
+    type: 'Image',
+    url: 'https://photos.prnewswire.com/prnfull/20150402/10119680',
+    width: 90,
+    height: 50,
+  },
+  {
+    type: 'RadioButton',
+    value: 'Protein',
+    options: [
+      {
+        type: 'plain_text',
+        value: 'Protein',
+      },
+      {
+        type: 'plain_text',
+        value: 'Carbs',
+      },
+    ],
+    action_id: 567,
+  },
   {
     type: 'Checkbox',
     value: 'Protein',
@@ -28,6 +52,13 @@ let JSON = [
       },
     ],
     action_id: 123,
+  },
+  {
+    type: 'input',
+    value: 'Last Name',
+    label: 'Name',
+    placeholder: 'Last Name',
+    action_id: 'lname',
   },
   {
     type: 'form',
@@ -68,7 +99,7 @@ let JSON = [
                 value: 'Second',
               },
             ],
-            action_id: 123,
+            action_id: 1112,
           },
         ],
       },
@@ -113,6 +144,7 @@ let JSON = [
 const Home = () => {
   const [data, setData] = useState({});
   const [value, setValue] = React.useState({});
+  console.log(data, '=-=-=');
 
   const handleCheckboxToggle = (action_id, name) => {
     setData(prevData => ({
@@ -146,7 +178,7 @@ const Home = () => {
             source={{
               html: item?.value,
             }}
-            valueWidth={width}
+            contentWidth={width}
           />
         );
 
