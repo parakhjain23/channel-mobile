@@ -208,7 +208,7 @@ const Home = () => {
   };
 
   const handleradio_buttonsToggle = (action_id, name) => {
-    setValue(prevData => ({
+    setData(prevData => ({
       ...prevData,
       [action_id]: name,
     }));
@@ -297,7 +297,10 @@ const Home = () => {
           return (
             <TouchableOpacity
               onPress={() =>
-                handleChekboxesToggle(item?.action_id, element?.value)
+                handleChekboxesToggle(
+                  item?.action_id || element?.value || 'checkboxes',
+                  element?.value,
+                )
               }
               style={{
                 flexDirection: 'row',
@@ -321,9 +324,12 @@ const Home = () => {
         return (
           <RadioButton.Group
             onValueChange={value =>
-              handleradio_buttonsToggle(item?.action_id, value)
+              handleradio_buttonsToggle(
+                item?.action_id || 'radio_buttons',
+                value,
+              )
             }
-            value={value[item?.action_id]}>
+            value={data[item?.action_id]}>
             <View>
               {item?.options?.map(element => {
                 return (
@@ -359,7 +365,9 @@ const Home = () => {
             mode="outlined"
             label={item?.label || ''}
             placeholder={item?.placeholder || 'Input'}
-            onChangeText={text => onChange(item?.action_id, text)}
+            onChangeText={text =>
+              onChange(item?.action_id || item?.label || 'input', text)
+            }
           />
         );
 
@@ -370,15 +378,9 @@ const Home = () => {
             mode="outlined"
             label={item?.label || ''}
             placeholder={item?.placeholder || 'Write something'}
-            onChangeText={text => onChange(item?.action_id, text)}
-          />
-        );
-        return (
-          <TextInput
-            mode="outlined"
-            label={item?.label || ''}
-            placeholder={item?.placeholder || ''}
-            onChangeText={text => onChange(item?.action_id, text)}
+            onChangeText={text =>
+              onChange(item?.action_id || item?.label || 'text_area', text)
+            }
           />
         );
 
