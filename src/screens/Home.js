@@ -15,7 +15,6 @@ import {
   VictoryAxis,
   VictoryBar,
   VictoryChart,
-  VictoryHistogram,
   VictoryLabel,
   VictoryLine,
   VictoryPie,
@@ -248,7 +247,7 @@ const JSON = [
 ];
 
 const Home = () => {
-  const [data, setData] = useState({});
+  const [data, setData] = useState(JSON);
   const [value, setValue] = React.useState('');
   console.log(data, '=-=-');
 
@@ -333,8 +332,9 @@ const Home = () => {
       case 'RadioButton':
         return (
           <RadioButton.Group
-            onValueChange={newValue => setValue(newValue)}
-            value={value}>
+          // onValueChange={newValue => setValue(newValue)}
+          // value={value}
+          >
             {item?.values?.map(item => {
               return (
                 <View style={{flexDirection: 'row'}}>
@@ -447,18 +447,6 @@ const Home = () => {
             </VictoryChart>
           </View>
         );
-      //     <View>
-      //       {item?.values?.map(item => {
-      //         return (
-      //           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-      //             <RadioButton value={item} />
-      //             <Text>{item}</Text>
-      //           </View>
-      //         );
-      //       })}
-      //     </View>
-      //   </RadioButton.Group>
-      // );
       case 'Image':
         return (
           <Image
