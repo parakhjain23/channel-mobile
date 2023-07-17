@@ -194,7 +194,6 @@ let JSON = [
 
 const Home = () => {
   const [data, setData] = useState({});
-  const [value, setValue] = React.useState({});
   console.log(data, '=-=-=');
 
   const handleChekboxesToggle = (action_id, name) => {
@@ -220,6 +219,7 @@ const Home = () => {
       [action_id]: text,
     }));
   };
+
   const renderComponent = (item, index) => {
     const {width} = useWindowDimensions();
     switch (item.type) {
@@ -406,54 +406,72 @@ const Home = () => {
 
       case 'barGraph':
         return (
-          <VictoryChart
-            theme={VictoryTheme.grayscale}
-            domainPadding={{x: 20, y: 20}}>
-            <VictoryLabel
-              text={`${item.xAxisLabel}`}
-              x={200}
-              y={290}
-              textAnchor="middle"
-              style={{fontWeight: '600'}}
-            />
-            <VictoryLabel
-              text={`${item.yAxisLabel}`}
-              x={10}
-              y={140}
-              textAnchor="middle"
-              verticalAnchor="middle"
-              angle={-90}
-              style={{fontWeight: '600'}}
-            />
-            <VictoryBar
-              categories={item.categories}
-              data={item.values}
-              style={{
-                labels: {
-                  fontSize: 14,
-                },
-              }}
-            />
-            <VictoryAxis
-              tickCount={data.length}
-              style={{
-                tickLabels: {
-                  fontSize: 8, // Adjust the font size as desired
-                  padding: 5, // Adjust the padding as desired
-                  angle: 20, // Adjust the rotation angle as desired
-                  textAnchor: 'start', // Adjust the text anchor as desired
-                },
-              }}
-            />
-            <VictoryAxis dependentAxis />
-          </VictoryChart>
+          <View style={styles.chartContainer}>
+            <VictoryChart
+              theme={VictoryTheme.grayscale}
+              domainPadding={{x: 20, y: 20}}>
+              <VictoryLabel
+                text={`${item.xAxisLabel}`}
+                x={200}
+                y={290}
+                textAnchor="middle"
+                style={{fontWeight: '600'}}
+              />
+              <VictoryLabel
+                text={`${item.yAxisLabel}`}
+                x={10}
+                y={140}
+                textAnchor="middle"
+                verticalAnchor="middle"
+                angle={-90}
+                style={{fontWeight: '600'}}
+              />
+              <VictoryBar
+                categories={item.categories}
+                data={item.values}
+                style={{
+                  labels: {
+                    fontSize: 14,
+                  },
+                }}
+                animate={{
+                  duration: 1000,
+                  onLoad: {duration: 500},
+                }}
+              />
+              <VictoryAxis
+                tickCount={data.length}
+                style={{
+                  tickLabels: {
+                    fontSize: 8, // Adjust the font size as desired
+                    padding: 5, // Adjust the padding as desired
+                    angle: 20, // Adjust the rotation angle as desired
+                    textAnchor: 'start', // Adjust the text anchor as desired
+                  },
+                }}
+              />
+              <VictoryAxis dependentAxis />
+            </VictoryChart>
+          </View>
         );
+
       case 'pieChart':
         return (
-          <View>
+          <View style={styles.chartContainer}>
             <VictoryPie
+              colorScale={[
+                'tomato',
+                'orange',
+                'gold',
+                'cyan',
+                'navy',
+                'blue',
+                'red',
+                'black',
+              ]}
               data={item.values}
               labels={({datum}) => `${datum.x}\n${datum.y}%`}
+              width={300}
             />
             <Text
               style={{fontSize: 14, fontWeight: '600', textAlign: 'center'}}>
@@ -461,27 +479,35 @@ const Home = () => {
             </Text>
           </View>
         );
+
       case 'lineGraph':
         return (
-          <View style={{}}>
+          <View style={styles.chartContainer}>
             <VictoryChart theme={VictoryTheme.material}>
               <VictoryLine
                 style={{
                   data: {stroke: '#c43a31'},
                   parent: {border: '1px solid #ccc'},
                 }}
+                // width={300}
                 data={item.values}
+                interpolation="natural"
+                animate={{
+                  duration: 1000,
+                  onLoad: {duration: 700},
+                }}
               />
             </VictoryChart>
           </View>
         );
+
       default:
         return null;
     }
   };
   return (
     <ScrollView>
-      <View style={{marginHorizontal: 20}}>
+      <View style={{marginHorizontal: 20, backgroundColor: 'white'}}>
         {JSON.map((item, index) => renderComponent(item, index, `[${index}]`))}
       </View>
     </ScrollView>
@@ -494,8 +520,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: 'white', // Change background color if desired
-    // flexWrap: 'wrap',
+    backgroundColor: 'white',
     marginVertical: 5,
     borderRadius: 10,
     shadowColor: 'black',
@@ -511,5 +536,10 @@ const styles = StyleSheet.create({
     height: 0.5,
     backgroundColor: 'gray',
     marginVertical: 10,
+  },
+  chartContainer: {
+    backgroundColor: 'white',
+    marginVertical: 5,
+    alignItems: 'center',
   },
 });
