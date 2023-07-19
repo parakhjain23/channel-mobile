@@ -13,9 +13,9 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		27C3D51F15EECD203C479C85 /* libPods-Channel-ChannelTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F99D2686112593F960245E32 /* libPods-Channel-ChannelTests.a */; };
 		AC59AC5E123B4A80A0E16CB1 /* libPods-Channel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B9A56A6D45FD6878554A26A2 /* libPods-Channel.a */; };
+		BF0178F92A67F72B00BC8140 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF0178F82A67F72B00BC8140 /* LaunchScreen.storyboard */; };
 		E58649E72A36FEF900B387E2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E58649E52A36FEF900B387E2 /* GoogleService-Info.plist */; };
 		E58649E82A36FEF900B387E2 /* ding.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E58649E62A36FEF900B387E2 /* ding.mp3 */; };
-		E58649EC2A37002100B387E2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E58649EB2A37002100B387E2 /* LaunchScreen.storyboard */; };
 		E5864A402A370D7900B387E2 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E5864A302A370D7900B387E2 /* Fontisto.ttf */; };
 		E5864A412A370D7900B387E2 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E5864A312A370D7900B387E2 /* Octicons.ttf */; };
 		E5864A422A370D7900B387E2 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E5864A322A370D7900B387E2 /* Feather.ttf */; };
@@ -58,11 +58,11 @@
 		152120C783A98D9E9B055B0A /* Pods-Channel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Channel.release.xcconfig"; path = "Target Support Files/Pods-Channel/Pods-Channel.release.xcconfig"; sourceTree = "<group>"; };
 		70041B98E186C679958A77C4 /* Pods-Channel-ChannelTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Channel-ChannelTests.release.xcconfig"; path = "Target Support Files/Pods-Channel-ChannelTests/Pods-Channel-ChannelTests.release.xcconfig"; sourceTree = "<group>"; };
 		B9A56A6D45FD6878554A26A2 /* libPods-Channel.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Channel.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF0178F82A67F72B00BC8140 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D16F27627444630FB9955360 /* Pods-Channel-ChannelTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Channel-ChannelTests.debug.xcconfig"; path = "Target Support Files/Pods-Channel-ChannelTests/Pods-Channel-ChannelTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E51C68F32A383CE400397C5A /* Channel.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Channel.entitlements; path = Channel/Channel.entitlements; sourceTree = "<group>"; };
 		E58649E52A36FEF900B387E2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E58649E62A36FEF900B387E2 /* ding.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ding.mp3; sourceTree = "<group>"; };
-		E58649EB2A37002100B387E2 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = "../../../channel-mobile-app-react-native/Channel/ios/Channel/LaunchScreen.storyboard"; sourceTree = "<group>"; };
 		E5864A302A370D7900B387E2 /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
 		E5864A312A370D7900B387E2 /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
 		E5864A322A370D7900B387E2 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
@@ -131,8 +131,8 @@
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				E58649EB2A37002100B387E2 /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				BF0178F82A67F72B00BC8140 /* LaunchScreen.storyboard */,
 			);
 			name = Channel;
 			sourceTree = "<group>";
@@ -318,12 +318,12 @@
 				E5864A442A370D7900B387E2 /* FontAwesome5_Brands.ttf in Resources */,
 				E5864A402A370D7900B387E2 /* Fontisto.ttf in Resources */,
 				E5864A4D2A370D7900B387E2 /* EvilIcons.ttf in Resources */,
-				E58649EC2A37002100B387E2 /* LaunchScreen.storyboard in Resources */,
 				E5864A492A370D7900B387E2 /* FontAwesome5_Solid.ttf in Resources */,
 				E5864A452A370D7900B387E2 /* MaterialCommunityIcons.ttf in Resources */,
 				E5864A4E2A370D7900B387E2 /* SimpleLineIcons.ttf in Resources */,
 				E5864A4F2A370D7900B387E2 /* MaterialIcons.ttf in Resources */,
 				E5864A432A370D7900B387E2 /* Entypo.ttf in Resources */,
+				BF0178F92A67F72B00BC8140 /* LaunchScreen.storyboard in Resources */,
 				E5864A412A370D7900B387E2 /* Octicons.ttf in Resources */,
 				E5864A472A370D7900B387E2 /* Foundation.ttf in Resources */,
 				E5864A4A2A370D7900B387E2 /* FontAwesome5_Regular.ttf in Resources */,
