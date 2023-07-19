@@ -8,18 +8,11 @@ import Notifee from '@notifee/react-native';
 import NotificationSetup from './src/utils/NotificationSetup';
 import InternetConnection from './src/utils/InternetConnection';
 import SplashScreen from 'react-native-splash-screen';
-import codePush from 'react-native-code-push';
-
-let codePushOptions = {checkFrequency: codePush.CheckFrequency.MANUAL};
 
 const App = () => {
   useEffect(() => {
     SplashScreen.hide();
     Request();
-    codePush.sync({
-      updateDialog: true,
-      installMode: codePush.InstallMode.ON_NEXT_RESTART,
-    });
   }, []);
 
   return (
@@ -32,7 +25,7 @@ const App = () => {
     </Provider>
   );
 };
-export default codePush(codePushOptions)(App);
+export default App;
 
 async function Request() {
   await Notifee.requestPermission({
