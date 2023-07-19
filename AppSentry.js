@@ -6,7 +6,6 @@ import ErrorScreen from './src/screens/errorScreen/ErrorScreen';
 import codePush from 'react-native-code-push';
 
 let CODE_PUSH_OPTIONS = {checkFrequency: codePush.CheckFrequency.MANUAL};
-
 const AppSentry = () => {
   useEffect(() => {
     Sentry.init({
@@ -16,7 +15,7 @@ const AppSentry = () => {
       tracesSampleRate: 1.0,
     });
     codePush.sync({
-      // updateDialog: true,
+      updateDialog: true,
       installMode: codePush.InstallMode.ON_NEXT_RESTART,
     });
   });

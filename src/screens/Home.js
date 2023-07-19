@@ -12,65 +12,57 @@ import {
 import React, {useState} from 'react';
 import RenderHTML from 'react-native-render-html/src/RenderHTML';
 import {Checkbox, RadioButton, TextInput} from 'react-native-paper';
-import {
-  VictoryAxis,
-  VictoryBar,
-  VictoryChart,
-  VictoryLabel,
-  VictoryLine,
-  VictoryPie,
-  VictoryTheme,
-} from 'victory-native';
+import {BarChart, LineChart, PieChart} from 'react-native-chart-kit';
 
-let JSON = [
-  {type: 'html', value: '<h1>hello</h1>'},
-  {type: 'plain_text', value: 'hello'},
-  {type: 'button', value: 'hello'},
-  {type: 'divider'},
-  {type: 'text_area'},
-  {
-    type: 'image',
-    url: 'https://photos.prnewswire.com/prnfull/20150402/10119680',
-    width: 90,
-    height: 50,
-  },
-  {
-    type: 'radio_buttons',
-    value: 'Protein',
-    options: [
-      {
-        type: 'plain_text',
-        value: 'Protein',
-      },
-      {
-        type: 'plain_text',
-        value: 'Carbs',
-      },
-    ],
-    action_id: 567,
-  },
-  {
-    type: 'checkboxes',
-    value: 'Protein',
-    options: [
-      {
-        type: 'plain_text',
-        value: 'first',
-      },
-      {
-        type: 'plain_text',
-        value: 'Second',
-      },
-    ],
-    action_id: 123,
-  },
-  {
-    type: 'input',
-    value: 'Last Name',
-    label: 'Name',
-    placeholder: 'Last Name',
-    action_id: 'lname',
-  },
+let JSON_Example = [
+  // {type: 'html', value: '<h1>hello</h1>'},
+  // {type: 'plain_text', value: 'hello'},
+  // {type: 'button', value: 'hello'},
+  // {type: 'divider'},
+  // {type: 'text_area'},
+  // {
+  //   type: 'image',
+  //   url: 'https://photos.prnewswire.com/prnfull/20150402/10119680',
+  //   width: 90,
+  //   height: 50,
+  // },
+  // {
+  //   type: 'radio_buttons',
+  //   value: 'Protein',
+  //   options: [
+  //     {
+  //       type: 'plain_text',
+  //       value: 'Protein',
+  //     },
+  //     {
+  //       type: 'plain_text',
+  //       value: 'Carbs',
+  //     },
+  //   ],
+  //   action_id: 567,
+  // },
+  // {
+  //   type: 'checkboxes',
+  //   value: 'Protein',
+  //   options: [
+  //     {
+  //       type: 'plain_text',
+  //       value: 'first',
+  //     },
+  //     {
+  //       type: 'plain_text',
+  //       value: 'Second',
+  //     },
+  //   ],
+  //   action_id: 123,
+  // },
+  // {
+  //   type: 'input',
+  //   value: 'Last Name',
+  //   label: 'Name',
+  //   placeholder: 'Last Name',
+  //   action_id: 'lname',
+  // },
   {
     type: 'form',
     action_id: 'form',
@@ -152,43 +144,64 @@ let JSON = [
   },
   {
     type: 'barGraph',
-    values: [
-      {x: 'MSG90', y: '5', label: '100cr'},
-      {x: 'MSG91', y: '15', label: '100cr'},
-      {x: 'MSG92', y: '5', label: '100cr'},
-      {x: 'MSG93', y: '25', label: '100cr'},
-      {x: 'MSG94', y: '10', label: '100cr'},
-      {x: 'MSG95', y: '5', label: '100cr'},
-      {x: 'MSG96', y: '5', label: '100cr'},
-      {x: 'MSG97', y: '5', label: '100cr'},
-    ],
-    categories: {
-      x: ['MSG90', 'MSG91', 'MSG92', 'MSG93', 'MSG94'],
-      y: ['5', '10', '15', '20', '25'],
+    default: true,
+    values: {
+      datasets: [
+        {
+          data: ['5', '15', '5', '25', '10', '5', '15', '5'],
+        },
+      ],
+      labels: [
+        'MSG90',
+        'MSG91',
+        'MSG92',
+        'MSG93',
+        'MSG94',
+        'MSG95',
+        'MSG96',
+        'MSG97',
+      ],
     },
-    xAxisLabel: 'revenue in Cr.',
-    yAxisLabel: 'time in Years',
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          title: {
+            display: 'true',
+            text: 'Revenue in Cr',
+          },
+        },
+        x: {
+          title: {
+            display: 'true',
+            text: 'time in year',
+          },
+        },
+      },
+    },
   },
   {
     type: 'pieChart',
-    values: [
-      {x: 'MSG91', y: 30},
-      {x: 'Gidh', y: 20},
-      {x: 'SPACE', y: 15},
-      {x: 'halfKg', y: 35},
-      {x: 'halfKg', y: 5},
-    ],
-    chatTitile: 'year 2023 contributions',
+    values: {
+      datasets: [
+        {
+          data: [30, 20, 15, 35, 5],
+        },
+      ],
+      labels: ['MSG91', 'Gidh', 'SPACE', 'halfKg', 'halfKg'],
+    },
   },
+
   {
     type: 'lineGraph',
-    values: [
-      {x: 1, y: 2},
-      {x: 2, y: 3},
-      {x: 3, y: 5},
-      {x: 4, y: 4},
-      {x: 5, y: 7},
-    ],
+    values: {
+      datasets: [
+        {
+          data: [2, 3, 5, 4, 7],
+        },
+      ],
+      labels: [1, 2, 3, 4, 5],
+    },
   },
 ];
 
@@ -250,11 +263,26 @@ const Home = () => {
         );
 
       case 'button':
+        const onButtonPress = async buttonValue => {
+          setData({});
+          const response = await fetch(
+            'https://eo4m6r2avsfon5s.m.pipedream.net',
+            {
+              method: 'POST',
+              body: JSON.stringify({
+                ...data,
+                [item.action_id || item?.value]: buttonValue || 'Submit',
+              }),
+            },
+          );
+        };
         return (
           <View style={{flexShrink: 1}}>
             <Button
               title={item?.value || 'Submit'}
-              onPress={() => console.log(JSON[0]?.options)}
+              onPress={() => {
+                onButtonPress(item?.value);
+              }}
             />
           </View>
         );
@@ -376,6 +404,7 @@ const Home = () => {
             onChangeText={text =>
               onChange(item?.action_id || item?.label || 'input', text)
             }
+            value={data[item?.action_id] || ''}
           />
         );
 
@@ -405,99 +434,88 @@ const Home = () => {
         return <View style={styles.divider} />;
 
       case 'barGraph':
+        const chartConfig = {
+          backgroundGradientFrom: '#fff',
+          backgroundGradientFromOpacity: 1,
+          backgroundGradientTo: '#fff',
+          backgroundGradientToOpacity: 0.5,
+          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+          strokeWidth: 2, // optional, default 3
+          barPercentage: 0.5,
+          // useShadowColorFromDataset: false, // optional
+        };
         return (
-          <View style={styles.chartContainer}>
-            <VictoryChart
-              theme={VictoryTheme.grayscale}
-              domainPadding={{x: 20, y: 20}}>
-              <VictoryLabel
-                text={`${item.xAxisLabel}`}
-                x={200}
-                y={290}
-                textAnchor="middle"
-                style={{fontWeight: '600'}}
-              />
-              <VictoryLabel
-                text={`${item.yAxisLabel}`}
-                x={10}
-                y={140}
-                textAnchor="middle"
-                verticalAnchor="middle"
-                angle={-90}
-                style={{fontWeight: '600'}}
-              />
-              <VictoryBar
-                categories={item.categories}
-                data={item.values}
-                style={{
-                  labels: {
-                    fontSize: 14,
-                  },
-                }}
-                animate={{
-                  duration: 1000,
-                  onLoad: {duration: 500},
-                }}
-              />
-              <VictoryAxis
-                tickCount={data.length}
-                style={{
-                  tickLabels: {
-                    fontSize: 8, // Adjust the font size as desired
-                    padding: 5, // Adjust the padding as desired
-                    angle: 20, // Adjust the rotation angle as desired
-                    textAnchor: 'start', // Adjust the text anchor as desired
-                  },
-                }}
-              />
-              <VictoryAxis dependentAxis />
-            </VictoryChart>
+          <View style={[styles.chartContainer]}>
+            <BarChart
+              style={{}}
+              data={item?.values}
+              width={width - 50}
+              height={250}
+              yAxisLabel="$"
+              chartConfig={{
+                backgroundGradientFrom: '#fff',
+                backgroundGradientFromOpacity: 1,
+                backgroundGradientTo: '#fff',
+                backgroundGradientToOpacity: 0.5,
+                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                strokeWidth: 1, // optional, default 3
+                barPercentage: 0.5,
+                fillShadowGradientFromOffset: 100,
+                fillShadowGradient: 'black',
+                fillShadowGradientOpacity: 1,
+                fillShadowGradientTo: '#000',
+                fillShadowGradientToOffset: 100,
+              }}
+              fromZero={true}
+              // withCustomBarColorFromData={true}
+              segments={5}
+              verticalLabelRotation={30}
+              showBarTops={false}
+              showValuesOnTopOfBars={true}
+            />
           </View>
         );
-
       case 'pieChart':
         return (
           <View style={styles.chartContainer}>
-            <VictoryPie
-              colorScale={[
-                'tomato',
-                'orange',
-                'gold',
-                'cyan',
-                'navy',
-                'blue',
-                'red',
-                'black',
-              ]}
-              data={item.values}
-              labels={({datum}) => `${datum.x}\n${datum.y}%`}
-              width={300}
+            <PieChart
+              data={convertData(item.values)}
+              width={width}
+              height={250}
+              chartConfig={{
+                backgroundGradientFrom: '#fff',
+                backgroundGradientFromOpacity: 1,
+                backgroundGradientTo: '#fff',
+                backgroundGradientToOpacity: 0.5,
+                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                strokeWidth: 2,
+                barPercentage: 0.5,
+              }}
+              accessor={'value'}
+              backgroundColor={'transparent'}
+              paddingLeft={'15'}
+              center={[0.5, 0.5]} // Adjust the center coordinates within the range of [0, 1]
+              // absolute
             />
-            <Text
-              style={{fontSize: 14, fontWeight: '600', textAlign: 'center'}}>
-              {item.chatTitile}
-            </Text>
           </View>
         );
 
       case 'lineGraph':
         return (
           <View style={styles.chartContainer}>
-            <VictoryChart theme={VictoryTheme.material}>
-              <VictoryLine
-                style={{
-                  data: {stroke: '#c43a31'},
-                  parent: {border: '1px solid #ccc'},
-                }}
-                // width={300}
-                data={item.values}
-                interpolation="natural"
-                animate={{
-                  duration: 1000,
-                  onLoad: {duration: 700},
-                }}
-              />
-            </VictoryChart>
+            <LineChart
+              data={item.values}
+              width={width}
+              height={220}
+              chartConfig={{
+                backgroundGradientFrom: '#fff',
+                backgroundGradientFromOpacity: 1,
+                backgroundGradientTo: '#fff',
+                backgroundGradientToOpacity: 0.5,
+                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                strokeWidth: 1, // optional, default 3
+              }}
+            />
           </View>
         );
 
@@ -506,9 +524,11 @@ const Home = () => {
     }
   };
   return (
-    <ScrollView>
+    <ScrollView style={{backgroundColor: 'white'}}>
       <View style={{marginHorizontal: 20, backgroundColor: 'white'}}>
-        {JSON.map((item, index) => renderComponent(item, index, `[${index}]`))}
+        {JSON_Example.map((item, index) =>
+          renderComponent(item, index, `[${index}]`),
+        )}
       </View>
     </ScrollView>
   );
@@ -543,3 +563,37 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+const convertData = inputData => {
+  const {datasets, labels} = inputData;
+
+  const convertedData = datasets[0].data.map((dataValue, index) => {
+    return {
+      name: labels[index],
+      value: dataValue,
+      color: getRandomColor(index),
+      legendFontColor: '#7F7F7F',
+      legendFontSize: 15,
+    };
+  });
+
+  return convertedData;
+};
+const getRandomColor = index => {
+  const COLORS = [
+    'cyan',
+    'tomato',
+    'yellow',
+    'magenta',
+    'red',
+    'black',
+    'blue',
+    'gray',
+    'green',
+    'orange',
+    'purple',
+    'pink',
+    '#FFCC00', // Custom hexadecimal color
+    '#00FF00', // Custom hexadecimal color
+  ];
+  return COLORS[index % COLORS.length];
+};
