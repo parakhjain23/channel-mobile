@@ -258,16 +258,14 @@ const ChatCard = ({
     <View
       style={{
         height: '7%',
-        alignItems: 'flex-end',
-        width: '100%',
-        paddingVertical: 5,
+        justifyContent: 'flex-end',
+        marginTop: 10,
         paddingHorizontal: 15,
         position: 'absolute',
         zIndex: 99,
-        justifyContent: 'center',
       }}>
       <TouchableOpacity onPress={handleModalClose}>
-        <AntDesign name={'closecircleo'} size={25} color={'gray'} />
+        <AntDesign name={'close'} size={25} color={colors?.color} />
       </TouchableOpacity>
     </View>
   );
