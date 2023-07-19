@@ -219,106 +219,296 @@ const Home = () => {
       [action_id]: text,
     }));
   };
-  const renderElement = element => {
-    switch (element.type) {
+
+  const renderComponent = (item, index) => {
+    const {width} = useWindowDimensions();
+    switch (item.type) {
+      case 'quill':
       case 'html':
-        return <Text>{element.value}</Text>;
-      case 'plain_text':
-        return <Text>{element.value}</Text>;
-      case 'button':
         return (
-          <Button
-            title={element.value}
-            onPress={() => handleButtonPress(element)}
+          <RenderHTML
+            source={{
+              html: item?.value,
+            }}
+            contentWidth={width}
           />
         );
-      case 'divider':
-        return <View style={styles.divider} />;
-      case 'text_area':
-        return <TextInput multiline={true} />;
+
+      case 'plain_text':
+        return (
+          <View style={{flexShrink: 1, minWidth: 0}}>
+            <Text key={index}>{item?.value}</Text>
+          </View>
+        );
+
+      case 'Button_with_url':
+        return (
+          <Button
+            title={item?.value}
+            onPress={() => Linking.openURL(item?.url)}
+          />
+        );
+
+      case 'button':
+        return (
+          <View style={{flexShrink: 1}}>
+            <Button
+              title={item?.value || 'Submit'}
+              onPress={() => console.log(JSON[0]?.options)}
+            />
+          </View>
+        );
+
+      case 'form':
+        return (
+          <View style={styles.cardContainer}>
+            {item?.elements?.map((element, index) =>
+              renderComponent(element, index),
+            )}
+          </View>
+        );
+
+      case 'section':
+        return (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              // flexWrap: 'wrap',
+            }}>
+            {item?.elements?.map((element, index) =>
+              renderComponent(element, index),
+            )}
+          </View>
+        );
+
+      case 'checkboxes':
+        return item?.options?.map((element, elementIndex) => {
+          if (typeof data[item?.action_id] === 'undefined') {
+            setData(prevData => ({
+              ...prevData,
+              [item.action_id]: {
+                ...prevData[item.action_id],
+                [element.value]: element.selected || false,
+              },
+            }));
+          }
+
+          return (
+            <TouchableOpacity
+              onPress={() =>
+                handleChekboxesToggle(
+                  item?.action_id || element?.value || 'checkboxes',
+                  element?.value,
+                )
+              }
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginBottom: 5,
+              }}
+              key={elementIndex}>
+              <Checkbox
+                status={
+                  data[item?.action_id]?.[element?.value]
+                    ? 'checked'
+                    : 'unchecked'
+                }
+              />
+              <View>{renderComponent(element, index)}</View>
+            </TouchableOpacity>
+          );
+        });
+
+      case 'radio_buttons':
+        return (
+          <RadioButton.Group
+            onValueChange={value =>
+              handleradio_buttonsToggle(
+                item?.action_id || 'radio_buttons',
+                value,
+              )
+            }
+            value={data[item?.action_id]}>
+            <View>
+              {item?.options?.map(element => {
+                return (
+                  <TouchableOpacity
+                    onPress={() =>
+                      handleradio_buttonsToggle(
+                        item?.action_id || 'radio_buttons',
+                        element?.value,
+                      )
+                    }
+                    style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <RadioButton value={element?.value} />
+                    <Text>{element?.value}</Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </RadioButton.Group>
+        );
+
       case 'image':
         return (
           <Image
-            source={{uri: element.url}}
-            style={{width: element.width, height: element.height}}
+            source={{
+              uri: item?.url,
+            }}
+            style={{
+              height: item?.height || 50,
+              width: item?.width || 50,
+              marginRight: 8,
+              borderRadius: item?.radius || 0,
+            }}
           />
         );
-      case 'radio_buttons':
-        return (
-          <View style={styles.radioButtonsContainer}>
-            {element.options.map(option => (
-              <TouchableOpacity
-                key={option.value}
-                style={styles.radioButton}
-                onPress={() =>
-                  handleRadioButtonPress(element.action_id, option.value)
-                }>
-                <Text>{option.value}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        );
-      case 'checkboxes':
-        return (
-          <View style={styles.checkboxesContainer}>
-            {element.options.map(option => (
-              <TouchableOpacity
-                key={option.value}
-                style={styles.checkbox}
-                onPress={() =>
-                  handleCheckboxPress(element.action_id, option.value)
-                }>
-                <Text>{option.value}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        );
+
       case 'input':
-        return <TextInput placeholder={element.placeholder} />;
-      case 'form':
         return (
-          <View style={styles.form}>
-            {element.elements.map(formElement => (
-              <View key={formElement.action_id} style={styles.formElement}>
-                {renderElement(formElement)}
-              </View>
-            ))}
-          </View>
+          <TextInput
+            multiline={item?.multiline || false}
+            mode="outlined"
+            label={item?.label || ''}
+            placeholder={item?.placeholder || 'Input'}
+            onChangeText={text =>
+              onChange(item?.action_id || item?.label || 'input', text)
+            }
+          />
         );
+
+      case 'text_area':
+        return (
+          <TextInput
+            multiline={true}
+            mode="outlined"
+            label={item?.label || ''}
+            placeholder={item?.placeholder || 'Write something'}
+            onChangeText={text =>
+              onChange(item?.action_id || item?.label || 'text_area', text)
+            }
+          />
+        );
+
       case 'card':
         return (
-          <View style={styles.card}>
-            {element.elements.map(cardElement => (
-              <View key={cardElement.action_id} style={styles.cardElement}>
-                {renderElement(cardElement)}
-              </View>
-            ))}
+          <View style={styles.cardContainer}>
+            {item?.elements?.map((element, index) =>
+              renderComponent(element, index),
+            )}
           </View>
         );
+
+      case 'divider':
+        return <View style={styles.divider} />;
+
+      case 'barGraph':
+        return (
+          <View style={styles.chartContainer}>
+            <VictoryChart
+              theme={VictoryTheme.grayscale}
+              domainPadding={{x: 20, y: 20}}>
+              <VictoryLabel
+                text={`${item.xAxisLabel}`}
+                x={200}
+                y={290}
+                textAnchor="middle"
+                style={{fontWeight: '600'}}
+              />
+              <VictoryLabel
+                text={`${item.yAxisLabel}`}
+                x={10}
+                y={140}
+                textAnchor="middle"
+                verticalAnchor="middle"
+                angle={-90}
+                style={{fontWeight: '600'}}
+              />
+              <VictoryBar
+                categories={item.categories}
+                data={item.values}
+                style={{
+                  labels: {
+                    fontSize: 14,
+                  },
+                }}
+                animate={{
+                  duration: 1000,
+                  onLoad: {duration: 500},
+                }}
+              />
+              <VictoryAxis
+                tickCount={data.length}
+                style={{
+                  tickLabels: {
+                    fontSize: 8, // Adjust the font size as desired
+                    padding: 5, // Adjust the padding as desired
+                    angle: 20, // Adjust the rotation angle as desired
+                    textAnchor: 'start', // Adjust the text anchor as desired
+                  },
+                }}
+              />
+              <VictoryAxis dependentAxis />
+            </VictoryChart>
+          </View>
+        );
+
+      case 'pieChart':
+        return (
+          <View style={styles.chartContainer}>
+            <VictoryPie
+              colorScale={[
+                'tomato',
+                'orange',
+                'gold',
+                'cyan',
+                'navy',
+                'blue',
+                'red',
+                'black',
+              ]}
+              data={item.values}
+              labels={({datum}) => `${datum.x}\n${datum.y}%`}
+              width={300}
+            />
+            <Text
+              style={{fontSize: 14, fontWeight: '600', textAlign: 'center'}}>
+              {item.chatTitile}
+            </Text>
+          </View>
+        );
+
+      case 'lineGraph':
+        return (
+          <View style={styles.chartContainer}>
+            <VictoryChart theme={VictoryTheme.material}>
+              <VictoryLine
+                style={{
+                  data: {stroke: '#c43a31'},
+                  parent: {border: '1px solid #ccc'},
+                }}
+                // width={300}
+                data={item.values}
+                interpolation="natural"
+                animate={{
+                  duration: 1000,
+                  onLoad: {duration: 700},
+                }}
+              />
+            </VictoryChart>
+          </View>
+        );
+
       default:
         return null;
     }
   };
-
-  const handleButtonPress = element => {
-    // Handle button press event
-    console.log('Button pressed:', element.value);
-  };
-
-  const handleRadioButtonPress = (actionId, value) => {
-    // Handle radio button press event
-    console.log('Radio button pressed:', actionId, value);
-  };
-
-  const handleCheckboxPress = (actionId, value) => {
-    // Handle checkbox press event
-    console.log('Checkbox pressed:', actionId, value);
-  };
-
   return (
     <ScrollView>
       <View style={{marginHorizontal: 20, backgroundColor: 'white'}}>
-        {JSON.map((item, index) => renderElement(element, index))}
+        {JSON.map((item, index) => renderComponent(item, index, `[${index}]`))}
       </View>
     </ScrollView>
   );
@@ -327,68 +517,29 @@ const Home = () => {
 export default Home;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
+  cardContainer: {
+    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: 'white',
+    marginVertical: 5,
+    borderRadius: 10,
+    shadowColor: 'black',
+    shadowRadius: 5,
+    shadowOpacity: 0.2,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    elevation: 5,
   },
   divider: {
-    borderBottomColor: 'black',
-    borderBottomWidth: 1,
+    height: 0.5,
+    backgroundColor: 'gray',
     marginVertical: 10,
   },
-  radioButtonsContainer: {
-    flexDirection: 'row',
-  },
-  radioButton: {
-    marginRight: 10,
-  },
-  checkboxesContainer: {
-    flexDirection: 'row',
-  },
-  checkbox: {
-    marginRight: 10,
-  },
-  form: {
-    marginVertical: 10,
-  },
-  formElement: {
-    marginBottom: 10,
-  },
-  card: {
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 5,
-    padding: 10,
-    marginVertical: 10,
-  },
-  cardElement: {
-    marginBottom: 10,
+  chartContainer: {
+    backgroundColor: 'white',
+    marginVertical: 5,
+    alignItems: 'center',
   },
 });
-// const styles = StyleSheet.create({
-//   cardContainer: {
-//     justifyContent: 'center',
-//     padding: 20,
-//     backgroundColor: 'white',
-//     marginVertical: 5,
-//     borderRadius: 10,
-//     shadowColor: 'black',
-//     shadowRadius: 5,
-//     shadowOpacity: 0.2,
-//     shadowOffset: {
-//       width: 0,
-//       height: 3,
-//     },
-//     elevation: 5,
-//   },
-//   divider: {
-//     height: 0.5,
-//     backgroundColor: 'gray',
-//     marginVertical: 10,
-//   },
-//   chartContainer: {
-//     backgroundColor: 'white',
-//     marginVertical: 5,
-//     alignItems: 'center',
-//   },
-// });
