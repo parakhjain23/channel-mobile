@@ -12,15 +12,6 @@ import {
 import React, {useState} from 'react';
 import RenderHTML from 'react-native-render-html/src/RenderHTML';
 import {Checkbox, RadioButton, TextInput} from 'react-native-paper';
-import {
-  VictoryAxis,
-  VictoryBar,
-  VictoryChart,
-  VictoryLabel,
-  VictoryLine,
-  VictoryPie,
-  VictoryTheme,
-} from 'victory-native';
 import {BarChart, LineChart, PieChart} from 'react-native-chart-kit';
 
 let JSON = [
@@ -72,142 +63,123 @@ let JSON = [
   //   placeholder: 'Last Name',
   //   action_id: 'lname',
   // },
-  // {
-  //   type: 'form',
-  //   action_id: 'form',
-  //   elements: [
-  //     {
-  //       type: 'image',
-  //       url: 'https://photos.prnewswire.com/prnfull/20150402/10119680',
-  //       width: 90,
-  //     },
-  //     {
-  //       type: 'input',
-  //       value: 'First Name',
-  //       label: 'Name',
-  //       placeholder: 'First Name',
-  //       action_id: 'fname',
-  //     },
-  //     {
-  //       type: 'input',
-  //       value: 'Last Name',
-  //       label: 'Name',
-  //       placeholder: 'Last Name',
-  //       action_id: 'lname',
-  //     },
-  //     {
-  //       type: 'section',
-  //       elements: [
-  //         {
-  //           type: 'checkboxes',
-  //           options: [
-  //             {
-  //               type: 'plain_text',
-  //               value: 'first hai',
-  //               selected: true,
-  //             },
-  //             {
-  //               type: 'plain_text',
-  //               value: 'Second',
-  //             },
-  //           ],
-  //           action_id: 1112,
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       type: 'button',
-  //       value: 'Submit',
-  //       action_id: 'button',
-  //     },
-  //   ],
-  // },
-  // {
-  //   type: 'card',
-  //   elements: [
-  //     {
-  //       type: 'section',
-  //       elements: [
-  //         {
-  //           type: 'radio_buttons',
-  //           value: 'Protein',
-  //           options: [
-  //             {
-  //               type: 'plain_text',
-  //               value: 'Protein',
-  //             },
-  //             {
-  //               type: 'plain_text',
-  //               value: 'Carbs',
-  //             },
-  //           ],
-  //           action_id: 567,
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       type: 'button',
-  //       value: 'Submit',
-  //     },
-  //   ],
-  // },
-  // {
-  //   type: 'barGraph',
-  //   values: [
-  //     {x: 'MSG90', y: '5', label: '100cr'},
-  //     {x: 'MSG91', y: '15', label: '100cr'},
-  //     {x: 'MSG92', y: '5', label: '100cr'},
-  //     {x: 'MSG93', y: '25', label: '100cr'},
-  //     {x: 'MSG94', y: '10', label: '100cr'},
-  //     {x: 'MSG95', y: '5', label: '100cr'},
-  //     {x: 'MSG96', y: '5', label: '100cr'},
-  //     {x: 'MSG97', y: '5', label: '100cr'},
-  //   ],
-  //   categories: {
-  //     x: ['MSG90', 'MSG91', 'MSG92', 'MSG93', 'MSG94'],
-  //     y: ['5', '10', '15', '20', '25'],
-  //   },
-  //   xAxisLabel: 'revenue in Cr.',
-  //   yAxisLabel: 'time in Years',
-  // },
-  // {
-  //   type: 'barGraph',
-  //   default: true,
-  //   values: {
-  //     datasets: [
-  //       {
-  //         data: ['5', '15', '5', '25', '10', '5', '15', '5'],
-  //       },
-  //     ],
-  //     labels: [
-  //       'MSG90',
-  //       'MSG91',
-  //       'MSG92',
-  //       'MSG93',
-  //       'MSG94',
-  //       'MSG95',
-  //       'MSG96',
-  //       'MSG97',
-  //     ],
-  //   },
-  //   options: {
-  //     responsive: true,
-  //     scales: {
-  //       y: {
-  //         title: {
-  //           display: 'true',
-  //           text: 'Revenue in Cr',
-  //         },
-  //       },
-  //       x: {
-  //         title: {
-  //           display: 'true',
-  //           text: 'time in year',
-  //         },
-  //       },
-  //     },
-  //   },
-  // },
+  {
+    type: 'form',
+    action_id: 'form',
+    elements: [
+      {
+        type: 'image',
+        url: 'https://photos.prnewswire.com/prnfull/20150402/10119680',
+        width: 90,
+      },
+      {
+        type: 'input',
+        value: 'First Name',
+        label: 'Name',
+        placeholder: 'First Name',
+        action_id: 'fname',
+      },
+      {
+        type: 'input',
+        value: 'Last Name',
+        label: 'Name',
+        placeholder: 'Last Name',
+        action_id: 'lname',
+      },
+      {
+        type: 'section',
+        elements: [
+          {
+            type: 'checkboxes',
+            options: [
+              {
+                type: 'plain_text',
+                value: 'first hai',
+                selected: true,
+              },
+              {
+                type: 'plain_text',
+                value: 'Second',
+              },
+            ],
+            action_id: 1112,
+          },
+        ],
+      },
+      {
+        type: 'button',
+        value: 'Submit',
+        action_id: 'button',
+      },
+    ],
+  },
+  {
+    type: 'card',
+    elements: [
+      {
+        type: 'section',
+        elements: [
+          {
+            type: 'radio_buttons',
+            value: 'Protein',
+            options: [
+              {
+                type: 'plain_text',
+                value: 'Protein',
+              },
+              {
+                type: 'plain_text',
+                value: 'Carbs',
+              },
+            ],
+            action_id: 567,
+          },
+        ],
+      },
+      {
+        type: 'button',
+        value: 'Submit',
+      },
+    ],
+  },
+  {
+    type: 'barGraph',
+    default: true,
+    values: {
+      datasets: [
+        {
+          data: ['5', '15', '5', '25', '10', '5', '15', '5'],
+        },
+      ],
+      labels: [
+        'MSG90',
+        'MSG91',
+        'MSG92',
+        'MSG93',
+        'MSG94',
+        'MSG95',
+        'MSG96',
+        'MSG97',
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          title: {
+            display: 'true',
+            text: 'Revenue in Cr',
+          },
+        },
+        x: {
+          title: {
+            display: 'true',
+            text: 'time in year',
+          },
+        },
+      },
+    },
+  },
   {
     type: 'pieChart',
     values: {
@@ -219,38 +191,18 @@ let JSON = [
       labels: ['MSG91', 'Gidh', 'SPACE', 'halfKg', 'halfKg'],
     },
   },
-  // {
-  //   type: 'lineGraph',
-  //   values: {
-  //     datasets: [
-  //       {
-  //         data: [2, 3, 5, 4, 7],
-  //       },
-  //     ],
-  //     labels: [1, 2, 3, 4, 5],
-  //   },
-  // },
-  // {
-  //   type: 'pieChart',
-  //   values: [
-  //     {x: 'MSG91', y: 30},
-  //     {x: 'Gidh', y: 20},
-  //     {x: 'SPACE', y: 15},
-  //     {x: 'halfKg', y: 35},
-  //     {x: 'halfKg', y: 5},
-  //   ],
-  //   chatTitile: 'year 2023 contributions',
-  // },
-  // {
-  //   type: 'lineGraph',
-  //   values: [
-  //     {x: 1, y: 2},
-  //     {x: 2, y: 3},
-  //     {x: 3, y: 5},
-  //     {x: 4, y: 4},
-  //     {x: 5, y: 7},
-  //   ],
-  // },
+
+  {
+    type: 'lineGraph',
+    values: {
+      datasets: [
+        {
+          data: [2, 3, 5, 4, 7],
+        },
+      ],
+      labels: [1, 2, 3, 4, 5],
+    },
+  },
 ];
 
 const Home = () => {
@@ -465,57 +417,6 @@ const Home = () => {
       case 'divider':
         return <View style={styles.divider} />;
 
-      // case 'barGraph':
-      //   return (
-      //     <View style={styles.chartContainer}>
-      //       <VictoryChart
-      //         theme={VictoryTheme.grayscale}
-      //         domainPadding={{x: 20, y: 20}}>
-      //         <VictoryLabel
-      //           text={`${item.xAxisLabel}`}
-      //           x={200}
-      //           y={290}
-      //           textAnchor="middle"
-      //           style={{fontWeight: '600'}}
-      //         />
-      //         <VictoryLabel
-      //           text={`${item.yAxisLabel}`}
-      //           x={10}
-      //           y={140}
-      //           textAnchor="middle"
-      //           verticalAnchor="middle"
-      //           angle={-90}
-      //           style={{fontWeight: '600'}}
-      //         />
-      //         <VictoryBar
-      //           categories={item.categories}
-      //           data={item.values}
-      //           style={{
-      //             labels: {
-      //               fontSize: 14,
-      //             },
-      //           }}
-      //           animate={{
-      //             duration: 1000,
-      //             onLoad: {duration: 500},
-      //           }}
-      //         />
-      //         <VictoryAxis
-      //           tickCount={data.length}
-      //           style={{
-      //             tickLabels: {
-      //               fontSize: 8, // Adjust the font size as desired
-      //               padding: 5, // Adjust the padding as desired
-      //               angle: 20, // Adjust the rotation angle as desired
-      //               textAnchor: 'start', // Adjust the text anchor as desired
-      //             },
-      //           }}
-      //         />
-      //         <VictoryAxis dependentAxis />
-      //       </VictoryChart>
-      //     </View>
-      //   );
-
       case 'barGraph':
         const chartConfig = {
           backgroundGradientFrom: '#fff',
@@ -551,7 +452,7 @@ const Home = () => {
               }}
               fromZero={true}
               // withCustomBarColorFromData={true}
-              // segments={5}
+              segments={5}
               verticalLabelRotation={30}
               showBarTops={false}
               showValuesOnTopOfBars={true}
@@ -574,11 +475,11 @@ const Home = () => {
                 strokeWidth: 2,
                 barPercentage: 0.5,
               }}
-              accessor={'population'}
+              accessor={'value'}
               backgroundColor={'transparent'}
               paddingLeft={'15'}
               center={[0.5, 0.5]} // Adjust the center coordinates within the range of [0, 1]
-              absolute
+              // absolute
             />
           </View>
         );
@@ -586,21 +487,6 @@ const Home = () => {
       case 'lineGraph':
         return (
           <View style={styles.chartContainer}>
-            {/* <VictoryChart theme={VictoryTheme.material}>
-              <VictoryLine
-                style={{
-                  data: {stroke: '#c43a31'},
-                  parent: {border: '1px solid #ccc'},
-                }}
-                // width={300}
-                data={item.values}
-                interpolation="natural"
-                animate={{
-                  duration: 1000,
-                  onLoad: {duration: 700},
-                }}
-              />
-            </VictoryChart> */}
             <LineChart
               data={item.values}
               width={width}
@@ -665,8 +551,8 @@ const convertData = inputData => {
   const convertedData = datasets[0].data.map((dataValue, index) => {
     return {
       name: labels[index],
-      population: dataValue,
-      color: getRandomColor(),
+      value: dataValue,
+      color: getRandomColor(index),
       legendFontColor: '#7F7F7F',
       legendFontSize: 15,
     };
@@ -674,11 +560,22 @@ const convertData = inputData => {
 
   return convertedData;
 };
-const getRandomColor = () => {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
+const getRandomColor = index => {
+  const COLORS = [
+    'cyan',
+    'tomato',
+    'yellow',
+    'magenta',
+    'red',
+    'black',
+    'blue',
+    'gray',
+    'green',
+    'orange',
+    'purple',
+    'pink',
+    '#FFCC00', // Custom hexadecimal color
+    '#00FF00', // Custom hexadecimal color
+  ];
+  return COLORS[index % COLORS.length];
 };
