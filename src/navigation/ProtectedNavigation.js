@@ -57,7 +57,7 @@ const ProtectedNavigation = props => {
       {/* <Stack.Screen
         name="Home"
         component={Home}
-        options={{
+      options={{
           // headerShown: false,
           ...getHeader,
         }}

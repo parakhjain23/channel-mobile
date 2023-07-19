@@ -14,198 +14,198 @@ import RenderHTML from 'react-native-render-html/src/RenderHTML';
 import {Checkbox, RadioButton, TextInput} from 'react-native-paper';
 import {BarChart, LineChart, PieChart} from 'react-native-chart-kit';
 
-let JSON_Example = [
-  // {type: 'html', value: '<h1>hello</h1>'},
-  // {type: 'plain_text', value: 'hello'},
-  // {type: 'button', value: 'hello'},
-  // {type: 'divider'},
-  // {type: 'text_area'},
-  // {
-  //   type: 'image',
-  //   url: 'https://photos.prnewswire.com/prnfull/20150402/10119680',
-  //   width: 90,
-  //   height: 50,
-  // },
-  // {
-  //   type: 'radio_buttons',
-  //   value: 'Protein',
-  //   options: [
-  //     {
-  //       type: 'plain_text',
-  //       value: 'Protein',
-  //     },
-  //     {
-  //       type: 'plain_text',
-  //       value: 'Carbs',
-  //     },
-  //   ],
-  //   action_id: 567,
-  // },
-  // {
-  //   type: 'checkboxes',
-  //   value: 'Protein',
-  //   options: [
-  //     {
-  //       type: 'plain_text',
-  //       value: 'first',
-  //     },
-  //     {
-  //       type: 'plain_text',
-  //       value: 'Second',
-  //     },
-  //   ],
-  //   action_id: 123,
-  // },
-  // {
-  //   type: 'input',
-  //   value: 'Last Name',
-  //   label: 'Name',
-  //   placeholder: 'Last Name',
-  //   action_id: 'lname',
-  // },
-  {
-    type: 'form',
-    action_id: 'form',
-    elements: [
-      {
-        type: 'image',
-        url: 'https://photos.prnewswire.com/prnfull/20150402/10119680',
-        width: 90,
-      },
-      {
-        type: 'input',
-        value: 'First Name',
-        label: 'Name',
-        placeholder: 'First Name',
-        action_id: 'fname',
-      },
-      {
-        type: 'input',
-        value: 'Last Name',
-        label: 'Name',
-        placeholder: 'Last Name',
-        action_id: 'lname',
-      },
-      {
-        type: 'section',
-        elements: [
-          {
-            type: 'checkboxes',
-            options: [
-              {
-                type: 'plain_text',
-                value: 'first hai',
-                selected: true,
-              },
-              {
-                type: 'plain_text',
-                value: 'Second',
-              },
-            ],
-            action_id: 1112,
-          },
-        ],
-      },
-      {
-        type: 'button',
-        value: 'Submit',
-        action_id: 'button',
-      },
-    ],
-  },
-  {
-    type: 'card',
-    elements: [
-      {
-        type: 'section',
-        elements: [
-          {
-            type: 'radio_buttons',
-            value: 'Protein',
-            options: [
-              {
-                type: 'plain_text',
-                value: 'Protein',
-              },
-              {
-                type: 'plain_text',
-                value: 'Carbs',
-              },
-            ],
-            action_id: 567,
-          },
-        ],
-      },
-      {
-        type: 'button',
-        value: 'Submit',
-      },
-    ],
-  },
-  {
-    type: 'barGraph',
-    default: true,
-    values: {
-      datasets: [
-        {
-          data: ['5', '15', '5', '25', '10', '5', '15', '5'],
-        },
-      ],
-      labels: [
-        'MSG90',
-        'MSG91',
-        'MSG92',
-        'MSG93',
-        'MSG94',
-        'MSG95',
-        'MSG96',
-        'MSG97',
-      ],
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          title: {
-            display: 'true',
-            text: 'Revenue in Cr',
-          },
-        },
-        x: {
-          title: {
-            display: 'true',
-            text: 'time in year',
-          },
-        },
-      },
-    },
-  },
-  {
-    type: 'pieChart',
-    values: {
-      datasets: [
-        {
-          data: [30, 20, 15, 35, 5],
-        },
-      ],
-      labels: ['MSG91', 'Gidh', 'SPACE', 'halfKg', 'halfKg'],
-    },
-  },
+// let JSON_Example = [
+//   // {type: 'html', value: '<h1>hello</h1>'},
+//   // {type: 'plain_text', value: 'hello'},
+//   // {type: 'button', value: 'hello'},
+//   // {type: 'divider'},
+//   // {type: 'text_area'},
+//   // {
+//   //   type: 'image',
+//   //   url: 'https://photos.prnewswire.com/prnfull/20150402/10119680',
+//   //   width: 90,
+//   //   height: 50,
+//   // },
+//   // {
+//   //   type: 'radio_buttons',
+//   //   value: 'Protein',
+//   //   options: [
+//   //     {
+//   //       type: 'plain_text',
+//   //       value: 'Protein',
+//   //     },
+//   //     {
+//   //       type: 'plain_text',
+//   //       value: 'Carbs',
+//   //     },
+//   //   ],
+//   //   action_id: 567,
+//   // },
+//   // {
+//   //   type: 'checkboxes',
+//   //   value: 'Protein',
+//   //   options: [
+//   //     {
+//   //       type: 'plain_text',
+//   //       value: 'first',
+//   //     },
+//   //     {
+//   //       type: 'plain_text',
+//   //       value: 'Second',
+//   //     },
+//   //   ],
+//   //   action_id: 123,
+//   // },
+//   // {
+//   //   type: 'input',
+//   //   value: 'Last Name',
+//   //   label: 'Name',
+//   //   placeholder: 'Last Name',
+//   //   action_id: 'lname',
+//   // },
+//   {
+//     type: 'form',
+//     action_id: 'form',
+//     elements: [
+//       {
+//         type: 'image',
+//         url: 'https://photos.prnewswire.com/prnfull/20150402/10119680',
+//         width: 90,
+//       },
+//       {
+//         type: 'input',
+//         value: 'First Name',
+//         label: 'Name',
+//         placeholder: 'First Name',
+//         action_id: 'fname',
+//       },
+//       {
+//         type: 'input',
+//         value: 'Last Name',
+//         label: 'Name',
+//         placeholder: 'Last Name',
+//         action_id: 'lname',
+//       },
+//       {
+//         type: 'section',
+//         elements: [
+//           {
+//             type: 'checkboxes',
+//             options: [
+//               {
+//                 type: 'plain_text',
+//                 value: 'first hai',
+//                 selected: true,
+//               },
+//               {
+//                 type: 'plain_text',
+//                 value: 'Second',
+//               },
+//             ],
+//             action_id: 1112,
+//           },
+//         ],
+//       },
+//       {
+//         type: 'button',
+//         value: 'Submit',
+//         action_id: 'button',
+//       },
+//     ],
+//   },
+//   {
+//     type: 'card',
+//     elements: [
+//       {
+//         type: 'section',
+//         elements: [
+//           {
+//             type: 'radio_buttons',
+//             value: 'Protein',
+//             options: [
+//               {
+//                 type: 'plain_text',
+//                 value: 'Protein',
+//               },
+//               {
+//                 type: 'plain_text',
+//                 value: 'Carbs',
+//               },
+//             ],
+//             action_id: 567,
+//           },
+//         ],
+//       },
+//       {
+//         type: 'button',
+//         value: 'Submit',
+//       },
+//     ],
+//   },
+//   {
+//     type: 'barGraph',
+//     default: true,
+//     values: {
+//       datasets: [
+//         {
+//           data: ['5', '15', '5', '25', '10', '5', '15', '5'],
+//         },
+//       ],
+//       labels: [
+//         'MSG90',
+//         'MSG91',
+//         'MSG92',
+//         'MSG93',
+//         'MSG94',
+//         'MSG95',
+//         'MSG96',
+//         'MSG97',
+//       ],
+//     },
+//     options: {
+//       responsive: true,
+//       scales: {
+//         y: {
+//           title: {
+//             display: 'true',
+//             text: 'Revenue in Cr',
+//           },
+//         },
+//         x: {
+//           title: {
+//             display: 'true',
+//             text: 'time in year',
+//           },
+//         },
+//       },
+//     },
+//   },
+//   {
+//     type: 'pieChart',
+//     values: {
+//       datasets: [
+//         {
+//           data: [30, 20, 15, 35, 5],
+//         },
+//       ],
+//       labels: ['MSG91', 'Gidh', 'SPACE', 'halfKg', 'halfKg'],
+//     },
+//   },
 
-  {
-    type: 'lineGraph',
-    values: {
-      datasets: [
-        {
-          data: [2, 3, 5, 4, 7],
-        },
-      ],
-      labels: [1, 2, 3, 4, 5],
-    },
-  },
-];
+//   {
+//     type: 'lineGraph',
+//     values: {
+//       datasets: [
+//         {
+//           data: [2, 3, 5, 4, 7],
+//         },
+//       ],
+//       labels: [1, 2, 3, 4, 5],
+//     },
+//   },
+// ];
 
-const Home = () => {
+const Home = ({JSON_Example}) => {
   const [data, setData] = useState({});
   console.log(data, '=-=-=');
 
@@ -265,16 +265,23 @@ const Home = () => {
       case 'button':
         const onButtonPress = async buttonValue => {
           setData({});
-          const response = await fetch(
-            'https://eo4m6r2avsfon5s.m.pipedream.net',
-            {
-              method: 'POST',
-              body: JSON.stringify({
-                ...data,
-                [item.action_id || item?.value]: buttonValue || 'Submit',
-              }),
-            },
-          );
+          try {
+            const response = await fetch(
+              'https://ebl-api-h7duexlbuq-el.a.run.app/func/KIIWX0yC0W3U',
+              {
+                method: 'POST',
+                body: JSON.stringify({
+                  ...data,
+                  [item.action_id || item?.value]: buttonValue || 'Submit',
+                }),
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              },
+            );
+          } catch (error) {
+            console.log(error, '=-=-error in api=');
+          }
         };
         return (
           <View style={{flexShrink: 1}}>
@@ -303,7 +310,7 @@ const Home = () => {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'center',
-              // flexWrap: 'wrap',
+              flexWrap: 'wrap', ///// Can be removed later
             }}>
             {item?.elements?.map((element, index) =>
               renderComponent(element, index),
@@ -418,6 +425,7 @@ const Home = () => {
             onChangeText={text =>
               onChange(item?.action_id || item?.label || 'text_area', text)
             }
+            value={data[item?.action_id] || ''}
           />
         );
 
@@ -449,7 +457,7 @@ const Home = () => {
             <BarChart
               style={{}}
               data={item?.values}
-              width={width - 50}
+              width={width - 80}
               height={250}
               yAxisLabel="$"
               chartConfig={{
@@ -480,8 +488,8 @@ const Home = () => {
           <View style={styles.chartContainer}>
             <PieChart
               data={convertData(item.values)}
-              width={width}
-              height={250}
+              width={width - 100}
+              height={200}
               chartConfig={{
                 backgroundGradientFrom: '#fff',
                 backgroundGradientFromOpacity: 1,
@@ -493,8 +501,8 @@ const Home = () => {
               }}
               accessor={'value'}
               backgroundColor={'transparent'}
-              paddingLeft={'15'}
-              center={[0.5, 0.5]} // Adjust the center coordinates within the range of [0, 1]
+              paddingLeft={'25'}
+              center={[0, 0]} // Adjust the center coordinates within the range of [0, 1]
               // absolute
             />
           </View>
@@ -505,15 +513,23 @@ const Home = () => {
           <View style={styles.chartContainer}>
             <LineChart
               data={item.values}
-              width={width}
+              width={width - 50}
               height={220}
               chartConfig={{
                 backgroundGradientFrom: '#fff',
-                backgroundGradientFromOpacity: 1,
                 backgroundGradientTo: '#fff',
                 backgroundGradientToOpacity: 0.5,
                 color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                 strokeWidth: 1, // optional, default 3
+                propsForDots: {
+                  r: '5',
+                  strokeWidth: '1',
+                  stroke: '#fff',
+                },
+              }}
+              bezier
+              style={{
+                marginVertical: 8,
               }}
             />
           </View>
@@ -525,7 +541,7 @@ const Home = () => {
   };
   return (
     <ScrollView style={{backgroundColor: 'white'}}>
-      <View style={{marginHorizontal: 20, backgroundColor: 'white'}}>
+      <View style={{marginHorizontal: 10, backgroundColor: 'white'}}>
         {JSON_Example.map((item, index) =>
           renderComponent(item, index, `[${index}]`),
         )}
@@ -539,7 +555,7 @@ export default Home;
 const styles = StyleSheet.create({
   cardContainer: {
     justifyContent: 'center',
-    padding: 20,
+    padding: 10,
     backgroundColor: 'white',
     marginVertical: 5,
     borderRadius: 10,
@@ -582,15 +598,15 @@ const getRandomColor = index => {
   const COLORS = [
     'cyan',
     'tomato',
-    'yellow',
     'magenta',
-    'red',
-    'black',
     'blue',
     'gray',
     'green',
     'orange',
     'purple',
+    'red',
+    'yellow',
+    'black',
     'pink',
     '#FFCC00', // Custom hexadecimal color
     '#00FF00', // Custom hexadecimal color

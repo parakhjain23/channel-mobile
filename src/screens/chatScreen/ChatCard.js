@@ -36,6 +36,7 @@ import FastImage from 'react-native-fast-image';
 import {reactionOnChatStart} from '../../redux/actions/chat/ReactionsActions';
 import Reactions from '../../components/Reactions';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Home from '../Home';
 
 const AddRemoveJoinedMsg = React.memo(({senderName, content, orgState}) => {
   const {colors} = useTheme();
@@ -270,7 +271,6 @@ const ChatCard = ({
         <AntDesign name={'closecircleo'} size={25} color={'gray'} />
       </TouchableOpacity>
     </View>
-    
   );
   if (!isActivity) {
     return (
@@ -570,8 +570,40 @@ const ChatCard = ({
                           </View>
                         );
                       })}
-
-                    {chat?.content?.includes('<span class="mention"') ? (
+                    <Home
+                      JSON_Example={[
+                        {
+                          type: 'lineGraph',
+                          values: {
+                            datasets: [
+                              {
+                                data: [2, 3, 5, 4, 7],
+                              },
+                            ],
+                            labels: [1, 2, 3, 4, 5],
+                          },
+                        },
+                        {type: 'divider'},
+                        {
+                          type: 'pieChart',
+                          values: {
+                            datasets: [
+                              {
+                                data: [30, 20, 15, 35, 5],
+                              },
+                            ],
+                            labels: [
+                              'MSG91',
+                              'Gidh',
+                              'SPACE',
+                              'halfKg',
+                              'halfKg',
+                            ],
+                          },
+                        },
+                      ]}
+                    />
+                    {/* {chat?.content?.includes('<span class="mention"') ? (
                       <HTMLView
                         value={
                           !showMore
@@ -599,7 +631,7 @@ const ChatCard = ({
                         contentWidth={width}
                         tagsStyles={tagsStyles(textColor, linkColor)}
                       />
-                    )}
+                    )} */}
                     {chat?.content?.length > 500 &&
                       (showMore ? (
                         <Text
@@ -632,7 +664,7 @@ const ChatCard = ({
           </TouchableOpacity>
         </View>
         {!isSameDate && (
-          <View> 
+          <View>
             <Text
               style={{
                 color: '#808080',
