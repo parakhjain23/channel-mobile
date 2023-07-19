@@ -499,6 +499,7 @@ const Home = ({JSON_Example}) => {
                 strokeWidth: 2,
                 barPercentage: 0.5,
               }}
+              avoidFalseZero={true}
               accessor={'value'}
               backgroundColor={'transparent'}
               paddingLeft={'25'}
