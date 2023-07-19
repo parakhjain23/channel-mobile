@@ -14,7 +14,7 @@ import RenderHTML from 'react-native-render-html/src/RenderHTML';
 import {Checkbox, RadioButton, TextInput} from 'react-native-paper';
 import {BarChart, LineChart, PieChart} from 'react-native-chart-kit';
 
-let JSON = [
+let JSON_Example = [
   // {type: 'html', value: '<h1>hello</h1>'},
   // {type: 'plain_text', value: 'hello'},
   // {type: 'button', value: 'hello'},
@@ -263,11 +263,26 @@ const Home = () => {
         );
 
       case 'button':
+        const onButtonPress = async buttonValue => {
+          setData({});
+          const response = await fetch(
+            'https://eo4m6r2avsfon5s.m.pipedream.net',
+            {
+              method: 'POST',
+              body: JSON.stringify({
+                ...data,
+                [item.action_id || item?.value]: buttonValue || 'Submit',
+              }),
+            },
+          );
+        };
         return (
           <View style={{flexShrink: 1}}>
             <Button
               title={item?.value || 'Submit'}
-              onPress={() => console.log(JSON[0]?.options)}
+              onPress={() => {
+                onButtonPress(item?.value);
+              }}
             />
           </View>
         );
@@ -389,6 +404,7 @@ const Home = () => {
             onChangeText={text =>
               onChange(item?.action_id || item?.label || 'input', text)
             }
+            value={data[item?.action_id] || ''}
           />
         );
 
@@ -510,7 +526,9 @@ const Home = () => {
   return (
     <ScrollView style={{backgroundColor: 'white'}}>
       <View style={{marginHorizontal: 20, backgroundColor: 'white'}}>
-        {JSON.map((item, index) => renderComponent(item, index, `[${index}]`))}
+        {JSON_Example.map((item, index) =>
+          renderComponent(item, index, `[${index}]`),
+        )}
       </View>
     </ScrollView>
   );
