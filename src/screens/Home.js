@@ -207,7 +207,6 @@ import {BarChart, LineChart, PieChart} from 'react-native-chart-kit';
 
 const Home = ({JSON_Example}) => {
   const [data, setData] = useState({});
-  console.log(data, '=-=-=');
 
   const handleChekboxesToggle = (action_id, name) => {
     setData(prevData => ({

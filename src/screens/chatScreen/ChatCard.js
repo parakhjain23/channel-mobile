@@ -70,7 +70,6 @@ const ChatCard = ({
   setActiveChannelTeamIdAction,
   reactionAction,
 }) => {
-  // console.log('chat-card');
   const deviceType = useSelector(state => state.appInfoReducer.deviceType);
   const {colors, dark} = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
@@ -570,68 +569,41 @@ const ChatCard = ({
                           </View>
                         );
                       })}
-                    <Home
-                      JSON_Example={[
-                        {
-                          type: 'lineGraph',
-                          values: {
-                            datasets: [
-                              {
-                                data: [2, 3, 5, 4, 7],
-                              },
-                            ],
-                            labels: [1, 2, 3, 4, 5],
-                          },
-                        },
-                        {type: 'divider'},
-                        {
-                          type: 'pieChart',
-                          values: {
-                            datasets: [
-                              {
-                                data: [30, 20, 15, 35, 5],
-                              },
-                            ],
-                            labels: [
-                              'MSG91',
-                              'Gidh',
-                              'SPACE',
-                              'halfKg',
-                              'halfKg',
-                            ],
-                          },
-                        },
-                      ]}
-                    />
-                    {/* {chat?.content?.includes('<span class="mention"') ? (
-                      <HTMLView
-                        value={
-                          !showMore
-                            ? `<div>${chat?.content?.slice(0, 400)}</div>`
-                            : `<div>${chat?.content}</div>`
-                        }
-                        renderNode={renderNode}
-                        stylesheet={htmlStyles(textColor)}
-                      />
-                    ) : (
-                      <RenderHTML
-                        source={{
-                          html: !showMore
-                            ? chat?.content
-                                ?.slice(0, 400)
-                                .replace(
+                    {chat.messageType == 'html' ? (
+                      chat?.content?.includes('<span class="mention"') ? (
+                        <HTMLView
+                          value={
+                            !showMore
+                              ? `<div>${chat?.content?.slice(0, 400)}</div>`
+                              : `<div>${chat?.content}</div>`
+                          }
+                          renderNode={renderNode}
+                          stylesheet={htmlStyles(textColor)}
+                        />
+                      ) : (
+                        <RenderHTML
+                          source={{
+                            html: !showMore
+                              ? chat?.content
+                                  ?.slice(0, 400)
+                                  .replace(
+                                    emailRegex,
+                                    '<a href="mailTo:$&">$&</a>',
+                                  )
+                              : chat?.content?.replace(
                                   emailRegex,
                                   '<a href="mailTo:$&">$&</a>',
-                                )
-                            : chat?.content?.replace(
-                                emailRegex,
-                                '<a href="mailTo:$&">$&</a>',
-                              ),
-                        }}
-                        contentWidth={width}
-                        tagsStyles={tagsStyles(textColor, linkColor)}
-                      />
-                    )} */}
+                                ),
+                          }}
+                          contentWidth={width}
+                          tagsStyles={tagsStyles(textColor, linkColor)}
+                        />
+                      )
+                    ) : chat.messageType == 'richText' ? (
+                      <Home JSON_Example={chat.content} />
+                    ) : (
+                      <Text>{chat.content}</Text>
+                    )}
                     {chat?.content?.length > 500 &&
                       (showMore ? (
                         <Text

@@ -58,7 +58,6 @@ const ChannelCard = ({
   appInfoState,
   setChatDetailsForTab,
 }) => {
-  // console.log('channel card');
   const navigation = useNavigation();
   const deviceType = appInfoState?.deviceType;
 
