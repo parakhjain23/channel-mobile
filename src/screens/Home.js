@@ -513,7 +513,7 @@ const Home = ({JSON_Example}) => {
           <View style={styles.chartContainer}>
             <LineChart
               data={item.values}
-              width={width - 50}
+              width={width - 40}
               height={220}
               chartConfig={{
                 backgroundGradientFrom: '#fff',
@@ -530,6 +530,26 @@ const Home = ({JSON_Example}) => {
               bezier
               style={{
                 marginVertical: 8,
+              }}
+              renderDotContent={({x, y, index, indexData}) => (
+                (uniqueKey = `dot-${indexData}-${index}-${Math.random()}`),
+                (
+                  <Text
+                    key={uniqueKey}
+                    style={{
+                      position: 'absolute',
+                      top: y - 20,
+                      left: x - 10,
+                      color: 'black',
+                    }}>
+                    {indexData}
+                  </Text>
+                )
+              )}
+              fromZero={true}
+              segments={5}
+              onDataPointClick={() => {
+                console.log('hello');
               }}
             />
           </View>
