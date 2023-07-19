@@ -1,4 +1,5 @@
 import {Alert} from 'react-native';
+import {CHAT_SERVER_URL} from '../baseUrls/baseUrls';
 
 export const createDmChannel = async (
   token,
@@ -7,7 +8,7 @@ export const createDmChannel = async (
   reciverUserId,
 ) => {
   try {
-    var response = await fetch('https://api.intospace.io/chat/team', {
+    var response = await fetch(`${CHAT_SERVER_URL}/chat/team`, {
       method: 'POST',
       headers: {
         Authorization: token,

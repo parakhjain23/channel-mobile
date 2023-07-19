@@ -1,6 +1,7 @@
 import io from 'socket.io-client';
+import {SOCKET_URL} from '../api/baseUrls/baseUrls';
 
-let socket = io('wss://api.intospace.io', {
+let socket = io(SOCKET_URL, {
   forceNew: true,
   transports: ['websocket', 'polling'],
   reconnectionAttempts: 10,
@@ -8,7 +9,7 @@ let socket = io('wss://api.intospace.io', {
 export function createSocket(accessToken, orgId) {
   if (socket?.connected) {
     socket.disconnect();
-    socket = io('wss://api.intospace.io', {
+    socket = io(SOCKET_URL, {
       forceNew: true,
       transports: ['websocket', 'polling'],
       reconnectionAttempts: 20,

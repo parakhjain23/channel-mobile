@@ -53,15 +53,15 @@ const ProtectedNavigation = props => {
       />
     </Stack.Navigator>
   ) : (
-    <Stack.Navigator initialRouteName="Home">
-      <Stack.Screen
+    <Stack.Navigator initialRouteName="Org">
+      {/* <Stack.Screen
         name="Home"
         component={Home}
         options={{
           // headerShown: false,
           ...getHeader,
         }}
-      />
+      /> */}
       <Stack.Screen
         name="Org"
         component={DrawerNavigation}

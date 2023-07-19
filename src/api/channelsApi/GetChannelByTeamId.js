@@ -1,6 +1,8 @@
+import {CHAT_SERVER_URL} from '../baseUrls/baseUrls';
+
 export const getChannelByTeamIdApi = async (token, teamId) => {
   try {
-    var response = await fetch(`https://api.intospace.io/chat/team/${teamId}`, {
+    var response = await fetch(`${CHAT_SERVER_URL}/chat/team/${teamId}`, {
       method: 'GET',
       headers: {
         Authorization: token,

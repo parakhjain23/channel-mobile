@@ -1,3 +1,5 @@
+import {CHAT_SERVER_URL} from '../baseUrls/baseUrls';
+
 export const reactionsApi = async (
   token,
   teamId,
@@ -9,7 +11,7 @@ export const reactionsApi = async (
   userId,
 ) => {
   try {
-    var response = await fetch(`https://api.intospace.io/chat/reactions`, {
+    var response = await fetch(`${CHAT_SERVER_URL}/chat/reactions`, {
       method: actionType == 'remove' ? 'PATCH' : 'POST',
       headers: {
         Authorization: token,

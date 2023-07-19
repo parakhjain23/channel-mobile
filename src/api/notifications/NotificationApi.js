@@ -1,4 +1,5 @@
 import {call} from 'redux-saga/effects';
+import {CHAT_SERVER_URL} from '../baseUrls/baseUrls';
 
 export function* notifications({accessToken, deviceId}) {
   try {
@@ -11,15 +12,12 @@ export function* notifications({accessToken, deviceId}) {
 const notificationApi = async (token, deviceId) => {
   try {
     const myHeaders = new Headers();
-    myHeaders.append(
-      'Authorization',
-      `${token}`,
-    );
+    myHeaders.append('Authorization', `${token}`);
     myHeaders.append('Content-Type', 'application/json');
 
     const raw = JSON.stringify({
       deviceId: {
-        chat: `${deviceId}`
+        chat: `${deviceId}`,
       },
     });
 
@@ -30,9 +28,9 @@ const notificationApi = async (token, deviceId) => {
       redirect: 'follow',
     };
 
-    fetch('https://api.intospace.io/users/deviceGroups', requestOptions)
+    fetch(`${CHAT_SERVER_URL}/users/deviceGroups`, requestOptions)
       .then(async response => {
-        let result = await response.json()
+        let result = await response.json();
       })
       .catch(error => console.warn('error', error));
   } catch (error) {

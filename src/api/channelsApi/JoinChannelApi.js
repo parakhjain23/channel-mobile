@@ -1,7 +1,9 @@
+import {CHAT_SERVER_URL} from '../baseUrls/baseUrls';
+
 export const joinChannelApi = async (orgId, teamId, userId, token) => {
   try {
     const date = new Date();
-    var response = await fetch('https://api.intospace.io/chat/teamUser', {
+    var response = await fetch(`${CHAT_SERVER_URL}/chat/teamUser`, {
       method: 'POST',
       headers: {
         Authorization: token,
@@ -15,7 +17,7 @@ export const joinChannelApi = async (orgId, teamId, userId, token) => {
     });
     var result = await response.json();
     var response2 = await fetch(
-      `https://api.intospace.io/chat/teamUser?orgId=${orgId}&userId=${userId}&teamId=${teamId}`,
+      `${CHAT_SERVER_URL}/chat/teamUser?orgId=${orgId}&userId=${userId}&teamId=${teamId}`,
       {
         method: 'PATCH',
         headers: {

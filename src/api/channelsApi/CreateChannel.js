@@ -1,8 +1,15 @@
-import { Alert } from "react-native";
+import {Alert} from 'react-native';
+import {CHAT_SERVER_URL} from '../baseUrls/baseUrls';
 
-export const createChannel = async (token,orgId,channelName,channelType,userIds) => {
+export const createChannel = async (
+  token,
+  orgId,
+  channelName,
+  channelType,
+  userIds,
+) => {
   try {
-    var response = await fetch('https://api.intospace.io/chat/team', {
+    var response = await fetch(`${CHAT_SERVER_URL}//chat/team`, {
       method: 'POST',
       headers: {
         Authorization: token,
@@ -13,14 +20,14 @@ export const createChannel = async (token,orgId,channelName,channelType,userIds)
         type: channelType,
         orgId: orgId,
         name: channelName,
-        userIds: userIds
+        userIds: userIds,
       }),
     });
     var result = await response.json();
-    if(result?.name=='GeneralError' || result?.name=='Conflict'){
-      Alert.alert(result?.message)
+    if (result?.name == 'GeneralError' || result?.name == 'Conflict') {
+      Alert.alert(result?.message);
     }
-    return result
+    return result;
   } catch (error) {
     console.warn(error);
   }
