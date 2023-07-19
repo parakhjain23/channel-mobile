@@ -569,7 +569,7 @@ const ChatCard = ({
                           </View>
                         );
                       })}
-                    {chat.messageType == 'html' ? (
+                    {!chat.messageType || chat.messageType != 'richText' ? (
                       chat?.content?.includes('<span class="mention"') ? (
                         <HTMLView
                           value={
@@ -599,10 +599,8 @@ const ChatCard = ({
                           tagsStyles={tagsStyles(textColor, linkColor)}
                         />
                       )
-                    ) : chat.messageType == 'richText' ? (
-                      <Home JSON_Example={chat.content} />
                     ) : (
-                      <Text>{chat.content}</Text>
+                      <Home JSON_Example={chat.content} />
                     )}
                     {chat?.content?.length > 500 &&
                       (showMore ? (
