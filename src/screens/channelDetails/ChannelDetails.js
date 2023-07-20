@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
+  Image,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -17,6 +18,7 @@ import {useTheme} from '@react-navigation/native';
 import {makeStyles} from './Styles';
 import FastImage from 'react-native-fast-image';
 import {Throttling} from '../../utils/Throttling';
+import {ResultNotFound} from '../../assests/images/attachments';
 
 const ChannelDetailsScreen = ({
   route,
@@ -194,7 +196,23 @@ const ChannelDetailsScreen = ({
             changeText={changeText}
             isSearchFocus={false}
           />
-
+          {searchValue != '' &&
+            channelsByQueryState?.channels?.length === 0 && (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: 60,
+                  marginBottom: 20,
+                }}>
+                <FastImage
+                  source={ResultNotFound}
+                  style={{height: 200, width: 200}}
+                />
+              </View>
+              // <Text>No users found.</Text>
+            )}
           {searchValue != '' &&
             channelsByQueryState?.channels?.length > 0 &&
             channelsByQueryState?.channels?.map((item, index) => {
