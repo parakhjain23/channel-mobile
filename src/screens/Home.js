@@ -207,7 +207,7 @@ import {BarChart, LineChart, PieChart} from 'react-native-chart-kit';
 
 const Home = ({JSON_Example}) => {
   const [data, setData] = useState({});
-
+  // console.log(data, '=-=-=-');
   const handleChekboxesToggle = (action_id, name) => {
     setData(prevData => ({
       ...prevData,
@@ -221,7 +221,15 @@ const Home = ({JSON_Example}) => {
   const handleradio_buttonsToggle = (action_id, name) => {
     setData(prevData => ({
       ...prevData,
-      [action_id]: name,
+      [action_id]: {
+        ...prevData[action_id],
+        [prevData[action_id].selectedRadioButton || name]: false,
+        selectedRadioButton: name,
+        [name]:
+          (prevData[action_id]?.[name]
+            ? prevData[action_id]?.[name]
+            : !prevData[action_id]?.[name]) || false,
+      },
     }));
   };
 
@@ -356,6 +364,7 @@ const Home = ({JSON_Example}) => {
         });
 
       case 'radio_buttons':
+        let selectedRadioButtonLocal = null;
         return (
           <RadioButton.Group
             onValueChange={value =>
@@ -364,11 +373,25 @@ const Home = ({JSON_Example}) => {
                 value,
               )
             }
-            value={data[item?.action_id]}>
+            value={data[item?.action_id]?.selectedRadioButton}>
             <View>
-              {item?.options?.map(element => {
+              {item?.options?.map((element, index) => {
+                if (element?.selected) {
+                  selectedRadioButtonLocal = element?.value;
+                }
+                if (typeof data[item?.action_id] === 'undefined') {
+                  setData(prevData => ({
+                    ...prevData,
+                    [item.action_id]: {
+                      ...prevData[item.action_id],
+                      selectedRadioButton: selectedRadioButtonLocal,
+                      [element.value]: element.selected || false,
+                    },
+                  }));
+                }
                 return (
                   <TouchableOpacity
+                    key={index}
                     onPress={() =>
                       handleradio_buttonsToggle(
                         item?.action_id || 'radio_buttons',
@@ -376,7 +399,14 @@ const Home = ({JSON_Example}) => {
                       )
                     }
                     style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <RadioButton value={element?.value} />
+                    <RadioButton
+                      value={element?.value}
+                      // status={
+                      //   data?.[item?.action_id]?.[element?.value]
+                      //     ? 'checked'
+                      //     : 'unchecked'
+                      // }
+                    />
                     <Text>{element?.value}</Text>
                   </TouchableOpacity>
                 );
@@ -548,9 +578,6 @@ const Home = ({JSON_Example}) => {
               )}
               fromZero={true}
               segments={5}
-              onDataPointClick={() => {
-                console.log('hello');
-              }}
             />
           </View>
         );
@@ -574,6 +601,7 @@ export default Home;
 
 const styles = StyleSheet.create({
   cardContainer: {
+    minWidth: 300,
     justifyContent: 'center',
     padding: 10,
     backgroundColor: 'white',
