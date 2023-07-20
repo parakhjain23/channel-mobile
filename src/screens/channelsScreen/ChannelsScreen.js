@@ -40,7 +40,7 @@ const ChannelsScreen = props => {
   const {height} = Dimensions.get('window');
   const textInputRef = useRef(null);
   const [refreshing, setRefreshing] = useState(false);
-
+  const currentUser = props?.userInfoState?.user;
   const offset = height * 0.12;
 
   const onScroll = useCallback(
@@ -67,7 +67,7 @@ const ChannelsScreen = props => {
     if (searchValue != '') {
       props.getChannelsByQueryStartAction(
         searchValue,
-        props?.userInfoState?.user?.id,
+        currentUser?.id,
         props?.orgsState?.currentOrgId,
       );
     }
@@ -78,10 +78,10 @@ const ChannelsScreen = props => {
     await props?.getChannelsAction(
       props?.userInfoState?.accessToken,
       props?.orgsState?.currentOrgId,
-      props?.userInfoState?.user?.id,
-      props?.userInfoState?.user?.displayName
-        ? props?.userInfoState?.user?.displayName
-        : props?.userInfoState?.user?.firstName,
+      currentUser?.id,
+      currentUser?.displayName
+        ? currentUser?.displayName
+        : currentUser?.firstName,
     );
     await props?.getAllUsersOfOrgAction(
       props?.userInfoState?.accessToken,

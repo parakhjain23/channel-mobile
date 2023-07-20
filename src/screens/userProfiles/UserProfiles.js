@@ -48,10 +48,10 @@ const ContactDetailsPage = ({
       searchedUserInfoState?.searchedUserProfile?.[userId]?.id
     ];
   const navigation = useNavigation();
-
+  const currentUserId = userInfoState?.user?.id;
   useEffect(() => {
     if (
-      userId !== userInfoState?.user?.id &&
+      userId !== currentUserId &&
       !searchedUserInfoState?.searchedUserProfile?.[userId]
     ) {
       searchUserProfileAction(userId, userInfoState?.accessToken);
@@ -93,7 +93,7 @@ const ContactDetailsPage = ({
     avatarKey: userAvatarKey,
     displayName: userDisplayName,
     id: user_id,
-  } = userId === userInfoState?.user?.id
+  } = userId === currentUserId
     ? userInfoState?.user || {}
     : searchedUserInfoState?.searchedUserProfile?.[userId] || {};
 
@@ -160,7 +160,7 @@ const ContactDetailsPage = ({
                 marginBottom: 20,
               }}
             />
-            {userId == userInfoState?.user?.id &&
+            {userId == currentUserId &&
               (attachmentLoading ? (
                 <ListFooterComponent />
               ) : (
@@ -192,7 +192,7 @@ const ContactDetailsPage = ({
               </View>
             </TouchableOpacity>
           )}
-          {userId != userInfoState?.user?.id && (
+          {userId != currentUserId && (
             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
               <TouchableOpacity
                 style={[styles.button, styles.messageButton]}
@@ -221,7 +221,7 @@ const ContactDetailsPage = ({
           )}
         </ScrollView>
       )}
-      {userId == userInfoState?.user?.id && (
+      {userId == currentUserId && (
         <View
           style={{
             borderTopColor: 'gray',

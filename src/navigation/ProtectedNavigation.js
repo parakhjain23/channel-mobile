@@ -1,19 +1,11 @@
 import React, {useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import LoginScreen from '../screens/loginScreen/LoginScreen';
 import {connect} from 'react-redux';
-import DrawerNavigation from './DrawerNavigation';
-import ChatScreen from '../screens/chatScreen/ChatScreen';
-import ExploreChannels from '../screens/channelsScreen/ExploreChannels';
-import ContactDetailsPage from '../screens/userProfiles/UserProfiles';
 import {useTheme} from '@react-navigation/native';
 import {Platform, Dimensions} from 'react-native';
-import SelectWorkSpaceScreen from '../screens/selectWorkSpaceScreen/SelectWorkSpaceScreen';
-import IpadScreen from '../screens/ipadScreen/IpadScreen';
 import {DEVICE_TYPES} from '../constants/Constants';
 import * as Actions from '../redux/Enums';
-import ChannelDetailsScreen from '../screens/channelDetails/ChannelDetails';
-import Home from '../screens/Home';
+import {AuthenticationScreens, StackScreens} from './StackScreens';
 
 const ProtectedNavigation = props => {
   const Stack = createNativeStackNavigator();
@@ -41,79 +33,25 @@ const ProtectedNavigation = props => {
 
   return props?.orgsState?.currentOrgId == null ? (
     <Stack.Navigator>
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="SelectWorkSpace"
-        component={SelectWorkSpaceScreen}
-        options={{headerShown: false}}
-      />
+      {AuthenticationScreens.map(screen => (
+        <Stack.Screen
+          key={screen.name}
+          name={screen.name}
+          component={screen.component}
+          options={screen.options}
+        />
+      ))}
     </Stack.Navigator>
   ) : (
-    <Stack.Navigator initialRouteName="Org">
-      {/* <Stack.Screen
-        name="Home"
-        component={Home}
-      options={{
-          // headerShown: false,
-          ...getHeader,
-        }}
-      /> */}
-      <Stack.Screen
-        name="Org"
-        component={DrawerNavigation}
-        options={{
-          headerShown: false,
-          ...getHeader,
-        }}
-      />
-      <Stack.Screen
-        name="Ipad"
-        component={IpadScreen}
-        options={{
-          headerShown: true,
-          ...getHeader,
-        }}
-      />
-      <Stack.Screen
-        name="Chat"
-        component={ChatScreen}
-        options={{
-          headerShown: false,
-          ...getHeader,
-        }}
-      />
-      <Stack.Screen
-        name="Explore Channels"
-        component={ExploreChannels}
-        options={({route}) => ({
-          headerTitle: route?.params?.chatHeaderTitle,
-          headerShown: true,
-          ...getHeader,
-        })}
-      />
-      <Stack.Screen
-        name="UserProfiles"
-        component={ContactDetailsPage}
-        options={({route}) => ({
-          headerTitle: route?.params?.displayName + ' Profile',
-          headerShown: true,
-          ...getHeader,
-        })}
-      />
-      <Stack.Screen
-        name="Channel Details"
-        component={ChannelDetailsScreen}
-        options={({route}) => ({
-          // header: () => <CustomHeader route={route} />,
-          headerTitle: route?.params?.channelName,
-          headerShown: true,
-          ...getHeader,
-        })}
-      />
+    <Stack.Navigator>
+      {StackScreens.map(({name, component, options}) => (
+        <Stack.Screen
+          key={name}
+          name={name}
+          component={component}
+          options={{...options, ...getHeader}}
+        />
+      ))}
     </Stack.Navigator>
   );
 };

@@ -6,18 +6,18 @@ import {reactionOnChatStart} from '../redux/actions/chat/ReactionsActions';
 const Reactions = React.memo(props => {
   const {reactionAction, chat, sentByMe, setShowActions} = props;
   const userInfoState = useSelector(state => state.userInfoReducer);
-
+  const currentUserId = userInfoState?.user?.id;
   const onPress = reaction => {
-    if (reaction?.users?.includes(userInfoState?.user?.id)) {
+    if (reaction?.users?.includes(currentUserId)) {
       reactionAction(
         userInfoState?.accessToken,
         chat?.teamId,
         chat?._id,
         reaction.reaction_icon,
         reaction.reaction_name,
-        reaction?.users.filter(userId => userId !== userInfoState?.user?.id),
+        reaction?.users.filter(userId => userId !== currentUserId),
         'remove',
-        userInfoState?.user?.id,
+        currentUserId,
       );
     } else {
       reactionAction(
@@ -26,9 +26,9 @@ const Reactions = React.memo(props => {
         chat?._id,
         reaction.reaction_icon,
         reaction.reaction_name,
-        reaction?.users.filter(userId => userId !== userInfoState?.user?.id),
+        reaction?.users.filter(userId => userId !== currentUserId),
         'add',
-        userInfoState?.user?.id,
+        currentUserId,
       );
     }
     sentByMe == undefined && setShowActions(false);

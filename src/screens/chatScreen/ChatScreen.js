@@ -118,7 +118,7 @@ const ChatScreen = ({
     const fetchData = () => {
       fetchChatsOfTeamAction(
         teamId,
-        userInfoState?.accessToken,
+        accessToken,
         0,
         chatState?.data?.[teamId]?.messages[0]?.['_id'],
       );
@@ -174,7 +174,7 @@ const ChatScreen = ({
   const teamIdAndUnreadCountMapping =
     channelsState?.teamIdAndUnreadCountMapping;
   const teamIdAndBadgeCountMapping = channelsState?.teamIdAndBadgeCountMapping;
-  const user = userInfoState?.user;
+  const currentUserId = userInfoState?.user?.id;
   const accessToken = userInfoState?.accessToken;
   const currentOrgId = orgState?.currentOrgId;
   const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
@@ -182,7 +182,6 @@ const ChatScreen = ({
     teamIdAndUnreadCountMapping?.[teamId] > 0 ||
     teamIdAndBadgeCountMapping?.[teamId] > 0;
   const skip = chatState?.data[teamId]?.messages?.length ?? 0;
-
   const path = LOCAL_PATH;
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', e => {
@@ -191,9 +190,9 @@ const ChatScreen = ({
         draftMessageAction(
           message,
           teamId,
-          userInfoState?.accessToken,
-          orgState?.currentOrgId,
-          userInfoState?.user?.id,
+          accessToken,
+          currentOrgId,
+          currentUserId,
         );
       }
       navigation.dispatch(e.data.action); // Allow the screen to be removed
@@ -222,7 +221,7 @@ const ChatScreen = ({
       if (shouldResetUnreadCount) {
         resetUnreadCountAction(
           currentOrgId,
-          user?.id,
+          currentUserId,
           teamId,
           accessToken,
           0,
@@ -249,8 +248,8 @@ const ChatScreen = ({
       if (currentWord.startsWith('@')) {
         await getChannelsByQueryStartAction(
           currentWord.slice(1),
-          userInfoState?.user?.id,
-          orgState?.currentOrgId,
+          currentUserId,
+          currentOrgId,
         );
         // setMentions(channelsByQueryState?.mentionChannels);
         setshowMention(true);
@@ -271,8 +270,8 @@ const ChatScreen = ({
     [
       onChangeMessage,
       channelsByQueryState?.mentionChannels,
-      userInfoState?.user?.id,
-      orgState?.currentOrgId,
+      currentUserId,
+      currentOrgId,
     ],
   );
 
@@ -322,8 +321,8 @@ const ChatScreen = ({
   );
 
   const onEndReached = useCallback(() => {
-    fetchChatsOfTeamAction(teamId, userInfoState?.accessToken, skip);
-  }, [teamId, userInfoState?.accessToken, skip]);
+    fetchChatsOfTeamAction(teamId, accessToken, skip);
+  }, [teamId, accessToken, skip]);
 
   function renderNode(node, index, siblings, parent, defaultRenderer) {
     const attribs = node?.attribs;
@@ -341,7 +340,7 @@ const ChatScreen = ({
 
   const handleRefresh = () => {
     setRefreshing(true);
-    fetchChatsOfTeamAction(teamId, userInfoState?.accessToken);
+    fetchChatsOfTeamAction(teamId, accessToken);
     setTimeout(() => {
       setRefreshing(false);
     }, 1500);
@@ -357,18 +356,13 @@ const ChatScreen = ({
     onChangeMessage('');
     const hasMentions = mentionsArr?.length > 0;
     if (action == ACTIVITIES[0]?.name && hasMentions) {
-      addUsersToChannelAction(
-        mentionsArr,
-        teamId,
-        orgState?.currentOrgId,
-        userInfoState?.accessToken,
-      );
+      addUsersToChannelAction(mentionsArr, teamId, currentOrgId, accessToken);
     } else if (action == ACTIVITIES[1]?.name && hasMentions) {
       removeUserFromChannelAction(
         mentionsArr,
         teamId,
-        orgState?.currentOrgId,
-        userInfoState?.accessToken,
+        currentOrgId,
+        accessToken,
       );
     }
     setaction('');
@@ -387,9 +381,9 @@ const ChatScreen = ({
         createdAt: date,
         isLink: false,
         mentions: mentionsArr,
-        orgId: orgState?.currentOrgId,
+        orgId: currentOrgId,
         parentId: repliedMsgDetails?._id,
-        senderId: userInfoState?.user?.id,
+        senderId: currentUserId,
         senderType: 'APP',
         teamId: teamId,
         updatedAt: date,
@@ -407,9 +401,9 @@ const ChatScreen = ({
         sendMessageAction(
           localMessage,
           teamId,
-          orgState?.currentOrgId,
-          userInfoState?.user?.id,
-          userInfoState?.accessToken,
+          currentOrgId,
+          currentUserId,
+          accessToken,
           repliedMsgDetails?._id || null,
           attachment?.length > 0 ? attachment : response || [],
           mentionsArr,
@@ -418,10 +412,10 @@ const ChatScreen = ({
         setGlobalMessageToSendAction({
           content: localMessage,
           teamId: teamId,
-          orgId: orgState?.currentOrgId,
-          senderId: userInfoState?.user?.id,
-          userId: userInfoState?.user?.id,
-          accessToken: userInfoState?.accessToken,
+          orgId: currentOrgId,
+          senderId: currentUserId,
+          userId: currentUserId,
+          accessToken: accessToken,
           parentId: repliedMsgDetails?.id || null,
           updatedAt: date,
           mentionsArr: mentionsArr,
@@ -543,7 +537,7 @@ const ChatScreen = ({
                 channelType == 'PRIVATE') &&
               !channelsState?.channelIdAndDataMapping[
                 teamId
-              ]?.userIds?.includes(userInfoState?.user?.id) ? (
+              ]?.userIds?.includes(currentUserId) ? (
                 <View
                   style={{
                     flex: 1,
@@ -555,10 +549,10 @@ const ChatScreen = ({
                   <TouchableOpacity
                     onPress={() =>
                       joinChannelAction(
-                        orgState?.currentOrgId,
+                        currentOrgId,
                         teamId,
-                        userInfoState?.user?.id,
-                        userInfoState?.accessToken,
+                        currentUserId,
+                        accessToken,
                       )
                     }
                     style={{
