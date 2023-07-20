@@ -1,5 +1,11 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {connect} from 'react-redux';
 import SearchBox from '../../components/searchBox';
 import {getChannelsByQueryStart} from '../../redux/actions/channels/ChannelsByQueryAction';
@@ -10,6 +16,7 @@ import {
 import {useTheme} from '@react-navigation/native';
 import {makeStyles} from './Styles';
 import FastImage from 'react-native-fast-image';
+import {Throttling} from '../../utils/Throttling';
 
 const ChannelDetailsScreen = ({
   route,
@@ -21,6 +28,7 @@ const ChannelDetailsScreen = ({
   addUsersToChannelAction,
   channelsState,
 }) => {
+  console.log('channel details');
   const [searchValue, setsearchValue] = useState('');
   const {teamId, channelName} = route?.params;
   const {colors} = useTheme();
@@ -32,18 +40,21 @@ const ChannelDetailsScreen = ({
   const changeText = value => {
     setsearchValue(value);
   };
-  useEffect(() => {
-    if (searchValue != '') {
+  const fetchData = () => {
+    if (searchValue?.length > 0) {
       getChannelsByQueryStartAction(
         searchValue,
         userInfoState?.user?.id,
         orgsState?.currentOrgId,
       );
     }
+  };
+  useEffect(() => {
+    Throttling(fetchData, 300);
   }, [searchValue]);
+
   const RenderUsers = useCallback(
     ({item}) => {
-      console.log(item);
       return (
         item?._source?.type == 'U' &&
         item?._source?.isEnabled && (
@@ -148,6 +159,7 @@ const ChannelDetailsScreen = ({
       </View>
     );
   };
+  console.log(channelsByQueryState?.channels?.length);
   return (
     <ScrollView
       style={{flex: 1, backgroundColor: colors?.primaryColor}}
