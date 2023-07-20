@@ -3,13 +3,13 @@ import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
 import SearchBox from '../../components/searchBox';
 import {getChannelsByQueryStart} from '../../redux/actions/channels/ChannelsByQueryAction';
-import {FlatList} from 'react-native';
 import {
   addUserToChannelStart,
   removeUserFromChannelStart,
 } from '../../redux/actions/channelActivities/inviteUserToChannelAction';
 import {useTheme} from '@react-navigation/native';
 import {makeStyles} from './Styles';
+import FastImage from 'react-native-fast-image';
 
 const ChannelDetailsScreen = ({
   route,
@@ -43,11 +43,25 @@ const ChannelDetailsScreen = ({
   }, [searchValue]);
   const RenderUsers = useCallback(
     ({item}) => {
+      console.log(item);
       return (
         item?._source?.type == 'U' &&
         item?._source?.isEnabled && (
           <View style={styles.userToAddContainer} key={item}>
-            <Text style={styles.memberText}>{item?._source?.title}</Text>
+            <View style={styles.leftContainer}>
+              <FastImage
+                source={{
+                  uri: orgsState?.userIdAndImageUrlMapping[
+                    item?._source?.userId
+                  ]
+                    ? orgsState?.userIdAndImageUrlMapping[item?._source?.userId]
+                    : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVe0cFaZ9e5Hm9X-tdWRLSvoZqg2bjemBABA&usqp=CAU',
+                  priority: FastImage.priority.normal,
+                }}
+                style={styles.imageIcon}
+              />
+              <Text style={styles.memberText}>{item?._source?.title}</Text>
+            </View>
             {channelsState?.channelIdAndDataMapping[teamId]?.userIds.includes(
               item?._source?.userId,
             ) ? (
@@ -61,7 +75,7 @@ const ChannelDetailsScreen = ({
                   );
                 }}
                 style={[
-                  styles.buttonBorder,
+                  styles.button,
                   {borderColor: RED_COLOR, backgroundColor: RED_COLOR},
                 ]}>
                 <Text style={{color: '#ffffff', fontWeight: '500'}}>
@@ -79,7 +93,7 @@ const ChannelDetailsScreen = ({
                   );
                 }}
                 style={[
-                  styles.buttonBorder,
+                  styles.button,
                   {borderColor: GREEN_COLOR, backgroundColor: GREEN_COLOR},
                 ]}>
                 <Text style={{color: '#ffffff', fontWeight: '500'}}>ADD</Text>
@@ -93,11 +107,25 @@ const ChannelDetailsScreen = ({
   );
 
   const RenderItem = ({item, index}) => {
+    const userId = item;
     return (
       <View style={styles.memberContainer} key={index}>
-        <Text style={styles.memberText}>
-          {orgsState?.userIdAndNameMapping[item]}
-        </Text>
+        <View style={styles.leftContainer}>
+          <FastImage
+            source={{
+              uri: orgsState?.userIdAndImageUrlMapping[userId]
+                ? orgsState?.userIdAndImageUrlMapping[userId]
+                : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVe0cFaZ9e5Hm9X-tdWRLSvoZqg2bjemBABA&usqp=CAU',
+              priority: FastImage.priority.normal,
+            }}
+            style={styles.imageIcon}
+          />
+          <View style={styles.textContainer}>
+            <Text style={styles.memberText}>
+              {orgsState?.userIdAndNameMapping[item]}
+            </Text>
+          </View>
+        </View>
         <TouchableOpacity
           onPress={() => {
             removeUserFromChannelAction(
@@ -108,10 +136,14 @@ const ChannelDetailsScreen = ({
             );
           }}
           style={[
-            styles.buttonBorder,
-            {borderColor: RED_COLOR, backgroundColor: RED_COLOR},
+            styles.button,
+            {
+              borderColor: RED_COLOR,
+              backgroundColor: RED_COLOR,
+              justifyContent: 'flex-end',
+            },
           ]}>
-          <Text style={{color: '#ffffff', fontWeight: '500'}}>REMOVE</Text>
+          <Text style={styles.removeText}>REMOVE</Text>
         </TouchableOpacity>
       </View>
     );
