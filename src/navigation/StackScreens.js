@@ -19,7 +19,7 @@ export const StackScreens = [
     name: 'Ipad',
     component: IpadScreen,
     options: {
-      headerShown: true,
+      headerShown: false,
     },
   },
   {
@@ -32,26 +32,14 @@ export const StackScreens = [
   {
     name: 'Explore Channels',
     component: ExploreChannels,
-    options: ({route}) => ({
-      headerTitle: route?.params?.chatHeaderTitle,
-      headerShown: true,
-    }),
   },
   {
     name: 'UserProfiles',
     component: UserProfile,
-    options: ({route}) => ({
-      headerTitle: route?.params?.displayName + ' Profile',
-      headerShown: true,
-    }),
   },
   {
     name: 'Channel Details',
     component: ChannelDetailsScreen,
-    options: ({route}) => ({
-      headerTitle: route?.params?.channelName,
-      headerShown: true,
-    }),
   },
 ];
 

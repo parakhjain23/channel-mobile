@@ -5,7 +5,11 @@ import {useTheme} from '@react-navigation/native';
 import {Platform, Dimensions} from 'react-native';
 import {DEVICE_TYPES} from '../constants/Constants';
 import * as Actions from '../redux/Enums';
-import {AuthenticationScreens, StackScreens} from './StackScreens';
+import {
+  AuthenticationScreens,
+  StackScreens,
+  screenOptions,
+} from './StackScreens';
 
 const ProtectedNavigation = props => {
   const Stack = createNativeStackNavigator();
@@ -28,7 +32,31 @@ const ProtectedNavigation = props => {
     },
     statusBarColor: 'transparent',
     statusBarTranslucent: true,
-    statusBarStyle: colors?.primaryColor == '#ffffff' ? 'dark' : 'light',
+    statusBarStyle: colors?.primaryColor === '#ffffff' ? 'dark' : 'light',
+  };
+
+  const customScreenOptions = ({route}) => {
+    const options = {
+      headerShown: true,
+    };
+
+    switch (route.name) {
+      case 'Explore Channels':
+        options.headerTitle = route.name;
+        break;
+      case 'UserProfiles':
+        options.headerTitle = route.params?.displayName
+          ? route.params.displayName
+          : 'User Profile';
+        break;
+      case 'Channel Details':
+        options.headerTitle = route.params?.channelName || 'Channel Details';
+        break;
+      default:
+        break;
+    }
+
+    return options;
   };
 
   return props?.orgsState?.currentOrgId == null ? (
@@ -43,7 +71,7 @@ const ProtectedNavigation = props => {
       ))}
     </Stack.Navigator>
   ) : (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={customScreenOptions}>
       {StackScreens.map(({name, component, options}) => (
         <Stack.Screen
           key={name}
@@ -59,14 +87,16 @@ const ProtectedNavigation = props => {
 const mapStateToProps = state => ({
   channelsState: state.channelsReducer,
   orgsState: state.orgsReducer,
-  appInfoState: state.appInfoReduer,
+  appInfoState: state.appInfoReducer,
 });
+
 const mapDispatchToProps = dispatch => {
   return {
     setDeviceTypeAction: deviceType =>
       dispatch({type: Actions.SET_DEVICE_TYPE, deviceType: deviceType}),
   };
 };
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
