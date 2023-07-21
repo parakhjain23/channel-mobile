@@ -21,12 +21,11 @@ import Reactions from '../../../../components/Reactions';
 import {makeStyles} from './LongPressCard-Styles';
 import {DocLogo, PdfLogo} from '../../../../assests/images/attachments';
 
-const ActionMessageCard = ({
+const LongPressCard = ({
   chat,
   userInfoState,
   orgState,
   chatState,
-  index,
   reactionAction,
   setShowActions,
 }) => {
@@ -216,8 +215,10 @@ const ActionMessageCard = ({
               sentByMe ? styles.sentByMe : styles.received,
               {padding: 10, backgroundColor: containerBackgroundColor},
             ]}>
-            <View style={[styles.nameTimeContainer, {color: textColor}]}>
-              <Text style={[styles.nameText]}>{SenderName}</Text>
+            <View style={[styles.nameTimeContainer]}>
+              <Text style={[styles.nameText, {color: textColor}]}>
+                {SenderName}
+              </Text>
               <Text
                 style={[
                   styles.timeText,
@@ -323,6 +324,6 @@ const mapDispatchToProps = dispatch => {
       ),
   };
 };
-export const ActionMessageCardMemo = React.memo(
-  connect(null, mapDispatchToProps)(ActionMessageCard),
+export const LongPressCardMemo = React.memo(
+  connect(null, mapDispatchToProps)(LongPressCard),
 );

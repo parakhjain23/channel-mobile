@@ -2,8 +2,8 @@ import {View, Dimensions, StyleSheet} from 'react-native';
 import React from 'react';
 import {Modal} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native';
-import ActionList from './actionList/ActionList';
-import {ActionMessageCardMemo} from './longPressCard/LongPressCard';
+import ActionList from '../actionList/ActionList';
+import {LongPressCardMemo} from '../longPressCard/LongPressCard';
 
 const {height} = Dimensions.get('window');
 
@@ -32,7 +32,7 @@ const ActionModal = props => {
         <View style={styles.container}>
           <TouchableWithoutFeedback onPress={() => setShowActions(false)}>
             <View style={styles.cardContainer}>
-              <ActionMessageCardMemo
+              <LongPressCardMemo
                 chat={chat}
                 userInfoState={userInfoState}
                 orgState={orgState}

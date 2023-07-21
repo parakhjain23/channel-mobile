@@ -54,7 +54,7 @@ import AudioRecordingPlayer from '../../components/AudioRecorderPlayer';
 import FirstTabChatScreen from './FirstTabChatScreen';
 import ActivityList from './components/acitivityList/ActivityList';
 import MentionList from './components/mentionList/MentionList';
-import ActionModal from './components/ActionModal';
+import ActionModal from './components/actionModal/ActionModal';
 import {Button} from 'react-native-paper';
 import {listStyles} from './components/AttachmentStyles';
 import AttachmentOptionsModal from './components/AttachmentOptionsModal';
