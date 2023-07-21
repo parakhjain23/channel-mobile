@@ -1,8 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useRef} from 'react';
-import {Button, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Modalize} from 'react-native-modalize';
-import {s,ms,mvs} from 'react-native-size-matters';
+import React from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 const NoChannelsFound = ({modalizeRef, setsearchValue, props}) => {
   const navigation = useNavigation();
@@ -20,7 +18,7 @@ const NoChannelsFound = ({modalizeRef, setsearchValue, props}) => {
           <Text
             style={[
               styles.centerText,
-              {fontSize: (20), color: 'hsl(206,100%,40%)', margin: 5},
+              {fontSize: 20, color: 'hsl(206,100%,40%)', margin: 5},
             ]}>
             Explore All Channels
           </Text>
@@ -33,7 +31,7 @@ const NoChannelsFound = ({modalizeRef, setsearchValue, props}) => {
           <Text
             style={[
               styles.centerText,
-              {fontSize: (20), color: 'hsl(206,100%,40%)', margin: 5},
+              {fontSize: 20, color: 'hsl(206,100%,40%)', margin: 5},
             ]}>
             Create New Channel
           </Text>

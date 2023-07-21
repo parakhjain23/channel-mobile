@@ -2,7 +2,7 @@ import ExploreChannels from '../screens/channelsScreen/ExploreChannels';
 import ChatScreen from '../screens/chatScreen/ChatScreen';
 import IpadScreen from '../screens/ipadScreen/IpadScreen';
 import DrawerNavigation from './DrawerNavigation';
-import ContactDetailsPage from '../screens/userProfiles/UserProfiles';
+import UserProfile from '../screens/userProfiles/UserProfiles';
 import ChannelDetailsScreen from '../screens/channelDetails/ChannelDetails';
 import LoginScreen from '../screens/loginScreen/LoginScreen';
 import SelectWorkSpaceScreen from '../screens/selectWorkSpaceScreen/SelectWorkSpaceScreen';
@@ -39,7 +39,7 @@ export const StackScreens = [
   },
   {
     name: 'UserProfiles',
-    component: ContactDetailsPage,
+    component: UserProfile,
     options: ({route}) => ({
       headerTitle: route?.params?.displayName + ' Profile',
       headerShown: true,

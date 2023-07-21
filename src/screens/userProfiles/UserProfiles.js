@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Image,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Linking,
-} from 'react-native';
+import {View, Image, Text, TouchableOpacity, Linking} from 'react-native';
 import {connect} from 'react-redux';
 import {DEVICE_TYPES, IMAGE_BASE_URL} from '../../constants/Constants';
 import {useNavigation, useTheme} from '@react-navigation/native';
@@ -25,7 +18,7 @@ import {fetchSearchedUserProfileStart} from '../../redux/actions/user/searchUser
 import ListFooterComponent from '../../components/ListFooterComponent';
 import {launchGallery} from '../chatScreen/ImagePicker';
 
-const ContactDetailsPage = ({
+const UserProfile = ({
   userInfoState,
   channelsState,
   createDmChannelAction,
@@ -257,5 +250,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToPros,
   mapDispatchToProps,
-)(React.memo(ContactDetailsPage));
-// export default ContactDetailsPage;
+)(React.memo(UserProfile));
