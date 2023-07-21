@@ -26,7 +26,13 @@ const HeaderComponent = ({
   const handleGoBack = () => {
     RootNavigation?.goBack();
   };
-
+  console.log(
+    chatHeaderTitle,
+    userId,
+    channelType,
+    teamId,
+    '--------HEADER SCREEN-------------',
+  );
   const HeaderTitle = ({chatHeaderTitle}) => {
     return (
       <View

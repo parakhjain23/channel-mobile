@@ -228,7 +228,7 @@ const NotificationSetup = ({
         );
         await store.dispatch(removeCountOnOrgCard(message?.data?.orgId));
       }
-      resetChatsAction();
+      // resetChatsAction();
       var teamId = message?.data?.teamId;
       var name = null;
       channnelState?.teamIdAndTypeMapping[teamId] == 'DIRECT_MESSAGE'
@@ -239,7 +239,7 @@ const NotificationSetup = ({
         chatHeaderTitle: name,
         teamId: teamId,
         channelType: channnelState?.teamIdAndTypeMapping[teamId],
-        userId: message?.data?.senderId,
+        reciverUserId: message?.data?.senderId,
       });
     } catch (error) {
       console.warn(error);
