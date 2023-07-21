@@ -15,6 +15,7 @@ export const makeStyles = colors =>
     messageListContainer: {
       flex: 9,
     },
+    mentionsList: {maxHeight: 250},
     loadingContainer: {
       flex: 1,
       justifyContent: 'center',
