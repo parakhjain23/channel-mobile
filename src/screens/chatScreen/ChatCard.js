@@ -38,6 +38,7 @@ import Reactions from '../../components/Reactions';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Home from '../Home';
 import ListFooterComponent from '../../components/ListFooterComponent';
+import ImageViewerComponent from './components/ImageViewerComponent';
 
 const AddRemoveJoinedMsg = React.memo(({senderName, content, orgState}) => {
   const {colors} = useTheme();
@@ -105,10 +106,6 @@ const ChatCard = ({
     },
     [chat?.attachment],
   );
-
-  const handleModalClose = useCallback(() => {
-    setSelectedImage(null);
-  }, []);
 
   const onLongPress = () => {
     setCurrentSelectedChatCard(chat);
@@ -254,21 +251,6 @@ const ChatCard = ({
   }
   const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
 
-  const renderImageviewerHeader = () => (
-    <View
-      style={{
-        height: '7%',
-        justifyContent: 'flex-end',
-        marginTop: 10,
-        paddingHorizontal: 15,
-        position: 'absolute',
-        zIndex: 99,
-      }}>
-      <TouchableOpacity onPress={handleModalClose}>
-        <AntDesign name={'close'} size={25} color={'#ffffff'} />
-      </TouchableOpacity>
-    </View>
-  );
   if (!isActivity) {
     return (
       <GestureHandlerRootView>
@@ -446,26 +428,12 @@ const ChatCard = ({
                         )}
                       </TouchableOpacity>
                     )}
-                    <View style={{maxWidth: '80%'}}>
-                      <Modal
-                        visible={selectedImage !== null}
-                        transparent={true}
-                        onRequestClose={handleModalClose}>
-                        <ImageViewer
-                          imageUrls={[
-                            {
-                              url: selectedImage?.resourceUrl,
-                              freeHeight: true,
-                              freeWidth: true,
-                            },
-                          ]}
-                          enableSwipeDown={true}
-                          onSwipeDown={handleModalClose}
-                          renderHeader={renderImageviewerHeader}
-                          loadingRender={() => <ListFooterComponent />}
-                        />
-                      </Modal>
-                    </View>
+                    {selectedImage != null && (
+                      <ImageViewerComponent
+                        url={selectedImage?.resourceUrl}
+                        setSelectedImage={setSelectedImage}
+                      />
+                    )}
                     {attachment?.length > 0 &&
                       attachment?.map((item, index) => {
                         return item?.contentType?.includes('image') ? (
@@ -485,13 +453,6 @@ const ChatCard = ({
                                 width: 150,
                               }}
                             />
-                            {/* <Image
-                              source={{uri: item?.resourceUrl}}
-                              style={{
-                                height: 150,
-                                width: 150,
-                              }}
-                            /> */}
                           </TouchableOpacity>
                         ) : item?.contentType?.includes('audio') ? (
                           <View
