@@ -205,7 +205,7 @@ import {BarChart, LineChart, PieChart} from 'react-native-chart-kit';
 //   },
 // ];
 
-const Home = ({JSON_Example}) => {
+const JSONRenderer = ({JSON_Example}) => {
   const [data, setData] = useState({});
   // console.log(data, '=-=-=-');
   const handleChekboxesToggle = (action_id, name) => {
@@ -597,7 +597,7 @@ const Home = ({JSON_Example}) => {
   );
 };
 
-export default Home;
+export default JSONRenderer;
 
 const styles = StyleSheet.create({
   cardContainer: {

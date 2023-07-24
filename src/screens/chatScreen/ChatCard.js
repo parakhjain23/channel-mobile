@@ -20,9 +20,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Linking} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import {makeStyles} from './ChatCardStyles';
-import {ms, s} from 'react-native-size-matters';
+import {ms} from 'react-native-size-matters';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
-import ImageViewer from 'react-native-image-zoom-viewer';
 import HTMLView from 'react-native-htmlview';
 import {RenderHTML} from 'react-native-render-html';
 import * as RootNavigation from '../../navigation/RootNavigation';
@@ -35,10 +34,8 @@ import {formatTime} from '../../utils/FormatTime';
 import FastImage from 'react-native-fast-image';
 import {reactionOnChatStart} from '../../redux/actions/chat/ReactionsActions';
 import Reactions from '../../components/Reactions';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Home from '../Home';
-import ListFooterComponent from '../../components/ListFooterComponent';
 import ImageViewerComponent from './components/ImageViewerComponent';
+import JSONRenderer from './JSONRenderer';
 
 const AddRemoveJoinedMsg = React.memo(({senderName, content, orgState}) => {
   const {colors} = useTheme();
@@ -152,7 +149,7 @@ const ChatCard = ({
 
   const openLink = async url => {
     if (await InAppBrowser.isAvailable()) {
-      const result = InAppBrowser?.open(url);
+      InAppBrowser?.open(url);
     } else {
       Linking.openURL(url);
     }
@@ -560,30 +557,19 @@ const ChatCard = ({
                         />
                       )
                     ) : (
-                      <Home JSON_Example={chat.content} />
+                      <JSONRenderer JSON_Example={chat.content} />
                     )}
-                    {chat?.content?.length > 500 &&
-                      (showMore ? (
-                        <Text
-                          style={{
-                            color: linkColor,
-                            textDecorationLine: 'underline',
-                            marginTop: 5,
-                          }}
-                          onPress={() => setShoreMore(!showMore)}>
-                          Show Less
-                        </Text>
-                      ) : (
-                        <Text
-                          style={{
-                            color: linkColor,
-                            textDecorationLine: 'underline',
-                            marginTop: 5,
-                          }}
-                          onPress={() => setShoreMore(!showMore)}>
-                          Show More
-                        </Text>
-                      ))}
+                    {chat?.content?.length > 500 && (
+                      <Text
+                        style={{
+                          color: linkColor,
+                          textDecorationLine: 'underline',
+                          marginTop: 5,
+                        }}
+                        onPress={() => setShoreMore(!showMore)}>
+                        {showMore ? 'Show Less' : 'Show More'}
+                      </Text>
+                    )}
                   </View>
                 </View>
               </View>

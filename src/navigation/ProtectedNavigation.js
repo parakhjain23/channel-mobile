@@ -13,7 +13,6 @@ import IpadScreen from '../screens/ipadScreen/IpadScreen';
 import {DEVICE_TYPES} from '../constants/Constants';
 import * as Actions from '../redux/Enums';
 import ChannelDetailsScreen from '../screens/channelDetails/ChannelDetails';
-import Home from '../screens/Home';
 
 const ProtectedNavigation = props => {
   const Stack = createNativeStackNavigator();
@@ -54,14 +53,6 @@ const ProtectedNavigation = props => {
     </Stack.Navigator>
   ) : (
     <Stack.Navigator initialRouteName="Org">
-      {/* <Stack.Screen
-        name="Home"
-        component={Home}
-      options={{
-          // headerShown: false,
-          ...getHeader,
-        }}
-      /> */}
       <Stack.Screen
         name="Org"
         component={DrawerNavigation}
