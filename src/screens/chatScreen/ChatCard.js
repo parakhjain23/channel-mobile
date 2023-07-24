@@ -37,6 +37,7 @@ import {reactionOnChatStart} from '../../redux/actions/chat/ReactionsActions';
 import Reactions from '../../components/Reactions';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Home from '../Home';
+import ListFooterComponent from '../../components/ListFooterComponent';
 
 const AddRemoveJoinedMsg = React.memo(({senderName, content, orgState}) => {
   const {colors} = useTheme();
@@ -183,7 +184,6 @@ const ChatCard = ({
     });
   };
   const onPress = (teamId, channelName) => {
-    // networkState?.isInternetConnected && resetChatsAction();
     if (deviceType === DEVICE_TYPES[1]) {
       handleListItemPress(
         teamId,
@@ -265,7 +265,7 @@ const ChatCard = ({
         zIndex: 99,
       }}>
       <TouchableOpacity onPress={handleModalClose}>
-        <AntDesign name={'close'} size={25} color={colors?.color} />
+        <AntDesign name={'close'} size={25} color={'#ffffff'} />
       </TouchableOpacity>
     </View>
   );
@@ -462,6 +462,7 @@ const ChatCard = ({
                           enableSwipeDown={true}
                           onSwipeDown={handleModalClose}
                           renderHeader={renderImageviewerHeader}
+                          loadingRender={() => <ListFooterComponent />}
                         />
                       </Modal>
                     </View>
