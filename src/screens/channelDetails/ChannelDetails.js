@@ -210,8 +210,8 @@ const ChannelDetailsScreen = ({
                   source={ResultNotFound}
                   style={{height: 200, width: 200}}
                 />
-                <Text style={{color: colors?.color}}>No users found.</Text>
               </View>
+              // <Text>No users found.</Text>
             )}
           {searchValue != '' &&
             channelsByQueryState?.channels?.length > 0 &&

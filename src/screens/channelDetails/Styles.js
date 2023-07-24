@@ -9,7 +9,8 @@ export const makeStyles = colors =>
       backgroundColor: colors?.primaryColor,
     },
     content: {
-      padding: 20,
+      // padding: 20,
+      margin: 20,
       flex: 1,
     },
     text: {
@@ -60,7 +61,7 @@ export const makeStyles = colors =>
     },
     leftContainer: {
       flexDirection: 'row',
-      alignItems: 'center',
+      // alignItems: 'center',
     },
     imageIcon: {
       width: 30,
@@ -69,8 +70,8 @@ export const makeStyles = colors =>
       marginRight: 10,
     },
     textContainer: {
-      flexDirection: 'row',
-      flex: 1,
+      // flexDirection: 'row',
+      // flex: 1,
       maxWidth: '70%', // Adjust the maximum width as desired
     },
     removeText: {color: '#ffffff', fontWeight: '500'},
