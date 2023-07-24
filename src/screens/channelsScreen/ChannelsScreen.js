@@ -75,18 +75,18 @@ const ChannelsScreen = props => {
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await props?.getChannelsAction(
-      props?.userInfoState?.accessToken,
-      props?.orgsState?.currentOrgId,
-      currentUser?.id,
-      currentUser?.displayName
-        ? currentUser?.displayName
-        : currentUser?.firstName,
-    );
-    await props?.getAllUsersOfOrgAction(
-      props?.userInfoState?.accessToken,
-      props?.orgsState?.currentOrgId,
-    );
+    // await props?.getChannelsAction(
+    //   props?.userInfoState?.accessToken,
+    //   props?.orgsState?.currentOrgId,
+    //   currentUser?.id,
+    //   currentUser?.displayName
+    //     ? currentUser?.displayName
+    //     : currentUser?.firstName,
+    // );
+    // await props?.getAllUsersOfOrgAction(
+    //   props?.userInfoState?.accessToken,
+    //   props?.orgsState?.currentOrgId,
+    // );
     setRefreshing(false);
   }, [props?.orgsState?.currentOrgId]);
 

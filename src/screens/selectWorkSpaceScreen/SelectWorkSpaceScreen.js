@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import {useDispatch} from 'react-redux';
-import {setIntialOrgId} from '../../redux/actions/org/intialOrgId';
+import {setCurrentOrgId} from '../../redux/actions/org/intialOrgId';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import signOut from '../../redux/actions/user/userAction';
 import {useNavigation} from '@react-navigation/native';
@@ -33,7 +33,17 @@ const SelectWorkSpaceScreen = ({
   };
   useEffect(() => {
     if (selectedOrg != null) {
-      dispatch(setIntialOrgId(selectedOrg, userInfoState?.accessToken));
+      dispatch(
+        setCurrentOrgId(
+          userInfoState?.accessToken,
+          selectedOrg,
+          userInfoState?.user?.id,
+          userInfoState?.user?.displayName
+            ? userInfoState?.user?.displayName
+            : userInfoState?.user?.firstName,
+          'select workspace screen',
+        ),
+      );
     }
   }, [selectedOrg]);
   return (
@@ -44,7 +54,7 @@ const SelectWorkSpaceScreen = ({
         alignItems: 'center',
         backgroundColor: '#171717',
       }}>
-      <View style={{marginTop: 50,margin:20}}>
+      <View style={{marginTop: 50, margin: 20}}>
         <Text style={{fontSize: 20, fontWeight: '600', color: 'white'}}>
           Select a Work Space to continue
         </Text>
@@ -87,7 +97,7 @@ const SelectWorkSpaceScreen = ({
         </View>
       ) : orgsState?.orgs?.length > 0 ? (
         orgsState?.orgs != null && (
-          <ScrollView style={{flex:1}}>
+          <ScrollView style={{flex: 1}}>
             {orgsState?.orgs?.map(item => {
               return (
                 <TouchableOpacity
@@ -101,17 +111,16 @@ const SelectWorkSpaceScreen = ({
                     justifyContent: 'center',
                     alignItems: 'center',
                     flexDirection: 'row',
-                    borderRadius:10
+                    borderRadius: 10,
                   }}
-                  activeOpacity={.6}
-                  >
+                  activeOpacity={0.6}>
                   <Text
                     style={{
                       fontSize: 18,
                       textAlign: 'center',
                       fontWeight: '600',
                       color: 'white',
-                      margin:15,
+                      margin: 15,
                     }}>
                     {item?.name}
                   </Text>

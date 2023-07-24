@@ -15,6 +15,8 @@ const initialState = {
 
 export function channelsReducer(state = initialState, action) {
   switch (action.type) {
+    case 'persist/REHYDRATE':
+      console.log('rehydrate process ==-==-=-=-');
     case Actions.FETCH_CHANNELS_START:
       return {
         ...state,
@@ -24,7 +26,7 @@ export function channelsReducer(state = initialState, action) {
         teamIdAndTypeMapping: {},
       };
 
-    case Actions.UPDATE_CURRENT_ORG_ID:
+    case Actions.SELECT_CURRENT_ORG_ID:
       return {...state, isLoading: true};
 
     case Actions.FETCH_CHANNELS_SUCCESS:

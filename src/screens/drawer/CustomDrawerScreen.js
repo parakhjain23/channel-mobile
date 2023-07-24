@@ -20,6 +20,7 @@ import {switchOrgStart} from '../../redux/actions/org/changeCurrentOrg';
 import {removeCountOnOrgCard} from '../../redux/actions/org/UnreadCountOnOrgCardsAction';
 import * as RootNavigation from '../../navigation/RootNavigation';
 import FastImage from 'react-native-fast-image';
+import {setCurrentOrgId} from '../../redux/actions/org/intialOrgId';
 
 const CustomeDrawerScreen = ({
   deviceType,
@@ -35,18 +36,18 @@ const CustomeDrawerScreen = ({
   const data = orgsState?.orgs;
   const navigation = useNavigation();
   const currentUser = userInfoState?.user;
-  useEffect(() => {
-    if (currentUser != null && networkState?.isInternetConnected) {
-      getChannelsAction(
-        userInfoState?.accessToken,
-        orgsState?.currentOrgId,
-        currentUser?.id,
-        currentUser?.displayName
-          ? currentUser?.displayName
-          : currentUser?.firstName,
-      );
-    }
-  }, [currentUser, networkState?.isInternetConnected]);
+  // useEffect(() => {
+  //   if (currentUser != null && networkState?.isInternetConnected) {
+  //     getChannelsAction(
+  //       userInfoState?.accessToken,
+  //       orgsState?.currentOrgId,
+  //       currentUser?.id,
+  //       currentUser?.displayName
+  //         ? currentUser?.displayName
+  //         : currentUser?.firstName,
+  //     );
+  //   }
+  // }, [currentUser, networkState?.isInternetConnected]);
   const OrgCard = ({item, navigation}) => {
     var unreadCountObj = orgsState?.orgsWithNewMessages?.[item?.id];
     var count = undefined;
@@ -211,7 +212,15 @@ const mapDispatchToProps = dispatch => {
     getChannelsAction: (token, orgId, userId, userName) =>
       dispatch(getChannelsStart(token, orgId, userId, userName)),
     switchOrgAction: (accessToken, orgId, userId, userName) =>
-      dispatch(switchOrgStart(accessToken, orgId, userId, userName)),
+      dispatch(
+        setCurrentOrgId(
+          accessToken,
+          orgId,
+          userId,
+          userName,
+          'from custom drawer screen',
+        ),
+      ),
     removeCountOnOrgCardAction: orgId => dispatch(removeCountOnOrgCard(orgId)),
     moveChannelToTopAction: teamIdArr => dispatch(moveChannelToTop(teamIdArr)),
   };

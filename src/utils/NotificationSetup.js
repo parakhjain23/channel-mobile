@@ -25,6 +25,7 @@ import {
   resetUnreadCountStart,
 } from '../redux/actions/channels/ChannelsAction';
 import {connect} from 'react-redux';
+import {setCurrentOrgId} from '../redux/actions/org/intialOrgId';
 
 const NotificationSetup = ({
   userInfoState,
@@ -95,7 +96,7 @@ const NotificationSetup = ({
         }
       });
       messaging().onNotificationOpenedApp(message => {
-        openChat(message);
+        openChat(message, 'on messaging notification press');
       });
       messaging().setBackgroundMessageHandler(async message => {
         if (
@@ -106,9 +107,27 @@ const NotificationSetup = ({
       });
       const rMessage = await messaging().getInitialNotification();
       if (rMessage) {
-        setTimeout(() => {
-          openChat(rMessage);
-        }, 1000);
+        if (
+          rMessage?.data?.orgId != store?.getState()?.orgsReducer?.currentOrgId
+        ) {
+          await store.dispatch(
+            setCurrentOrgId(
+              store?.getState()?.userInfoReducer?.accessToken,
+              rMessage?.data?.orgId,
+              store?.getState()?.userInfoReducer?.user?.id,
+              store?.getState()?.userInfoReducer?.user?.displayName
+                ? store?.getState()?.userInfoReducer?.user?.displayName
+                : store?.getState()?.userInfoReducer?.user?.firstName,
+            ),
+          );
+          setTimeout(() => {
+            openChat(rMessage, 'RMESSAGE SWITCH ORG ');
+          }, 2200);
+        } else {
+          setTimeout(() => {
+            openChat(rMessage, 'RMESSAGE NORMAL');
+          }, 2000);
+        }
       }
       const categories = [
         {
@@ -155,27 +174,20 @@ const NotificationSetup = ({
         message?.data?.orgId != store?.getState()?.orgsReducer?.currentOrgId
       ) {
         await store.dispatch(
-          switchOrgStart(
+          setCurrentOrgId(
             store?.getState()?.userInfoReducer?.accessToken,
             message?.data?.orgId,
             store?.getState()?.userInfoReducer?.user?.id,
+            store?.getState()?.userInfoReducer?.user?.displayName
+              ? store?.getState()?.userInfoReducer?.user?.displayName
+              : store?.getState()?.userInfoReducer?.user?.firstName,
           ),
         );
-        await store.dispatch(
-          moveChannelToTop(
-            Object.keys(
-              store.getState()?.orgsReducer?.orgsWithNewMessages[
-                message?.data?.orgId
-              ],
-            ),
-          ),
-        );
-        await store.dispatch(removeCountOnOrgCard(message?.data?.orgId));
         setTimeout(() => {
-          openChat(message);
-        }, 500);
+          openChat(message, 'from action listiner ');
+        }, 1000);
       } else {
-        openChat(message);
+        openChat(message, 'normal');
       }
     }
     switch (event?.detail?.pressAction?.id) {
@@ -204,30 +216,8 @@ const NotificationSetup = ({
         break;
     }
   };
-  const openChat = async message => {
+  const openChat = async (message, text = '') => {
     try {
-      if (
-        message?.data?.orgId != store?.getState()?.orgsReducer?.currentOrgId
-      ) {
-        await store.dispatch(
-          switchOrgStart(
-            store?.getState()?.userInfoReducer?.accessToken,
-            message?.data?.orgId,
-            store?.getState()?.userInfoReducer?.user?.id,
-          ),
-        );
-        await store.dispatch(
-          moveChannelToTop(
-            Object.keys(
-              store.getState()?.orgsReducer?.orgsWithNewMessages[
-                message?.data?.orgId
-              ],
-            ),
-          ),
-        );
-        await store.dispatch(removeCountOnOrgCard(message?.data?.orgId));
-      }
-      resetChatsAction();
       var teamId = message?.data?.teamId;
       var name = null;
       store.getState()?.channelsReducer?.teamIdAndTypeMapping[teamId] ==

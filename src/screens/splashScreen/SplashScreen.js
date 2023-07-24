@@ -7,6 +7,7 @@ import DeviceInfo from 'react-native-device-info';
 import {SIGN_OUT, UPDATE_APP_VERSION} from '../../redux/Enums';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {storage} from '../../redux/reducers/Index';
+import {getChannelsStart} from '../../redux/actions/channels/ChannelsAction';
 
 const SplashScreenComponent = ({
   setShowSplashScreen,
@@ -15,6 +16,9 @@ const SplashScreenComponent = ({
   setNewVersionOfApp,
   appInfoState,
   signOutAction,
+  userInfoState,
+  orgsState,
+  getChannelsAction,
 }) => {
   const checkForApiUpdate = async () => {
     const version = DeviceInfo.getReadableVersion();
@@ -28,11 +32,22 @@ const SplashScreenComponent = ({
   useEffect(() => {
     checkForApiUpdate();
     networkState?.isInternetConnected && fetchChatResetAction();
+    if (userInfoState?.user != null && orgsState?.currentOrgId != null) {
+      console.log('getting chats');
+      getChannelsAction(
+        userInfoState?.accessToken,
+        orgsState?.currentOrgId,
+        userInfoState?.user?.id,
+        userInfoState?.user?.displayName
+          ? userInfoState?.user?.displayName
+          : userInfoState?.user?.firstName,
+      );
+    }
     setTimeout(() => {
       SplashScreen.hide();
       setShowSplashScreen(false);
     }, 200);
-  }, []);
+  }, [userInfoState?.user]);
 
   return (
     <></>
@@ -45,6 +60,8 @@ const SplashScreenComponent = ({
 const mapStateToProps = state => ({
   networkState: state.networkReducer,
   appInfoState: state.appInfoReducer,
+  userInfoState: state.userInfoReducer,
+  orgsState: state.orgsReducer,
 });
 const mapDispatchToProps = dispatch => {
   return {
@@ -52,6 +69,8 @@ const mapDispatchToProps = dispatch => {
     setNewVersionOfApp: version =>
       dispatch({type: UPDATE_APP_VERSION, version}),
     signOutAction: () => dispatch({type: SIGN_OUT}),
+    getChannelsAction: (token, orgId, userId, userName) =>
+      dispatch(getChannelsStart(token, orgId, userId, userName)),
   };
 };
 export default connect(

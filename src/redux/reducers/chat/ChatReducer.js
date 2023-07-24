@@ -215,7 +215,7 @@ export function chatReducer(state = initialState, action) {
       return {
         ...state,
       };
-    case Actions.UPDATE_CURRENT_ORG_ID:
+    case Actions.SELECT_CURRENT_ORG_ID:
       return initialState;
 
     case Actions.ADD_LOCAL_MESSAGE:

@@ -15,13 +15,13 @@ const initialState = {
 
 export function orgsReducer(state = initialState, action) {
   switch (action.type) {
-    case Actions.SELECT_INITIAL_ORG_ID:
+    case Actions.SELECT_CURRENT_ORG_ID:
       return {...state, currentOrgId: action.orgId};
 
     case Actions.NO_ORGS_FOUND:
       return {...state, noOrgsFound: true};
-    case Actions.UPDATE_CURRENT_ORG_ID:
-      return {...state, currentOrgId: action.orgId};
+    // case Actions.UPDATE_CURRENT_ORG_ID:
+    //   return {...state, currentOrgId: action.orgId};
 
     case Actions.GET_ORG_START:
       return {...state, isLoading: true, isInitiated: true};

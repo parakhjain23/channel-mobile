@@ -14,13 +14,14 @@ const AppSentry = () => {
       // We recommend adjusting this value in production.
       tracesSampleRate: 1.0,
     });
-    codePush.sync({
-      updateDialog: true,
-      installMode: codePush.InstallMode.ON_NEXT_RESTART,
-    });
+    // codePush.sync({
+    //   updateDialog: true,
+    //   installMode: codePush.InstallMode.ON_NEXT_RESTART,
+    // });
   });
 
   return <ErrorBoundary FallbackComponent={ErrorScreen} children={<App />} />;
 };
 
-export default codePush(CODE_PUSH_OPTIONS)(Sentry.wrap(AppSentry));
+// export default codePush(CODE_PUSH_OPTIONS)(Sentry.wrap(AppSentry));
+export default Sentry.wrap(AppSentry);

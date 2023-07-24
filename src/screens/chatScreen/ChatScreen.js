@@ -89,7 +89,7 @@ const ChatScreen = ({
   draftMessageAction,
   joinChannelAction,
 }) => {
-  console.log('chat-screen', route.params);
+  // console.log('chat-screen', route.params);
   var teamId, channelType, chatHeaderTitle, userId;
   if (deviceType === DEVICE_TYPES[1]) {
     userId = chatDetailsForTab?.userId;
