@@ -144,13 +144,13 @@ const ChatCard = ({
   }
 
   const openLink = async (url, contentType) => {
-    const path = ReactNativeBlobUtil.fs.dirs.DownloadDir + '/demo3.pdf';
+    const path = ReactNativeBlobUtil.fs.dirs.DocumentDir + '/demo.pdf';
     const doesExist = await ReactNativeBlobUtil.fs.exists(path);
     console.log(doesExist, path, contentType, '=-=-');
     if (doesExist) {
       Platform.OS === 'android'
         ? ReactNativeBlobUtil.android.actionViewIntent(path, contentType)
-        : console.log('hello ios');
+        : ReactNativeBlobUtil.ios.openDocument(path, url);
     } else {
       ReactNativeBlobUtil.config({
         fileCache: true,
@@ -164,6 +164,7 @@ const ChatCard = ({
         .then(res => {
           // the temp file path
           console.log('The file saved to ', res.path());
+          RNFetchBlob.ios.openDocument(res.data);
         })
         .catch(async () => {
           if (await InAppBrowser.isAvailable()) {
@@ -459,11 +460,12 @@ const ChatCard = ({
                             ? onLongPress()
                             : handleImagePress(index)
                         }
-                        onAttachmentPress={(url, contentType) =>
-                          !optionsVisible
-                            ? openLink(url, contentType)
-                            : onLongPress()
-                        }
+                        // onAttachmentPress={(url, contentType) =>
+                        //   !optionsVisible
+                        //     ? openLink(url, contentType)
+                        //     : onLongPress()
+                        // }
+                        onAttachmentPress={optionsVisible ? onLongPress : null}
                         onLongPress={onLongPress}
                       />
                     )}
