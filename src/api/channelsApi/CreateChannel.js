@@ -9,7 +9,7 @@ export const createChannel = async (
   userIds,
 ) => {
   try {
-    var response = await fetch(`${CHAT_SERVER_URL}//chat/team`, {
+    var response = await fetch(`${CHAT_SERVER_URL}/chat/team`, {
       method: 'POST',
       headers: {
         Authorization: token,

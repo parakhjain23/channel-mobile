@@ -37,8 +37,9 @@ const ChannelDetailsScreen = ({
   const styles = makeStyles(colors);
   const RED_COLOR = '#FF2E2E';
   const GREEN_COLOR = '#00A300';
-  const Purpose = channelsState?.channelIdAndDataMapping?.[teamId]?.purpose;
-  const CreatedBy = channelsState?.channelIdAndDataMapping[teamId]?.createdBy;
+  const channelIdAndDataMapping = channelsState?.channelIdAndDataMapping;
+  const Purpose = channelIdAndDataMapping?.[teamId]?.purpose;
+  const CreatedBy = channelIdAndDataMapping[teamId]?.createdBy;
   const changeText = value => {
     setsearchValue(value);
   };
@@ -82,7 +83,7 @@ const ChannelDetailsScreen = ({
                 onPress={() => {
                   removeUserFromChannelAction(
                     [{userId: item?._source?.userId}],
-                    channelsState?.channelIdAndDataMapping[teamId]?._id,
+                    channelIdAndDataMapping[teamId]?._id,
                     orgsState?.currentOrgId,
                     userInfoState?.accessToken,
                   );
@@ -100,7 +101,7 @@ const ChannelDetailsScreen = ({
                 onPress={() => {
                   addUsersToChannelAction(
                     [{userId: item?._source?.userId}],
-                    channelsState?.channelIdAndDataMapping[teamId]?._id,
+                    channelIdAndDataMapping[teamId]?._id,
                     orgsState?.currentOrgId,
                     userInfoState?.accessToken,
                   );
@@ -116,7 +117,7 @@ const ChannelDetailsScreen = ({
         )
       );
     },
-    [channelsByQueryState?.channels, channelsState?.channelIdAndDataMapping],
+    [channelsByQueryState?.channels, channelIdAndDataMapping],
   );
 
   const RenderItem = ({item, index}) => {
@@ -143,7 +144,7 @@ const ChannelDetailsScreen = ({
           onPress={() => {
             removeUserFromChannelAction(
               [{userId: item}],
-              channelsState?.channelIdAndDataMapping[teamId]?._id,
+              channelIdAndDataMapping[teamId]?._id,
               orgsState?.currentOrgId,
               userInfoState?.accessToken,
             );
@@ -171,10 +172,7 @@ const ChannelDetailsScreen = ({
         <View style={styles.content}>
           {Purpose?.length > 0 && (
             <Text style={styles.text}>
-              Purpose:{' '}
-              {channelsState?.channelIdAndDataMapping[
-                teamId
-              ]?.purpose?.toString()}
+              Purpose: {channelIdAndDataMapping[teamId]?.purpose?.toString()}
             </Text>
           )}
           {CreatedBy?.length > 0 && (
@@ -183,7 +181,7 @@ const ChannelDetailsScreen = ({
                 Created by:{' '}
                 {
                   orgsState?.userIdAndNameMapping[
-                    channelsState?.channelIdAndDataMapping[teamId]?.createdBy
+                    channelIdAndDataMapping[teamId]?.createdBy
                   ]
                 }
               </Text>
@@ -222,11 +220,9 @@ const ChannelDetailsScreen = ({
           {searchValue?.length === 0 && (
             <View style={{flex: 1}}>
               <Text style={styles.header}>Members:</Text>
-              {channelsState?.channelIdAndDataMapping[teamId]?.userIds?.map(
-                (item, index) => {
-                  return <RenderItem item={item} index={index} key={index} />;
-                },
-              )}
+              {channelIdAndDataMapping[teamId]?.userIds?.map((item, index) => {
+                return <RenderItem item={item} index={index} key={index} />;
+              })}
             </View>
           )}
         </View>

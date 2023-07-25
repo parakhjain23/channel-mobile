@@ -20,7 +20,7 @@ const SocketService = socket => {
   socket.on('reconnect', function () {
     createSocket(
       store.getState()?.userInfoReducer?.accessToken,
-      store.getState()?.orgsReducer?.currentOrgId,
+      store.getState().orgsReducer?.currentOrgId,
     );
   });
   socket.on('connect', () => {
@@ -30,15 +30,16 @@ const SocketService = socket => {
     store.dispatch(socketStatus(false));
   });
   socket.on('chat/message created', data => {
+    console.log(data, 'this is message created event');
     if (
-      store.getState().channelsReducer?.teamIdAndTypeMapping[data?.teamId] ==
+      store.getState()?.channelsReducer?.teamIdAndTypeMapping[data?.teamId] ==
       undefined
     ) {
       store.dispatch(
         getChannelByTeamIdStart(
-          store?.getState()?.userInfoReducer?.accessToken,
+          store.getState()?.userInfoReducer?.accessToken,
           data?.teamId,
-          store?.getState()?.userInfoReducer?.user?.id,
+          store.getState()?.userInfoReducer?.user?.id,
         ),
       );
     }
@@ -47,7 +48,7 @@ const SocketService = socket => {
       newData.isActivity = false;
     }
     store.dispatch(
-      addNewMessage(newData, store?.getState()?.userInfoReducer?.user?.id),
+      addNewMessage(newData, store.getState()?.userInfoReducer?.user?.id),
     );
     newData?.content == 'closed this channel' && newData?.isActivity
       ? null
@@ -59,14 +60,14 @@ const SocketService = socket => {
             moveChannelToTop(
               [newData?.teamId],
               newData?.senderId,
-              store?.getState()?.userInfoReducer?.user?.id,
+              store.getState()?.userInfoReducer?.user?.id,
             ),
           ),
         store.dispatch(
           increaseUnreadCount(
             [newData?.teamId],
             newData?.senderId,
-            store?.getState()?.userInfoReducer?.user?.id,
+            store.getState()?.userInfoReducer?.user?.id,
           ),
         ))
       : store.getState()?.channelsReducer?.recentChannels?.[0]?._id !=
@@ -75,17 +76,18 @@ const SocketService = socket => {
           moveChannelToTop(
             [newData?.teamId],
             newData?.senderId,
-            store?.getState()?.userInfoReducer?.user?.id,
+            store.getState()?.userInfoReducer?.user?.id,
           ),
         );
-    if (newData?.senderId != store?.getState()?.userInfoReducer?.user?.id) {
+    if (newData?.senderId != store.getState()?.userInfoReducer?.user?.id) {
       PlayLocalSoundFile();
       if (
-        newData?.teamId != store.getState().channelsReducer?.activeChannelTeamId
+        newData?.teamId !=
+        store.getState()?.channelsReducer?.activeChannelTeamId
       ) {
         handleNotificationFromEvents(
           newData,
-          store?.getState()?.orgsReducer?.userIdAndDisplayNameMapping,
+          store.getState()?.orgsReducer?.userIdAndDisplayNameMapping,
         );
       }
     }
@@ -113,11 +115,11 @@ const SocketService = socket => {
     store.dispatch(channelPatchedEvent(data));
   });
   socket.on('chat/team created', data => {
-    if (data?.userIds?.includes(store?.getState()?.userInfoReducer?.user?.id)) {
+    if (data?.userIds?.includes(store.getState()?.userInfoReducer?.user?.id)) {
       store.dispatch(
         createNewChannelSuccess(
           data,
-          store.getState().userInfoReducer?.user?.id,
+          store.getState()?.userInfoReducer?.user?.id,
         ),
       );
       store.dispatch(moveChannelToTop([data?._id]));

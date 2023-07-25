@@ -1,4 +1,4 @@
-export function formatTime(timestamp) {
+export function formatTime(timestamp:string) : string {
     const date = new Date(timestamp);
     const hours = date.getHours();
     const minutes = date.getMinutes();
@@ -8,4 +8,4 @@ export function formatTime(timestamp) {
     const period = hours >= 12 ? 'PM' : 'AM';
   
     return `${formattedHours}:${formattedMinutes} ${period}`;
-  }
+}

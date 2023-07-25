@@ -26,7 +26,7 @@ const LongPressCard = ({
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const {width} = useWindowDimensions();
   const [emojiModel, setemojiModel] = useState(false);
-
+  const currentUserId = userInfoState?.user?.id;
   const isActivity =
     typeof chat.isActivity === 'string'
       ? chat.isActivity === 'true'
@@ -42,7 +42,7 @@ const LongPressCard = ({
 
   var parentId = chat?.parentId;
   const time = formatTime(chat?.createdAt);
-  const sentByMe = chat?.senderId == userInfoState?.user?.id ? true : false;
+  const sentByMe = chat?.senderId == currentUserId ? true : false;
   const containerBackgroundColor = useMemo(() => {
     if (sentByMe) {
       return colors.sentByMeCardColor;
@@ -52,7 +52,7 @@ const LongPressCard = ({
   }, [colors, sentByMe]);
 
   const SenderName = useMemo(() => {
-    if (chat?.senderId === userInfoState?.user?.id) {
+    if (chat?.senderId === currentUserId) {
       return 'You';
     } else if (orgState?.userIdAndDisplayNameMapping[chat?.senderId]) {
       return orgState?.userIdAndDisplayNameMapping[chat?.senderId];
@@ -110,7 +110,7 @@ const LongPressCard = ({
             e.name,
             [],
             'add',
-            userInfoState?.user?.id,
+            currentUserId,
           ) && setShowActions(false)
         }
         open={emojiModel}
@@ -137,7 +137,7 @@ const LongPressCard = ({
       obj.reaction_name,
       [],
       actionType,
-      userInfoState?.user?.id,
+      currentUserId,
     ) && setShowActions(false);
   };
   if (!isActivity) {

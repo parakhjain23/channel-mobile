@@ -140,8 +140,8 @@ const ChannelCard = ({
         extrapolate: 'clamp',
       });
       return item?.type !== 'PUBLIC' &&
-        (channelsState?.teamIdAndUnreadCountMapping[item?._id] > 0 ||
-          channelsState?.teamIdAndBadgeCountMapping[item?._id] > 0) ? null : (
+        (teamIdAndUnreadCountMapping[item?._id] > 0 ||
+          teamIdAndBadgeCountMapping[item?._id] > 0) ? null : (
         <RightSwipeAction
           scale={scale}
           swipeableRef={swipeableRef}

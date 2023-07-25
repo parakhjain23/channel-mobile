@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Image,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Linking,
-} from 'react-native';
+import {View, Image, Text, TouchableOpacity, Linking} from 'react-native';
 import {connect} from 'react-redux';
 import {DEVICE_TYPES, IMAGE_BASE_URL} from '../../constants/Constants';
 import {useNavigation, useTheme} from '@react-navigation/native';
@@ -25,7 +18,7 @@ import {fetchSearchedUserProfileStart} from '../../redux/actions/user/searchUser
 import ListFooterComponent from '../../components/ListFooterComponent';
 import {launchGallery} from '../chatScreen/ImagePicker';
 
-const ContactDetailsPage = ({
+const UserProfile = ({
   userInfoState,
   channelsState,
   createDmChannelAction,
@@ -48,10 +41,10 @@ const ContactDetailsPage = ({
       searchedUserInfoState?.searchedUserProfile?.[userId]?.id
     ];
   const navigation = useNavigation();
-
+  const currentUserId = userInfoState?.user?.id;
   useEffect(() => {
     if (
-      userId !== userInfoState?.user?.id &&
+      userId !== currentUserId &&
       !searchedUserInfoState?.searchedUserProfile?.[userId]
     ) {
       searchUserProfileAction(userId, userInfoState?.accessToken);
@@ -93,7 +86,7 @@ const ContactDetailsPage = ({
     avatarKey: userAvatarKey,
     displayName: userDisplayName,
     id: user_id,
-  } = userId === userInfoState?.user?.id
+  } = userId === currentUserId
     ? userInfoState?.user || {}
     : searchedUserInfoState?.searchedUserProfile?.[userId] || {};
 
@@ -160,7 +153,7 @@ const ContactDetailsPage = ({
                 marginBottom: 20,
               }}
             />
-            {userId == userInfoState?.user?.id &&
+            {userId == currentUserId &&
               (attachmentLoading ? (
                 <ListFooterComponent />
               ) : (
@@ -192,7 +185,7 @@ const ContactDetailsPage = ({
               </View>
             </TouchableOpacity>
           )}
-          {userId != userInfoState?.user?.id && (
+          {userId != currentUserId && (
             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
               <TouchableOpacity
                 style={[styles.button, styles.messageButton]}
@@ -221,7 +214,7 @@ const ContactDetailsPage = ({
           )}
         </ScrollView>
       )}
-      {userId == userInfoState?.user?.id && (
+      {userId == currentUserId && (
         <View
           style={{
             borderTopColor: 'gray',
@@ -257,5 +250,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToPros,
   mapDispatchToProps,
-)(React.memo(ContactDetailsPage));
-// export default ContactDetailsPage;
+)(React.memo(UserProfile));
