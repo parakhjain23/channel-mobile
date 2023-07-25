@@ -1,12 +1,12 @@
 import {Platform} from 'react-native';
-import RNFetchBlob from 'rn-fetch-blob';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 
 export const LOCAL_PATH = Platform.select({
-  ios: `${RNFetchBlob.fs.dirs.CacheDir}/sound.m4a`,
-  android: `${RNFetchBlob.fs.dirs.CacheDir}/sound.mp3`,
+  ios: `${ReactNativeBlobUtil.fs.dirs.CacheDir}/sound.m4a`,
+  android: `${ReactNativeBlobUtil.fs.dirs.CacheDir}/sound.mp3`,
 });
 
 export const RECORING_PATH = Platform.select({
   ios: `sound.m4a`,
-  android: `${RNFetchBlob.fs.dirs.CacheDir}/sound.mp3`,
+  android: `${ReactNativeBlobUtil.fs.dirs.CacheDir}/sound.mp3`,
 });

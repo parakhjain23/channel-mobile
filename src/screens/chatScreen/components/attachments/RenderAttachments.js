@@ -51,7 +51,9 @@ const Attachments = React.memo(
                 LongPressCardStyle.repliedContainer,
                 LongPressCardStyle.docContainer,
               ]}
-              onPress={() => onAttachmentPress(item?.resourceUrl)}
+              onPress={() =>
+                onAttachmentPress(item?.resourceUrl, item?.contentType)
+              }
               onLongPress={isLongPressCard ? null : onLongPress}
               activeOpacity={0.8}>
               <View style={LongPressCardStyle.docContentContainer}>

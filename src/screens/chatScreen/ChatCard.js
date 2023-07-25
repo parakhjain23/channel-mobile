@@ -1,5 +1,6 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {
+  Platform,
   Text,
   TouchableOpacity,
   Vibration,
@@ -26,6 +27,7 @@ import Reactions from '../../components/Reactions';
 import ImageViewerComponent from './components/attachments/ImageViewerComponent';
 import JSONRenderer from './JSONRenderer';
 import Attachments from './components/attachments/RenderAttachments';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 
 const AddRemoveJoinedMsg = React.memo(({senderName, content, orgState}) => {
   const {colors} = useTheme();
@@ -136,11 +138,40 @@ const ChatCard = ({
     );
   };
 
-  const openLink = async url => {
-    if (await InAppBrowser.isAvailable()) {
-      InAppBrowser?.open(url);
+  function round(value, precision) {
+    var multiplier = Math.pow(10, precision || 0);
+    return Math.round(value * multiplier) / multiplier;
+  }
+
+  const openLink = async (url, contentType) => {
+    const path = ReactNativeBlobUtil.fs.dirs.DownloadDir + '/demo3.pdf';
+    const doesExist = await ReactNativeBlobUtil.fs.exists(path);
+    console.log(doesExist, path, contentType, '=-=-');
+    if (doesExist) {
+      Platform.OS === 'android'
+        ? ReactNativeBlobUtil.android.actionViewIntent(path, contentType)
+        : console.log('hello ios');
     } else {
-      Linking.openURL(url);
+      ReactNativeBlobUtil.config({
+        fileCache: true,
+        path: path,
+      })
+        .fetch('GET', url)
+        .progress({interval: 250}, (received, total) => {
+          // setDownloadProgress(round((received / total) * 100, 0))
+          console.log(round((received / total) * 100, 0));
+        })
+        .then(res => {
+          // the temp file path
+          console.log('The file saved to ', res.path());
+        })
+        .catch(async () => {
+          if (await InAppBrowser.isAvailable()) {
+            InAppBrowser?.open(url);
+          } else {
+            Linking.openURL(url);
+          }
+        });
     }
   };
 
@@ -428,8 +459,10 @@ const ChatCard = ({
                             ? onLongPress()
                             : handleImagePress(index)
                         }
-                        onAttachmentPress={url =>
-                          !optionsVisible ? openLink(url) : onLongPress()
+                        onAttachmentPress={(url, contentType) =>
+                          !optionsVisible
+                            ? openLink(url, contentType)
+                            : onLongPress()
                         }
                         onLongPress={onLongPress}
                       />
