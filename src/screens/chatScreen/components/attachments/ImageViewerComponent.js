@@ -2,7 +2,7 @@ import {View, Modal, Pressable} from 'react-native';
 import React, {useCallback} from 'react';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import ListFooterComponent from '../../../components/ListFooterComponent';
+import ListFooterComponent from '../../../../components/ListFooterComponent';
 
 const ImageViewerComponent = ({url, setSelectedImage}) => {
   const handleModalClose = useCallback(() => {

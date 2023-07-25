@@ -1,14 +1,5 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {
-  Image,
-  Modal,
   Text,
   TouchableOpacity,
   Vibration,
@@ -26,16 +17,15 @@ import HTMLView from 'react-native-htmlview';
 import {RenderHTML} from 'react-native-render-html';
 import * as RootNavigation from '../../navigation/RootNavigation';
 import {tagsStyles} from './HtmlStyles';
-import AudioRecordingPlayer from '../../components/AudioRecorderPlayer';
 import {DEVICE_TYPES} from '../../constants/Constants';
 import {connect, useSelector} from 'react-redux';
 import {setActiveChannelTeamId} from '../../redux/actions/channels/SetActiveChannelId';
 import {formatTime} from '../../utils/FormatTime';
 import FastImage from 'react-native-fast-image';
-import {reactionOnChatStart} from '../../redux/actions/chat/ReactionsActions';
 import Reactions from '../../components/Reactions';
-import ImageViewerComponent from './components/ImageViewerComponent';
+import ImageViewerComponent from './components/attachments/ImageViewerComponent';
 import JSONRenderer from './JSONRenderer';
+import Attachments from './components/attachments/RenderAttachments';
 
 const AddRemoveJoinedMsg = React.memo(({senderName, content, orgState}) => {
   const {colors} = useTheme();
@@ -67,7 +57,6 @@ const ChatCard = ({
   setCurrentSelectedChatCard,
   setChatDetailsForTab,
   setActiveChannelTeamIdAction,
-  reactionAction,
 }) => {
   const deviceType = useSelector(state => state.appInfoReducer.deviceType);
   const {colors, dark} = useTheme();
@@ -431,101 +420,21 @@ const ChatCard = ({
                         setSelectedImage={setSelectedImage}
                       />
                     )}
-                    {attachment?.length > 0 &&
-                      attachment?.map((item, index) => {
-                        return item?.contentType?.includes('image') ? (
-                          <TouchableOpacity
-                            key={index}
-                            onPress={() =>
-                              optionsVisible
-                                ? onLongPress()
-                                : handleImagePress(index)
-                            }
-                            onLongPress={onLongPress}
-                            style={{marginVertical: 5, alignItems: 'center'}}>
-                            <FastImage
-                              source={{uri: item?.resourceUrl}}
-                              style={{
-                                height: 150,
-                                width: 150,
-                              }}
-                            />
-                          </TouchableOpacity>
-                        ) : item?.contentType?.includes('audio') ? (
-                          <View
-                            key={index}
-                            style={{
-                              flexDirection: 'row',
-                              height: 50,
-                              width: ms(260),
-                              flex: 1,
-                              alignItems: 'center',
-                              overflow: 'hidden',
-                              justifyContent: 'center', // Align center horizontally
-                            }}>
-                            <AudioRecordingPlayer
-                              remoteUrl={item?.resourceUrl}
-                            />
-                          </View>
-                        ) : (
-                          <View
-                            key={index}
-                            style={[
-                              styles.repliedContainer,
-                              {
-                                borderWidth: ms(0.5),
-                                borderColor: 'gray',
-                                borderRadius: ms(5),
-                                padding: ms(10),
-                              },
-                            ]}>
-                            <TouchableOpacity
-                              onPress={() =>
-                                !optionsVisible
-                                  ? openLink(item?.resourceUrl)
-                                  : onLongPress()
-                              }
-                              onLongPress={onLongPress}>
-                              <View
-                                style={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                  justifyContent: 'space-between',
-                                }}>
-                                {item?.contentType?.includes('pdf') && (
-                                  <Image
-                                    source={require('../../assests/images/attachments/pdfLogo.png')}
-                                    style={{
-                                      width: 40,
-                                      height: 40,
-                                      marginRight: 15,
-                                    }}
-                                  />
-                                )}
-                                {item?.contentType?.includes('doc') && (
-                                  <Image
-                                    source={require('../../assests/images/attachments/docLogo.png')}
-                                    style={{
-                                      width: 40,
-                                      height: 40,
-                                      marginRight: 15,
-                                    }}
-                                  />
-                                )}
+                    {attachment?.length > 0 && (
+                      <Attachments
+                        attachment={attachment}
+                        onImagePress={index =>
+                          optionsVisible
+                            ? onLongPress()
+                            : handleImagePress(index)
+                        }
+                        onAttachmentPress={url =>
+                          !optionsVisible ? openLink(url) : onLongPress()
+                        }
+                        onLongPress={onLongPress}
+                      />
+                    )}
 
-                                <View>
-                                  <Text style={{color: 'black'}}>
-                                    {item?.title?.slice(0, 15) + '...'}
-                                  </Text>
-                                  <Text style={{color: 'black'}}>
-                                    {'...' + item?.contentType?.slice(-15)}
-                                  </Text>
-                                </View>
-                              </View>
-                            </TouchableOpacity>
-                          </View>
-                        );
-                      })}
                     {!chat.messageType || chat.messageType != 'richText' ? (
                       chat?.content?.includes('<span class="mention"') ? (
                         <HTMLView
@@ -559,6 +468,7 @@ const ChatCard = ({
                     ) : (
                       <JSONRenderer JSON_Example={chat.content} />
                     )}
+
                     {chat?.content?.length > 500 && (
                       <Text
                         style={{
@@ -609,28 +519,6 @@ const mapDispatchToProps = dispatch => {
   return {
     setActiveChannelTeamIdAction: teamId =>
       dispatch(setActiveChannelTeamId(teamId)),
-    reactionAction: (
-      token,
-      teamId,
-      messageId,
-      reaction_icon,
-      reaction_name,
-      userIds,
-      actionTye,
-      userId,
-    ) =>
-      dispatch(
-        reactionOnChatStart(
-          token,
-          teamId,
-          messageId,
-          reaction_icon,
-          reaction_name,
-          userIds,
-          actionTye,
-          userId,
-        ),
-      ),
   };
 };
 export const ChatCardMemo = React.memo(

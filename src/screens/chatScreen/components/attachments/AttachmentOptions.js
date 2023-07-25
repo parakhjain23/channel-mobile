@@ -1,10 +1,9 @@
 import {View, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {Animated} from 'react-native';
 import {useTheme} from '@react-navigation/native';
-import {pickDocument} from '../DocumentPicker';
-import {launchCameraForPhoto, launchGallery} from '../ImagePicker';
+import {pickDocument} from '../../DocumentPicker';
+import {launchCameraForPhoto, launchGallery} from '../../ImagePicker';
 import {listStyles} from './AttachmentStyles';
 
 const AttachmentTile = React.memo(

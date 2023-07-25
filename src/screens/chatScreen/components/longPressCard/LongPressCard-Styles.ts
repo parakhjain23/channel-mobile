@@ -139,7 +139,7 @@ export const makeStyles = (colors: any) =>
       justifyContent: 'space-between',
     },
     attachmentIcon: {
-      width: 40,
+      width: 30,
       height: 40,
       marginRight: 15,
     },

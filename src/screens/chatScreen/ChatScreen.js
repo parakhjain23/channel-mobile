@@ -56,14 +56,15 @@ import ActivityList from './components/acitivityList/ActivityList';
 import MentionList from './components/mentionList/MentionList';
 import ActionModal from './components/actionModal/ActionModal';
 import {Button} from 'react-native-paper';
-import {listStyles} from './components/AttachmentStyles';
-import AttachmentOptionsModal from './components/AttachmentOptionsModal';
+import {listStyles} from './components/attachments/AttachmentStyles';
+import AttachmentOptionsModal from './components/attachments/AttachmentOptionsModal';
 import {addDraftMessage} from '../../redux/actions/chat/DraftMessageAction';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Header} from '../../components/Header';
 import {joinChannelStart} from '../../redux/actions/channels/JoinChannelActions';
 import {AnimatedFlashList, FlashList} from '@shopify/flash-list';
 import {LOCAL_PATH} from '../../utils/Path';
+import {useTraceUpdate} from '../../utils/utility';
 
 const ChatScreen = ({
   chatDetailsForTab,
@@ -89,7 +90,31 @@ const ChatScreen = ({
   draftMessageAction,
   joinChannelAction,
 }) => {
-  // console.log('chat-screen');
+  console.log('chat-screen');
+  useTraceUpdate({
+    chatDetailsForTab,
+    setChatDetailsForTab,
+    deviceType,
+    route,
+    userInfoState,
+    networkState,
+    fetchChatsOfTeamAction,
+    sendMessageAction,
+    chatState,
+    orgState,
+    deleteMessageAction,
+    channelsState,
+    setActiveChannelTeamIdAction,
+    setGlobalMessageToSendAction,
+    getChannelsByQueryStartAction,
+    channelsByQueryState,
+    setlocalMsgAction,
+    resetUnreadCountAction,
+    addUsersToChannelAction,
+    removeUserFromChannelAction,
+    draftMessageAction,
+    joinChannelAction,
+  });
   var teamId, channelType, chatHeaderTitle, userId;
   if (deviceType === DEVICE_TYPES[1]) {
     userId = chatDetailsForTab?.userId;
