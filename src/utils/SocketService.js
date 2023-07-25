@@ -30,7 +30,7 @@ const SocketService = socket => {
     store.dispatch(socketStatus(false));
   });
   socket.on('chat/message created', data => {
-    console.log(data, 'this is message created event');
+    // console.log(data, 'this is message created event');
     if (
       store.getState()?.channelsReducer?.teamIdAndTypeMapping[data?.teamId] ==
       undefined
