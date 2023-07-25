@@ -90,31 +90,6 @@ const ChatScreen = ({
   draftMessageAction,
   joinChannelAction,
 }) => {
-  console.log('chat-screen');
-  useTraceUpdate({
-    chatDetailsForTab,
-    setChatDetailsForTab,
-    deviceType,
-    route,
-    userInfoState,
-    networkState,
-    fetchChatsOfTeamAction,
-    sendMessageAction,
-    chatState,
-    orgState,
-    deleteMessageAction,
-    channelsState,
-    setActiveChannelTeamIdAction,
-    setGlobalMessageToSendAction,
-    getChannelsByQueryStartAction,
-    channelsByQueryState,
-    setlocalMsgAction,
-    resetUnreadCountAction,
-    addUsersToChannelAction,
-    removeUserFromChannelAction,
-    draftMessageAction,
-    joinChannelAction,
-  });
   var teamId, channelType, chatHeaderTitle, userId;
   if (deviceType === DEVICE_TYPES[1]) {
     userId = chatDetailsForTab?.userId;

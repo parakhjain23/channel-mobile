@@ -30,7 +30,6 @@ const ChannelDetailsScreen = ({
   addUsersToChannelAction,
   channelsState,
 }) => {
-  console.log('channel details');
   const [searchValue, setsearchValue] = useState('');
   const {teamId, channelName} = route?.params;
   const {colors} = useTheme();
@@ -162,7 +161,7 @@ const ChannelDetailsScreen = ({
       </View>
     );
   };
-  console.log(channelsByQueryState?.channels?.length);
+
   return (
     <ScrollView
       style={{flex: 1, backgroundColor: colors?.primaryColor}}
