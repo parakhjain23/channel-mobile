@@ -33,7 +33,8 @@ const Attachments = React.memo(
               key={index}
               style={LongPressCardStyle.imageAttachContainer}
               onPress={() => onImagePress(index)}
-              onLongPress={!isLongPressCard ? onLongPress : () => null}>
+              onLongPress={!isLongPressCard ? onLongPress : () => null}
+              activeOpacity={0.8}>
               <FastImage
                 source={{uri: item?.resourceUrl}}
                 style={LongPressCardStyle.imageAttachment}
@@ -51,7 +52,8 @@ const Attachments = React.memo(
                 LongPressCardStyle.docContainer,
               ]}
               onPress={() => onAttachmentPress(item?.resourceUrl)}
-              onLongPress={isLongPressCard ? null : onLongPress}>
+              onLongPress={isLongPressCard ? null : onLongPress}
+              activeOpacity={0.8}>
               <View style={LongPressCardStyle.docContentContainer}>
                 {item?.contentType?.includes('pdf') && (
                   <FastImage
