@@ -68,7 +68,7 @@ export const makeStyles = (colors: any) =>
       borderRadius: ms(3),
       marginBottom: mvs(4),
       borderWidth: s(0.3),
-      maxHeight: ms(80),
+      maxHeight: ms(200),
       borderLeftColor: '#b38b6d',
       borderLeftWidth: ms(4),
       flexDirection: 'row',
@@ -132,6 +132,7 @@ export const makeStyles = (colors: any) =>
       borderColor: 'gray',
       borderRadius: ms(5),
       padding: ms(10),
+      flexDirection: 'column',
     },
     docContentContainer: {
       flexDirection: 'row',
