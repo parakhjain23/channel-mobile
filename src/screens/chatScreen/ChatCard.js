@@ -1,6 +1,5 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {
-  Platform,
   Text,
   TouchableOpacity,
   Vibration,
@@ -9,11 +8,9 @@ import {
 } from 'react-native';
 import {GestureHandlerRootView, Swipeable} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {Linking} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import {makeStyles} from './ChatCardStyles';
 import {ms} from 'react-native-size-matters';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
 import HTMLView from 'react-native-htmlview';
 import {RenderHTML} from 'react-native-render-html';
 import * as RootNavigation from '../../navigation/RootNavigation';
@@ -27,7 +24,6 @@ import Reactions from '../../components/Reactions';
 import ImageViewerComponent from './components/attachments/ImageViewerComponent';
 import JSONRenderer from './JSONRenderer';
 import Attachments from './components/attachments/RenderAttachments';
-import ReactNativeBlobUtil from 'react-native-blob-util';
 
 const AddRemoveJoinedMsg = React.memo(({senderName, content, orgState}) => {
   const {colors} = useTheme();
@@ -142,39 +138,6 @@ const ChatCard = ({
     var multiplier = Math.pow(10, precision || 0);
     return Math.round(value * multiplier) / multiplier;
   }
-
-  const openLink = async (url, contentType) => {
-    const path = ReactNativeBlobUtil.fs.dirs.DocumentDir + '/demo.pdf';
-    const doesExist = await ReactNativeBlobUtil.fs.exists(path);
-    console.log(doesExist, path, contentType, '=-=-');
-    if (doesExist) {
-      Platform.OS === 'android'
-        ? ReactNativeBlobUtil.android.actionViewIntent(path, contentType)
-        : ReactNativeBlobUtil.ios.openDocument(path, url);
-    } else {
-      ReactNativeBlobUtil.config({
-        fileCache: true,
-        path: path,
-      })
-        .fetch('GET', url)
-        .progress({interval: 250}, (received, total) => {
-          // setDownloadProgress(round((received / total) * 100, 0))
-          console.log(round((received / total) * 100, 0));
-        })
-        .then(res => {
-          // the temp file path
-          console.log('The file saved to ', res.path());
-          RNFetchBlob.ios.openDocument(res.data);
-        })
-        .catch(async () => {
-          if (await InAppBrowser.isAvailable()) {
-            InAppBrowser?.open(url);
-          } else {
-            Linking.openURL(url);
-          }
-        });
-    }
-  };
 
   const htmlStyles = color => ({
     div: {

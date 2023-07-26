@@ -191,7 +191,9 @@ const Attachments = React.memo(
                 <Text style={{color: 'black'}}>
                   {item?.title?.slice(0, 15) + '...'}
                 </Text>
-                {downloadProgress !== 0 && <Text>{downloadProgress}%</Text>}
+                {downloadProgress !== 0 && (
+                  <Text style={{color: 'black'}}>{downloadProgress}%</Text>
+                )}
               </View>
             </View>
             <View>
