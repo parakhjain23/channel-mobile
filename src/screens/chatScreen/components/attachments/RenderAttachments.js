@@ -128,6 +128,26 @@ const Attachments = React.memo(
         }
       };
 
+      function getImage(contentType) {
+        if (contentType?.includes('pdf')) {
+          return (
+            <FastImage source={Pdf} style={LongPressCardStyle.attachmentIcon} />
+          );
+        } else if (contentType?.includes('doc')) {
+          return (
+            <FastImage source={Doc} style={LongPressCardStyle.attachmentIcon} />
+          );
+        } else if (contentType?.includes('csv')) {
+          return (
+            <FastImage source={Csv} style={LongPressCardStyle.attachmentIcon} />
+          );
+        } else {
+          return (
+            <FastImage source={Doc} style={LongPressCardStyle.attachmentIcon} />
+          );
+        }
+      }
+
       return item?.contentType?.includes('image') ? (
         <TouchableOpacity
           key={index}
@@ -169,24 +189,7 @@ const Attachments = React.memo(
                 alignItems: 'center',
                 marginRight: 5,
               }}>
-              {item?.contentType?.includes('pdf') && (
-                <FastImage
-                  source={Pdf}
-                  style={LongPressCardStyle.attachmentIcon}
-                />
-              )}
-              {item?.contentType?.includes('doc') && (
-                <FastImage
-                  source={Doc}
-                  style={LongPressCardStyle.attachmentIcon}
-                />
-              )}
-              {item?.contentType?.includes('csv') && (
-                <FastImage
-                  source={Csv}
-                  style={LongPressCardStyle.attachmentIcon}
-                />
-              )}
+              {getImage(item?.contentType)}
               <View>
                 <Text style={{color: 'black'}}>
                   {item?.title?.slice(0, 15) + '...'}
