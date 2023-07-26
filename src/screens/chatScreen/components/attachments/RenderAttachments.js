@@ -53,7 +53,7 @@ const Attachments = React.memo(
           android: DownloadDir,
         });
         const filePath =
-          directory_path + '/' + getFileNameFromURL(url) + 'j.pdf';
+          directory_path + '/' + getFileNameFromURL(url) + '.pdf';
         return filePath;
       }
 
