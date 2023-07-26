@@ -55,7 +55,7 @@ import FirstTabChatScreen from './FirstTabChatScreen';
 import ActivityList from './components/acitivityList/ActivityList';
 import MentionList from './components/mentionList/MentionList';
 import ActionModal from './components/actionModal/ActionModal';
-import {Button} from 'react-native-paper';
+import {Button, Divider} from 'react-native-paper';
 import {listStyles} from './components/attachments/AttachmentStyles';
 import AttachmentOptionsModal from './components/attachments/AttachmentOptionsModal';
 import {addDraftMessage} from '../../redux/actions/chat/DraftMessageAction';
@@ -538,14 +538,8 @@ const ChatScreen = ({
               !channelsState?.channelIdAndDataMapping[
                 teamId
               ]?.userIds?.includes(currentUserId) ? (
-                <View
-                  style={{
-                    flex: 1,
-                    borderTopWidth: 0.3,
-                    borderTopColor: colors.color,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
+                <View>
+                  <Divider />
                   <TouchableOpacity
                     onPress={() =>
                       joinChannelAction(
@@ -557,15 +551,24 @@ const ChatScreen = ({
                     }
                     style={{
                       borderWidth: 1,
-                      borderColor: colors.color,
+                      borderColor: '#50C878',
                       borderRadius: 5,
+                      alignSelf: 'center',
+                      marginVertical: 15,
+                      paddingHorizontal: 20,
                     }}>
-                    <Text style={{margin: 10, color: colors.textColor}}>
+                    <Text
+                      style={{
+                        margin: 10,
+                        fontSize: 16,
+                        color: colors.textColor,
+                      }}>
                       Join this channel
                     </Text>
                   </TouchableOpacity>
                 </View>
               ) : (
+                // </View>
                 <View style={styles.bottomContainer}>
                   <View
                     style={[

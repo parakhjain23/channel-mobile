@@ -423,11 +423,6 @@ const ChatCard = ({
                             ? onLongPress()
                             : handleImagePress(index)
                         }
-                        // onAttachmentPress={(url, contentType) =>
-                        //   !optionsVisible
-                        //     ? openLink(url, contentType)
-                        //     : onLongPress()
-                        // }
                         onAttachmentPress={optionsVisible ? onLongPress : null}
                         onLongPress={onLongPress}
                       />
