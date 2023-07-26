@@ -7,8 +7,7 @@ import AudioRecordingPlayer from '../../../../components/AudioRecorderPlayer';
 import {Csv, Doc, Pdf, Redirect} from '../../../../assests/images/attachments';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 import ReactNativeBlobUtil from 'react-native-blob-util';
-import {getFileType} from './file';
-import pdfPreview, {PdfPreview} from './PdfPreview';
+import {PdfPreview} from './PdfPreview';
 
 const Attachments = React.memo(
   ({
@@ -164,7 +163,12 @@ const Attachments = React.memo(
           activeOpacity={0.8}>
           {localFilePath && <PdfPreview filePath={localFilePath} />}
           <View style={LongPressCardStyle.docContentContainer}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginRight: 5,
+              }}>
               {item?.contentType?.includes('pdf') && (
                 <FastImage
                   source={Pdf}
@@ -191,7 +195,7 @@ const Attachments = React.memo(
               </View>
             </View>
             <View>
-              <FastImage source={Redirect} style={{width: 30, height: 30}} />
+              <FastImage source={Redirect} style={{width: 27, height: 27}} />
             </View>
           </View>
         </TouchableOpacity>
