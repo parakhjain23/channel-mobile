@@ -11,12 +11,9 @@ import {
   SafeAreaView,
   useWindowDimensions,
   Platform,
-  StyleSheet,
   RefreshControl,
   Keyboard,
-  StatusBar,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {connect} from 'react-redux';
 import ListFooterComponent from '../../components/ListFooterComponent';
@@ -36,7 +33,7 @@ import {
   useTheme,
 } from '@react-navigation/native';
 import AnimatedLottieView from 'lottie-react-native';
-import {ms, s} from 'react-native-size-matters';
+import {ms} from 'react-native-size-matters';
 import {setLocalMsgStart} from '../../redux/actions/chat/LocalMessageActions';
 import {resetUnreadCountStart} from '../../redux/actions/channels/ChannelsAction';
 import HTMLView from 'react-native-htmlview';
@@ -62,9 +59,9 @@ import {addDraftMessage} from '../../redux/actions/chat/DraftMessageAction';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Header} from '../../components/Header';
 import {joinChannelStart} from '../../redux/actions/channels/JoinChannelActions';
-import {AnimatedFlashList, FlashList} from '@shopify/flash-list';
+import {AnimatedFlashList} from '@shopify/flash-list';
 import {LOCAL_PATH} from '../../utils/Path';
-import {useTraceUpdate} from '../../utils/utility';
+import Attachments from './components/attachments/RenderAttachments';
 
 const ChatScreen = ({
   chatDetailsForTab,
@@ -568,7 +565,6 @@ const ChatScreen = ({
                   </TouchableOpacity>
                 </View>
               ) : (
-                // </View>
                 <View style={styles.bottomContainer}>
                   <View
                     style={[
@@ -602,58 +598,56 @@ const ChatScreen = ({
                         );
                       })}
 
-                    {replyOnMessage && (
-                      <TouchableOpacity
-                        activeOpacity={0.9}
-                        onPress={() => {
-                          setreplyOnMessage(false);
-                          setrepliedMsgDetails(null);
-                        }}>
-                        <View style={styles.replyMessageInInput}>
-                          {repliedMsgDetails?.content?.includes(
-                            '<span class="mention"',
-                          ) ? (
-                            <HTMLView
-                              value={`<div>${repliedMsgDetails?.content}</div>`}
-                              renderNode={renderNode}
-                              stylesheet={htmlStyles}
-                            />
-                          ) : repliedMsgDetails?.attachment?.length > 0 &&
-                            typeof repliedMsgDetails?.attachment != 'string' ? (
-                            <Text style={{color: 'black'}}>
-                              <Icon
-                                name="attach-file"
-                                size={16}
-                                color="black"
+                    {replyOnMessage &&
+                      (console.log(repliedMsgDetails, '=-=-'),
+                      (
+                        <TouchableOpacity
+                          activeOpacity={0.9}
+                          onPress={() => {
+                            setreplyOnMessage(false);
+                            setrepliedMsgDetails(null);
+                          }}>
+                          <View style={styles.replyMessageInInput}>
+                            {repliedMsgDetails?.content?.includes(
+                              '<span class="mention"',
+                            ) ? (
+                              <HTMLView
+                                value={`<div>${repliedMsgDetails?.content}</div>`}
+                                renderNode={renderNode}
+                                stylesheet={htmlStyles}
                               />
-                              attachment
-                            </Text>
-                          ) : (
-                            <RenderHTML
-                              source={{
-                                html: repliedMsgDetails?.content?.replace(
-                                  emailRegex,
-                                  '<span>$&</span>',
-                                ),
+                            ) : repliedMsgDetails?.attachment?.length > 0 &&
+                              typeof repliedMsgDetails?.attachment !=
+                                'string' ? (
+                              <Attachments
+                                attachment={repliedMsgDetails?.attachment}
+                              />
+                            ) : (
+                              <RenderHTML
+                                source={{
+                                  html: repliedMsgDetails?.content?.replace(
+                                    emailRegex,
+                                    '<span>$&</span>',
+                                  ),
+                                }}
+                                contentWidth={width}
+                                tagsStyles={tagsStyles('black', 'black')}
+                              />
+                            )}
+                            <MaterialIcons
+                              name="cancel"
+                              size={ms(16)}
+                              color="black"
+                              style={{
+                                position: 'absolute',
+                                top: ms(5),
+                                right: ms(5),
+                                zIndex: 1,
                               }}
-                              contentWidth={width}
-                              tagsStyles={tagsStyles('black', 'black')}
                             />
-                          )}
-                          <MaterialIcons
-                            name="cancel"
-                            size={ms(16)}
-                            color="black"
-                            style={{
-                              position: 'absolute',
-                              top: ms(5),
-                              right: ms(5),
-                              zIndex: 1,
-                            }}
-                          />
-                        </View>
-                      </TouchableOpacity>
-                    )}
+                          </View>
+                        </TouchableOpacity>
+                      ))}
 
                     {showMention && (
                       <MentionList

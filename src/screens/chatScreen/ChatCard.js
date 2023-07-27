@@ -24,6 +24,7 @@ import Reactions from '../../components/Reactions';
 import ImageViewerComponent from './components/attachments/ImageViewerComponent';
 import JSONRenderer from './JSONRenderer';
 import Attachments from './components/attachments/RenderAttachments';
+import {ChatSenderName} from './components/ChatUtility';
 
 const AddRemoveJoinedMsg = React.memo(({senderName, content, orgState}) => {
   const {colors} = useTheme();
@@ -48,7 +49,7 @@ const ChatCard = ({
   chatState,
   setreplyOnMessage,
   setrepliedMsgDetails,
-  flatListRef,
+  FlashListRef,
   channelType,
   index,
   setShowActions,
@@ -105,15 +106,7 @@ const ChatCard = ({
       return colors.receivedCardColor;
     }
   }, [colors, sentByMe]);
-  const SenderName = useMemo(() => {
-    if (chat?.senderId === userInfoState?.user?.id) {
-      return 'You';
-    } else if (orgState?.userIdAndDisplayNameMapping[chat?.senderId]) {
-      return orgState?.userIdAndDisplayNameMapping[chat?.senderId];
-    } else {
-      return orgState?.userIdAndNameMapping[chat?.senderId];
-    }
-  }, [chat?.senderId, orgState]);
+  const SenderName = ChatSenderName(chat?.senderId);
   const linkColor = sentByMe
     ? colors.sentByMeLinkColor
     : colors.recivedLinkColor;
@@ -133,11 +126,6 @@ const ChatCard = ({
       </View>
     );
   };
-
-  function round(value, precision) {
-    var multiplier = Math.pow(10, precision || 0);
-    return Math.round(value * multiplier) / multiplier;
-  }
 
   const htmlStyles = color => ({
     div: {
@@ -370,7 +358,7 @@ const ChatCard = ({
                                 ],
                                 chatState,
                                 chat,
-                                flatListRef,
+                                FlashListRef,
                               )
                             : onLongPress();
                         }}
@@ -522,14 +510,14 @@ const handleRepliedMessagePress = (
   repliedMessage,
   chatState,
   chat,
-  flatListRef,
+  FlashListRef,
 ) => {
   if (repliedMessage) {
     const index = chatState?.data[chat.teamId]?.messages.findIndex(
       item => item._id === repliedMessage._id,
     );
     if (index !== -1) {
-      flatListRef?.current?.scrollToIndex({
+      FlashListRef?.current?.scrollToIndex({
         index,
         animated: true,
         viewPosition: 0,
@@ -541,7 +529,7 @@ const handleRepliedMessagePress = (
       item => item?._id === chat?._id,
     );
     if (index !== -1) {
-      flatListRef?.current?.scrollToIndex({
+      FlashListRef?.current?.scrollToIndex({
         index,
         animated: true,
         viewPosition: 0,

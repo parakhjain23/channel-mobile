@@ -40,7 +40,7 @@ export const makeStyles = colors =>
       borderRadius: ms(3),
       marginBottom: mvs(4),
       borderWidth: s(0.3),
-      maxHeight: ms(80),
+      maxHeight: ms(100),
       borderLeftColor: '#b38b6d',
       borderLeftWidth: ms(4),
       flexDirection: 'row',
