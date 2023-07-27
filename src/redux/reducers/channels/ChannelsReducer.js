@@ -30,6 +30,7 @@ export function channelsReducer(state = initialState, action) {
       return {...state, isLoading: true};
 
     case Actions.FETCH_CHANNELS_SUCCESS:
+      console.log('fetched channels');
       var {channels, userId, userName} = action;
       var userIdAndTeamIdMapping = {};
       var teamIdAndNameMapping = {};
@@ -77,6 +78,7 @@ export function channelsReducer(state = initialState, action) {
       };
 
     case Actions.FETCH_RECENT_CHANNELS_SUCCESS:
+      console.log('fetched recent channels');
       var tempRecentChannels = [];
       var key = null;
       for (let i = 0; i < action?.recentChannels?.length; i++) {

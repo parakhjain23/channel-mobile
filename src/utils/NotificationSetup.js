@@ -6,7 +6,6 @@ import Notifee, {
   EventType,
 } from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {subscribeToNotifications} from '../redux/actions/socket/socketActions';
 import {store} from '../redux/Store';
 import {handleNotification} from './HandleNotification';
@@ -27,6 +26,7 @@ import {
 } from '../redux/actions/channels/ChannelsAction';
 import {connect} from 'react-redux';
 import {setCurrentOrgId} from '../redux/actions/org/intialOrgId';
+import {storage} from '../redux/reducers/Index';
 
 const NotificationSetup = ({
   userInfoState,
@@ -99,17 +99,17 @@ const NotificationSetup = ({
   const setNotificationListeners = async () => {
     try {
       const token = await messaging().getToken();
-      await AsyncStorage.setItem('FCM_TOKEN', token);
-      await AsyncStorage.getItem('FCM_TOKEN').then(token => {
-        if (store.getState().userInfoReducer?.accessToken) {
-          store.dispatch(
-            subscribeToNotifications(userInfoState?.accessToken, token),
-          );
-        }
-      });
+      await storage.set('FCM_TOKEN', token);
+      const FCM_TOKEN = await storage.getString('FCM_TOKEN');
+      if (store.getState().userInfoReducer?.accessToken) {
+        store.dispatch(
+          subscribeToNotifications(userInfoState?.accessToken, FCM_TOKEN),
+        );
+      }
+      // });
       messaging().onTokenRefresh(async token => {
         if (token) {
-          await AsyncStorage.setItem('FCM_TOKEN', token.token);
+          await storage.set('FCM_TOKEN', token.token);
         }
       });
       messaging().onMessage(async message => {
