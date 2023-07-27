@@ -19,6 +19,7 @@ const HeaderComponent = ({
   userInfoState,
   appInfoState,
   setChatDetailsForTab,
+  userProfileModalizeRef,
 }) => {
   const {colors} = useTheme();
   const accessToken = userInfoState?.accessToken;
@@ -51,12 +52,14 @@ const HeaderComponent = ({
     );
   };
   const onTitlePress = (chatHeaderTitle, userId, channelType, accessToken) => {
+    console.log(userProfileModalizeRef, '==-');
     channelType === 'DIRECT_MESSAGE'
-      ? RootNavigation.navigate('UserProfiles', {
-          displayName: chatHeaderTitle,
-          userId: userId,
-          setChatDetailsForTab: setChatDetailsForTab,
-        })
+      ? //  RootNavigation.navigate('UserProfiles', {
+        //     displayName: chatHeaderTitle,
+        //     userId: userId,
+        //     setChatDetailsForTab: setChatDetailsForTab,
+        //   })
+        userProfileModalizeRef?.current?.open()
       : RootNavigation.navigate('Channel Details', {
           channelName: chatHeaderTitle,
           teamId: teamId,

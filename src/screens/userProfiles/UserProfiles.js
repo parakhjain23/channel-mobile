@@ -29,9 +29,11 @@ const UserProfile = ({
   searchUserProfileAction,
   searchedUserInfoState,
   updateUserDetailsAction,
+  userId,
+  setChatDetailsForTab,
 }) => {
-  // console.log('insider user profile screen');
-  const {displayName, userId, setChatDetailsForTab} = route?.params;
+  console.log('insider user profile screen', userId);
+  // const {userId, setChatDetailsForTab} = route?.params;
   const [attachment, setAttachment] = useState([]);
   const [attachmentLoading, setAttachmentLoading] = useState(false);
   const {colors} = useTheme();

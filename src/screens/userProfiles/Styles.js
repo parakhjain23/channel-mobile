@@ -4,8 +4,8 @@ export const makeStyles = colors =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.primaryColor,
-      paddingHorizontal: 20,
+      // backgroundColor: colors.primaryColor,
+      // paddingHorizontal: 20,
     },
     image: {
       width: 250,

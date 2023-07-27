@@ -62,6 +62,7 @@ import {joinChannelStart} from '../../redux/actions/channels/JoinChannelActions'
 import {AnimatedFlashList} from '@shopify/flash-list';
 import {LOCAL_PATH} from '../../utils/Path';
 import Attachments from './components/attachments/RenderAttachments';
+import UserProfileModal from '../userProfiles/UserProfileModal';
 
 const ChatScreen = ({
   chatDetailsForTab,
@@ -167,6 +168,7 @@ const ChatScreen = ({
   const navigationState = useNavigationState(state => state);
   const isMountedRef = useRef(true);
   const modalizeRef = useRef(null);
+  const userProfileModalizeRef = useRef(null);
   const navigation = useNavigation();
   const teamIdAndUnreadCountMapping =
     channelsState?.teamIdAndUnreadCountMapping;
@@ -446,6 +448,7 @@ const ChatScreen = ({
             channelType={channelType}
             teamId={teamId}
             setChatDetailsForTab={setChatDetailsForTab}
+            userProfileModalizeRef={userProfileModalizeRef}
           />
         )}
         <View style={styles.mainContainer}>
@@ -870,6 +873,12 @@ const ChatScreen = ({
         </View>
       </SafeAreaView>
       <AttachmentOptionsModal AttachmentObject={AttachmentObject} />
+      <UserProfileModal
+        userProfileModalizeRef={userProfileModalizeRef}
+        chatHeaderTitle={chatHeaderTitle}
+        userId={userId || reciverUserId}
+        setChatDetailsForTab={setChatDetailsForTab}
+      />
     </GestureHandlerRootView>
   );
 };
