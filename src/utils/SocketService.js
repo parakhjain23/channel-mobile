@@ -12,7 +12,7 @@ import {deleteMessageSuccess} from '../redux/actions/chat/DeleteChatAction';
 import {newUserJoinedAOrg} from '../redux/actions/org/GetAllUsersOfOrg';
 import {socketStatus} from '../redux/actions/socket/socketActions';
 import {store} from '../redux/Store';
-import {handleNotificationFromEvents} from './HandleNotification';
+import {handleNotification} from './HandleNotification';
 import {createSocket} from './Socket';
 import {PlayLocalSoundFile} from './Sounds';
 
@@ -85,8 +85,9 @@ const SocketService = socket => {
         newData?.teamId !=
         store.getState()?.channelsReducer?.activeChannelTeamId
       ) {
-        handleNotificationFromEvents(
+        handleNotification(
           newData,
+          'events',
           store.getState()?.orgsReducer?.userIdAndDisplayNameMapping,
         );
       }

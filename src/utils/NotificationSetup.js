@@ -3,12 +3,13 @@ import {useEffect} from 'react';
 import Notifee, {
   AndroidImportance,
   AndroidVisibility,
+  EventType,
 } from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {subscribeToNotifications} from '../redux/actions/socket/socketActions';
 import {store} from '../redux/Store';
-import {handleNotificationFirebase} from './HandleNotification';
+import {handleNotification} from './HandleNotification';
 import * as RootNavigation from '../navigation/RootNavigation';
 import {
   getChatsReset,
@@ -41,6 +42,37 @@ const NotificationSetup = ({
   const initPushNotification = async () => {
     try {
       await Notifee.requestPermission();
+      const categories = [
+        {
+          id: 'channel',
+          actions: [
+            {
+              id: 'mark_as_read',
+              title: 'Mark as Read',
+              options: {
+                foreground: true,
+                authenticationRequired: false,
+                destructive: false,
+              },
+            },
+            {
+              id: 'reply',
+              title: 'Reply',
+              input: true,
+              options: {
+                foreground: true,
+                authenticationRequired: false,
+                destructive: true,
+              },
+              textInput: {
+                buttonTitle: 'Send',
+                placeholder: 'Type a message',
+              },
+            },
+          ],
+        },
+      ];
+      Platform.OS == 'ios' && Notifee.setNotificationCategories(categories);
       await Notifee.createChannel({
         id: 'fcm_channel',
         importance: AndroidImportance.HIGH,
@@ -82,7 +114,8 @@ const NotificationSetup = ({
       });
       messaging().onMessage(async message => {
         if (message?.data?.senderId != userInfoState.user?.id) {
-          handleNotificationFirebase(message);
+          // handleNotificationFirebase(message);
+          handleNotification(message, 'firebase');
           if (
             message?.data?.orgId != store?.getState()?.orgsReducer?.currentOrgId
           ) {
@@ -102,7 +135,7 @@ const NotificationSetup = ({
         if (
           message?.data?.senderId != store.getState()?.userInfoReducer?.user?.id
         ) {
-          handleNotificationFirebase(message);
+          handleNotification(message, 'firebase');
         }
       });
       const rMessage = await messaging().getInitialNotification();
@@ -120,6 +153,8 @@ const NotificationSetup = ({
                 : store?.getState()?.userInfoReducer?.user?.firstName,
             ),
           );
+          await store.dispatch(removeCountOnOrgCard(rMessage?.data?.orgId));
+
           setTimeout(() => {
             openChat(rMessage, 'RMESSAGE SWITCH ORG ');
           }, 2200);
@@ -129,38 +164,7 @@ const NotificationSetup = ({
           }, 2000);
         }
       }
-      const categories = [
-        {
-          id: 'channel',
-          actions: [
-            {
-              id: 'mark_as_read',
-              title: 'Mark as Read',
-              options: {
-                foreground: true,
-                authenticationRequired: false,
-                destructive: false,
-              },
-            },
-            {
-              id: 'reply',
-              title: 'Reply',
-              input: true,
-              options: {
-                foreground: true,
-                authenticationRequired: false,
-                destructive: true,
-              },
-              textInput: {
-                buttonTitle: 'Send',
-                placeholder: 'Type a message',
-              },
-            },
-          ],
-        },
-      ];
 
-      Platform.OS == 'ios' && Notifee.setNotificationCategories(categories);
       Notifee.onForegroundEvent(actionListeners);
       Notifee.onBackgroundEvent(actionListeners);
     } catch (error) {
@@ -183,6 +187,8 @@ const NotificationSetup = ({
               : store?.getState()?.userInfoReducer?.user?.firstName,
           ),
         );
+        await store.dispatch(removeCountOnOrgCard(message?.data?.orgId));
+
         setTimeout(() => {
           openChat(message, 'from action listiner ');
         }, 1000);
