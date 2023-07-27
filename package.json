@@ -33,6 +33,7 @@
     "react-native": "0.71.10",
     "react-native-audio-recorder-player": "^3.5.3",
     "react-native-base64": "^0.2.1",
+    "react-native-blob-util": "^0.18.3",
     "react-native-chart-kit": "^6.12.0",
     "react-native-code-push": "^8.0.2",
     "react-native-device-info": "^10.4.0",
@@ -48,6 +49,7 @@
     "react-native-mmkv": "^2.10.0",
     "react-native-modalize": "^2.1.1",
     "react-native-paper": "^5.1.4",
+    "react-native-pdf-thumbnail": "^1.2.1",
     "react-native-push-notification": "^8.1.1",
     "react-native-reanimated": "^2.14.3",
     "react-native-render-html": "^6.3.4",
@@ -65,7 +67,6 @@
     "redux-persist": "^6.0.0",
     "redux-saga": "^1.2.2",
     "rn-emoji-keyboard": "^1.2.2",
-    "rn-fetch-blob": "^0.12.0",
     "socket.io-client": "^2.5.0",
     "victory-native": "^36.6.11"
   },

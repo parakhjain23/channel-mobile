@@ -2,11 +2,11 @@ import {View, Text} from 'react-native';
 import React, {useMemo} from 'react';
 import {FlatList} from 'react-native';
 import {useTheme} from '@react-navigation/native';
-import {makeStyles} from '../Styles';
 import {TouchableOpacity} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import FastImage from 'react-native-fast-image';
+import {makeStyles} from './MentionList-Styles';
 
 const MentionList = ({
   data,
@@ -54,17 +54,8 @@ const MentionList = ({
           <TouchableOpacity
             onPress={handlePress}
             key={index}
-            style={{borderRadius: 6, padding: 1}}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                borderWidth: 0.8,
-                borderColor: 'grey',
-                borderRadius: 6,
-                padding: 6,
-                backgroundColor: colors?.primaryColor,
-              }}>
+            style={styles.container}>
+            <View style={styles.contentContainer}>
               {Type?.toUpperCase() === 'U' ? (
                 orgsState?.userIdAndImageUrlMapping[item?._source?.userId] ? (
                   <FastImage
@@ -73,12 +64,7 @@ const MentionList = ({
                         item?._source?.userId
                       ],
                     }}
-                    style={{
-                      height: 20,
-                      width: 20,
-                      borderRadius: 50,
-                      marginRight: 8,
-                    }}
+                    style={styles.userImage}
                   />
                 ) : (
                   <MaterialIcons

@@ -1,14 +1,5 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {
-  Image,
-  Modal,
   Text,
   TouchableOpacity,
   Vibration,
@@ -17,26 +8,23 @@ import {
 } from 'react-native';
 import {GestureHandlerRootView, Swipeable} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {Linking} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import {makeStyles} from './ChatCardStyles';
-import {ms, s} from 'react-native-size-matters';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
-import ImageViewer from 'react-native-image-zoom-viewer';
+import {ms} from 'react-native-size-matters';
 import HTMLView from 'react-native-htmlview';
 import {RenderHTML} from 'react-native-render-html';
 import * as RootNavigation from '../../navigation/RootNavigation';
 import {tagsStyles} from './HtmlStyles';
-import AudioRecordingPlayer from '../../components/AudioRecorderPlayer';
 import {DEVICE_TYPES} from '../../constants/Constants';
 import {connect, useSelector} from 'react-redux';
 import {setActiveChannelTeamId} from '../../redux/actions/channels/SetActiveChannelId';
 import {formatTime} from '../../utils/FormatTime';
 import FastImage from 'react-native-fast-image';
-import {reactionOnChatStart} from '../../redux/actions/chat/ReactionsActions';
 import Reactions from '../../components/Reactions';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Home from '../Home';
+import ImageViewerComponent from './components/attachments/ImageViewerComponent';
+import JSONRenderer from './JSONRenderer';
+import Attachments from './components/attachments/RenderAttachments';
+import {ChatSenderName} from './components/ChatUtility';
 
 const AddRemoveJoinedMsg = React.memo(({senderName, content, orgState}) => {
   const {colors} = useTheme();
@@ -61,14 +49,13 @@ const ChatCard = ({
   chatState,
   setreplyOnMessage,
   setrepliedMsgDetails,
-  flatListRef,
+  FlashListRef,
   channelType,
   index,
   setShowActions,
   setCurrentSelectedChatCard,
   setChatDetailsForTab,
   setActiveChannelTeamIdAction,
-  reactionAction,
 }) => {
   const deviceType = useSelector(state => state.appInfoReducer.deviceType);
   const {colors, dark} = useTheme();
@@ -105,10 +92,6 @@ const ChatCard = ({
     [chat?.attachment],
   );
 
-  const handleModalClose = useCallback(() => {
-    setSelectedImage(null);
-  }, []);
-
   const onLongPress = () => {
     setCurrentSelectedChatCard(chat);
     setShowActions(true);
@@ -123,15 +106,7 @@ const ChatCard = ({
       return colors.receivedCardColor;
     }
   }, [colors, sentByMe]);
-  const SenderName = useMemo(() => {
-    if (chat?.senderId === userInfoState?.user?.id) {
-      return 'You';
-    } else if (orgState?.userIdAndDisplayNameMapping[chat?.senderId]) {
-      return orgState?.userIdAndDisplayNameMapping[chat?.senderId];
-    } else {
-      return orgState?.userIdAndNameMapping[chat?.senderId];
-    }
-  }, [chat?.senderId, orgState]);
+  const SenderName = ChatSenderName(chat?.senderId);
   const linkColor = sentByMe
     ? colors.sentByMeLinkColor
     : colors.recivedLinkColor;
@@ -150,14 +125,6 @@ const ChatCard = ({
         <Icon name="reply" size={20} color={colors?.color} />
       </View>
     );
-  };
-
-  const openLink = async url => {
-    if (await InAppBrowser.isAvailable()) {
-      const result = InAppBrowser?.open(url);
-    } else {
-      Linking.openURL(url);
-    }
   };
 
   const htmlStyles = color => ({
@@ -183,7 +150,6 @@ const ChatCard = ({
     });
   };
   const onPress = (teamId, channelName) => {
-    // networkState?.isInternetConnected && resetChatsAction();
     if (deviceType === DEVICE_TYPES[1]) {
       handleListItemPress(
         teamId,
@@ -254,23 +220,6 @@ const ChatCard = ({
   }
   const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
 
-  const renderImageviewerHeader = () => (
-    <View
-      style={{
-        height: '7%',
-        alignItems: 'flex-end',
-        width: '100%',
-        paddingVertical: 5,
-        paddingHorizontal: 15,
-        position: 'absolute',
-        zIndex: 99,
-        justifyContent: 'center',
-      }}>
-      <TouchableOpacity onPress={handleModalClose}>
-        <AntDesign name={'closecircleo'} size={25} color={'gray'} />
-      </TouchableOpacity>
-    </View>
-  );
   if (!isActivity) {
     return (
       <GestureHandlerRootView>
@@ -409,7 +358,7 @@ const ChatCard = ({
                                 ],
                                 chatState,
                                 chat,
-                                flatListRef,
+                                FlashListRef,
                               )
                             : onLongPress();
                         }}
@@ -448,127 +397,25 @@ const ChatCard = ({
                         )}
                       </TouchableOpacity>
                     )}
-                    <View style={{maxWidth: '80%'}}>
-                      <Modal
-                        visible={selectedImage !== null}
-                        transparent={true}
-                        onRequestClose={handleModalClose}>
-                        <ImageViewer
-                          imageUrls={[
-                            {
-                              url: selectedImage?.resourceUrl,
-                              freeHeight: true,
-                              freeWidth: true,
-                            },
-                          ]}
-                          enableSwipeDown={true}
-                          onSwipeDown={handleModalClose}
-                          renderHeader={renderImageviewerHeader}
-                        />
-                      </Modal>
-                    </View>
-                    {attachment?.length > 0 &&
-                      attachment?.map((item, index) => {
-                        return item?.contentType?.includes('image') ? (
-                          <TouchableOpacity
-                            key={index}
-                            onPress={() =>
-                              optionsVisible
-                                ? onLongPress()
-                                : handleImagePress(index)
-                            }
-                            onLongPress={onLongPress}
-                            style={{marginVertical: 5, alignItems: 'center'}}>
-                            <FastImage
-                              source={{uri: item?.resourceUrl}}
-                              style={{
-                                height: 150,
-                                width: 150,
-                              }}
-                            />
-                            {/* <Image
-                              source={{uri: item?.resourceUrl}}
-                              style={{
-                                height: 150,
-                                width: 150,
-                              }}
-                            /> */}
-                          </TouchableOpacity>
-                        ) : item?.contentType?.includes('audio') ? (
-                          <View
-                            key={index}
-                            style={{
-                              flexDirection: 'row',
-                              height: 50,
-                              width: ms(260),
-                              flex: 1,
-                              alignItems: 'center',
-                              overflow: 'hidden',
-                              justifyContent: 'center', // Align center horizontally
-                            }}>
-                            <AudioRecordingPlayer
-                              remoteUrl={item?.resourceUrl}
-                            />
-                          </View>
-                        ) : (
-                          <View
-                            key={index}
-                            style={[
-                              styles.repliedContainer,
-                              {
-                                borderWidth: ms(0.5),
-                                borderColor: 'gray',
-                                borderRadius: ms(5),
-                                padding: ms(10),
-                              },
-                            ]}>
-                            <TouchableOpacity
-                              onPress={() =>
-                                !optionsVisible
-                                  ? openLink(item?.resourceUrl)
-                                  : onLongPress()
-                              }
-                              onLongPress={onLongPress}>
-                              <View
-                                style={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                  justifyContent: 'space-between',
-                                }}>
-                                {item?.contentType?.includes('pdf') && (
-                                  <Image
-                                    source={require('../../assests/images/attachments/pdfLogo.png')}
-                                    style={{
-                                      width: 40,
-                                      height: 40,
-                                      marginRight: 15,
-                                    }}
-                                  />
-                                )}
-                                {item?.contentType?.includes('doc') && (
-                                  <Image
-                                    source={require('../../assests/images/attachments/docLogo.png')}
-                                    style={{
-                                      width: 40,
-                                      height: 40,
-                                      marginRight: 15,
-                                    }}
-                                  />
-                                )}
+                    {selectedImage != null && (
+                      <ImageViewerComponent
+                        url={selectedImage?.resourceUrl}
+                        setSelectedImage={setSelectedImage}
+                      />
+                    )}
+                    {attachment?.length > 0 && (
+                      <Attachments
+                        attachment={attachment}
+                        onImagePress={index =>
+                          optionsVisible
+                            ? onLongPress()
+                            : handleImagePress(index)
+                        }
+                        onAttachmentPress={optionsVisible ? onLongPress : null}
+                        onLongPress={onLongPress}
+                      />
+                    )}
 
-                                <View>
-                                  <Text style={{color: 'black'}}>
-                                    {item?.title?.slice(0, 15) + '...'}
-                                  </Text>
-                                  <Text style={{color: 'black'}}>
-                                    {'...' + item?.contentType?.slice(-15)}
-                                  </Text>
-                                </View>
-                              </View>
-                            </TouchableOpacity>
-                          </View>
-                        );
-                      })}
                     {!chat.messageType || chat.messageType != 'richText' ? (
                       chat?.content?.includes('<span class="mention"') ? (
                         <HTMLView
@@ -600,30 +447,20 @@ const ChatCard = ({
                         />
                       )
                     ) : (
-                      <Home JSON_Example={chat.content} />
+                      <JSONRenderer JSON_Example={chat.content} />
                     )}
-                    {chat?.content?.length > 500 &&
-                      (showMore ? (
-                        <Text
-                          style={{
-                            color: linkColor,
-                            textDecorationLine: 'underline',
-                            marginTop: 5,
-                          }}
-                          onPress={() => setShoreMore(!showMore)}>
-                          Show Less
-                        </Text>
-                      ) : (
-                        <Text
-                          style={{
-                            color: linkColor,
-                            textDecorationLine: 'underline',
-                            marginTop: 5,
-                          }}
-                          onPress={() => setShoreMore(!showMore)}>
-                          Show More
-                        </Text>
-                      ))}
+
+                    {chat?.content?.length > 500 && (
+                      <Text
+                        style={{
+                          color: linkColor,
+                          textDecorationLine: 'underline',
+                          marginTop: 5,
+                        }}
+                        onPress={() => setShoreMore(!showMore)}>
+                        {showMore ? 'Show Less' : 'Show More'}
+                      </Text>
+                    )}
                   </View>
                 </View>
               </View>
@@ -663,28 +500,6 @@ const mapDispatchToProps = dispatch => {
   return {
     setActiveChannelTeamIdAction: teamId =>
       dispatch(setActiveChannelTeamId(teamId)),
-    reactionAction: (
-      token,
-      teamId,
-      messageId,
-      reaction_icon,
-      reaction_name,
-      userIds,
-      actionTye,
-      userId,
-    ) =>
-      dispatch(
-        reactionOnChatStart(
-          token,
-          teamId,
-          messageId,
-          reaction_icon,
-          reaction_name,
-          userIds,
-          actionTye,
-          userId,
-        ),
-      ),
   };
 };
 export const ChatCardMemo = React.memo(
@@ -695,14 +510,14 @@ const handleRepliedMessagePress = (
   repliedMessage,
   chatState,
   chat,
-  flatListRef,
+  FlashListRef,
 ) => {
   if (repliedMessage) {
     const index = chatState?.data[chat.teamId]?.messages.findIndex(
       item => item._id === repliedMessage._id,
     );
     if (index !== -1) {
-      flatListRef?.current?.scrollToIndex({
+      FlashListRef?.current?.scrollToIndex({
         index,
         animated: true,
         viewPosition: 0,
@@ -714,7 +529,7 @@ const handleRepliedMessagePress = (
       item => item?._id === chat?._id,
     );
     if (index !== -1) {
-      flatListRef?.current?.scrollToIndex({
+      FlashListRef?.current?.scrollToIndex({
         index,
         animated: true,
         viewPosition: 0,

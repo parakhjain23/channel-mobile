@@ -11,12 +11,9 @@ import {
   SafeAreaView,
   useWindowDimensions,
   Platform,
-  StyleSheet,
   RefreshControl,
   Keyboard,
-  StatusBar,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {connect} from 'react-redux';
 import ListFooterComponent from '../../components/ListFooterComponent';
@@ -36,7 +33,7 @@ import {
   useTheme,
 } from '@react-navigation/native';
 import AnimatedLottieView from 'lottie-react-native';
-import {ms, s} from 'react-native-size-matters';
+import {ms} from 'react-native-size-matters';
 import {setLocalMsgStart} from '../../redux/actions/chat/LocalMessageActions';
 import {resetUnreadCountStart} from '../../redux/actions/channels/ChannelsAction';
 import HTMLView from 'react-native-htmlview';
@@ -53,17 +50,18 @@ import ScrollDownButton from '../../components/ScrollDownButton';
 import AudioRecordingPlayer from '../../components/AudioRecorderPlayer';
 import FirstTabChatScreen from './FirstTabChatScreen';
 import ActivityList from './components/acitivityList/ActivityList';
-import MentionList from './components/MentionList';
-import ActionModal from './components/ActionModal';
-import {Button} from 'react-native-paper';
-import {listStyles} from './components/AttachmentStyles';
-import AttachmentOptionsModal from './components/AttachmentOptionsModal';
+import MentionList from './components/mentionList/MentionList';
+import ActionModal from './components/actionModal/ActionModal';
+import {Button, Divider} from 'react-native-paper';
+import {listStyles} from './components/attachments/AttachmentStyles';
+import AttachmentOptionsModal from './components/attachments/AttachmentOptionsModal';
 import {addDraftMessage} from '../../redux/actions/chat/DraftMessageAction';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Header} from '../../components/Header';
 import {joinChannelStart} from '../../redux/actions/channels/JoinChannelActions';
-import {AnimatedFlashList, FlashList} from '@shopify/flash-list';
+import {AnimatedFlashList} from '@shopify/flash-list';
 import {LOCAL_PATH} from '../../utils/Path';
+import Attachments from './components/attachments/RenderAttachments';
 
 const ChatScreen = ({
   chatDetailsForTab,
@@ -89,7 +87,6 @@ const ChatScreen = ({
   draftMessageAction,
   joinChannelAction,
 }) => {
-  // console.log('chat-screen', route.params);
   var teamId, channelType, chatHeaderTitle, userId;
   if (deviceType === DEVICE_TYPES[1]) {
     userId = chatDetailsForTab?.userId;
@@ -538,14 +535,8 @@ const ChatScreen = ({
               !channelsState?.channelIdAndDataMapping[
                 teamId
               ]?.userIds?.includes(currentUserId) ? (
-                <View
-                  style={{
-                    flex: 1,
-                    borderTopWidth: 0.3,
-                    borderTopColor: colors.color,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
+                <View>
+                  <Divider />
                   <TouchableOpacity
                     onPress={() =>
                       joinChannelAction(
@@ -557,10 +548,18 @@ const ChatScreen = ({
                     }
                     style={{
                       borderWidth: 1,
-                      borderColor: colors.color,
+                      borderColor: '#50C878',
                       borderRadius: 5,
+                      alignSelf: 'center',
+                      marginVertical: 15,
+                      paddingHorizontal: 20,
                     }}>
-                    <Text style={{margin: 10, color: colors.textColor}}>
+                    <Text
+                      style={{
+                        margin: 10,
+                        fontSize: 16,
+                        color: colors.textColor,
+                      }}>
                       Join this channel
                     </Text>
                   </TouchableOpacity>
@@ -599,58 +598,56 @@ const ChatScreen = ({
                         );
                       })}
 
-                    {replyOnMessage && (
-                      <TouchableOpacity
-                        activeOpacity={0.9}
-                        onPress={() => {
-                          setreplyOnMessage(false);
-                          setrepliedMsgDetails(null);
-                        }}>
-                        <View style={styles.replyMessageInInput}>
-                          {repliedMsgDetails?.content?.includes(
-                            '<span class="mention"',
-                          ) ? (
-                            <HTMLView
-                              value={`<div>${repliedMsgDetails?.content}</div>`}
-                              renderNode={renderNode}
-                              stylesheet={htmlStyles}
-                            />
-                          ) : repliedMsgDetails?.attachment?.length > 0 &&
-                            typeof repliedMsgDetails?.attachment != 'string' ? (
-                            <Text style={{color: 'black'}}>
-                              <Icon
-                                name="attach-file"
-                                size={16}
-                                color="black"
+                    {replyOnMessage &&
+                      (console.log(repliedMsgDetails, '=-=-'),
+                      (
+                        <TouchableOpacity
+                          activeOpacity={0.9}
+                          onPress={() => {
+                            setreplyOnMessage(false);
+                            setrepliedMsgDetails(null);
+                          }}>
+                          <View style={styles.replyMessageInInput}>
+                            {repliedMsgDetails?.content?.includes(
+                              '<span class="mention"',
+                            ) ? (
+                              <HTMLView
+                                value={`<div>${repliedMsgDetails?.content}</div>`}
+                                renderNode={renderNode}
+                                stylesheet={htmlStyles}
                               />
-                              attachment
-                            </Text>
-                          ) : (
-                            <RenderHTML
-                              source={{
-                                html: repliedMsgDetails?.content?.replace(
-                                  emailRegex,
-                                  '<span>$&</span>',
-                                ),
+                            ) : repliedMsgDetails?.attachment?.length > 0 &&
+                              typeof repliedMsgDetails?.attachment !=
+                                'string' ? (
+                              <Attachments
+                                attachment={repliedMsgDetails?.attachment}
+                              />
+                            ) : (
+                              <RenderHTML
+                                source={{
+                                  html: repliedMsgDetails?.content?.replace(
+                                    emailRegex,
+                                    '<span>$&</span>',
+                                  ),
+                                }}
+                                contentWidth={width}
+                                tagsStyles={tagsStyles('black', 'black')}
+                              />
+                            )}
+                            <MaterialIcons
+                              name="cancel"
+                              size={ms(16)}
+                              color="black"
+                              style={{
+                                position: 'absolute',
+                                top: ms(5),
+                                right: ms(5),
+                                zIndex: 1,
                               }}
-                              contentWidth={width}
-                              tagsStyles={tagsStyles('black', 'black')}
                             />
-                          )}
-                          <MaterialIcons
-                            name="cancel"
-                            size={ms(16)}
-                            color="black"
-                            style={{
-                              position: 'absolute',
-                              top: ms(5),
-                              right: ms(5),
-                              zIndex: 1,
-                            }}
-                          />
-                        </View>
-                      </TouchableOpacity>
-                    )}
+                          </View>
+                        </TouchableOpacity>
+                      ))}
 
                     {showMention && (
                       <MentionList

@@ -205,9 +205,8 @@ import {BarChart, LineChart, PieChart} from 'react-native-chart-kit';
 //   },
 // ];
 
-const Home = ({JSON_Example}) => {
+const JSONRenderer = ({JSON_Example}) => {
   const [data, setData] = useState({});
-
   const handleChekboxesToggle = (action_id, name) => {
     setData(prevData => ({
       ...prevData,
@@ -221,7 +220,15 @@ const Home = ({JSON_Example}) => {
   const handleradio_buttonsToggle = (action_id, name) => {
     setData(prevData => ({
       ...prevData,
-      [action_id]: name,
+      [action_id]: {
+        ...prevData[action_id],
+        [prevData[action_id].selectedRadioButton || name]: false,
+        selectedRadioButton: name,
+        [name]:
+          (prevData[action_id]?.[name]
+            ? prevData[action_id]?.[name]
+            : !prevData[action_id]?.[name]) || false,
+      },
     }));
   };
 
@@ -356,6 +363,7 @@ const Home = ({JSON_Example}) => {
         });
 
       case 'radio_buttons':
+        let selectedRadioButtonLocal = null;
         return (
           <RadioButton.Group
             onValueChange={value =>
@@ -364,11 +372,25 @@ const Home = ({JSON_Example}) => {
                 value,
               )
             }
-            value={data[item?.action_id]}>
+            value={data[item?.action_id]?.selectedRadioButton}>
             <View>
-              {item?.options?.map(element => {
+              {item?.options?.map((element, index) => {
+                if (element?.selected) {
+                  selectedRadioButtonLocal = element?.value;
+                }
+                if (typeof data[item?.action_id] === 'undefined') {
+                  setData(prevData => ({
+                    ...prevData,
+                    [item.action_id]: {
+                      ...prevData[item.action_id],
+                      selectedRadioButton: selectedRadioButtonLocal,
+                      [element.value]: element.selected || false,
+                    },
+                  }));
+                }
                 return (
                   <TouchableOpacity
+                    key={index}
                     onPress={() =>
                       handleradio_buttonsToggle(
                         item?.action_id || 'radio_buttons',
@@ -376,7 +398,14 @@ const Home = ({JSON_Example}) => {
                       )
                     }
                     style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <RadioButton value={element?.value} />
+                    <RadioButton
+                      value={element?.value}
+                      // status={
+                      //   data?.[item?.action_id]?.[element?.value]
+                      //     ? 'checked'
+                      //     : 'unchecked'
+                      // }
+                    />
                     <Text>{element?.value}</Text>
                   </TouchableOpacity>
                 );
@@ -498,6 +527,7 @@ const Home = ({JSON_Example}) => {
                 strokeWidth: 2,
                 barPercentage: 0.5,
               }}
+              avoidFalseZero={true}
               accessor={'value'}
               backgroundColor={'transparent'}
               paddingLeft={'25'}
@@ -512,7 +542,7 @@ const Home = ({JSON_Example}) => {
           <View style={styles.chartContainer}>
             <LineChart
               data={item.values}
-              width={width - 50}
+              width={width - 40}
               height={220}
               chartConfig={{
                 backgroundGradientFrom: '#fff',
@@ -530,6 +560,23 @@ const Home = ({JSON_Example}) => {
               style={{
                 marginVertical: 8,
               }}
+              renderDotContent={({x, y, index, indexData}) => (
+                (uniqueKey = `dot-${indexData}-${index}-${Math.random()}`),
+                (
+                  <Text
+                    key={uniqueKey}
+                    style={{
+                      position: 'absolute',
+                      top: y - 20,
+                      left: x - 10,
+                      color: 'black',
+                    }}>
+                    {indexData}
+                  </Text>
+                )
+              )}
+              fromZero={true}
+              segments={5}
             />
           </View>
         );
@@ -549,10 +596,11 @@ const Home = ({JSON_Example}) => {
   );
 };
 
-export default Home;
+export default JSONRenderer;
 
 const styles = StyleSheet.create({
   cardContainer: {
+    minWidth: 300,
     justifyContent: 'center',
     padding: 10,
     backgroundColor: 'white',

@@ -37,11 +37,11 @@ const ActionList = React.memo(
         <TouchableOpacity
           onPress={() => copyToClipboard(chat?.content)}
           style={styles.option}>
-          <Icon name="content-copy" size={20} color={colors.text} />
+          <Icon name="content-copy" size={20} color={'black'} />
           <Text style={styles.optionText}>Copy</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={swipeFromLeftOpen} style={styles.option}>
-          <Icon name="reply" size={20} color={colors.text} />
+          <Icon name="reply" size={20} color={'black'} />
           <Text style={styles.optionText}>Reply</Text>
         </TouchableOpacity>
         {sentByMe && (

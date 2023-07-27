@@ -5,11 +5,7 @@ import {useTheme} from '@react-navigation/native';
 import {Platform, Dimensions} from 'react-native';
 import {DEVICE_TYPES} from '../constants/Constants';
 import * as Actions from '../redux/Enums';
-import {
-  AuthenticationScreens,
-  StackScreens,
-  screenOptions,
-} from './StackScreens';
+import {AuthenticationScreens, StackScreens} from './StackScreens';
 
 const ProtectedNavigation = props => {
   const Stack = createNativeStackNavigator();

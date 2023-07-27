@@ -14,7 +14,6 @@ import java.util.List;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.dooboolab.audiorecorderplayer.RNAudioRecorderPlayerPackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
 import com.reactnativecommunity.slider.ReactSliderPackage;
 
 public class MainApplication extends Application implements ReactApplication {

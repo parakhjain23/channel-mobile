@@ -189,7 +189,6 @@ const ChannelCard = ({
         runOnJS(Vibration.vibrate)([10, 100]);
         // opacity.value = withTiming(0, undefined, isFinished => {
         //   if (isFinished) {
-        //     console.log(isFinished, '=-=-=-=-=-=');
         //     runOnJS(
         //       markAsUnreadAction(
         //         item?.orgId,

@@ -1,32 +1,24 @@
 import React, {useMemo, useState} from 'react';
-import {
-  Image,
-  Text,
-  TouchableOpacity,
-  View,
-  useWindowDimensions,
-} from 'react-native';
+import {Text, TouchableOpacity, View, useWindowDimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useTheme} from '@react-navigation/native';
 import HTMLView from 'react-native-htmlview';
 import {RenderHTML} from 'react-native-render-html';
 import {tagsStyles} from '../../HtmlStyles';
 import {formatTime} from '../../../../utils/FormatTime';
-import AudioRecordingPlayer from '../../../../components/AudioRecorderPlayer';
 import {reactionOnChatStart} from '../../../../redux/actions/chat/ReactionsActions';
 import {connect} from 'react-redux';
 import EmojiPicker from 'rn-emoji-keyboard';
 import {EMOJI_ARRAY} from '../../../../constants/Constants';
 import Reactions from '../../../../components/Reactions';
 import {makeStyles} from './LongPressCard-Styles';
-import {DocLogo, PdfLogo} from '../../../../assests/images/attachments';
+import Attachments from '../attachments/RenderAttachments';
 
-const ActionMessageCard = ({
+const LongPressCard = ({
   chat,
   userInfoState,
   orgState,
   chatState,
-  index,
   reactionAction,
   setShowActions,
 }) => {
@@ -106,48 +98,6 @@ const ActionMessageCard = ({
       ? chat?.content?.length > 400
       : chatState?.data[chat.teamId]?.parentMessages[parentId]?.content > 400;
 
-  const Attachments = React.memo(() => {
-    return (
-      <>
-        {attachment?.map((item, index) => {
-          return item?.contentType?.includes('image') ? (
-            <View key={index} style={styles.imageAttachContainer}>
-              <Image
-                source={{uri: item?.resourceUrl}}
-                style={styles.imageAttachment}
-              />
-            </View>
-          ) : item?.contentType?.includes('audio') ? (
-            <View key={index} style={styles.audioAttachContainer}>
-              <AudioRecordingPlayer remoteUrl={item?.resourceUrl} />
-            </View>
-          ) : (
-            <View
-              key={index}
-              style={[styles.repliedContainer, styles.docContainer]}>
-              <View style={styles.docContentContainer}>
-                {item?.contentType?.includes('pdf') && (
-                  <Image source={PdfLogo} style={styles.attachmentIcon} />
-                )}
-                {item?.contentType?.includes('doc') && (
-                  <Image source={DocLogo} style={styles.attachmentIcon} />
-                )}
-                <View>
-                  <Text style={{color: 'black'}}>
-                    {item?.title?.slice(0, 15) + '...'}
-                  </Text>
-                  <Text style={{color: 'black'}}>
-                    {'...' + item?.contentType?.slice(-15)}
-                  </Text>
-                </View>
-              </View>
-            </View>
-          );
-        })}
-      </>
-    );
-  });
-
   const EmojiPicerComponent = () => {
     return (
       <EmojiPicker
@@ -216,8 +166,10 @@ const ActionMessageCard = ({
               sentByMe ? styles.sentByMe : styles.received,
               {padding: 10, backgroundColor: containerBackgroundColor},
             ]}>
-            <View style={[styles.nameTimeContainer, {color: textColor}]}>
-              <Text style={[styles.nameText]}>{SenderName}</Text>
+            <View style={[styles.nameTimeContainer]}>
+              <Text style={[styles.nameText, {color: textColor}]}>
+                {SenderName}
+              </Text>
               <Text
                 style={[
                   styles.timeText,
@@ -263,7 +215,7 @@ const ActionMessageCard = ({
               </TouchableOpacity>
             )}
 
-            {attachment?.length > 0 && <Attachments />}
+            {attachment?.length > 0 && <Attachments attachment={attachment} />}
 
             <View style={styles.textContainer}>
               {chat?.content?.includes('<span class="mention"') ? (
@@ -323,6 +275,6 @@ const mapDispatchToProps = dispatch => {
       ),
   };
 };
-export const ActionMessageCardMemo = React.memo(
-  connect(null, mapDispatchToProps)(ActionMessageCard),
+export const LongPressCardMemo = React.memo(
+  connect(null, mapDispatchToProps)(LongPressCard),
 );

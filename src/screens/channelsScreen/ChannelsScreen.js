@@ -27,6 +27,7 @@ import SearchChannelList from './components/SearchChannelList';
 import RecentChannelsList from './components/RecentChannelsList';
 import {AddFabButton, SearchFabButton} from './components/AddAndSearchFab';
 import {CreateChannelModal} from './components/CreateChannelComponent';
+import {Throttling} from '../../utils/Throttling';
 
 const ChannelsScreen = props => {
   // console.log('channel-screen');
@@ -63,7 +64,7 @@ const ChannelsScreen = props => {
     }
   }, [isFocused]);
 
-  useEffect(() => {
+  const fetchData = () => {
     if (searchValue != '') {
       props.getChannelsByQueryStartAction(
         searchValue,
@@ -71,22 +72,25 @@ const ChannelsScreen = props => {
         props?.orgsState?.currentOrgId,
       );
     }
+  };
+  useEffect(() => {
+    Throttling(fetchData, 300);
   }, [searchValue]);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    // await props?.getChannelsAction(
-    //   props?.userInfoState?.accessToken,
-    //   props?.orgsState?.currentOrgId,
-    //   currentUser?.id,
-    //   currentUser?.displayName
-    //     ? currentUser?.displayName
-    //     : currentUser?.firstName,
-    // );
-    // await props?.getAllUsersOfOrgAction(
-    //   props?.userInfoState?.accessToken,
-    //   props?.orgsState?.currentOrgId,
-    // );
+    await props?.getChannelsAction(
+      props?.userInfoState?.accessToken,
+      props?.orgsState?.currentOrgId,
+      currentUser?.id,
+      currentUser?.displayName
+        ? currentUser?.displayName
+        : currentUser?.firstName,
+    );
+    await props?.getAllUsersOfOrgAction(
+      props?.userInfoState?.accessToken,
+      props?.orgsState?.currentOrgId,
+    );
     setRefreshing(false);
   }, [props?.orgsState?.currentOrgId]);
 
