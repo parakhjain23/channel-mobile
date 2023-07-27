@@ -42,6 +42,7 @@ const UserProfileModal = ({
         // displayName={chatHeaderTitle}
         userId={userId}
         setChatDetailsForTab={setChatDetailsForTab}
+        userProfileModalizeRef={userProfileModalizeRef}
       />
     </Modalize>
   );

@@ -21,6 +21,7 @@ export const makeStyles = colors =>
     },
     name: {
       fontSize: 18,
+      fontWeight: 'bold',
       color: colors?.textColor,
       marginBottom: 15,
       marginTop: 15,
