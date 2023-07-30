@@ -20,7 +20,7 @@ const SplashScreenComponent = ({
     const version = DeviceInfo.getReadableVersion();
     if (appInfoState.appVersion === '' || appInfoState.appVersion !== version) {
       // await AsyncStorage.clear();
-      storage.clearAll();
+      // storage.clearAll();
       signOutAction();
       setNewVersionOfApp(version);
     }

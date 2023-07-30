@@ -166,7 +166,9 @@ const UserProfile = ({
           paddingHorizontal: 30,
           alignItems: 'center',
           borderRadius: 10,
-          backgroundColor: '#3b3b3b',
+          backgroundColor: colors.primaryColor,
+          borderWidth: 0.5,
+          borderColor: 'gray',
         }}
         onPress={onPress}
         activeOpacity={0.7}>

@@ -10,27 +10,29 @@ import {channelsByQueryReducer} from './channels/ChannelsByQueryReducer';
 import {networkReducer} from './network/NetworkReducer';
 import {appInfoReducer} from './app/AppInfoReducer';
 import {searchedUserInfoReducer} from './user/SearchedUserInfo';
+import {modalReducer} from './modal/ModalReducer';
+
 import {MMKV} from 'react-native-mmkv';
 
-export const storage = new MMKV();
+// export const storage = new MMKV();
 
-export const reduxStorage = {
-  setItem: (key, value) => {
-    storage.set(key, value);
-    return Promise.resolve(true);
-  },
-  getItem: key => {
-    const value = storage.getString(key);
-    return Promise.resolve(value);
-  },
-  removeItem: key => {
-    storage.delete(key);
-    return Promise.resolve();
-  },
-};
+// export const reduxStorage = {
+//   setItem: (key, value) => {
+//     storage.set(key, value);
+//     return Promise.resolve(true);
+//   },
+//   getItem: key => {
+//     const value = storage.getString(key);
+//     return Promise.resolve(value);
+//   },
+//   removeItem: key => {
+//     storage.delete(key);
+//     return Promise.resolve();
+//   },
+// };
 const persistConfig = {
   key: 'root',
-  storage: reduxStorage,
+  storage: AsyncStorage,
   whitelist: [
     'userInfoReducer',
     'orgsReducer',
@@ -38,6 +40,7 @@ const persistConfig = {
     'chatReducer',
     'appInfoReducer',
     'searchedUserInfoReducer',
+    'modalReducer',
   ],
 };
 
@@ -52,6 +55,7 @@ const rootReducer = combineReducers({
   networkReducer,
   appInfoReducer,
   searchedUserInfoReducer,
+  modalReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

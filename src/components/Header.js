@@ -7,7 +7,8 @@ import * as RootNavigation from '../navigation/RootNavigation';
 import {useTheme} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import {DEVICE_TYPES} from '../constants/Constants';
-import {connect} from 'react-redux';
+import {connect, useSelector} from 'react-redux';
+import ModalComponent from './ModalComponent';
 
 const HeaderComponent = ({
   chatHeaderTitle,
@@ -24,6 +25,8 @@ const HeaderComponent = ({
   const {colors} = useTheme();
   const accessToken = userInfoState?.accessToken;
   const deviceType = appInfoState?.deviceType;
+  const modalstate = useSelector(state => state.modalReducer);
+
   const handleGoBack = () => {
     RootNavigation?.goBack();
   };
@@ -51,15 +54,21 @@ const HeaderComponent = ({
       </View>
     );
   };
-  const onTitlePress = (chatHeaderTitle, userId, channelType, accessToken) => {
-    console.log(userProfileModalizeRef, '==-');
+  const onTitlePress = (
+    chatHeaderTitle,
+    userId,
+    channelType,
+    accessToken,
+    event,
+  ) => {
     channelType === 'DIRECT_MESSAGE'
       ? //  RootNavigation.navigate('UserProfiles', {
         //     displayName: chatHeaderTitle,
         //     userId: userId,
         //     setChatDetailsForTab: setChatDetailsForTab,
         //   })
-        userProfileModalizeRef?.current?.open()
+        // userProfileModalizeRef?.current?.open()
+        modalstate?.modalRef?.current?.open()
       : RootNavigation.navigate('Channel Details', {
           channelName: chatHeaderTitle,
           teamId: teamId,
@@ -95,13 +104,14 @@ const HeaderComponent = ({
 
         <TouchableOpacity
           style={{flex: 1}} // don't remove it bcz of this full header is touchable
-          onPress={() => {
+          onPress={event => {
             onTitlePress(
               chatHeaderTitle,
               userId,
               channelType,
               accessToken,
               teamId,
+              event,
             );
           }}>
           <View
@@ -133,6 +143,9 @@ const HeaderComponent = ({
       {platform !== 'ios' && deviceType != DEVICE_TYPES[1] ? (
         <SafeAreaView style={{backgroundColor: colors?.headerColor}}>
           <MainComponent />
+          <ModalComponent>
+            <Text>hello</Text>
+          </ModalComponent>
         </SafeAreaView>
       ) : (
         <MainComponent />
