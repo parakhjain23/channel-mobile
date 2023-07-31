@@ -20,7 +20,7 @@ export const makeStyles = colors =>
       borderColor: colors?.secondaryColor,
     },
     name: {
-      fontSize: 18,
+      fontSize: 20,
       fontWeight: 'bold',
       color: colors?.textColor,
       marginBottom: 15,

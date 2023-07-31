@@ -25,7 +25,7 @@ const App = () => {
     </Provider>
   );
 };
-export default (App);
+export default App;
 
 async function Request() {
   await Notifee.requestPermission({

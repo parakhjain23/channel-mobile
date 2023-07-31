@@ -10,6 +10,7 @@ import {channelsByQueryReducer} from './channels/ChannelsByQueryReducer';
 import {networkReducer} from './network/NetworkReducer';
 import {appInfoReducer} from './app/AppInfoReducer';
 import {searchedUserInfoReducer} from './user/SearchedUserInfo';
+import {modalReducer} from './modal/ModalReducer';
 import {MMKV} from 'react-native-mmkv';
 
 export const storage = new MMKV();
@@ -38,6 +39,7 @@ const persistConfig = {
     'chatReducer',
     'appInfoReducer',
     'searchedUserInfoReducer',
+    'modalReducer',
   ],
 };
 
@@ -52,6 +54,7 @@ const rootReducer = combineReducers({
   networkReducer,
   appInfoReducer,
   searchedUserInfoReducer,
+  modalReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

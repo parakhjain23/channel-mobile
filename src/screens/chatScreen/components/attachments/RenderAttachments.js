@@ -8,6 +8,7 @@ import {Csv, Doc, Pdf, Redirect} from '../../../../assests/images/attachments';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import {PdfPreview} from './PdfPreview';
+import {useSelector} from 'react-redux';
 
 const Attachments = React.memo(
   ({
@@ -105,27 +106,31 @@ const Attachments = React.memo(
         }
       }
 
+      const modalState = useSelector(state => state.modalReducer);
+
       const openAttachment = async (url, contentType) => {
-        if (contentType.includes('pdf')) {
-          const filePath = getFilePath(url);
-          const doesExist = await ReactNativeBlobUtil.fs.exists(filePath);
-          try {
-            if (doesExist) {
-              Platform.OS === 'android'
-                ? ReactNativeBlobUtil.android.actionViewIntent(
-                    filePath,
-                    contentType,
-                  )
-                : ReactNativeBlobUtil.ios.openDocument(filePath);
-            } else {
-              downLoadFile(url, filePath);
-            }
-          } catch (error) {
-            openFileInBrowser(url);
-          }
-        } else {
-          openFileInBrowser(url);
-        }
+        console.log(modalState, '=-=-=-=-=-=-=-');
+        modalState?.modalizeRef?.current.open();
+        // if (contentType.includes('pdf')) {
+        //   const filePath = getFilePath(url);
+        //   const doesExist = await ReactNativeBlobUtil.fs.exists(filePath);
+        //   try {
+        //     if (doesExist) {
+        //       Platform.OS === 'android'
+        //         ? ReactNativeBlobUtil.android.actionViewIntent(
+        //             filePath,
+        //             contentType,
+        //           )
+        //         : ReactNativeBlobUtil.ios.openDocument(filePath);
+        //     } else {
+        //       downLoadFile(url, filePath);
+        //     }
+        //   } catch (error) {
+        //     openFileInBrowser(url);
+        //   }
+        // } else {
+        //   openFileInBrowser(url);
+        // }
       };
 
       function getImage(contentType) {
