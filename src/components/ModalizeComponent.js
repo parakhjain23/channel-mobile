@@ -4,7 +4,8 @@ import {Modalize} from 'react-native-modalize';
 import {useDispatch} from 'react-redux';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
-const ModalizeComponent = ({}) => {
+const ModalizeComponent = ({children}) => {
+  console.log(children, '-=-=-=-');
   const modalizeRef = useRef(null);
   const dispatch = useDispatch();
   useEffect(() => {

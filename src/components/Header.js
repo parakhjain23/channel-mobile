@@ -7,7 +7,8 @@ import * as RootNavigation from '../navigation/RootNavigation';
 import {useTheme} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import {DEVICE_TYPES} from '../constants/Constants';
-import {connect} from 'react-redux';
+import {connect, useSelector} from 'react-redux';
+import ModalizeComponent from './ModalizeComponent';
 
 const HeaderComponent = ({
   chatHeaderTitle,
@@ -24,6 +25,7 @@ const HeaderComponent = ({
   const {colors} = useTheme();
   const accessToken = userInfoState?.accessToken;
   const deviceType = appInfoState?.deviceType;
+  const modalState = useSelector(state => state.modalReducer);
   const handleGoBack = () => {
     RootNavigation?.goBack();
   };
@@ -59,8 +61,9 @@ const HeaderComponent = ({
         //     userId: userId,
         //     setChatDetailsForTab: setChatDetailsForTab,
         //   })
-        userProfileModalizeRef?.current?.open()
-      : RootNavigation.navigate('Channel Details', {
+        modalState?.modalizeRef?.current?.open()
+      : // userProfileModalizeRef?.current?.open()
+        RootNavigation.navigate('Channel Details', {
           channelName: chatHeaderTitle,
           teamId: teamId,
         });
