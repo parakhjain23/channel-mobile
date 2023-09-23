@@ -28,7 +28,7 @@ export function channelsReducer(state = initialState, action) {
       return {...state, isLoading: true};
 
     case Actions.FETCH_CHANNELS_SUCCESS:
-      console.log(action.channels,"channels");
+      console.log(action.channels,"all Channels");
       var {channels, userId, userName} = action;
       var userIdAndTeamIdMapping = {};
       var teamIdAndNameMapping = {};

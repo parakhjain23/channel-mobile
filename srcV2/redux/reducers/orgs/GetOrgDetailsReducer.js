@@ -27,7 +27,6 @@ export function orgsReducer(state = initialState, action) {
       return {...state, isLoading: true, isInitiated: true};
 
     case Actions.GET_ORG_SUCCESS:
-      console.log(action.payload,"orgs");
       var orgIdAndNameObj = {};
       action?.payload?.map(org => {
         orgIdAndNameObj[org?.id] = org?.name;
@@ -41,7 +40,7 @@ export function orgsReducer(state = initialState, action) {
       };
 
     case Actions.GET_ALL_USERS_SUCCESS:
-      console.log(action.allUser,"all user");
+      console.log(action.allUser,'all user V2');
       var idAndNameMap = {};
       var idAndDisplayNameMap = {};
       var idAndImageUrlMap = {};
