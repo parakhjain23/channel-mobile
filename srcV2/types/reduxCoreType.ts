@@ -1,21 +1,19 @@
 import { $AppInfoReducerType } from "./appInfoReducerType";
-import { $ChannelsByQueryReducerType } from "./channelReducerByQueryType";
 import { $ChannelsReduxType } from "./channelsReducerType";
-import { $ChatReducerType } from "./chatReducerType";
+import { $ChatsReducerType } from "./chatsReducerType";
 import { $NetworkReducerType } from "./networkReducerType";
 import { $OrgsReducerType } from "./orgsReducerType";
-import { $SearchedUserReducerType } from "./searchedUserReducerType";
+import { $SearchedDataReducerType } from "./searchedDataType";
 import { $SocketReducerType } from "./socketReducerType";
-import { $UserInfoReducerType } from "./userInfoReducerType";
+import { $AllUserInfoReducerType } from "./allUserInfoReducerType";
 
 export interface $ReduxCoreType{
-    user: $UserInfoReducerType,
+    allUsers: $AllUserInfoReducerType,
+    appInfo: $AppInfoReducerType,
     orgs: $OrgsReducerType,
     channels: $ChannelsReduxType,
-    chat: $ChatReducerType,
+    chats: $ChatsReducerType,
     socket: $SocketReducerType,
-    channelsByQuery: $ChannelsByQueryReducerType,
     network: $NetworkReducerType,
-    appInfo: $AppInfoReducerType,
-    searchedUser: $SearchedUserReducerType,
+    searchedData: $SearchedDataReducerType
 }

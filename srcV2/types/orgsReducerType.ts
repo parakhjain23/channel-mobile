@@ -1,11 +1,7 @@
 export interface $OrgsReducerType{
     isLoading: boolean,
-    isInitiated: boolean,
     orgs: orgDetailType[],
-    currentOrgId: string,
     orgIdAndNameMapping: {[key:string]:string},
-    userIdAndNameMapping: {[key:string]:string},
-    userIdAndDisplayNameMapping: {[key:string]:string},
     orgsWithNewMessages: any,
     unreadCountForDrawerIcon: number,
     noOrgsFound : boolean,

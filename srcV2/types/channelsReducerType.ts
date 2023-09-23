@@ -2,13 +2,15 @@ export interface $ChannelsReduxType {
     channels: channelDetailType[]; 
     recentChannels: recentChannelDetailType[]; 
     isLoading: boolean;
-    activeChannelTeamId: string | null; 
+    // activeChannelTeamId: string | null; 
     highlightChannel:any 
     userIdAndTeamIdMapping:{[key:string]:string} 
-    teamIdAndNameMapping:{[key:string]:string} 
-    teamIdAndTypeMapping:{[key:string]:string} 
-    teamIdAndUnreadCountMapping:{[key:string]:string | number} 
-    teamIdAndBadgeCountMapping:{[key:string]:string | number} 
+    // teamIdAndNameMapping:{[key:string]:string} 
+    // teamIdAndTypeMapping:{[key:string]:string} 
+    teamIdAndDataMapping:{[key:string]:any}
+    // teamIdAndUnreadCountMapping:{[key:string]:string | number} 
+    // teamIdAndBadgeCountMapping:{[key:string]:string | number} 
+    unReadAndBadgeCountMapping:{[key:string]:any}
   }
 
 export interface recentChannelDetailType {
