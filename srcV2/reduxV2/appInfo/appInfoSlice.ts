@@ -6,6 +6,9 @@ const appInfoSlice = createSlice({
   reducers
 })
 
-export const { updateAppInfoState } = appInfoSlice.actions
+export const { 
+  updateAppInfoState,
+  resetAppInfoState
+ } = appInfoSlice.actions
 
 export default appInfoSlice.reducer

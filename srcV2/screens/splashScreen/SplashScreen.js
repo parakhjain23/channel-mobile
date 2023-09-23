@@ -34,10 +34,6 @@ const SplashScreenComponent = ({
 
   return (
     <></>
-    // <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    //   <Image source={require('../../assests/images/appIcon/icon-96x96.png')} />
-    //   <Text style={{textAlign: 'center'}}>Channel by Space</Text>
-    // </View>
   );
 };
 const mapStateToProps = state => ({

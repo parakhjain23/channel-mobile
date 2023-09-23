@@ -9,5 +9,8 @@ export const initialState: $ChatsReducerType = {
 export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseReducers<$ChatsReducerType>>  = {
     updateChatState(state,action: actionType<any>){
         
+    },
+    resetChatState(){
+        return initialState
     }
 }

@@ -6,6 +6,7 @@ import chatsReducer from './chats/chatsSlice'
 import orgsReducer from './orgs/orgsSlice'
 import searchedDataReducer from './searchedData/searchedDataSlice'
 import persistReducer from "redux-persist/es/persistReducer";
+import { combineReducers } from "redux";
 const persistConfig = {
     key: 'root',
     storage: AsyncStorage,

@@ -1,11 +1,9 @@
 import { $AppInfoReducerType } from "./appInfoReducerType";
 import { $ChannelsReduxType } from "./channelsReducerType";
-import { $ChatsReducerType } from "./chatsReducerType";
-import { $NetworkReducerType } from "./networkReducerType";
 import { $OrgsReducerType } from "./orgsReducerType";
 import { $SearchedDataReducerType } from "./searchedDataType";
-import { $SocketReducerType } from "./socketReducerType";
 import { $AllUserInfoReducerType } from "./allUserInfoReducerType";
+import { $ChatsReducerType } from "./ChatsReducerType";
 
 export interface $ReduxCoreType{
     allUsers: $AllUserInfoReducerType,
@@ -13,7 +11,5 @@ export interface $ReduxCoreType{
     orgs: $OrgsReducerType,
     channels: $ChannelsReduxType,
     chats: $ChatsReducerType,
-    socket: $SocketReducerType,
-    network: $NetworkReducerType,
     searchedData: $SearchedDataReducerType
 }

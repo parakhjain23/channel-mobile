@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import * as Sentry from '@sentry/react-native';
 import ErrorBoundary from 'react-native-error-boundary';
 import App from './App';
-import ErrorScreen from './src/screens/errorScreen/ErrorScreen';
+import ErrorScreen from './srcV2/screens/errorScreen/ErrorScreen';
 
 const AppSentry = () => {
   useEffect(() => {

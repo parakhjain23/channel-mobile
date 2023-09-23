@@ -6,6 +6,9 @@ const chatsSlice = createSlice({
   reducers
 })
 
-export const { updateChatState } = chatsSlice.actions
+export const { 
+  updateChatState,
+  resetChatState
+ } = chatsSlice.actions
 
 export default chatsSlice.reducer
