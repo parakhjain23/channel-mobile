@@ -7,9 +7,10 @@ import Notifee from '@notifee/react-native';
 // import NotificationSetup from './src/utils/NotificationSetup';
 // import InternetConnection from './src/utils/InternetConnection';
 import SplashScreen from 'react-native-splash-screen';
-import { persistor, store } from './srcV2/reduxV2/store';
-import { InternetConnectionV2 } from './srcV2/utils/InternetConnectionV2';
-import NotificationSetup from './srcV2/utils/NotificationSetup';
+import { persistor, store } from './src/reduxV2/store';
+import { InternetConnectionV2 } from './src/utils/InternetConnectionV2';
+import NotificationSetup from './src/utils/NotificationSetup';
+import StoreAppWrapperV2 from './src/navigation/StoreAppWrapperV2';
 
 const App = () => {
   useEffect(() => {
@@ -26,6 +27,7 @@ const App = () => {
 
         <InternetConnectionV2/>
         <NotificationSetup />
+        <StoreAppWrapperV2 />
       </PersistGate>
     </Provider>
   );
