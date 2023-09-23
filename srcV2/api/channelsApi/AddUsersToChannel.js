@@ -1,7 +1,9 @@
+import {CHAT_SERVER_URL} from '../baseUrls/baseUrls';
+
 export const addUsersToChannelApi = async (userIds, teamId, orgId, token) => {
   try {
     const requests = userIds.map(userId =>
-      fetch(`https://api.intospace.io/chat/teamUser`, {
+      fetch(`${CHAT_SERVER_URL}/chat/teamUser`, {
         method: 'POST',
         headers: {
           Authorization: token,
@@ -31,7 +33,7 @@ export const removeUserFromChannelApi = async (
   try {
     const requests = userIds.map(userId =>
       fetch(
-        `https://api.intospace.io/chat/teamUser?orgId=${orgId}&userId=${userId.userId}&teamId=${teamId}`,
+        `${CHAT_SERVER_URL}/chat/teamUser?orgId=${orgId}&userId=${userId.userId}&teamId=${teamId}`,
         {
           method: 'DELETE',
           headers: {

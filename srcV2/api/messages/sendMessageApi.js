@@ -1,4 +1,5 @@
 import base64 from 'react-native-base64';
+import {CHAT_SERVER_URL} from '../baseUrls/baseUrls';
 
 function mentionHTML(userId, teamId, type, match, username, mentionsArrToSend) {
   if (username == 'channel') {
@@ -52,7 +53,7 @@ export const sendMessageApi = async (
     }
     message = renderTextWithBreaks(message);
 
-    var response = await fetch('https://api.intospace.io/chat/message', {
+    var response = await fetch(`${CHAT_SERVER_URL}/chat/message`, {
       method: 'POST',
       headers: {
         Authorization: token,
@@ -102,7 +103,7 @@ export const sendGlobalMessageApi = async messageObj => {
     }
     message = renderTextWithBreaks(message);
 
-    var response = await fetch('https://api.intospace.io/chat/message', {
+    var response = await fetch(`${CHAT_SERVER_URL}/chat/message`, {
       method: 'POST',
       headers: {
         Authorization: messageObj?.accessToken,

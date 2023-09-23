@@ -20,6 +20,7 @@ import {switchOrgStart} from '../../redux/actions/org/changeCurrentOrg';
 import {removeCountOnOrgCard} from '../../redux/actions/org/UnreadCountOnOrgCardsAction';
 import * as RootNavigation from '../../navigation/RootNavigation';
 import FastImage from 'react-native-fast-image';
+import {setCurrentOrgId} from '../../redux/actions/org/intialOrgId';
 
 const CustomeDrawerScreen = ({
   deviceType,
@@ -34,19 +35,19 @@ const CustomeDrawerScreen = ({
   const {colors} = useTheme();
   const data = orgsState?.orgs;
   const navigation = useNavigation();
-
-  useEffect(() => {
-    if (userInfoState?.user != null && networkState?.isInternetConnected) {
-      getChannelsAction(
-        userInfoState?.accessToken,
-        orgsState?.currentOrgId,
-        userInfoState?.user?.id,
-        userInfoState?.user?.displayName
-          ? userInfoState?.user?.displayName
-          : userInfoState?.user?.firstName,
-      );
-    }
-  }, [userInfoState?.user, networkState?.isInternetConnected]);
+  const currentUser = userInfoState?.user;
+  // useEffect(() => {
+  //   if (currentUser != null && networkState?.isInternetConnected) {
+  //     getChannelsAction(
+  //       userInfoState?.accessToken,
+  //       orgsState?.currentOrgId,
+  //       currentUser?.id,
+  //       currentUser?.displayName
+  //         ? currentUser?.displayName
+  //         : currentUser?.firstName,
+  //     );
+  //   }
+  // }, [currentUser, networkState?.isInternetConnected]);
   const OrgCard = ({item, navigation}) => {
     var unreadCountObj = orgsState?.orgsWithNewMessages?.[item?.id];
     var count = undefined;
@@ -62,10 +63,10 @@ const CustomeDrawerScreen = ({
           await switchOrgAction(
             userInfoState?.accessToken,
             item?.id,
-            userInfoState?.user?.id,
-            userInfoState?.user?.displayName
-              ? userInfoState?.user?.displayName
-              : userInfoState?.user?.firstName,
+            currentUser?.id,
+            currentUser?.displayName
+              ? currentUser?.displayName
+              : currentUser?.firstName,
           );
           count != undefined &&
             (await moveChannelToTopAction(Object.keys(unreadCountObj))) &&
@@ -140,8 +141,8 @@ const CustomeDrawerScreen = ({
           <TouchableOpacity
             onPress={async () => {
               RootNavigation.navigate('UserProfiles', {
-                displayName: userInfoState?.user?.displayName,
-                userId: userInfoState?.user?.id,
+                displayName: currentUser?.displayName,
+                userId: currentUser?.id,
               });
             }}
             style={{
@@ -151,8 +152,8 @@ const CustomeDrawerScreen = ({
             }}>
             <FastImage
               source={{
-                uri: userInfoState?.user?.avatarKey
-                  ? `${IMAGE_BASE_URL}${userInfoState?.user?.avatarKey}`
+                uri: currentUser?.avatarKey
+                  ? `${IMAGE_BASE_URL}${currentUser?.avatarKey}`
                   : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVe0cFaZ9e5Hm9X-tdWRLSvoZqg2bjemBABA&usqp=CAU',
               }}
               style={{width: 60, height: 60, borderRadius: 50}}
@@ -165,16 +166,15 @@ const CustomeDrawerScreen = ({
                   marginLeft: 10,
                   color: colors.textColor,
                 }}>
-                {userInfoState?.user?.displayName &&
-                  userInfoState?.user?.displayName}{' '}
-                {userInfoState?.user?.lastName && userInfoState?.user?.lastName}
+                {currentUser?.displayName && currentUser?.displayName}{' '}
+                {currentUser?.lastName && currentUser?.lastName}
               </Text>
               <Text
                 style={{
                   marginLeft: 10,
                   color: colors.textColor,
                 }}>
-                {userInfoState?.user?.email && userInfoState?.user?.email}
+                {currentUser?.email && currentUser?.email}
               </Text>
             </View>
           </TouchableOpacity>
@@ -212,7 +212,15 @@ const mapDispatchToProps = dispatch => {
     getChannelsAction: (token, orgId, userId, userName) =>
       dispatch(getChannelsStart(token, orgId, userId, userName)),
     switchOrgAction: (accessToken, orgId, userId, userName) =>
-      dispatch(switchOrgStart(accessToken, orgId, userId, userName)),
+      dispatch(
+        setCurrentOrgId(
+          accessToken,
+          orgId,
+          userId,
+          userName,
+          'from custom drawer screen',
+        ),
+      ),
     removeCountOnOrgCardAction: orgId => dispatch(removeCountOnOrgCard(orgId)),
     moveChannelToTopAction: teamIdArr => dispatch(moveChannelToTop(teamIdArr)),
   };

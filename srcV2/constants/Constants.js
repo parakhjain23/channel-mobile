@@ -18,3 +18,13 @@ export const ACTIVITIES = [
 ];
 
 export const DEVICE_TYPES = ['Mobile', 'Tablet'];
+
+export const EMOJI_ARRAY = [
+  {reaction_icon: '😄', reaction_name: 'grinning face with smiling eyes'},
+  {reaction_icon: '😂', reaction_name: 'face with tears of joy'},
+  {reaction_icon: '👍', reaction_name: 'thumbs up'},
+  {reaction_icon: '✌️', reaction_name: 'victory hand'},
+  {reaction_icon: '✋', reaction_name: 'raised hand'},
+  {reaction_icon: '👏', reaction_name: 'clapping hands'},
+  {reaction_icon: '🤝', reaction_name: 'handshake'},
+];

@@ -1,6 +1,8 @@
+import { CHAT_SERVER_URL } from "../baseUrls/baseUrls";
+
 export const deleteMessageApi = async (token: string, msgId: string | number): Promise<any> => {
     try {
-      const response = await fetch(`https://api.intospace.io/chat/message/${msgId}`, {
+      const response = await fetch(`${CHAT_SERVER_URL}/chat/message/${msgId}`, {
         method: 'PATCH',
         headers: {
           Authorization: token,

@@ -1,15 +1,24 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {connect} from 'react-redux';
 import SearchBox from '../../components/searchBox';
 import {getChannelsByQueryStart} from '../../redux/actions/channels/ChannelsByQueryAction';
-import {FlatList} from 'react-native';
 import {
   addUserToChannelStart,
   removeUserFromChannelStart,
 } from '../../redux/actions/channelActivities/inviteUserToChannelAction';
 import {useTheme} from '@react-navigation/native';
 import {makeStyles} from './Styles';
+import FastImage from 'react-native-fast-image';
+import {Throttling} from '../../utils/Throttling';
+import {ResultNotFound} from '../../assests/images/attachments';
 
 const ChannelDetailsScreen = ({
   route,
@@ -27,27 +36,45 @@ const ChannelDetailsScreen = ({
   const styles = makeStyles(colors);
   const RED_COLOR = '#FF2E2E';
   const GREEN_COLOR = '#00A300';
-  const Purpose = channelsState?.channelIdAndDataMapping?.[teamId]?.purpose;
-  const CreatedBy = channelsState?.channelIdAndDataMapping[teamId]?.createdBy;
+  const channelIdAndDataMapping = channelsState?.channelIdAndDataMapping;
+  const Purpose = channelIdAndDataMapping?.[teamId]?.purpose;
+  const CreatedBy = channelIdAndDataMapping[teamId]?.createdBy;
   const changeText = value => {
     setsearchValue(value);
   };
-  useEffect(() => {
-    if (searchValue != '') {
+  const fetchData = () => {
+    if (searchValue?.length > 0) {
       getChannelsByQueryStartAction(
         searchValue,
         userInfoState?.user?.id,
         orgsState?.currentOrgId,
       );
     }
+  };
+  useEffect(() => {
+    Throttling(fetchData, 300);
   }, [searchValue]);
+
   const RenderUsers = useCallback(
     ({item}) => {
       return (
         item?._source?.type == 'U' &&
         item?._source?.isEnabled && (
           <View style={styles.userToAddContainer} key={item}>
-            <Text style={styles.memberText}>{item?._source?.title}</Text>
+            <View style={styles.leftContainer}>
+              <FastImage
+                source={{
+                  uri: orgsState?.userIdAndImageUrlMapping[
+                    item?._source?.userId
+                  ]
+                    ? orgsState?.userIdAndImageUrlMapping[item?._source?.userId]
+                    : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVe0cFaZ9e5Hm9X-tdWRLSvoZqg2bjemBABA&usqp=CAU',
+                  priority: FastImage.priority.normal,
+                }}
+                style={styles.imageIcon}
+              />
+              <Text style={styles.memberText}>{item?._source?.title}</Text>
+            </View>
             {channelsState?.channelIdAndDataMapping[teamId]?.userIds.includes(
               item?._source?.userId,
             ) ? (
@@ -55,13 +82,13 @@ const ChannelDetailsScreen = ({
                 onPress={() => {
                   removeUserFromChannelAction(
                     [{userId: item?._source?.userId}],
-                    channelsState?.channelIdAndDataMapping[teamId]?._id,
+                    channelIdAndDataMapping[teamId]?._id,
                     orgsState?.currentOrgId,
                     userInfoState?.accessToken,
                   );
                 }}
                 style={[
-                  styles.buttonBorder,
+                  styles.button,
                   {borderColor: RED_COLOR, backgroundColor: RED_COLOR},
                 ]}>
                 <Text style={{color: '#ffffff', fontWeight: '500'}}>
@@ -73,13 +100,13 @@ const ChannelDetailsScreen = ({
                 onPress={() => {
                   addUsersToChannelAction(
                     [{userId: item?._source?.userId}],
-                    channelsState?.channelIdAndDataMapping[teamId]?._id,
+                    channelIdAndDataMapping[teamId]?._id,
                     orgsState?.currentOrgId,
                     userInfoState?.accessToken,
                   );
                 }}
                 style={[
-                  styles.buttonBorder,
+                  styles.button,
                   {borderColor: GREEN_COLOR, backgroundColor: GREEN_COLOR},
                 ]}>
                 <Text style={{color: '#ffffff', fontWeight: '500'}}>ADD</Text>
@@ -89,33 +116,52 @@ const ChannelDetailsScreen = ({
         )
       );
     },
-    [channelsByQueryState?.channels, channelsState?.channelIdAndDataMapping],
+    [channelsByQueryState?.channels, channelIdAndDataMapping],
   );
 
   const RenderItem = ({item, index}) => {
+    const userId = item;
     return (
       <View style={styles.memberContainer} key={index}>
-        <Text style={styles.memberText}>
-          {orgsState?.userIdAndNameMapping[item]}
-        </Text>
+        <View style={styles.leftContainer}>
+          <FastImage
+            source={{
+              uri: orgsState?.userIdAndImageUrlMapping[userId]
+                ? orgsState?.userIdAndImageUrlMapping[userId]
+                : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVe0cFaZ9e5Hm9X-tdWRLSvoZqg2bjemBABA&usqp=CAU',
+              priority: FastImage.priority.normal,
+            }}
+            style={styles.imageIcon}
+          />
+          <View style={styles.textContainer}>
+            <Text style={styles.memberText}>
+              {orgsState?.userIdAndNameMapping[item]}
+            </Text>
+          </View>
+        </View>
         <TouchableOpacity
           onPress={() => {
             removeUserFromChannelAction(
               [{userId: item}],
-              channelsState?.channelIdAndDataMapping[teamId]?._id,
+              channelIdAndDataMapping[teamId]?._id,
               orgsState?.currentOrgId,
               userInfoState?.accessToken,
             );
           }}
           style={[
-            styles.buttonBorder,
-            {borderColor: RED_COLOR, backgroundColor: RED_COLOR},
+            styles.button,
+            {
+              borderColor: RED_COLOR,
+              backgroundColor: RED_COLOR,
+              justifyContent: 'flex-end',
+            },
           ]}>
-          <Text style={{color: '#ffffff', fontWeight: '500'}}>REMOVE</Text>
+          <Text style={styles.removeText}>REMOVE</Text>
         </TouchableOpacity>
       </View>
     );
   };
+
   return (
     <ScrollView
       style={{flex: 1, backgroundColor: colors?.primaryColor}}
@@ -125,10 +171,7 @@ const ChannelDetailsScreen = ({
         <View style={styles.content}>
           {Purpose?.length > 0 && (
             <Text style={styles.text}>
-              Purpose:{' '}
-              {channelsState?.channelIdAndDataMapping[
-                teamId
-              ]?.purpose?.toString()}
+              Purpose: {channelIdAndDataMapping[teamId]?.purpose?.toString()}
             </Text>
           )}
           {CreatedBy?.length > 0 && (
@@ -137,7 +180,7 @@ const ChannelDetailsScreen = ({
                 Created by:{' '}
                 {
                   orgsState?.userIdAndNameMapping[
-                    channelsState?.channelIdAndDataMapping[teamId]?.createdBy
+                    channelIdAndDataMapping[teamId]?.createdBy
                   ]
                 }
               </Text>
@@ -150,7 +193,23 @@ const ChannelDetailsScreen = ({
             changeText={changeText}
             isSearchFocus={false}
           />
-
+          {searchValue != '' &&
+            channelsByQueryState?.channels?.length === 0 && (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: 60,
+                  marginBottom: 20,
+                }}>
+                <FastImage
+                  source={ResultNotFound}
+                  style={{height: 200, width: 200}}
+                />
+              </View>
+              // <Text>No users found.</Text>
+            )}
           {searchValue != '' &&
             channelsByQueryState?.channels?.length > 0 &&
             channelsByQueryState?.channels?.map((item, index) => {
@@ -160,11 +219,9 @@ const ChannelDetailsScreen = ({
           {searchValue?.length === 0 && (
             <View style={{flex: 1}}>
               <Text style={styles.header}>Members:</Text>
-              {channelsState?.channelIdAndDataMapping[teamId]?.userIds?.map(
-                (item, index) => {
-                  return <RenderItem item={item} index={index} key={index} />;
-                },
-              )}
+              {channelIdAndDataMapping[teamId]?.userIds?.map((item, index) => {
+                return <RenderItem item={item} index={index} key={index} />;
+              })}
             </View>
           )}
         </View>

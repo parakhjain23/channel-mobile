@@ -3,12 +3,12 @@ import {useEffect} from 'react';
 import Notifee, {
   AndroidImportance,
   AndroidVisibility,
+  EventType,
 } from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {subscribeToNotifications} from '../redux/actions/socket/socketActions';
 import {store} from '../redux/Store';
-import {handleNotificationFirebase} from './HandleNotification';
+import {handleNotification} from './HandleNotification';
 import * as RootNavigation from '../navigation/RootNavigation';
 import {
   getChatsReset,
@@ -25,6 +25,8 @@ import {
   resetUnreadCountStart,
 } from '../redux/actions/channels/ChannelsAction';
 import {connect} from 'react-redux';
+import {setCurrentOrgId} from '../redux/actions/org/intialOrgId';
+import {storage} from '../redux/reducers/Index';
 
 const NotificationSetup = ({
   userInfoState,
@@ -40,76 +42,6 @@ const NotificationSetup = ({
   const initPushNotification = async () => {
     try {
       await Notifee.requestPermission();
-      await Notifee.createChannel({
-        id: 'fcm_channel',
-        importance: AndroidImportance.HIGH,
-        name: 'fcm_channel',
-        lights: true,
-        sound: 'default',
-        vibration: true,
-        visibility: AndroidVisibility.PUBLIC,
-      });
-      const isPresent = await Notifee.isChannelCreated('foreground');
-      if (!isPresent) {
-        await Notifee.createChannel({
-          id: 'foreground',
-          importance: AndroidImportance.HIGH,
-          name: 'foreground',
-          lights: true,
-          sound: 'default',
-          vibration: true,
-          visibility: AndroidVisibility.PUBLIC,
-        });
-      }
-    } catch (error) {}
-  };
-  const setNotificationListeners = async () => {
-    try {
-      const token = await messaging().getToken();
-      await AsyncStorage.setItem('FCM_TOKEN', token);
-      await AsyncStorage.getItem('FCM_TOKEN').then(token => {
-        if (store.getState().userInfoReducer?.accessToken) {
-          store.dispatch(
-            subscribeToNotifications(userInfoState?.accessToken, token),
-          );
-        }
-      });
-      messaging().onTokenRefresh(async token => {
-        if (token) {
-          await AsyncStorage.setItem('FCM_TOKEN', token.token);
-        }
-      });
-      messaging().onMessage(async message => {
-        if (message?.data?.senderId != userInfoState.user?.id) {
-          handleNotificationFirebase(message);
-          if (
-            message?.data?.orgId != store?.getState()?.orgsReducer?.currentOrgId
-          ) {
-            await store?.dispatch(
-              increaseCountOnOrgCard(
-                message?.data?.orgId,
-                message?.data?.teamId,
-              ),
-            );
-          }
-        }
-      });
-      messaging().onNotificationOpenedApp(message => {
-        openChat(message);
-      });
-      messaging().setBackgroundMessageHandler(async message => {
-        if (
-          message?.data?.senderId != store.getState()?.userInfoReducer?.user?.id
-        ) {
-          handleNotificationFirebase(message);
-        }
-      });
-      const rMessage = await messaging().getInitialNotification();
-      if (rMessage) {
-        setTimeout(() => {
-          openChat(rMessage);
-        }, 1000);
-      }
       const categories = [
         {
           id: 'channel',
@@ -140,8 +72,99 @@ const NotificationSetup = ({
           ],
         },
       ];
-
       Platform.OS == 'ios' && Notifee.setNotificationCategories(categories);
+      await Notifee.createChannel({
+        id: 'fcm_channel',
+        importance: AndroidImportance.HIGH,
+        name: 'fcm_channel',
+        lights: true,
+        sound: 'default',
+        vibration: true,
+        visibility: AndroidVisibility.PUBLIC,
+      });
+      const isPresent = await Notifee.isChannelCreated('foreground');
+      if (!isPresent) {
+        await Notifee.createChannel({
+          id: 'foreground',
+          importance: AndroidImportance.HIGH,
+          name: 'foreground',
+          lights: true,
+          sound: 'default',
+          vibration: true,
+          visibility: AndroidVisibility.PUBLIC,
+        });
+      }
+    } catch (error) {}
+  };
+  const setNotificationListeners = async () => {
+    try {
+      const token = await messaging().getToken();
+      await storage.set('FCM_TOKEN', token);
+      const FCM_TOKEN = await storage.getString('FCM_TOKEN');
+      if (store.getState().userInfoReducer?.accessToken) {
+        store.dispatch(
+          subscribeToNotifications(userInfoState?.accessToken, FCM_TOKEN),
+        );
+      }
+      // });
+      messaging().onTokenRefresh(async token => {
+        if (token) {
+          await storage.set('FCM_TOKEN', token.token);
+        }
+      });
+      messaging().onMessage(async message => {
+        if (message?.data?.senderId != userInfoState.user?.id) {
+          // handleNotificationFirebase(message);
+          handleNotification(message, 'firebase');
+          if (
+            message?.data?.orgId != store?.getState()?.orgsReducer?.currentOrgId
+          ) {
+            await store?.dispatch(
+              increaseCountOnOrgCard(
+                message?.data?.orgId,
+                message?.data?.teamId,
+              ),
+            );
+          }
+        }
+      });
+      messaging().onNotificationOpenedApp(message => {
+        openChat(message, 'on messaging notification press');
+      });
+      messaging().setBackgroundMessageHandler(async message => {
+        if (
+          message?.data?.senderId != store.getState()?.userInfoReducer?.user?.id
+        ) {
+          handleNotification(message, 'firebase');
+        }
+      });
+      const rMessage = await messaging().getInitialNotification();
+      if (rMessage) {
+        if (
+          rMessage?.data?.orgId != store?.getState()?.orgsReducer?.currentOrgId
+        ) {
+          await store.dispatch(
+            setCurrentOrgId(
+              store?.getState()?.userInfoReducer?.accessToken,
+              rMessage?.data?.orgId,
+              store?.getState()?.userInfoReducer?.user?.id,
+              store?.getState()?.userInfoReducer?.user?.displayName
+                ? store?.getState()?.userInfoReducer?.user?.displayName
+                : store?.getState()?.userInfoReducer?.user?.firstName,
+            ),
+          );
+          await store.dispatch(removeCountOnOrgCard(rMessage?.data?.orgId));
+
+          setTimeout(() => {
+            openChat(rMessage, 'RMESSAGE SWITCH ORG ');
+          }, 2200);
+        } else {
+          setTimeout(() => {
+            openChat(rMessage, 'RMESSAGE NORMAL');
+          }, 2000);
+        }
+      }
+
       Notifee.onForegroundEvent(actionListeners);
       Notifee.onBackgroundEvent(actionListeners);
     } catch (error) {
@@ -155,27 +178,22 @@ const NotificationSetup = ({
         message?.data?.orgId != store?.getState()?.orgsReducer?.currentOrgId
       ) {
         await store.dispatch(
-          switchOrgStart(
+          setCurrentOrgId(
             store?.getState()?.userInfoReducer?.accessToken,
             message?.data?.orgId,
             store?.getState()?.userInfoReducer?.user?.id,
-          ),
-        );
-        await store.dispatch(
-          moveChannelToTop(
-            Object.keys(
-              store.getState()?.orgsReducer?.orgsWithNewMessages[
-                message?.data?.orgId
-              ],
-            ),
+            store?.getState()?.userInfoReducer?.user?.displayName
+              ? store?.getState()?.userInfoReducer?.user?.displayName
+              : store?.getState()?.userInfoReducer?.user?.firstName,
           ),
         );
         await store.dispatch(removeCountOnOrgCard(message?.data?.orgId));
+
         setTimeout(() => {
-          openChat(message);
-        }, 500);
+          openChat(message, 'from action listiner ');
+        }, 1000);
       } else {
-        openChat(message);
+        openChat(message, 'normal');
       }
     }
     switch (event?.detail?.pressAction?.id) {
@@ -204,30 +222,8 @@ const NotificationSetup = ({
         break;
     }
   };
-  const openChat = async message => {
+  const openChat = async (message, text = '') => {
     try {
-      if (
-        message?.data?.orgId != store?.getState()?.orgsReducer?.currentOrgId
-      ) {
-        await store.dispatch(
-          switchOrgStart(
-            store?.getState()?.userInfoReducer?.accessToken,
-            message?.data?.orgId,
-            store?.getState()?.userInfoReducer?.user?.id,
-          ),
-        );
-        await store.dispatch(
-          moveChannelToTop(
-            Object.keys(
-              store.getState()?.orgsReducer?.orgsWithNewMessages[
-                message?.data?.orgId
-              ],
-            ),
-          ),
-        );
-        await store.dispatch(removeCountOnOrgCard(message?.data?.orgId));
-      }
-      resetChatsAction();
       var teamId = message?.data?.teamId;
       var name = null;
       store.getState()?.channelsReducer?.teamIdAndTypeMapping[teamId] ==
@@ -244,6 +240,7 @@ const NotificationSetup = ({
         channelType:
           store.getState()?.channelsReducer?.teamIdAndTypeMapping[teamId],
         userId: message?.data?.senderId,
+        reciverUserId: message?.data?.senderId,
       });
     } catch (error) {
       console.warn(error);

@@ -15,6 +15,8 @@ const initialState = {
 
 export function channelsReducer(state = initialState, action) {
   switch (action.type) {
+    case 'persist/REHYDRATE':
+      console.log('rehydrate process ==-==-=-=-');
     case Actions.FETCH_CHANNELS_START:
       return {
         ...state,
@@ -24,11 +26,11 @@ export function channelsReducer(state = initialState, action) {
         teamIdAndTypeMapping: {},
       };
 
-    case Actions.UPDATE_CURRENT_ORG_ID:
+    case Actions.SELECT_CURRENT_ORG_ID:
       return {...state, isLoading: true};
 
     case Actions.FETCH_CHANNELS_SUCCESS:
-      console.log(action.channels,"all Channels");
+      console.log('fetched channels');
       var {channels, userId, userName} = action;
       var userIdAndTeamIdMapping = {};
       var teamIdAndNameMapping = {};
@@ -76,7 +78,7 @@ export function channelsReducer(state = initialState, action) {
       };
 
     case Actions.FETCH_RECENT_CHANNELS_SUCCESS:
-      console.log(action.recentChannels,"recent channels");
+      console.log('fetched recent channels');
       var tempRecentChannels = [];
       var key = null;
       for (let i = 0; i < action?.recentChannels?.length; i++) {

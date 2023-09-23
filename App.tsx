@@ -3,11 +3,13 @@ import React, {useEffect} from 'react';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/lib/integration/react';
 import StoreAppWrapper from './src/navigation/StoreAppWrapper';
-import {persistor, store} from './src/redux/Store';
 import Notifee from '@notifee/react-native';
-import NotificationSetup from './src/utils/NotificationSetup';
-import InternetConnection from './src/utils/InternetConnection';
+// import NotificationSetup from './src/utils/NotificationSetup';
+// import InternetConnection from './src/utils/InternetConnection';
 import SplashScreen from 'react-native-splash-screen';
+import { persistor, store } from './srcV2/reduxV2/store';
+import { InternetConnectionV2 } from './srcV2/utils/InternetConnectionV2';
+import NotificationSetup from './srcV2/utils/NotificationSetup';
 
 const App = () => {
   useEffect(() => {
@@ -18,9 +20,12 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <InternetConnection />
+        {/* <InternetConnection />
         <NotificationSetup />
-        <StoreAppWrapper />
+        <StoreAppWrapper /> */}
+
+        <InternetConnectionV2/>
+        <NotificationSetup />
       </PersistGate>
     </Provider>
   );

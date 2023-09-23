@@ -1,18 +1,11 @@
 import React, {useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import LoginScreen from '../screens/loginScreen/LoginScreen';
 import {connect} from 'react-redux';
-import DrawerNavigation from './DrawerNavigation';
-import ChatScreen from '../screens/chatScreen/ChatScreen';
-import ExploreChannels from '../screens/channelsScreen/ExploreChannels';
-import ContactDetailsPage from '../screens/userProfiles/UserProfiles';
 import {useTheme} from '@react-navigation/native';
 import {Platform, Dimensions} from 'react-native';
-import SelectWorkSpaceScreen from '../screens/selectWorkSpaceScreen/SelectWorkSpaceScreen';
-import IpadScreen from '../screens/ipadScreen/IpadScreen';
 import {DEVICE_TYPES} from '../constants/Constants';
 import * as Actions from '../redux/Enums';
-import ChannelDetailsScreen from '../screens/channelDetails/ChannelDetails';
+import {AuthenticationScreens, StackScreens} from './StackScreens';
 
 const ProtectedNavigation = props => {
   const Stack = createNativeStackNavigator();
@@ -35,76 +28,54 @@ const ProtectedNavigation = props => {
     },
     statusBarColor: 'transparent',
     statusBarTranslucent: true,
-    statusBarStyle: colors?.primaryColor == '#ffffff' ? 'dark' : 'light',
+    statusBarStyle: colors?.primaryColor === '#ffffff' ? 'dark' : 'light',
+  };
+
+  const customScreenOptions = ({route}) => {
+    const options = {
+      headerShown: true,
+    };
+
+    switch (route.name) {
+      case 'Explore Channels':
+        options.headerTitle = route.name;
+        break;
+      case 'UserProfiles':
+        options.headerTitle = route.params?.displayName
+          ? route.params.displayName
+          : 'User Profile';
+        break;
+      case 'Channel Details':
+        options.headerTitle = route.params?.channelName || 'Channel Details';
+        break;
+      default:
+        break;
+    }
+
+    return options;
   };
 
   return props?.orgsState?.currentOrgId == null ? (
     <Stack.Navigator>
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="SelectWorkSpace"
-        component={SelectWorkSpaceScreen}
-        options={{headerShown: false}}
-      />
+      {AuthenticationScreens.map(screen => (
+        <Stack.Screen
+          key={screen.name}
+          name={screen.name}
+          component={screen.component}
+          options={screen.options}
+        />
+      ))}
     </Stack.Navigator>
   ) : (
-    <Stack.Navigator initialRouteName="Org">
-      <Stack.Screen
-        name="Org"
-        component={DrawerNavigation}
-        options={{
-          headerShown: false,
-          ...getHeader,
-        }}
-      />
-      <Stack.Screen
-        name="Ipad"
-        component={IpadScreen}
-        options={{
-          headerShown: true,
-          ...getHeader,
-        }}
-      />
-      <Stack.Screen
-        name="Chat"
-        component={ChatScreen}
-        options={{
-          headerShown: false,
-          ...getHeader,
-        }}
-      />
-      <Stack.Screen
-        name="Explore Channels"
-        component={ExploreChannels}
-        options={({route}) => ({
-          headerTitle: route?.params?.chatHeaderTitle,
-          headerShown: true,
-          ...getHeader,
-        })}
-      />
-      <Stack.Screen
-        name="UserProfiles"
-        component={ContactDetailsPage}
-        options={({route}) => ({
-          headerTitle: route?.params?.displayName + ' Profile',
-          headerShown: true,
-          ...getHeader,
-        })}
-      />
-      <Stack.Screen
-        name="Channel Details"
-        component={ChannelDetailsScreen}
-        options={({route}) => ({
-          // header: () => <CustomHeader route={route} />,
-          headerTitle: route?.params?.channelName,
-          headerShown: true,
-          ...getHeader,
-        })}
-      />
+    <Stack.Navigator screenOptions={customScreenOptions}>
+      {StackScreens.map(({name, component, options}) => (
+        <Stack.Screen
+          key={name}
+          name={name}
+          component={component}
+          options={{...options, ...getHeader}}
+        />
+      ))}
     </Stack.Navigator>
   );
 };
@@ -112,14 +83,16 @@ const ProtectedNavigation = props => {
 const mapStateToProps = state => ({
   channelsState: state.channelsReducer,
   orgsState: state.orgsReducer,
-  appInfoState: state.appInfoReduer,
+  appInfoState: state.appInfoReducer,
 });
+
 const mapDispatchToProps = dispatch => {
   return {
     setDeviceTypeAction: deviceType =>
       dispatch({type: Actions.SET_DEVICE_TYPE, deviceType: deviceType}),
   };
 };
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,

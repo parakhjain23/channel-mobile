@@ -1,15 +1,17 @@
+import {DELVE_SERVER_URL} from '../baseUrls/baseUrls';
+
 export const getChannelsByQueryApi = async (query, userToken, orgId) => {
   try {
     var response = await fetch(
-      `https://delve-api.intospace.io/search/prod-space?query=${query}&API_KEY=TmkzBMbr3Z1eiLjMOQ0kqhqp4f0GVCzR1w&size=15&userToken=${userToken}`,
+      `${DELVE_SERVER_URL}/search/prod-space?query=${query}&API_KEY=TmkzBMbr3Z1eiLjMOQ0kqhqp4f0GVCzR1w&size=15&userToken=${userToken}`,
       {
         method: 'POST',
-        headers:{
-          'Content-Type': 'application/json'
+        headers: {
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           terms: {
-            type: ['U','T'],
+            type: ['U', 'T'],
             orgId: [orgId],
           },
           scoreMultiplier: {
@@ -32,9 +34,8 @@ export const getChannelsByQueryApi = async (query, userToken, orgId) => {
     const result = await response.json();
     if (result?.hits?.hits) {
       return result?.hits?.hits;
-    }
-    else{
-      return []
+    } else {
+      return [];
     }
   } catch (error) {
     console.warn(error);

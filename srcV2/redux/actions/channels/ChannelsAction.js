@@ -58,22 +58,6 @@ export function increaseUnreadCount(channelId, senderId = '', userId = '') {
   };
 }
 
-export function* getChannelDetails({accessToken, orgId, userId}) {
-  try {
-    var response = yield call(getChannelDetailsApi, accessToken, orgId, userId);
-    yield put(getChannelDetailsSuccess(response));
-  } catch (error) {
-    console.warn(error);
-  }
-}
-
-export function getChannelDetailsSuccess(data) {
-  return {
-    type: Actions.FETCH_CHANNEL_DETAILS_SUCCESS,
-    payload: data,
-  };
-}
-
 export function* resetUnreadCount({
   orgId,
   userId,

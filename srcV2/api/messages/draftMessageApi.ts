@@ -1,3 +1,5 @@
+import { CHAT_SERVER_URL } from "../baseUrls/baseUrls";
+
 export const draftMessageApi = async (
   message: string | any,
   teamId: string,
@@ -7,7 +9,7 @@ export const draftMessageApi = async (
 ): Promise<void> => {
   try {
     await fetch(
-      `https://api.intospace.io/chat/teamUser?orgId=${orgId}&userId=${userId}&teamId=${teamId}`,
+      `${CHAT_SERVER_URL}/chat/teamUser?orgId=${orgId}&userId=${userId}&teamId=${teamId}`,
       {
         method: 'PATCH',
         headers: {

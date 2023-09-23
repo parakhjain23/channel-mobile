@@ -11,12 +11,9 @@ import {
   SafeAreaView,
   useWindowDimensions,
   Platform,
-  StyleSheet,
   RefreshControl,
   Keyboard,
-  StatusBar,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {connect} from 'react-redux';
 import ListFooterComponent from '../../components/ListFooterComponent';
@@ -43,7 +40,6 @@ import HTMLView from 'react-native-htmlview';
 import RenderHTML from 'react-native-render-html';
 import {tagsStyles} from './HtmlStyles';
 import {onStartRecord, onStopRecord} from './VoiceRecording';
-import RNFetchBlob from 'rn-fetch-blob';
 import {uploadRecording} from './VoicePicker';
 import {
   addUserToChannelStart,
@@ -53,17 +49,19 @@ import {ACTIVITIES, DEVICE_TYPES} from '../../constants/Constants';
 import ScrollDownButton from '../../components/ScrollDownButton';
 import AudioRecordingPlayer from '../../components/AudioRecorderPlayer';
 import FirstTabChatScreen from './FirstTabChatScreen';
-import ActivityList from './components/ActivityList';
-import MentionList from './components/MentionList';
-import ActionModal from './components/ActionModal';
-import {Button} from 'react-native-paper';
-import {listStyles} from './components/AttachmentStyles';
-import AttachmentOptionsModal from './components/AttachmentOptionsModal';
+import ActivityList from './components/acitivityList/ActivityList';
+import MentionList from './components/mentionList/MentionList';
+import ActionModal from './components/actionModal/ActionModal';
+import {Button, Divider} from 'react-native-paper';
+import {listStyles} from './components/attachments/AttachmentStyles';
+import AttachmentOptionsModal from './components/attachments/AttachmentOptionsModal';
 import {addDraftMessage} from '../../redux/actions/chat/DraftMessageAction';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Header} from '../../components/Header';
 import {joinChannelStart} from '../../redux/actions/channels/JoinChannelActions';
-import {FlashList} from '@shopify/flash-list';
+import {AnimatedFlashList} from '@shopify/flash-list';
+import {LOCAL_PATH} from '../../utils/Path';
+import Attachments from './components/attachments/RenderAttachments';
 
 const ChatScreen = ({
   chatDetailsForTab,
@@ -89,7 +87,6 @@ const ChatScreen = ({
   draftMessageAction,
   joinChannelAction,
 }) => {
-  // console.log('chat-screen');
   var teamId, channelType, chatHeaderTitle, userId;
   if (deviceType === DEVICE_TYPES[1]) {
     userId = chatDetailsForTab?.userId;
@@ -118,9 +115,9 @@ const ChatScreen = ({
     const fetchData = () => {
       fetchChatsOfTeamAction(
         teamId,
-        userInfoState?.accessToken,
+        accessToken,
         0,
-        chatState?.data[teamId]?.messages[0]?.['_id'],
+        chatState?.data?.[teamId]?.messages[0]?.['_id'],
       );
       setActiveChannelTeamIdAction(teamId);
     };
@@ -152,7 +149,7 @@ const ChatScreen = ({
   const [mentionsArr, setMentionsArr] = useState([]);
   const [isScrolling, setIsScrolling] = useState(false);
   const [mentions, setMentions] = useState([]);
-  const FlatListRef = useRef(null);
+  const FlashListRef = useRef(null);
   const textInputRef = useRef(null);
   const scrollY = new Animated.Value(0);
   const {height} = Dimensions.get('window');
@@ -174,7 +171,7 @@ const ChatScreen = ({
   const teamIdAndUnreadCountMapping =
     channelsState?.teamIdAndUnreadCountMapping;
   const teamIdAndBadgeCountMapping = channelsState?.teamIdAndBadgeCountMapping;
-  const user = userInfoState?.user;
+  const currentUserId = userInfoState?.user?.id;
   const accessToken = userInfoState?.accessToken;
   const currentOrgId = orgState?.currentOrgId;
   const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
@@ -182,11 +179,7 @@ const ChatScreen = ({
     teamIdAndUnreadCountMapping?.[teamId] > 0 ||
     teamIdAndBadgeCountMapping?.[teamId] > 0;
   const skip = chatState?.data[teamId]?.messages?.length ?? 0;
-
-  const path = Platform.select({
-    ios: `${RNFetchBlob.fs.dirs.CacheDir}/sound.m4a`,
-    android: `${RNFetchBlob.fs.dirs.CacheDir}/sound.mp3`,
-  });
+  const path = LOCAL_PATH;
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', e => {
       e.preventDefault();
@@ -194,9 +187,9 @@ const ChatScreen = ({
         draftMessageAction(
           message,
           teamId,
-          userInfoState?.accessToken,
-          orgState?.currentOrgId,
-          userInfoState?.user?.id,
+          accessToken,
+          currentOrgId,
+          currentUserId,
         );
       }
       navigation.dispatch(e.data.action); // Allow the screen to be removed
@@ -225,7 +218,7 @@ const ChatScreen = ({
       if (shouldResetUnreadCount) {
         resetUnreadCountAction(
           currentOrgId,
-          user?.id,
+          currentUserId,
           teamId,
           accessToken,
           0,
@@ -244,16 +237,6 @@ const ChatScreen = ({
     }
   }, [channelsByQueryState?.mentionChannels]);
 
-  const handlePressOut = () => {
-    setShowPlayer(true),
-      onStopRecord(setrecordingUrl, setvoiceAttachment, isMountedRef),
-      setisRecording(false);
-  };
-
-  const handleLongPress = () => {
-    onStartRecord(setisRecording);
-  };
-
   const handleInputChange = useCallback(
     async text => {
       onChangeMessage(text);
@@ -262,8 +245,8 @@ const ChatScreen = ({
       if (currentWord.startsWith('@')) {
         await getChannelsByQueryStartAction(
           currentWord.slice(1),
-          userInfoState?.user?.id,
-          orgState?.currentOrgId,
+          currentUserId,
+          currentOrgId,
         );
         // setMentions(channelsByQueryState?.mentionChannels);
         setshowMention(true);
@@ -284,13 +267,13 @@ const ChatScreen = ({
     [
       onChangeMessage,
       channelsByQueryState?.mentionChannels,
-      userInfoState?.user?.id,
-      orgState?.currentOrgId,
+      currentUserId,
+      currentOrgId,
     ],
   );
 
   const scrollToBottom = () => {
-    FlatListRef?.current?.scrollToOffset({animating: true, offset: 0});
+    FlashListRef?.current?.scrollToOffset({animating: true, offset: 0});
   };
 
   const onScroll = Animated.event(
@@ -303,13 +286,6 @@ const ChatScreen = ({
       },
     },
   );
-  const handleScroll = event => {
-    // Access scroll-related information from the event object
-    const {contentOffset, contentSize, layoutMeasurement} = event.nativeEvent;
-    const offsetY = contentOffset.y;
-    setIsScrolling(offsetY >= 0.7 * screenHeight);
-    // ...
-  };
 
   const memoizedData = useMemo(
     () => chatState?.data[teamId]?.messages || [],
@@ -329,7 +305,7 @@ const ChatScreen = ({
           chatState={chatState}
           setreplyOnMessage={setreplyOnMessage}
           setrepliedMsgDetails={setrepliedMsgDetails}
-          flatListRef={FlatListRef}
+          FlashListRef={FlashListRef}
           channelType={channelType}
           index={index}
           setShowActions={setShowActions}
@@ -342,8 +318,8 @@ const ChatScreen = ({
   );
 
   const onEndReached = useCallback(() => {
-    fetchChatsOfTeamAction(teamId, userInfoState?.accessToken, skip);
-  }, [teamId, userInfoState?.accessToken, skip]);
+    fetchChatsOfTeamAction(teamId, accessToken, skip);
+  }, [teamId, accessToken, skip]);
 
   function renderNode(node, index, siblings, parent, defaultRenderer) {
     const attribs = node?.attribs;
@@ -361,7 +337,7 @@ const ChatScreen = ({
 
   const handleRefresh = () => {
     setRefreshing(true);
-    fetchChatsOfTeamAction(teamId, userInfoState?.accessToken);
+    fetchChatsOfTeamAction(teamId, accessToken);
     setTimeout(() => {
       setRefreshing(false);
     }, 1500);
@@ -377,18 +353,13 @@ const ChatScreen = ({
     onChangeMessage('');
     const hasMentions = mentionsArr?.length > 0;
     if (action == ACTIVITIES[0]?.name && hasMentions) {
-      addUsersToChannelAction(
-        mentionsArr,
-        teamId,
-        orgState?.currentOrgId,
-        userInfoState?.accessToken,
-      );
+      addUsersToChannelAction(mentionsArr, teamId, currentOrgId, accessToken);
     } else if (action == ACTIVITIES[1]?.name && hasMentions) {
       removeUserFromChannelAction(
         mentionsArr,
         teamId,
-        orgState?.currentOrgId,
-        userInfoState?.accessToken,
+        currentOrgId,
+        accessToken,
       );
     }
     setaction('');
@@ -407,9 +378,9 @@ const ChatScreen = ({
         createdAt: date,
         isLink: false,
         mentions: mentionsArr,
-        orgId: orgState?.currentOrgId,
+        orgId: currentOrgId,
         parentId: repliedMsgDetails?._id,
-        senderId: userInfoState?.user?.id,
+        senderId: currentUserId,
         senderType: 'APP',
         teamId: teamId,
         updatedAt: date,
@@ -427,9 +398,9 @@ const ChatScreen = ({
         sendMessageAction(
           localMessage,
           teamId,
-          orgState?.currentOrgId,
-          userInfoState?.user?.id,
-          userInfoState?.accessToken,
+          currentOrgId,
+          currentUserId,
+          accessToken,
           repliedMsgDetails?._id || null,
           attachment?.length > 0 ? attachment : response || [],
           mentionsArr,
@@ -438,10 +409,10 @@ const ChatScreen = ({
         setGlobalMessageToSendAction({
           content: localMessage,
           teamId: teamId,
-          orgId: orgState?.currentOrgId,
-          senderId: userInfoState?.user?.id,
-          userId: userInfoState?.user?.id,
-          accessToken: userInfoState?.accessToken,
+          orgId: currentOrgId,
+          senderId: currentUserId,
+          userId: currentUserId,
+          accessToken: accessToken,
           parentId: repliedMsgDetails?.id || null,
           updatedAt: date,
           mentionsArr: mentionsArr,
@@ -493,8 +464,8 @@ const ChatScreen = ({
                   </View>
                 ) : (
                   <>
-                    <FlashList
-                      ref={FlatListRef}
+                    <AnimatedFlashList
+                      ref={FlashListRef}
                       data={memoizedData}
                       renderItem={renderItem}
                       estimatedItemSize={200}
@@ -511,7 +482,7 @@ const ChatScreen = ({
                       onEndReachedThreshold={0.9}
                       keyboardDismissMode="on-drag"
                       keyboardShouldPersistTaps="always"
-                      onScroll={handleScroll}
+                      onScroll={onScroll}
                       showsVerticalScrollIndicator={false}
                       removeClippedSubviews={true}
                       // maxToRenderPerBatch={20}
@@ -551,7 +522,7 @@ const ChatScreen = ({
                   chatState={chatState}
                   setreplyOnMessage={setreplyOnMessage}
                   setrepliedMsgDetails={setrepliedMsgDetails}
-                  flatListRef={FlatListRef}
+                  FlashListRef={FlashListRef}
                   channelType={channelType}
                   setCurrentSelectedChatCard={setCurrentSelectedChatCard}
                   currentSelectChatCard={currentSelectChatCard}
@@ -563,30 +534,32 @@ const ChatScreen = ({
                 channelType == 'PRIVATE') &&
               !channelsState?.channelIdAndDataMapping[
                 teamId
-              ]?.userIds?.includes(userInfoState?.user?.id) ? (
-                <View
-                  style={{
-                    flex: 1,
-                    borderTopWidth: 0.3,
-                    borderTopColor: colors.color,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
+              ]?.userIds?.includes(currentUserId) ? (
+                <View>
+                  <Divider />
                   <TouchableOpacity
                     onPress={() =>
                       joinChannelAction(
-                        orgState?.currentOrgId,
+                        currentOrgId,
                         teamId,
-                        userInfoState?.user?.id,
-                        userInfoState?.accessToken,
+                        currentUserId,
+                        accessToken,
                       )
                     }
                     style={{
                       borderWidth: 1,
-                      borderColor: colors.color,
+                      borderColor: '#50C878',
                       borderRadius: 5,
+                      alignSelf: 'center',
+                      marginVertical: 15,
+                      paddingHorizontal: 20,
                     }}>
-                    <Text style={{margin: 10, color: colors.textColor}}>
+                    <Text
+                      style={{
+                        margin: 10,
+                        fontSize: 16,
+                        color: colors.textColor,
+                      }}>
                       Join this channel
                     </Text>
                   </TouchableOpacity>
@@ -625,58 +598,56 @@ const ChatScreen = ({
                         );
                       })}
 
-                    {replyOnMessage && (
-                      <TouchableOpacity
-                        activeOpacity={0.9}
-                        onPress={() => {
-                          setreplyOnMessage(false);
-                          setrepliedMsgDetails(null);
-                        }}>
-                        <View style={styles.replyMessageInInput}>
-                          {repliedMsgDetails?.content?.includes(
-                            '<span class="mention"',
-                          ) ? (
-                            <HTMLView
-                              value={`<div>${repliedMsgDetails?.content}</div>`}
-                              renderNode={renderNode}
-                              stylesheet={htmlStyles}
-                            />
-                          ) : repliedMsgDetails?.attachment?.length > 0 &&
-                            typeof repliedMsgDetails?.attachment != 'string' ? (
-                            <Text style={{color: 'black'}}>
-                              <Icon
-                                name="attach-file"
-                                size={16}
-                                color="black"
+                    {replyOnMessage &&
+                      (console.log(repliedMsgDetails, '=-=-'),
+                      (
+                        <TouchableOpacity
+                          activeOpacity={0.9}
+                          onPress={() => {
+                            setreplyOnMessage(false);
+                            setrepliedMsgDetails(null);
+                          }}>
+                          <View style={styles.replyMessageInInput}>
+                            {repliedMsgDetails?.content?.includes(
+                              '<span class="mention"',
+                            ) ? (
+                              <HTMLView
+                                value={`<div>${repliedMsgDetails?.content}</div>`}
+                                renderNode={renderNode}
+                                stylesheet={htmlStyles}
                               />
-                              attachment
-                            </Text>
-                          ) : (
-                            <RenderHTML
-                              source={{
-                                html: repliedMsgDetails?.content?.replace(
-                                  emailRegex,
-                                  '<span>$&</span>',
-                                ),
+                            ) : repliedMsgDetails?.attachment?.length > 0 &&
+                              typeof repliedMsgDetails?.attachment !=
+                                'string' ? (
+                              <Attachments
+                                attachment={repliedMsgDetails?.attachment}
+                              />
+                            ) : (
+                              <RenderHTML
+                                source={{
+                                  html: repliedMsgDetails?.content?.replace(
+                                    emailRegex,
+                                    '<span>$&</span>',
+                                  ),
+                                }}
+                                contentWidth={width}
+                                tagsStyles={tagsStyles('black', 'black')}
+                              />
+                            )}
+                            <MaterialIcons
+                              name="cancel"
+                              size={ms(16)}
+                              color="black"
+                              style={{
+                                position: 'absolute',
+                                top: ms(5),
+                                right: ms(5),
+                                zIndex: 1,
                               }}
-                              contentWidth={width}
-                              tagsStyles={tagsStyles('black', 'black')}
                             />
-                          )}
-                          <MaterialIcons
-                            name="cancel"
-                            size={ms(16)}
-                            color="black"
-                            style={{
-                              position: 'absolute',
-                              top: ms(5),
-                              right: ms(5),
-                              zIndex: 1,
-                            }}
-                          />
-                        </View>
-                      </TouchableOpacity>
-                    )}
+                          </View>
+                        </TouchableOpacity>
+                      ))}
 
                     {showMention && (
                       <MentionList

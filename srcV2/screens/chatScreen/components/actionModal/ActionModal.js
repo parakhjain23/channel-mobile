@@ -1,30 +1,27 @@
-import {View, Text, Dimensions} from 'react-native';
+import {View, Dimensions, StyleSheet} from 'react-native';
 import React from 'react';
 import {Modal} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native';
-import {useTheme} from '@react-navigation/native';
-import {makeStyles} from '../Styles';
-import ActionList from './ActionList';
-import {ActionMessageCardMemo} from './ActionMessageCard';
+import ActionList from '../actionList/ActionList';
+import {LongPressCardMemo} from '../longPressCard/LongPressCard';
 
-const ActionModal = ({
-  setShowActions,
-  chat,
-  userInfoState,
-  orgState,
-  deleteMessageAction,
-  chatState,
-  setreplyOnMessage,
-  setrepliedMsgDetails,
-  flatListRef,
-  channelType,
-  setCurrentSelectedChatCard,
-  currentSelectChatCard,
-}) => {
-  const {colors} = useTheme();
-  const styles = makeStyles(colors);
-  const {height} = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
+const ActionModal = props => {
+  const {
+    setShowActions,
+    chat,
+    userInfoState,
+    orgState,
+    deleteMessageAction,
+    chatState,
+    setreplyOnMessage,
+    setrepliedMsgDetails,
+    flatListRef,
+    channelType,
+    setCurrentSelectedChatCard,
+    currentSelectChatCard,
+  } = props;
   return (
     <Modal
       animationType="fade"
@@ -32,23 +29,10 @@ const ActionModal = ({
       onRequestClose={() => setShowActions(false)}
       style={{flex: 1}}>
       <TouchableWithoutFeedback onPress={() => setShowActions(false)}>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            alignContent: 'center',
-            backgroundColor: 'rgba(0, 0, 0, 0.9)',
-          }}>
+        <View style={styles.container}>
           <TouchableWithoutFeedback onPress={() => setShowActions(false)}>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                maxHeight: height - 300,
-              }}>
-              <ActionMessageCardMemo
+            <View style={styles.cardContainer}>
+              <LongPressCardMemo
                 chat={chat}
                 userInfoState={userInfoState}
                 orgState={orgState}
@@ -80,4 +64,19 @@ const ActionModal = ({
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  },
+  cardContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    maxHeight: height - 300,
+  },
+});
 export default ActionModal;

@@ -1,23 +1,21 @@
 import uuid from 'react-native-uuid';
+import {CHAT_SERVER_URL} from '../baseUrls/baseUrls';
 export const FileUploadApi = async (Files, accessToken) => {
   const fileNames = Files?.map(item => {
     const folder = uuid.v4();
     return `${folder}/${item?.name || item?.fileName}`;
   });
   try {
-    const presignedUrl = await fetch(
-      'https://api.intospace.io/chat/fileUpload',
-      {
-        method: 'POST',
-        headers: {
-          Authorization: accessToken,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          fileNames: fileNames,
-        }),
+    const presignedUrl = await fetch(`${CHAT_SERVER_URL}/chat/fileUpload`, {
+      method: 'POST',
+      headers: {
+        Authorization: accessToken,
+        'Content-Type': 'application/json',
       },
-    );
+      body: JSON.stringify({
+        fileNames: fileNames,
+      }),
+    });
     const Genereated_URL = await presignedUrl.json();
     const signedUrls = Object.values(Genereated_URL);
     const uploadPromises = signedUrls.map(async (s3BucketUrl, index) => {

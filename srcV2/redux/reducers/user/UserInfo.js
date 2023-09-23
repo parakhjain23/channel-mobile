@@ -18,7 +18,6 @@ export function userInfoReducer(state = initialState, action) {
       return {...state, siginInMethod: action.signinMethod};
 
     case Actions.FETCH_USER_DETAILS_SUCCESS:
-      console.log(action);
       return {...state, user: action.userDetails};
 
     case Actions.SIGN_OUT:

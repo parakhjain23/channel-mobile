@@ -6,7 +6,7 @@ import AudioRecorderPlayer, {
   AudioSourceAndroidType,
   OutputFormatAndroidType,
 } from 'react-native-audio-recorder-player';
-import RNFetchBlob from 'rn-fetch-blob';
+import {RECORING_PATH} from '../../utils/Path';
 
 export const AudioRecorderPlay = new AudioRecorderPlayer();
 const audioSet = {
@@ -18,10 +18,8 @@ const audioSet = {
   OutputFormatAndroid: OutputFormatAndroidType.AAC_ADTS,
 };
 
-const path = Platform.select({
-  ios: `sound.m4a`,
-  android: `${RNFetchBlob.fs.dirs.CacheDir}/sound.mp3`,
-});
+const path = RECORING_PATH;
+
 export const onStartRecord = async setIsRecording => {
   try {
     if (Platform.OS === 'android') {

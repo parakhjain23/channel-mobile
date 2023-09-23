@@ -15,6 +15,7 @@ export const makeStyles = colors =>
     messageListContainer: {
       flex: 9,
     },
+    mentionsList: {maxHeight: 250},
     loadingContainer: {
       flex: 1,
       justifyContent: 'center',
@@ -82,7 +83,6 @@ export const makeStyles = colors =>
       borderRadius: 5,
       marginBottom: 4,
     },
-    mentionsList: {maxHeight: 250},
     option: {
       margin: 8,
       backgroundColor: 'yellow',

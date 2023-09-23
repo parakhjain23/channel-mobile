@@ -31,7 +31,7 @@ const RecentChannelsListComponent = React.memo(
               item={item}
               channelsState={channelsState}
               setChatDetailsForTab={setChatDetailsForTab}
-              accessToken={userInfoState?.accessToekn}
+              accessToken={userInfoState?.accessToken}
               currentUserId={userInfoState?.user?.id}
             />
           )
@@ -58,6 +58,9 @@ const RecentChannelsListComponent = React.memo(
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
+          ListFooterComponent={() => {
+            return <View style={{height: 100}} />;
+          }}
         />
       </View>
     );

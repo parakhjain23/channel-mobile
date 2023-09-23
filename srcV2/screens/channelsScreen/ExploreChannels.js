@@ -6,13 +6,14 @@ import {connect} from 'react-redux';
 import {setActiveChannelTeamId} from '../../redux/actions/channels/SetActiveChannelId';
 import {s, vs, ms, mvs} from 'react-native-size-matters';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {CHAT_SERVER_URL} from '../../api/baseUrls/baseUrls';
 const ExploreChannels = props => {
   const {colors} = useTheme();
   const [channels, setChannels] = useState([]);
   const navigation = useNavigation();
   async function fetchAllChannels() {
     const response = await fetch(
-      `https://api.intospace.io/chat//team?$paginate=false&orgId=${props?.orgsState?.currentOrgId}&isArchived=false&includeUsers=false&$limit=50`,
+      `${CHAT_SERVER_URL}/chat//team?$paginate=false&orgId=${props?.orgsState?.currentOrgId}&isArchived=false&includeUsers=false&$limit=50`,
       {
         method: 'GET',
         headers: {
