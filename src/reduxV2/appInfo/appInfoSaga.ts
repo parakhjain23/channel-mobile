@@ -1,4 +1,7 @@
 import { takeLatest } from "redux-saga/effects";
+import { getSpaceAccessTokenV2 } from "./appInfoGeneratorFunctions";
+import { getUserDetailsV2 } from "../allUsers/allUserGeneratorFunctions";
+import { getDataFromAccessToken } from "../multiTaskGeneratorFunctions";
 
 function* AppInfoSaga() {
     // yield takeLatest(Actions.SAVE_TOKEN, getUserDetails);
@@ -6,6 +9,8 @@ function* AppInfoSaga() {
     // yield takeLatest(Actions.SELECT_INITIAL_ORG_ID, getAllUsersOfOrg);
     // yield takeLatest(Actions.SEARCH_USER_PROFILE_START, fetchSearchedUserProfile);
     // yield takeLatest(Actions.UPDATE_USER_DETAILS_START, updateUserDetails);
+    yield takeLatest('appInfo/getSpaceTokenStart',getSpaceAccessTokenV2)
+    yield takeLatest('appInfo/getSpaceTokenSuccess',getDataFromAccessToken)
   }
   
   export default AppInfoSaga;

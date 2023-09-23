@@ -1,5 +1,6 @@
 export interface $OrgsReducerType{
     isLoading: boolean,
+    currentOrgId:string | null
     orgs: orgDetailType[],
     orgIdAndNameMapping: {[key:string]:string},
     orgsWithNewMessages: any,

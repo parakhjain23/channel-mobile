@@ -8,7 +8,9 @@ const appInfoSlice = createSlice({
 
 export const { 
   updateAppInfoState,
-  resetAppInfoState
+  getSpaceTokenStart,
+  getSpaceTokenSuccess,
+  resetAppInfoState,
  } = appInfoSlice.actions
 
 export default appInfoSlice.reducer

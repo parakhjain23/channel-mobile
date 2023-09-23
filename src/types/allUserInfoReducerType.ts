@@ -1,4 +1,5 @@
 export interface $AllUserInfoReducerType{
+    currentUser:UserDetailsType | {}
     allUsers: UserDetailsType[]
     userIdAndDataMapping:{[key:string]:UserDetailsType}
     isLoading: boolean

@@ -22,10 +22,10 @@ import {joinChannel} from '../actions/channels/JoinChannelActions';
 
 function* ChannelSaga() {
   yield takeLatest(Actions.FETCH_CHANNELS_START, getChannels);
-  yield takeLatest(Actions.SELECT_CURRENT_ORG_ID, getChannels);
   // yield takeLatest(Actions.SELECT_CURRENT_ORG_ID, getChannelDetails);
   // yield takeLatest(Actions.FETCH_CHANNELS_START, getChannelDetails);
   // yield takeLatest(Actions.FETCH_RECENT_CHANNELS_SUCCESS, getChannelDetails);
+  yield takeLatest(Actions.SELECT_CURRENT_ORG_ID, getChannels);
   yield takeLatest(Actions.GET_CHANNELS_DETAILS, getChannelDetails);
   yield takeLatest(Actions.SELECT_CURRENT_ORG_ID, getAllUsersOfOrg);
   yield takeLatest(Actions.GET_ALL_USERS_START, getAllUsersOfOrg);

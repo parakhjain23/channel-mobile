@@ -5,7 +5,6 @@ export interface $AppInfoReducerType{
     isInternetConnected:boolean
     isSocketConnected:boolean
     signinMethod:string
-    currentOrgId:string
     currentChannelId:string
     deviceType:string
 }

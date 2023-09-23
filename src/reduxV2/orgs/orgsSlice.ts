@@ -6,6 +6,10 @@ const orgsSlice = createSlice({
   reducers
 })
 
-export const { updateOrgsState } = orgsSlice.actions
+export const {
+   updateOrgsState ,
+   setCurrentOrgId ,
+   getAllOrgsSuccess
+  } = orgsSlice.actions
 
 export default orgsSlice.reducer

@@ -6,6 +6,7 @@ import UserProfile from '../screens/userProfiles/UserProfiles';
 import ChannelDetailsScreen from '../screens/channelDetails/ChannelDetails';
 import LoginScreen from '../screens/loginScreen/LoginScreen';
 import SelectWorkSpaceScreen from '../screens/selectWorkSpaceScreen/SelectWorkSpaceScreen';
+import { LoginScreenV2 } from '../screens/loginScreen/LoginScreenV2';
 
 export const StackScreens = [
   {
@@ -46,7 +47,7 @@ export const StackScreens = [
 export const AuthenticationScreens = [
   {
     name: 'Login',
-    component: LoginScreen,
+    component: LoginScreenV2,
     options: {
       headerShown: false,
     },

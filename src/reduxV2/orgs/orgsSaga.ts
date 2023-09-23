@@ -1,4 +1,5 @@
 import { takeLatest } from "redux-saga/effects";
+import { getDataFromOrgId } from "../multiTaskGeneratorFunctions";
 
 function* OrgsSaga() {
     // yield takeLatest(Actions.SAVE_TOKEN, getUserDetails);
@@ -6,6 +7,7 @@ function* OrgsSaga() {
     // yield takeLatest(Actions.SELECT_INITIAL_ORG_ID, getAllUsersOfOrg);
     // yield takeLatest(Actions.SEARCH_USER_PROFILE_START, fetchSearchedUserProfile);
     // yield takeLatest(Actions.UPDATE_USER_DETAILS_START, updateUserDetails);
+    yield takeLatest('orgs/setCurrentOrgId',getDataFromOrgId)
   }
   
   export default OrgsSaga;
