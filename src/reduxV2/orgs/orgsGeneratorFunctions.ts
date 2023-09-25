@@ -1,7 +1,8 @@
 import { call, put } from "redux-saga/effects";
 import { fetchOrgsApi } from "../../api/getOrgsApi/GetOrgs";
-import { getAllOrgsSuccess, updateOrgsState } from "./orgsSlice";
+import { getAllOrgsSuccessV2, updateOrgsState } from "./orgsSlice";
 import { getAllUsersOfOrgApi } from "../../api/getAllUsersofOrgApi/getAllUsers";
+import { getAllUsersSuccessV2 } from "../allUsers/allUsersSlice";
 
 export function* getAllOrgsV2(accessToken:string){
     try {
@@ -9,7 +10,7 @@ export function* getAllOrgsV2(accessToken:string){
       if(response?.length == 0){
         yield put(updateOrgsState({noOrgsFound:true}))
       }else{
-        yield put(getAllOrgsSuccess({orgs:response}))
+        yield put(getAllOrgsSuccessV2({orgs:response}))
       }
     } catch (error) {
       console.warn(error);
@@ -19,7 +20,7 @@ export function* getAllOrgsV2(accessToken:string){
 export function* getAllUsersOfOrgV2(data:{accessToken:string,orgId:string}){
     try {
       var response = yield call(getAllUsersOfOrgApi,data?.accessToken,data?.orgId)
-      yield put(getAllUsersOfOrgSuccess(response))
+      yield put(getAllUsersSuccessV2(response))
     } catch (error) {
       console.warn(error);
     }

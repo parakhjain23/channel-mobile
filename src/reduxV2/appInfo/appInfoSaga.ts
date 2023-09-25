@@ -9,8 +9,8 @@ function* AppInfoSaga() {
     // yield takeLatest(Actions.SELECT_INITIAL_ORG_ID, getAllUsersOfOrg);
     // yield takeLatest(Actions.SEARCH_USER_PROFILE_START, fetchSearchedUserProfile);
     // yield takeLatest(Actions.UPDATE_USER_DETAILS_START, updateUserDetails);
-    yield takeLatest('appInfo/getSpaceTokenStart',getSpaceAccessTokenV2)
-    yield takeLatest('appInfo/getSpaceTokenSuccess',getDataFromAccessToken)
+    yield takeLatest('appInfo/getSpaceTokenStartV2',getSpaceAccessTokenV2)
+    yield takeLatest('appInfo/getSpaceTokenSuccessV2',getDataFromAccessToken)
   }
   
   export default AppInfoSaga;

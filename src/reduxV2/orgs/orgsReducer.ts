@@ -16,11 +16,11 @@ export const reducers: ValidateSliceCaseReducers<$OrgsReducerType, SliceCaseRedu
     updateOrgsState(state,action:actionType<any>){
         return {...state,...action.payload}
     },
-    setCurrentOrgId(state,action:actionType<{orgId:string}>){
+    setCurrentOrgIdV2(state,action:actionType<{orgId:string}>){
         state.isLoading = false
         state.currentOrgId = action.payload.orgId
     },
-    getAllOrgsSuccess(state,action: actionType<orgDetailType[]>){
+    getAllOrgsSuccessV2(state,action: actionType<orgDetailType[]>){
         const mapping = orgIdAndNameMappingUtility(action?.payload)
         state.orgs = action.payload
         state.orgIdAndNameMapping = mapping

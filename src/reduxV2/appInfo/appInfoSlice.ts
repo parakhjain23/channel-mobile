@@ -8,8 +8,8 @@ const appInfoSlice = createSlice({
 
 export const { 
   updateAppInfoState,
-  getSpaceTokenStart,
-  getSpaceTokenSuccess,
+  getSpaceTokenStartV2,
+  getSpaceTokenSuccessV2,
   resetAppInfoState,
  } = appInfoSlice.actions
 

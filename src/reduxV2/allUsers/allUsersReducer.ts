@@ -1,6 +1,7 @@
 import { SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit'
-import { $AllUserInfoReducerType } from '../../types/allUserInfoReducerType'
+import { $AllUserInfoReducerType, UserDetailsType } from '../../types/allUserInfoReducerType'
 import {actionType} from '../../types/actionDataType'
+import { userIdAndDataMappingUtility } from '../../utils/mappingUtility'
 export const initialState: $AllUserInfoReducerType = {
     currentUser:{},
     allUsers: [],
@@ -12,5 +13,9 @@ export const reducers: ValidateSliceCaseReducers<$AllUserInfoReducerType, SliceC
     updateAllUsersState(state,action: actionType<any>){
         return {...state,...action.payload}
     },
-    
+    getAllUsersSuccessV2(state,action: actionType<UserDetailsType[]>){
+        const mapping = userIdAndDataMappingUtility(action.payload)
+        state.allUsers = action.payload
+        state.userIdAndDataMapping = mapping
+    }
 }

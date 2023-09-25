@@ -17,6 +17,7 @@ import {
   setSigningMethod,
 } from '../../redux/actions/spaceToken/SpaceTokenActions';
 import {useNavigation, useTheme} from '@react-navigation/native';
+import { getSpaceTokenStartV2 } from '../../reduxV2/appInfo/appInfoSlice';
 
 export const LoginScreenV2 = () => {
   const navigation = useNavigation();
@@ -43,7 +44,7 @@ export const LoginScreenV2 = () => {
         auth().onAuthStateChanged(data => {
           if (data) {
             data.getIdToken()?.then(token => {
-              dispatch(getSpaceTokenStart({signinMethod:'Google',firebaseToken:token}))
+              dispatch(getSpaceTokenStartV2({signinMethod:'Google',firebaseToken:token}))
               navigation.navigate('SelectWorkSpace', {email: user.email});
             });
           }
@@ -67,7 +68,6 @@ export const LoginScreenV2 = () => {
     }
   };
   async function onAppleButtonPress() {
-    {
       try {
         if (appleAuth?.isSupported) {
           let appleAuthRequestResponse = await appleAuth.performRequest({
@@ -88,7 +88,7 @@ export const LoginScreenV2 = () => {
                 data?.getIdToken()?.then(token => {
                 //   getSpaceTokenStartAction(token);
                 //   setSigningMethodAction('Apple');
-                 dispatch(getSpaceTokenStart({signinMethod:'Apple',firebaseToken:token}))
+                 dispatch(getSpaceTokenStartV2({signinMethod:'Apple',firebaseToken:token}))
                   navigation.navigate('SelectWorkSpace', {
                     email: jwttokkenEmail,
                   });
@@ -105,7 +105,6 @@ export const LoginScreenV2 = () => {
       } catch (error) {
         // console.log(error);
       }
-    }
   }
   return (
     <View

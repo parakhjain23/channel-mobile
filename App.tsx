@@ -26,7 +26,7 @@ const App = () => {
         <StoreAppWrapper /> */}
 
         <InternetConnectionV2/>
-        <NotificationSetup />
+        {/* <NotificationSetup /> */}
         <StoreAppWrapperV2 />
       </PersistGate>
     </Provider>

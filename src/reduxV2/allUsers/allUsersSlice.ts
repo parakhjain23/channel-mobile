@@ -6,6 +6,9 @@ const allUsersSlice = createSlice({
   reducers
 })
 
-export const { updateAllUserState } = allUsersSlice.actions
+export const { 
+  updateAllUserState ,
+  getAllUsersSuccessV2
+} = allUsersSlice.actions
 
 export default allUsersSlice.reducer

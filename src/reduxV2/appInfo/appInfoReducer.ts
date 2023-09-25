@@ -16,10 +16,11 @@ export const reducers: ValidateSliceCaseReducers<$AppInfoReducerType, SliceCaseR
     updateAppInfoState(state,action: actionType<{[key:string]:string | boolean}>){
         return {...state,...action.payload}
     },
-    getSpaceTokenStart(state,action:actionType<{signinMethod:string,firebaseToken:string}>){
+    getSpaceTokenStartV2(state,action:actionType<{signinMethod:string,firebaseToken:string}>){
+        console.log("inside getSpaceTokenStartV2");
         state.signinMethod = action.payload.signinMethod
     },
-    getSpaceTokenSuccess(state,action:actionType<{accessToken:string}>){
+    getSpaceTokenSuccessV2(state,action:actionType<{accessToken:string}>){
         state.accessToken = action.payload.accessToken
         state.isAuthenticated = true
     },

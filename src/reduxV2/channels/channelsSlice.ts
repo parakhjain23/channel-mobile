@@ -6,6 +6,9 @@ const channelsSlice = createSlice({
   reducers
 })
 
-export const { updateChannelState } = channelsSlice.actions
+export const { 
+  updateChannelState,
+  getAllChannelsSuccessV2
+} = channelsSlice.actions
 
 export default channelsSlice.reducer

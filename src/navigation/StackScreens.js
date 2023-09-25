@@ -7,6 +7,7 @@ import ChannelDetailsScreen from '../screens/channelDetails/ChannelDetails';
 import LoginScreen from '../screens/loginScreen/LoginScreen';
 import SelectWorkSpaceScreen from '../screens/selectWorkSpaceScreen/SelectWorkSpaceScreen';
 import { LoginScreenV2 } from '../screens/loginScreen/LoginScreenV2';
+import {SelectWorkSpaceScreenV2} from '../screens/selectWorkSpaceScreen/SelectWorkScreenV2'
 
 export const StackScreens = [
   {
@@ -54,7 +55,7 @@ export const AuthenticationScreens = [
   },
   {
     name: 'SelectWorkSpace',
-    component: SelectWorkSpaceScreen,
+    component: SelectWorkSpaceScreenV2,
     options: {
       headerShown: false,
     },

@@ -4,6 +4,7 @@ import ProtectedNavigation from './ProtectedNavigation';
 import {navigationRef} from './RootNavigation';
 import {useColorScheme} from 'react-native';
 import {DARK_THEME, LIGHT_THEME} from '../theme/Theme';
+import { ProtectedNavigationV2 } from './ProtectedNavigationV2';
 
 const linking = {
   prefixes: ['channel://', 'channel', 'walkover.space.chat'],
@@ -27,7 +28,7 @@ const AuthNavigation = () => {
       ref={navigationRef}
       linking={linking}
       theme={scheme === 'light' ? LIGHT_THEME : DARK_THEME}>
-      <ProtectedNavigation />
+      <ProtectedNavigationV2 />
     </NavigationContainer>
   );
 };

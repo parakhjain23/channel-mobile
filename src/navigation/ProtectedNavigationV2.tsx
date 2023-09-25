@@ -17,7 +17,7 @@ export const ProtectedNavigationV2 = () => {
   const isTablet = width >= 600 && height >= 600;
   const isIPad = Platform.OS === 'ios' && Platform.isPad;
   const deviceType = isTablet || isIPad ? DEVICE_TYPES[1] : DEVICE_TYPES[0];
-  const currentOrgId = useCustomSelector((state:$ReduxCoreType)=>state?.appInfo?.currentOrgId)
+  const currentOrgId = useCustomSelector((state:$ReduxCoreType)=>state?.orgs?.currentOrgId)
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(updateAppInfoState({deviceType:deviceType}))
