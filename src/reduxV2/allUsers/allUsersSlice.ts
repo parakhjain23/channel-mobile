@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { initialState , reducers} from './allUsersReducer'
+import { initialState, reducers } from './allUsersReducer'
 const allUsersSlice = createSlice({
   name: 'allUsers',
   initialState,
   reducers
 })
 
-export const { 
-  updateAllUserState ,
+export const {
+  updateAllUsersState,
   getAllUsersSuccessV2
 } = allUsersSlice.actions
 

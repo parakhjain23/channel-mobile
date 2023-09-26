@@ -14,7 +14,9 @@ export function* getDataFromAccessToken(action: actionType<{ accessToken: string
   ])
 }
 
-export function* getDataFromOrgId(action: actionType<{ accessToken: string, orgId: string, userId: string }>) {
+export function* getDataFromOrgId(action: actionType<{ accessToken: string, orgId: string, userId: string, userName: string }>) {
+  console.log(action.payload, "-0-0-0-")
+  console.log("inside getDataFromOrgId")
   yield all([
     call(getAllUsersOfOrgV2, action?.payload),
     call(getChannelsV2, action?.payload)

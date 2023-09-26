@@ -16,7 +16,8 @@ export const reducers: ValidateSliceCaseReducers<$OrgsReducerType, SliceCaseRedu
     updateOrgsState(state, action: actionType<any>) {
         return { ...state, ...action.payload }
     },
-    setCurrentOrgIdV2(state, action: actionType<{ orgId: string }>) {
+    setCurrentOrgIdV2(state, action: actionType<{ [key: string]: string }>) {
+        console.log("first", action.payload)
         state.isLoading = false
         state.currentOrgId = action.payload.orgId
     },

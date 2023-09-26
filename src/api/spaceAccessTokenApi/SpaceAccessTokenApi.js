@@ -12,7 +12,6 @@ export const getSpaceAccessTokenApi = async firebaseToken => {
       }),
     });
     var result = await response.json();
-    console.log(result,"-0-0-00--S");
     return result;
   } catch (error) {
     console.warn(error);
