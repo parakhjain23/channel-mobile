@@ -2,29 +2,30 @@ import { SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit'
 import { $AppInfoReducerType } from '../../types/appInfoReducerType'
 import { actionType } from '../../types/actionDataType'
 export const initialState: $AppInfoReducerType = {
-    appVersion:'',
-    accessToken:'',
-    isAuthenticated:false,
-    isInternetConnected:false,
-    isSocketConnected:false,
-    signinMethod:'',
-    currentChannelId:'',
-    deviceType:''
+    appVersion: '',
+    accessToken: '',
+    isAuthenticated: false,
+    isInternetConnected: false,
+    isSocketConnected: false,
+    signinMethod: '',
+    currentChannelId: '',
+    deviceType: ''
 }
 
-export const reducers: ValidateSliceCaseReducers<$AppInfoReducerType, SliceCaseReducers<$AppInfoReducerType>>  = {
-    updateAppInfoState(state,action: actionType<{[key:string]:string | boolean}>){
-        return {...state,...action.payload}
+export const reducers: ValidateSliceCaseReducers<$AppInfoReducerType, SliceCaseReducers<$AppInfoReducerType>> = {
+    updateAppInfoState(state, action: actionType<{ [key: string]: string | boolean }>) {
+        return { ...state, ...action.payload }
     },
-    getSpaceTokenStartV2(state,action:actionType<{signinMethod:string,firebaseToken:string}>){
+    getSpaceTokenStartV2(state, action: actionType<{ signinMethod: string, firebaseToken: string }>) {
         console.log("inside getSpaceTokenStartV2");
         state.signinMethod = action.payload.signinMethod
     },
-    getSpaceTokenSuccessV2(state,action:actionType<{accessToken:string}>){
+    getSpaceTokenSuccessV2(state, action: actionType<{ accessToken: string }>) {
+        console.log("inside get space token ")
         state.accessToken = action.payload.accessToken
         state.isAuthenticated = true
     },
-    resetAppInfoState(){
+    resetAppInfoState() {
         return initialState
     }
 }

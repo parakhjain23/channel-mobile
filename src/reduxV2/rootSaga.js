@@ -1,4 +1,4 @@
-import { fork } from "redux-saga/effects";
+import { all, fork } from "redux-saga/effects";
 import AppInfoSaga from "./appInfo/appInfoSaga";
 import ChannelsSaga from "./channels/channelsSaga";
 import ChatSaga from "./chats/chatsSaga";
