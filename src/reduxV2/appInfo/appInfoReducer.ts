@@ -9,7 +9,7 @@ export const initialState: $AppInfoReducerType = {
     isSocketConnected: false,
     signinMethod: '',
     currentChannelId: '',
-    deviceType: ''
+    deviceType: 'Mobile'
 }
 
 export const reducers: ValidateSliceCaseReducers<$AppInfoReducerType, SliceCaseReducers<$AppInfoReducerType>> = {

@@ -4,6 +4,7 @@ import ChannelsSaga from "./channels/channelsSaga";
 import ChatSaga from "./chats/chatsSaga";
 import AllUserSaga from "./allUsers/allUsersSaga";
 import SearchedDataSaga from "./searchedData/searchedDataSaga";
+import OrgsSaga from "./orgs/orgsSaga";
 
 export default function* rootSaga() {
     yield all([
@@ -14,6 +15,7 @@ export default function* rootSaga() {
       // fork(SocketSaga),
       fork(AllUserSaga),
       fork(AppInfoSaga),
+      fork(OrgsSaga),
       fork(ChannelsSaga),
       fork(ChatSaga),
       fork(SearchedDataSaga)

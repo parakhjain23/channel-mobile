@@ -1,5 +1,5 @@
 export interface $AllUserInfoReducerType{
-    currentUser:UserDetailsType | {}
+    currentUser:UserDetailsType
     allUsers: UserDetailsType[]
     userIdAndDataMapping:{[key:string]:UserDetailsType}
     isLoading: boolean
@@ -10,6 +10,7 @@ export interface $AllUserInfoReducerType{
 
 export interface UserDetailsType {
     avatarKey: string;
+    avatar:string
     createdAt: string;
     displayName: string;
     email: string;

@@ -31,6 +31,7 @@ import { CreateChannelModal } from './components/CreateChannelComponent';
 import { Throttling } from '../../utils/Throttling';
 import { useCustomSelector } from '../../utils/deepCheckSelector';
 import { $ReduxCoreType } from '../../types/reduxCoreType';
+import { RecentChannelsListComponentV2 } from './components/RecentChannelsListV2';
 
 export const ChannelsScreenV2 = () => {
     // console.log('channel-screen');
@@ -46,12 +47,16 @@ export const ChannelsScreenV2 = () => {
     const [refreshing, setRefreshing] = useState(false);
     // const currentUser = props?.userInfoState?.user;
     const offset = height * 0.12;
-    const { currentOrgId, currentUser, accessToken, deviceType } = useCustomSelector((state: $ReduxCoreType) => ({
+    const { currentOrgId, currentUser, accessToken, deviceType , channels , recentChannels } = useCustomSelector((state: $ReduxCoreType) => ({
         currentOrgId: state?.orgs?.currentOrgId,
         currentUser: state?.allUsers?.currentUser,
         accessToken: state?.appInfo?.accessToken,
         deviceType: state?.appInfo?.deviceType,
+        channels : state?.channels?.channels,
+        recentChannels: state?.channels?.recentChannels
     }))
+    console.log(channels.length,recentChannels.length,"-0--00-0-");
+    
     const onScroll = useCallback(
         Animated.event([{ nativeEvent: { contentOffset: { y: scrollY?.current } } }], {
             useNativeDriver: true,
@@ -131,21 +136,20 @@ export const ChannelsScreenV2 = () => {
                     behavior={Platform.OS === 'ios' ? 'padding' : null}
                     keyboardVerticalOffset={offset}
                     style={{ flex: 1 }}>
-                    {props?.channelsState?.isLoading && (
+                    {/* {props?.channelsState?.isLoading && (
                         <ActivityIndicator size={'small'} color={colors?.color} />
-                    )}
+                    )} */}
                     <View style={{ flex: 1 }}>
-                        {searchValue != '' ? (
-                            props?.channelsByQueryState?.channels?.length > 0 ? (
-                                <SearchChannelList props={props} navigation={navigation} />
-                            ) : (
-                                <NoChannelsFound
-                                    modalizeRef={modalizeRef}
-                                    setsearchValue={setsearchValue}
-                                />
-                            )
-                        ) : props?.channelsState?.recentChannels?.length > 0 ||
-                            props?.channelsState?.channels?.length > 0 ? (
+                        {/* {searchValue != '' ? (
+                            // props?.channelsByQueryState?.channels?.length > 0 ? (
+                            //     <SearchChannelList props={props} navigation={navigation} />
+                            // ) : (
+                            //     <NoChannelsFound
+                            //         modalizeRef={modalizeRef}
+                            //         setsearchValue={setsearchValue}
+                            //     />
+                            // )
+                        ) : (recentChannels?.length > 0 || channels?.length > 0) ? (
                             <RecentChannelsList
                                 onScroll={onScroll}
                                 refreshing={refreshing}
@@ -157,7 +161,17 @@ export const ChannelsScreenV2 = () => {
                                 refreshing={refreshing}
                                 onRefresh={onRefresh}
                             />
-                        )}
+                        )} */}
+                        {
+                            recentChannels.length > 0 || channels?.length > 0 ? 
+                            <RecentChannelsListComponentV2 onScroll={onScroll}  
+                              refreshing={refreshing}
+                            onRefresh={onRefresh}
+                            setChatDetailsForTab={""}/> : 
+                            <NoInternetComponent 
+                            refreshing={refreshing}
+                                onRefresh={onRefresh}/>
+                        }
                         {isScrolling && (
                             <View
                                 style={{
@@ -184,7 +198,7 @@ export const ChannelsScreenV2 = () => {
                         )}
                     </View>
                 </KeyboardAvoidingView>
-                <CreateChannelModal modalizeRef={modalizeRef} props={props} />
+                <CreateChannelModal modalizeRef={modalizeRef}  props={""}/>
             </View>
         </SafeAreaView>
     );

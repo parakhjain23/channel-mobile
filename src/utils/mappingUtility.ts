@@ -20,19 +20,21 @@ export function userIdAndDataMappingUtility(users: UserDetailsType[]): any {
       displayName: obj.displayName,
       firstName: obj.firstName,
       lastName: obj.lastName,
-      avatarKey: obj.avatarKey,
+      fullName: `${obj?.firstName + ' ' + obj?.lastName}`,
+      avatar: obj.avatar
     }
   })
   return userIdAndDataMapping
 }
 
 export function channelDataMappingUtility(data: { channels: channelDetailType[], userId: string, userName: string }): any {
-  let userIdAndTeamIdMapping: any, teamIdAndDataMapping: any = {}
-  const { channels, userId, userName } = data
-  channels.forEach(channel => {
-    const { _id, type, userIds } = channel;
-    teamIdAndDataMapping[_id] = channel;
+  let userIdAndTeamIdMapping: any = {}, teamIdAndDataMapping: any = {}
+  var {channels, userId, userName} = data;
 
+  channels.forEach(channel => {
+    console.log(channel);
+    
+    const {_id, type, userIds} = channel;
     if (type === 'DIRECT_MESSAGE') {
       let dmUserId = userIds?.find(id => id !== userId);
       userIdAndTeamIdMapping[dmUserId] = _id;
@@ -42,15 +44,14 @@ export function channelDataMappingUtility(data: { channels: channelDetailType[],
         channel.name = userName + ' (You)';
       }
     }
-    // teamIdAndTypeMapping[_id] = type;
-    teamIdAndDataMapping[_id] = {
-      type: channel.type,
-      name: channel?.name,
-      isThread: channel?.isThread,
-      parentTeamId: channel?.parentTeamId,
-      createdBy: channel?.createdBy,
-      userIds: channel?.userIds
-    }
+   teamIdAndDataMapping[_id] = {
+          type: channel.type,
+          name: channel?.name,
+          isThread: channel?.isThread,
+          parentTeamId: channel?.parentTeamId,
+          createdBy: channel?.createdBy,
+          userIds: channel?.userIds
+        }
   });
   return { userIdAndTeamIdMapping, teamIdAndDataMapping }
 }

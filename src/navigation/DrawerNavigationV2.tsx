@@ -15,6 +15,7 @@ import { DEVICE_TYPES } from '../constants/Constants';
 import { useCustomSelector } from '../utils/deepCheckSelector';
 import { $ReduxCoreType } from '../types/reduxCoreType';
 import { InsideDrawerScreenV2 } from '../screens/drawer/InsideDrawerScreenV2';
+import { ChannelsScreenV2 } from '../screens/channelsScreen/ChannelScreenV2';
 
 const Drawer = createDrawerNavigator();
 export const DrawerNavigationV2 = () => {
@@ -28,7 +29,7 @@ export const DrawerNavigationV2 = () => {
         currentOrgId: state?.orgs?.currentOrgId,
     }))
     if (deviceType === DEVICE_TYPES[0]) {
-        [ScreenName, ScreenComponent] = ['Channel', ChannelsScreen];
+        [ScreenName, ScreenComponent] = ['Channel', ChannelsScreenV2];
     } else {
         [ScreenName, ScreenComponent] = ['Ipad', IpadScreen];
     }

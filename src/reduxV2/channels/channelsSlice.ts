@@ -8,7 +8,8 @@ const channelsSlice = createSlice({
 
 export const { 
   updateChannelState,
-  getAllChannelsSuccessV2
+  getAllChannelsSuccessV2,
+  getAllRecentChannelSuccessV2
 } = channelsSlice.actions
 
 export default channelsSlice.reducer
