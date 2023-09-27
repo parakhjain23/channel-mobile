@@ -6,7 +6,7 @@ import { Platform, Dimensions } from 'react-native';
 import { DEVICE_TYPES } from '../constants/Constants';
 import * as Actions from '../redux/Enums';
 import { AuthenticationScreens, StackScreens } from './StackScreens';
-import useCustomSelector from '../utils/deepCheckSelector';
+import { useCustomSelector } from '../utils/deepCheckSelector';
 import { $ReduxCoreType } from '../types/reduxCoreType';
 import { updateAppInfoState } from '../reduxV2/appInfo/appInfoSlice';
 

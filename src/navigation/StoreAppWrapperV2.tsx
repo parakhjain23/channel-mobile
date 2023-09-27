@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { initializeSocket } from '../redux/actions/socket/socketActions';
 import AuthNavigation from './AuthNavigation';
-import useCustomSelector from '../utils/deepCheckSelector';
+import { useCustomSelector } from '../utils/deepCheckSelector';
 import { $ReduxCoreType } from '../types/reduxCoreType';
 import { SplashScreenComponentV2 } from '../screens/splashScreen/SplashScreenV2';
 

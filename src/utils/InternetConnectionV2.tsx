@@ -5,7 +5,7 @@ import { networkStatus } from '../redux/actions/network/NetworkActions';
 import { $ReduxCoreType } from '../types/reduxCoreType';
 import { useDispatch } from 'react-redux';
 import { updateAppInfoState } from '../reduxV2/appInfo/appInfoSlice';
-import useCustomSelector from '../utils/deepCheckSelector.js';
+import { useCustomSelector } from '../utils/deepCheckSelector.js';
 
 
 export const InternetConnectionV2 = () => {

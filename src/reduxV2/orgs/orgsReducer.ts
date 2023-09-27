@@ -1,12 +1,12 @@
 import { SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit'
 import { actionType } from '../../types/actionDataType'
 import { $OrgsReducerType, orgDetailType } from '../../types/orgsReducerType'
-import { orgIdAndNameMappingUtility } from '../../utils/mappingUtility'
+import { orgIdAndDataMappingUtility } from '../../utils/mappingUtility'
 export const initialState: $OrgsReducerType = {
     isLoading: false,
     currentOrgId: null,
     orgs: [],
-    orgIdAndNameMapping: {},
+    orgIdAndDataMapping: {},
     orgsWithNewMessages: {},
     unreadCountForDrawerIcon: 0,
     noOrgsFound: false,
@@ -22,8 +22,8 @@ export const reducers: ValidateSliceCaseReducers<$OrgsReducerType, SliceCaseRedu
         state.currentOrgId = action.payload.orgId
     },
     getAllOrgsSuccessV2(state, action: actionType<orgDetailType[]>) {
-        const mapping = orgIdAndNameMappingUtility(action?.payload)
+        const mapping = orgIdAndDataMappingUtility(action?.payload)
         state.orgs = action.payload
-        state.orgIdAndNameMapping = mapping
+        state.orgIdAndDataMapping = mapping
     }
 }

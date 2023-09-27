@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import signOut from '../../redux/actions/user/userAction';
 import { useNavigation } from '@react-navigation/native';
-import useCustomSelector from '../../utils/deepCheckSelector.js'
+import { useCustomSelector } from '../../utils/deepCheckSelector.js'
 import { $ReduxCoreType } from '../../types/reduxCoreType';
 import { updateAppInfoState } from '../../reduxV2/appInfo/appInfoSlice';
 import { setCurrentOrgIdV2 } from '../../reduxV2/orgs/orgsSlice';
@@ -20,7 +20,7 @@ export const SelectWorkSpaceScreenV2 = ({ route }) => {
   const [selectedOrg, setselectedOrg] = useState(null);
   const { email } = route.params;
   const dispatch = useDispatch();
-  const { noOrgsFound, orgs, currentUser, signingMethod, accessToken } = useSelector((state: $ReduxCoreType) => ({
+  const { noOrgsFound, orgs, currentUser, signingMethod, accessToken } = useCustomSelector((state: $ReduxCoreType) => ({
     noOrgsFound: state?.orgs?.noOrgsFound,
     orgs: state?.orgs?.orgs,
     currentUser: state?.allUsers?.currentUser,

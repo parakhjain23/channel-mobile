@@ -3,7 +3,7 @@ import { getChatsReset } from '../../redux/actions/chat/ChatActions';
 import SplashScreen from 'react-native-splash-screen';
 import DeviceInfo from 'react-native-device-info';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import useCustomSelector from '../../utils/deepCheckSelector';
+import { useCustomSelector } from '../../utils/deepCheckSelector';
 import { $ReduxCoreType } from '../../types/reduxCoreType';
 import { useDispatch } from 'react-redux';
 import { resetAppInfoState, updateAppInfoState } from '../../reduxV2/appInfo/appInfoSlice';

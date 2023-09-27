@@ -35,7 +35,7 @@ import { useSelector } from 'react-redux'
 
 //   return oldValue === newValue
 // }
- function isEqual(oldValue, newValue) {
+export default function isEqual(oldValue, newValue) {
   if (oldValue === newValue) return true
 
   if (oldValue === null || oldValue === undefined || newValue === null || newValue === undefined) {
@@ -65,7 +65,7 @@ import { useSelector } from 'react-redux'
   return false
 }
 
-export default  useCustomSelector = (stateChangesKaFuntion) => {
+export const useCustomSelector = (stateChangesKaFuntion) => {
   const data = useSelector(stateChangesKaFuntion, isEqual)
   return data
 }

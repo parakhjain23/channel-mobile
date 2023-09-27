@@ -1,18 +1,18 @@
 import ExploreChannels from '../screens/channelsScreen/ExploreChannels';
 import ChatScreen from '../screens/chatScreen/ChatScreen';
 import IpadScreen from '../screens/ipadScreen/IpadScreen';
-import DrawerNavigation from './DrawerNavigation';
 import UserProfile from '../screens/userProfiles/UserProfiles';
 import ChannelDetailsScreen from '../screens/channelDetails/ChannelDetails';
 import LoginScreen from '../screens/loginScreen/LoginScreen';
 import SelectWorkSpaceScreen from '../screens/selectWorkSpaceScreen/SelectWorkSpaceScreen';
 import { LoginScreenV2 } from '../screens/loginScreen/LoginScreenV2';
 import {SelectWorkSpaceScreenV2} from '../screens/selectWorkSpaceScreen/SelectWorkScreenV2'
+import { DrawerNavigationV2 } from './DrawerNavigationV2';
 
 export const StackScreens = [
   {
     name: 'Org',
-    component: DrawerNavigation,
+    component: DrawerNavigationV2,
     options: {
       headerShown: false,
     },
