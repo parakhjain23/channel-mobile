@@ -8,7 +8,9 @@ const chatsSlice = createSlice({
 
 export const { 
   updateChatState,
-  resetChatState
+  resetChatState,
+  fetchMessagesStartV2,
+  fetchMessagesSuccessV2
  } = chatsSlice.actions
 
 export default chatsSlice.reducer

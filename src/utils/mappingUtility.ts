@@ -50,7 +50,8 @@ export function channelDataMappingUtility(data: { channels: channelDetailType[],
           isThread: channel?.isThread,
           parentTeamId: channel?.parentTeamId,
           createdBy: channel?.createdBy,
-          userIds: channel?.userIds
+          userIds: channel?.userIds,
+          _id: channel?._id
         }
   });
   return { userIdAndTeamIdMapping, teamIdAndDataMapping }

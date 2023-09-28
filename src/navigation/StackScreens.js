@@ -8,6 +8,7 @@ import SelectWorkSpaceScreen from '../screens/selectWorkSpaceScreen/SelectWorkSp
 import { LoginScreenV2 } from '../screens/loginScreen/LoginScreenV2';
 import {SelectWorkSpaceScreenV2} from '../screens/selectWorkSpaceScreen/SelectWorkScreenV2'
 import { DrawerNavigationV2 } from './DrawerNavigationV2';
+import { ChatScreenV2 } from '../screens/chatScreen/ChatScreenV2';
 
 export const StackScreens = [
   {
@@ -26,7 +27,7 @@ export const StackScreens = [
   },
   {
     name: 'Chat',
-    component: ChatScreen,
+    component: ChatScreenV2,
     options: {
       headerShown: false,
     },

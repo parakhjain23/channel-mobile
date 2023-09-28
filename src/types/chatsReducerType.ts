@@ -6,6 +6,9 @@ export interface $ChatsReducerType{
 export interface chatDataTypes{
     [key:string]:{
         isLoading:boolean,
-        messages:[]
+        messages:[],
+        parentMessages:{[key:string]:any},
+        draftMessages:{[key:string]:any},
+        messagesToSendOnInternetReconnet:any
     }
 }

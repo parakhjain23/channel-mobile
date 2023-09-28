@@ -18,7 +18,6 @@ import {
 } from 'react-native';
 import {useNavigation , useTheme} from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {connect} from 'react-redux';
 import * as RootNavigation from '../../../navigation/RootNavigation';
 import {GestureHandlerRootView, Swipeable} from 'react-native-gesture-handler';
 import {DEVICE_TYPES} from '../../../constants/Constants';
@@ -53,7 +52,7 @@ const ChannelCard = ({
   // closeChannelAction,
   setChatDetailsForTab,
 }) => {
-  // console.log(item);
+  console.log(item);
   
   const navigation = useNavigation();
   const {deviceType,currentOrgId,currentUserId,userIdAndDataMapping,teamIdAndDataMapping,accessToken} = useCustomSelector((state:$ReduxCoreType)=>({
@@ -100,7 +99,7 @@ const ChannelCard = ({
     : 'Loading...'
     : item?.name;
     
-    item?.type == 'DIRECT_MESSAGE' && console.log("=-=-=-=--=,",Name,userIdAndDataMapping[userId].avatar);
+    // item?.type == 'DIRECT_MESSAGE' && console.log("=-=-=-=--=,",Name,userIdAndDataMapping[userId].avatar);
   
   const iconName =
     item?.type === 'DIRECT_MESSAGE'
