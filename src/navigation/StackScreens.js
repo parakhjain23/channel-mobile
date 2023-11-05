@@ -9,6 +9,7 @@ import { LoginScreenV2 } from '../screens/loginScreen/LoginScreenV2';
 import {SelectWorkSpaceScreenV2} from '../screens/selectWorkSpaceScreen/SelectWorkScreenV2'
 import { DrawerNavigationV2 } from './DrawerNavigationV2';
 import { ChatScreenV2 } from '../screens/chatScreen/ChatScreenV2';
+import { UserProfileV2 } from '../screens/userProfiles/UserProfileV2';
 
 export const StackScreens = [
   {
@@ -38,7 +39,7 @@ export const StackScreens = [
   },
   {
     name: 'UserProfiles',
-    component: UserProfile,
+    component: UserProfileV2,
   },
   {
     name: 'Channel Details',

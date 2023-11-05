@@ -21,7 +21,9 @@ export function userIdAndDataMappingUtility(users: UserDetailsType[]): any {
       firstName: obj.firstName,
       lastName: obj.lastName,
       fullName: `${obj?.firstName + ' ' + obj?.lastName}`,
-      avatar: obj.avatar
+      avatar: obj.avatar,
+      mobileNo: obj.mobileNumber,
+      email: obj.email,
     }
   })
   return userIdAndDataMapping

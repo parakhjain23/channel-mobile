@@ -9,7 +9,7 @@ import {
     View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import NoInternetComponent from '../../components/NoInternetComponent';
 import { IMAGE_BASE_URL } from '../../constants/Constants';
 import {
@@ -23,17 +23,18 @@ import FastImage from 'react-native-fast-image';
 import { setCurrentOrgId } from '../../redux/actions/org/intialOrgId';
 import { useCustomSelector } from '../../utils/deepCheckSelector';
 import { $ReduxCoreType } from '../../types/reduxCoreType';
+import { setCurrentOrgIdV2 } from '../../reduxV2/orgs/orgsSlice';
 
 export const InsideDrawerScreenV2 = () => {
     const { colors } = useTheme();
-    const navigation = useNavigation();
+    const dispatch = useDispatch()
     const { orgs, currentUser, deviceType, accessToken } = useCustomSelector((state: $ReduxCoreType) => ({
         orgs: state?.orgs?.orgs,
         currentUser: state?.allUsers?.currentUser,
         deviceType: state?.appInfo?.deviceType,
         accessToken: state?.appInfo?.accessToken
     }))
-    const OrgCard = ({ item, navigation }) => {
+    const OrgCard = ({ item }) => {
         // var unreadCountObj = orgsState?.orgsWithNewMessages?.[item?.id];
         // var count = undefined;
         // if (unreadCountObj != undefined) {
@@ -45,19 +46,13 @@ export const InsideDrawerScreenV2 = () => {
         return (
             <TouchableOpacity
                 onPress={async () => {
-                    // await switchOrgAction(
-                    //     accessToken,
-                    //     item?.id,
-                    //     currentUser?.id,
-                    //     currentUser?.displayName
-                    //         ? currentUser?.displayName
-                    //         : currentUser?.firstName,
-                    // );
+                  dispatch(setCurrentOrgIdV2({ accessToken: accessToken, orgId: item?.id, userId: currentUser.id, userName: currentUser.displayName ? currentUser.displayName : currentUser.firstName }));
+
                     // count != undefined &&
                     //     (await moveChannelToTopAction(Object.keys(unreadCountObj))) &&
                     //     removeCountOnOrgCardAction(item?.id); // todo handle later
                     deviceType == 'Mobile' &&
-                        navigation.navigate('Channel', {
+                        RootNavigation.navigate('Channel', {
                             orgId: item?.id,
                             name: item?.name,
                         });
@@ -174,7 +169,7 @@ export const InsideDrawerScreenV2 = () => {
                     {orgs?.length > 0 ? (
                         orgs?.map((item, index) => {
                             return (
-                                <OrgCard item={item} navigation={navigation} key={index} />
+                                <OrgCard item={item} key={index} />
                             );
                         })
                     ) : (

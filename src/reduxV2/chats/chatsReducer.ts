@@ -15,6 +15,7 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
         state.data[action.payload.teamId] = {...state.data[action.payload.teamId],isLoading:true,parentMessages:{}}
     },
     fetchMessagesSuccessV2(state,action:actionType<{messages:[],parentMessages:[],skip:number,teamId:string}>){
+        console.log("inside fetch message success");
         const {messages,parentMessages}=modifyMessagesUtility(action?.payload)
         state.data[action.payload.teamId] = {
             ...state.data[action.payload.teamId],

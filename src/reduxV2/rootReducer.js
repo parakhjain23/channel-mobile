@@ -11,11 +11,12 @@ const persistConfig = {
     key: 'root',
     storage: AsyncStorage,
     whitelist: [
-      'userInfoReducer',
-      'orgsReducer',
-      'channelsReducer',
-      'chatReducer',
-      'appInfoReducer',
+      'appInfo',
+      'orgs',
+      'channels',
+      'chats',
+      'searchedData',
+      'allUsers',
       'searchedUserInfoReducer',
     ],
   };

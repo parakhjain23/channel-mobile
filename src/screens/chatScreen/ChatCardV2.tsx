@@ -28,12 +28,13 @@ import {ChatSenderName} from './components/ChatUtility';
 import { useCustomSelector } from '../../utils/deepCheckSelector';
 import { $ReduxCoreType } from '../../types/reduxCoreType';
 
-const AddRemoveJoinedMsg = React.memo(({senderName, content, orgState}) => {
+const AddRemoveJoinedMsg = React.memo(({senderName, content}) => {
+  const userIdAndDataMapping = useCustomSelector((state:$ReduxCoreType)=>state?.allUsers?.userIdAndDataMapping)
   const {colors} = useTheme();
   const styles = makeStyles(colors);
   const regex = /\{\{(\w+)\}\}/g;
   const result = content.replace(regex, (match, userId) => {
-    return orgState?.userIdAndNameMapping[userId] || match; // return the name if it exists, or the original match if not
+    return userIdAndDataMapping[userId].fullName || match; // return the name if it exists, or the original match if not
   });
   return (
     <View style={[styles.actionText]}>
@@ -493,7 +494,7 @@ const {deviceType,currentUserId,userIdAndDataMapping,parentMessage} = useCustomS
       <AddRemoveJoinedMsg
         senderName={SenderName}
         content={chat?.content}
-        orgState={orgState}
+        // orgState={orgState}
       />
     );
   }

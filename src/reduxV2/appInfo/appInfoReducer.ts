@@ -8,7 +8,7 @@ export const initialState: $AppInfoReducerType = {
     isInternetConnected: false,
     isSocketConnected: false,
     signinMethod: '',
-    currentChannelId: '',
+    activeChannelId: '',
     deviceType: 'Mobile'
 }
 
@@ -17,11 +17,9 @@ export const reducers: ValidateSliceCaseReducers<$AppInfoReducerType, SliceCaseR
         return { ...state, ...action.payload }
     },
     getSpaceTokenStartV2(state, action: actionType<{ signinMethod: string, firebaseToken: string }>) {
-        console.log("inside getSpaceTokenStartV2");
         state.signinMethod = action.payload.signinMethod
     },
     getSpaceTokenSuccessV2(state, action: actionType<{ accessToken: string }>) {
-        console.log("inside get space token ")
         state.accessToken = action.payload.accessToken
         state.isAuthenticated = true
     },

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import uuid from 'react-native-uuid';
 import {
   KeyboardAvoidingView,
@@ -15,52 +15,52 @@ import {
   Keyboard,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {connect, useDispatch} from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import ListFooterComponent from '../../components/ListFooterComponent';
-import {setActiveChannelTeamId} from '../../redux/actions/channels/SetActiveChannelId';
+import { setActiveChannelTeamId } from '../../redux/actions/channels/SetActiveChannelId';
 import {
   getChatsStart,
   sendMessageStart,
   setGlobalMessageToSend,
 } from '../../redux/actions/chat/ChatActions';
-import {deleteMessageStart} from '../../redux/actions/chat/DeleteChatAction';
-import {ChatCardMemo} from './ChatCard';
-import {getChannelsByQueryStart} from '../../redux/actions/channels/ChannelsByQueryAction';
-import {makeStyles} from './Styles';
+import { deleteMessageStart } from '../../redux/actions/chat/DeleteChatAction';
+import { ChatCardMemo } from './ChatCard';
+import { getChannelsByQueryStart } from '../../redux/actions/channels/ChannelsByQueryAction';
+import { makeStyles } from './Styles';
 import {
   useNavigation,
   useNavigationState,
   useTheme,
 } from '@react-navigation/native';
 import AnimatedLottieView from 'lottie-react-native';
-import {ms} from 'react-native-size-matters';
-import {setLocalMsgStart} from '../../redux/actions/chat/LocalMessageActions';
-import {resetUnreadCountStart} from '../../redux/actions/channels/ChannelsAction';
+import { ms } from 'react-native-size-matters';
+import { setLocalMsgStart } from '../../redux/actions/chat/LocalMessageActions';
+import { resetUnreadCountStart } from '../../redux/actions/channels/ChannelsAction';
 import HTMLView from 'react-native-htmlview';
 import RenderHTML from 'react-native-render-html';
-import {tagsStyles} from './HtmlStyles';
-import {onStartRecord, onStopRecord} from './VoiceRecording';
-import {uploadRecording} from './VoicePicker';
+import { tagsStyles } from './HtmlStyles';
+import { onStartRecord, onStopRecord } from './VoiceRecording';
+import { uploadRecording } from './VoicePicker';
 import {
   addUserToChannelStart,
   removeUserFromChannelStart,
 } from '../../redux/actions/channelActivities/inviteUserToChannelAction';
-import {ACTIVITIES, DEVICE_TYPES} from '../../constants/Constants';
+import { ACTIVITIES, DEVICE_TYPES } from '../../constants/Constants';
 import ScrollDownButton from '../../components/ScrollDownButton';
 import AudioRecordingPlayer from '../../components/AudioRecorderPlayer';
 import FirstTabChatScreen from './FirstTabChatScreen';
 import ActivityList from './components/acitivityList/ActivityList';
 import MentionList from './components/mentionList/MentionList';
 import ActionModal from './components/actionModal/ActionModal';
-import {Button, Divider} from 'react-native-paper';
-import {listStyles} from './components/attachments/AttachmentStyles';
+import { Button, Divider } from 'react-native-paper';
+import { listStyles } from './components/attachments/AttachmentStyles';
 import AttachmentOptionsModal from './components/attachments/AttachmentOptionsModal';
-import {addDraftMessage} from '../../redux/actions/chat/DraftMessageAction';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {Header} from '../../components/Header';
-import {joinChannelStart} from '../../redux/actions/channels/JoinChannelActions';
-import {AnimatedFlashList} from '@shopify/flash-list';
-import {LOCAL_PATH} from '../../utils/Path';
+import { addDraftMessage } from '../../redux/actions/chat/DraftMessageAction';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Header } from '../../components/Header';
+import { joinChannelStart } from '../../redux/actions/channels/JoinChannelActions';
+import { AnimatedFlashList } from '@shopify/flash-list';
+import { LOCAL_PATH } from '../../utils/Path';
 import Attachments from './components/attachments/RenderAttachments';
 import { useCustomSelector } from '../../utils/deepCheckSelector';
 import { $ReduxCoreType } from '../../types/reduxCoreType';
@@ -70,20 +70,20 @@ import { fetchMessagesStartV2 } from '../../reduxV2/chats/chatsSlice';
 export const ChatScreenV2 = ({
   chatDetailsForTab,
   setChatDetailsForTab,
-//   deviceType,
+  //   deviceType,
   route,
-//   userInfoState,
-//   networkState,
+  //   userInfoState,
+  //   networkState,
   fetchChatsOfTeamAction,
   sendMessageAction,
-//   chatState,
-//   orgState,
+  //   chatState,
+  //   orgState,
   deleteMessageAction,
-//   channelsState,
+  //   channelsState,
   setActiveChannelTeamIdAction,
   setGlobalMessageToSendAction,
   getChannelsByQueryStartAction,
-//   channelsByQueryState,
+  //   channelsByQueryState,
   setlocalMsgAction,
   resetUnreadCountAction,
   addUsersToChannelAction,
@@ -91,56 +91,57 @@ export const ChatScreenV2 = ({
   draftMessageAction,
   joinChannelAction,
 }) => {
-  var teamId:string, channelType, chatHeaderTitle, userId;
-  
+  // var teamId:string, channelType, chatHeaderTitle, userId;
+
   const dispatch = useDispatch()
-  const {deviceType,userIdAndDataMapping,teamIdAndDataMapping,userIdAndTeamIdMapping,isInternetConnected,currentOrgId,currentUserId,accessToken}=useCustomSelector((state:$ReduxCoreType)=>({
-    deviceType:state?.appInfo?.deviceType,
-    userIdAndDataMapping:state?.allUsers?.userIdAndDataMapping,
-    teamIdAndDataMapping:state?.channels?.teamIdAndDataMapping,
-    userIdAndTeamIdMapping:state?.channels?.userIdAndTeamIdMapping,
-    isInternetConnected:state?.appInfo?.isInternetConnected,
-    currentOrgId:state?.orgs?.currentOrgId,
-    currentUserId:state?.allUsers?.currentUser?.id,
-    accessToken:state?.appInfo?.accessToken
+  const { deviceType, userIdAndDataMapping, teamIdAndDataMapping, userIdAndTeamIdMapping, isInternetConnected, currentOrgId, currentUserId, accessToken } = useCustomSelector((state: $ReduxCoreType) => ({
+    deviceType: state?.appInfo?.deviceType,
+    userIdAndDataMapping: state?.allUsers?.userIdAndDataMapping,
+    teamIdAndDataMapping: state?.channels?.teamIdAndDataMapping,
+    userIdAndTeamIdMapping: state?.channels?.userIdAndTeamIdMapping,
+    isInternetConnected: state?.appInfo?.isInternetConnected,
+    currentOrgId: state?.orgs?.currentOrgId,
+    currentUserId: state?.allUsers?.currentUser?.id,
+    accessToken: state?.appInfo?.accessToken
   }))
-  if (deviceType === DEVICE_TYPES[1]) {
-    userId = chatDetailsForTab?.userId;
-    teamId = chatDetailsForTab?.teamId;
-    channelType = chatDetailsForTab?.channelType;
-    chatHeaderTitle =
-      channelType === 'DIRECT_MESSAGE'
-        ? userIdAndDataMapping[userId].displayName
-        : chatDetailsForTab?.searchedChannel
-        ? chatDetailsForTab?.channelName
-        :teamIdAndDataMapping[teamId].name;
-  } else {
-    var {teamId:string, reciverUserId, channelType, searchedChannel, chatHeaderTitle} =
-      route.params;
-  }
-  console.log(route.params,"-0-0-0---0--");
+  // if (deviceType === DEVICE_TYPES[1]) {
+  //   userId = chatDetailsForTab?.userId;
+  //   teamId = chatDetailsForTab?.teamId;
+  //   channelType = chatDetailsForTab?.channelType;
+  //   chatHeaderTitle =
+  //     channelType === 'DIRECT_MESSAGE'
+  //       ? userIdAndDataMapping[userId].displayName
+  //       : chatDetailsForTab?.searchedChannel
+  //       ? chatDetailsForTab?.channelName
+  //       :teamIdAndDataMapping[teamId].name;
+  // } else {
+  console.log("inside else", route.params);
+
+  var { teamId, reciverUserId, channelType, searchedChannel, chatHeaderTitle } =
+    route.params;
+  // }
+  console.log(teamId, reciverUserId, "teamid in chatscreen");
 
   if (teamId == undefined) {
+    // when i dont have teamid with searched USER it handles that case create team ki api se data aakr state me add ho jata he waaha se yaha utha leta hu
     teamId = userIdAndTeamIdMapping[reciverUserId];
   }
 
   if (teamId == 'demo') {
     return <FirstTabChatScreen />;
   }
-  const {chatsData} = useCustomSelector((state:$ReduxCoreType)=>({
-    chatsData : state?.chats?.data[teamId]
+
+  const { chatsData } = useCustomSelector((state: $ReduxCoreType) => ({
+    chatsData: state?.chats?.data[teamId]
   }))
 
-  console.log("chatsDAta",chatsData?.messages?.length);
-  
+  console.log("chatsDAta", chatsData?.messages?.length);
+
   useEffect(() => {
     const fetchData = () => {
-     dispatch( fetchMessagesStartV2(
-      { teamId : teamId,
-       accessToken:accessToken,
-       skip:0,}
-       // chatState?.data?.[teamId]?.messages[0]?.['_id'],
-     ))
+      dispatch(fetchMessagesStartV2({ teamId: teamId, accessToken: accessToken, skip: 0 }
+        // chatState?.data?.[teamId]?.messages[0]?.['_id'],
+      ))
       // setActiveChannelTeamIdAction(teamId);
     };
     if (
@@ -154,7 +155,7 @@ export const ChatScreenV2 = ({
     }
   }, [isInternetConnected, teamId, chatDetailsForTab]);
 
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const styles = makeStyles(colors);
   const listStyle = listStyles(colors);
   const [replyOnMessage, setreplyOnMessage] = useState(false);
@@ -174,10 +175,10 @@ export const ChatScreenV2 = ({
   const FlashListRef = useRef(null);
   const textInputRef = useRef(null);
   const scrollY = new Animated.Value(0);
-  const {height} = Dimensions.get('window');
+  const { height } = Dimensions.get('window');
   const offset = height * 0.12;
   const screenHeight = Dimensions.get('window').height;
-  const {width} = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const date = useMemo(() => new Date(), []);
   const [recordingUrl, setrecordingUrl] = useState('');
   const [isRecording, setisRecording] = useState(false);
@@ -193,46 +194,46 @@ export const ChatScreenV2 = ({
   // const teamIdAndUnreadCountMapping =
   //   channelsState?.teamIdAndUnreadCountMapping;
   // const teamIdAndBadgeCountMapping = channelsState?.teamIdAndBadgeCountMapping;
-//   const currentUserId = userInfoState?.user?.id;
-//   const accessToken = userInfoState?.accessToken;
-//   const currentOrgId = orgState?.currentOrgId;
+  //   const currentUserId = userInfoState?.user?.id;
+  //   const accessToken = userInfoState?.accessToken;
+  //   const currentOrgId = orgState?.currentOrgId;
   const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
   // const shouldResetUnreadCount =
   //   teamIdAndUnreadCountMapping?.[teamId] > 0 ||
   //   teamIdAndBadgeCountMapping?.[teamId] > 0;
   const skip = chatsData?.messages?.length ?? 0;
   const path = LOCAL_PATH;
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('beforeRemove', e => {
-      e.preventDefault();
-      if (message.length > 0) {
-        draftMessageAction(
-          message,
-          teamId,
-          accessToken,
-          currentOrgId,
-          currentUserId,
-        );
-      }
-      navigation.dispatch(e.data.action); // Allow the screen to be removed
-    });
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('beforeRemove', e => {
+  //     e.preventDefault();
+  //     if (message.length > 0) {
+  //       draftMessageAction(
+  //         message,
+  //         teamId,
+  //         accessToken,
+  //         currentOrgId,
+  //         currentUserId,
+  //       );
+  //     }
+  //     navigation.dispatch(e.data.action); // Allow the screen to be removed
+  //   });
 
-    return () => unsubscribe();
-  }, [navigation, message]);
-  useEffect(() => {
-    return () => {
-      // Set the mounted state to false when the component is unmounted
-      isMountedRef.current = false;
-      onStopRecord(setrecordingUrl, setvoiceAttachment, isMountedRef);
-      setisRecording(false);
-    };
-  }, [navigationState]);
+  //   return () => unsubscribe();
+  // }, [navigation, message]);
+  // useEffect(() => {
+  //   return () => {
+  //     // Set the mounted state to false when the component is unmounted
+  //     isMountedRef.current = false;
+  //     onStopRecord(setrecordingUrl, setvoiceAttachment, isMountedRef);
+  //     setisRecording(false);
+  //   };
+  // }, [navigationState]);
 
-  useEffect(() => {
-    if (repliedMsgDetails != '' && !showPlayer) {
-      textInputRef.current.focus();
-    }
-  }, [repliedMsgDetails]);
+  // useEffect(() => {
+  //   if (repliedMsgDetails != '' && !showPlayer) {
+  //     textInputRef.current.focus();
+  //   }
+  // }, [repliedMsgDetails]);
 
   // useEffect(() => {
   //   searchedChannel && textInputRef?.current?.focus();
@@ -295,14 +296,14 @@ export const ChatScreenV2 = ({
   );
 
   const scrollToBottom = () => {
-    FlashListRef?.current?.scrollToOffset({animating: true, offset: 0});
+    FlashListRef?.current?.scrollToOffset({ animating: true, offset: 0 });
   };
 
   const onScroll = Animated.event(
-    [{nativeEvent: {contentOffset: {y: scrollY}}}],
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
     {
       useNativeDriver: true,
-      listener: ({nativeEvent}) => {
+      listener: ({ nativeEvent }) => {
         const offsetY = nativeEvent.contentOffset.y;
         setIsScrolling(offsetY >= 0.7 * screenHeight);
       },
@@ -315,7 +316,7 @@ export const ChatScreenV2 = ({
   );
 
   const renderItem = useCallback(
-    ({item, index}) => {
+    ({ item, index }) => {
       // console.log(index);
       return (
         <ChatCardMemoV2
@@ -342,9 +343,9 @@ export const ChatScreenV2 = ({
   const onEndReached = useCallback(() => {
     // fetchChatsOfTeamAction(teamId, accessToken, skip);
     dispatch(fetchMessagesStartV2({
-      teamId:teamId,
-      accessToken:accessToken,
-      skip:skip
+      teamId: teamId,
+      accessToken: accessToken,
+      skip: skip
     }))
   }, [teamId, accessToken, skip]);
 
@@ -355,7 +356,7 @@ export const ChatScreenV2 = ({
       return (
         <Text
           key={index}
-          style={{color: 'black', textDecorationLine: 'underline'}}>
+          style={{ color: 'black', textDecorationLine: 'underline' }}>
           @{dataValue}
         </Text>
       );
@@ -464,7 +465,7 @@ export const ChatScreenV2 = ({
   };
 
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView style={styles.safeAreaView}>
         {!isScrolling && (
           <Header
@@ -479,13 +480,13 @@ export const ChatScreenV2 = ({
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : null}
             keyboardVerticalOffset={searchedChannel ? 75 : offset}
-            style={{flex: 1}}>
+            style={{ flex: 1 }}>
             <View style={styles.outerContainer}>
               <View style={styles.messageListContainer}>
                 {teamId == undefined ||
-                chatsData?.isloading == true ? (
+                  chatsData?.isloading == true ? (
                   <View style={styles.loadingContainer}>
-                    <Text style={{color: colors?.color, textAlign: 'center'}}>
+                    <Text style={{ color: colors?.color, textAlign: 'center' }}>
                       Loading...
                     </Text>
                   </View>
@@ -529,7 +530,7 @@ export const ChatScreenV2 = ({
                   isNewMessage={false}
                 />
               </View>
-{/* 
+              {/* 
               {attachmentLoading && (
                 <AnimatedLottieView
                   source={require('../../assests/images/attachments/uploading.json')}

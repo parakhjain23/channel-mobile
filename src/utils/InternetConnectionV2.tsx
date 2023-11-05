@@ -27,17 +27,17 @@ export const InternetConnectionV2 = () => {
       unsubscribe();
     };
   }, []);
-  useEffect(() => {
-    if (isSocketConnected) {
-      Object.keys(chatStateData)?.map(async teamId => {
-        while (chatStateData[teamId]?.globalMessagesToSend?.length) {
-          await sendGlobalMessageApi(
-            chatStateData[teamId]?.globalMessagesToSend?.shift(),
-          );
-        }
-      });
-    }
-  }, [isInternetConnected, isSocketConnected]);
+  // useEffect(() => {
+  //   if (isSocketConnected) {
+  //     Object.keys(chatStateData)?.map(async teamId => {
+  //       while (chatStateData[teamId]?.globalMessagesToSend?.length) {
+  //         await sendGlobalMessageApi(
+  //           chatStateData[teamId]?.globalMessagesToSend?.shift(),
+  //         );
+  //       }
+  //     });
+  //   }
+  // }, [isInternetConnected, isSocketConnected]);
 
   return null;
 };

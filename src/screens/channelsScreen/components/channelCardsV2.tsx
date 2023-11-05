@@ -16,7 +16,7 @@ import {
   Vibration,
   Platform,
 } from 'react-native';
-import {useNavigation , useTheme} from '@react-navigation/native'
+import {useNavigation, useTheme} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as RootNavigation from '../../../navigation/RootNavigation';
 import {GestureHandlerRootView, Swipeable} from 'react-native-gesture-handler';
@@ -37,8 +37,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {makeStyles} from '../ChannelCardStyles';
-import { useCustomSelector } from '../../../utils/deepCheckSelector';
-import { $ReduxCoreType } from '../../../types/reduxCoreType';
+import {useCustomSelector} from '../../../utils/deepCheckSelector';
+import {$ReduxCoreType} from '../../../types/reduxCoreType';
 const TouchableItem =
   Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity;
 
@@ -52,17 +52,22 @@ const ChannelCard = ({
   // closeChannelAction,
   setChatDetailsForTab,
 }) => {
-  console.log(item);
-  
   const navigation = useNavigation();
-  const {deviceType,currentOrgId,currentUserId,userIdAndDataMapping,teamIdAndDataMapping,accessToken} = useCustomSelector((state:$ReduxCoreType)=>({
-    deviceType:state?.appInfo?.deviceType,
+  const {
+    deviceType,
+    currentOrgId,
+    currentUserId,
+    userIdAndDataMapping,
+    teamIdAndDataMapping,
+    accessToken,
+  } = useCustomSelector((state: $ReduxCoreType) => ({
+    deviceType: state?.appInfo?.deviceType,
     currentOrgId: state?.orgs?.currentOrgId,
     currentUserId: state?.allUsers?.currentUser?.id,
     userIdAndDataMapping: state?.allUsers?.userIdAndDataMapping,
     teamIdAndDataMapping: state?.channels?.teamIdAndDataMapping,
-    accessToken: state?.appInfo?.accessToken
-  }))
+    accessToken: state?.appInfo?.accessToken,
+  }));
 
   const handleListItemPress = (
     teamId,
@@ -80,27 +85,27 @@ const ChannelCard = ({
 
   const {colors} = useTheme();
   const styles = makeStyles(colors);
-//   const userIdAndDisplayNameMapping = orgsState?.userIdAndDisplayNameMapping;
-//   const userIdAndNameMapping = orgsState?.userIdAndNameMapping;
-//   const teamIdAndUnreadCountMapping =
-//     channelsState?.teamIdAndUnreadCountMapping;
-//   const teamIdAndBadgeCountMapping = channelsState?.teamIdAndBadgeCountMapping;
-//   const highlightChannel = channelsState?.highlightChannel;
-//   const currentOrgId = orgsState?.currentOrgId;
+  //   const userIdAndDisplayNameMapping = orgsState?.userIdAndDisplayNameMapping;
+  //   const userIdAndNameMapping = orgsState?.userIdAndNameMapping;
+  //   const teamIdAndUnreadCountMapping =
+  //     channelsState?.teamIdAndUnreadCountMapping;
+  //   const teamIdAndBadgeCountMapping = channelsState?.teamIdAndBadgeCountMapping;
+  //   const highlightChannel = channelsState?.highlightChannel;
+  //   const currentOrgId = orgsState?.currentOrgId;
   const userId =
     item?.userIds[0] !== currentUserId ? item?.userIds[0] : item?.userIds[1];
-    
-    const swipeableRef = useRef(null);
-    
-    const Name =
+
+  const swipeableRef = useRef(null);
+
+  const Name =
     item?.type === 'DIRECT_MESSAGE'
-    ? userIdAndDataMapping[userId]
-    ? userIdAndDataMapping[userId].displayName || userIdAndDataMapping[userId].fullName
-    : 'Loading...'
-    : item?.name;
-    
-    // item?.type == 'DIRECT_MESSAGE' && console.log("=-=-=-=--=,",Name,userIdAndDataMapping[userId].avatar);
-  
+      ? userIdAndDataMapping[userId]
+        ? userIdAndDataMapping[userId].displayName ||
+          userIdAndDataMapping[userId].fullName
+        : 'Loading...'
+      : item?.name;
+  // item?.type == 'DIRECT_MESSAGE' && console.log("=-=-=-=--=,",Name,userIdAndDataMapping[userId].avatar);
+
   const iconName =
     item?.type === 'DIRECT_MESSAGE'
       ? 'user'
@@ -108,11 +113,11 @@ const ChannelCard = ({
       ? 'lock'
       : 'hashtag';
 
-//   const unread = useMemo(() => {
-//     const unreadCount = teamIdAndUnreadCountMapping?.[item?._id] || 0;
-//     const isHighlighted = highlightChannel?.[item?._id];
-//     return unreadCount > 0 || isHighlighted;
-//   }, [item?._id, teamIdAndUnreadCountMapping, highlightChannel]);
+  //   const unread = useMemo(() => {
+  //     const unreadCount = teamIdAndUnreadCountMapping?.[item?._id] || 0;
+  //     const isHighlighted = highlightChannel?.[item?._id];
+  //     return unreadCount > 0 || isHighlighted;
+  //   }, [item?._id, teamIdAndUnreadCountMapping, highlightChannel]);
 
   const onPress = useCallback(() => {
     if (deviceType === DEVICE_TYPES[1]) {
@@ -122,7 +127,7 @@ const ChannelCard = ({
         chatHeaderTitle: Name,
         teamId: item?._id,
         channelType: item?.type,
-        reciverUserId: userId,
+        reciverUserId: userId || currentUserId,
         searchedChannel: false,
       });
     }
@@ -259,11 +264,11 @@ const ChannelCard = ({
           <Animated.View
             style={[styles.task, rStyle, {minHeight: LIST_ITEM_HEIGHT}]}>
             <View style={styles.cardStyle}>
-              {item?.type === 'DIRECT_MESSAGE' ? (
+              {item?.type === 'DIRECT_MESSAGE' || item?.type === 'PERSONAL' ? (
                 <FastImage
                   source={{
-                    uri: userIdAndDataMapping[userId].avatar
-                      ? userIdAndDataMapping[userId].avatar
+                    uri: userIdAndDataMapping[userId]?.avatar
+                      ? userIdAndDataMapping[userId]?.avatar
                       : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVe0cFaZ9e5Hm9X-tdWRLSvoZqg2bjemBABA&usqp=CAU',
                     priority: FastImage.priority.normal,
                   }}
