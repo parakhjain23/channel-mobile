@@ -252,7 +252,7 @@ const ChatCardV2 = ({
           )}
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: sentByMe ? 'row-reverse' : 'row',
             marginTop: sameSender
               ? ms(0)
               : channelType == 'DIRECT_MESSAGE'
@@ -261,7 +261,7 @@ const ChatCardV2 = ({
                   ? ms(0)
                   : ms(10),
             marginBottom: index == 0 ? 10 : 3,
-          }}>
+                      }}>
           {SenderName != 'You' && channelType != 'DIRECT_MESSAGE' && (
             <TouchableOpacity
               onPress={async () => {
@@ -276,9 +276,8 @@ const ChatCardV2 = ({
               <View
                 style={{
                   justifyContent: 'flex-start',
-                  marginRight: 5,
-                  marginTop: 5,
-                }}>
+                  margin: 5,
+                  }}>
                 {!sameSender ? (
                   <FastImage
                     source={{
@@ -315,8 +314,8 @@ const ChatCardV2 = ({
                     flexDirection: 'row',
                     flex: 1,
                     flexWrap: 'wrap',
-                  },
-                ]}>
+                                      },
+                                  ]}>
                 <View style={{ justifyContent: 'flex-end' }}>
                   {chat?.randomId != null && (
                     <View
