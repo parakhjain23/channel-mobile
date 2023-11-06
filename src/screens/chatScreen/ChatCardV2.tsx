@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useRef, useState} from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   Text,
   TouchableOpacity,
@@ -6,31 +6,31 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import {GestureHandlerRootView, Swipeable} from 'react-native-gesture-handler';
+import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useTheme} from '@react-navigation/native';
-import {makeStyles} from './ChatCardStyles';
-import {ms} from 'react-native-size-matters';
+import { useTheme } from '@react-navigation/native';
+import { makeStyles } from './ChatCardStyles';
+import { ms } from 'react-native-size-matters';
 import HTMLView from 'react-native-htmlview';
-import {RenderHTML} from 'react-native-render-html';
+import { RenderHTML } from 'react-native-render-html';
 import * as RootNavigation from '../../navigation/RootNavigation';
-import {tagsStyles} from './HtmlStyles';
-import {DEVICE_TYPES} from '../../constants/Constants';
-import {connect, useSelector} from 'react-redux';
-import {setActiveChannelTeamId} from '../../redux/actions/channels/SetActiveChannelId';
-import {formatTime} from '../../utils/FormatTime';
+import { tagsStyles } from './HtmlStyles';
+import { DEVICE_TYPES } from '../../constants/Constants';
+import { connect, useSelector } from 'react-redux';
+import { setActiveChannelTeamId } from '../../redux/actions/channels/SetActiveChannelId';
+import { formatTime } from '../../utils/FormatTime';
 import FastImage from 'react-native-fast-image';
 import Reactions from '../../components/Reactions';
 import ImageViewerComponent from './components/attachments/ImageViewerComponent';
 import JSONRenderer from './JSONRenderer';
 import Attachments from './components/attachments/RenderAttachments';
-import {ChatSenderName} from './components/ChatUtility';
+import { ChatSenderName } from './components/ChatUtility';
 import { useCustomSelector } from '../../utils/deepCheckSelector';
 import { $ReduxCoreType } from '../../types/reduxCoreType';
 
-const AddRemoveJoinedMsg = React.memo(({senderName, content}) => {
-  const userIdAndDataMapping = useCustomSelector((state:$ReduxCoreType)=>state?.allUsers?.userIdAndDataMapping)
-  const {colors} = useTheme();
+const AddRemoveJoinedMsg = React.memo(({ senderName, content }) => {
+  const userIdAndDataMapping = useCustomSelector((state: $ReduxCoreType) => state?.allUsers?.userIdAndDataMapping)
+  const { colors } = useTheme();
   const styles = makeStyles(colors);
   const regex = /\{\{(\w+)\}\}/g;
   const result = content.replace(regex, (match, userId) => {
@@ -47,9 +47,9 @@ const AddRemoveJoinedMsg = React.memo(({senderName, content}) => {
 
 const ChatCardV2 = ({
   chat,
-//   userInfoState,
-//   orgState,
-//   chatState,
+  //   userInfoState,
+  //   orgState,
+  //   chatState,
   setreplyOnMessage,
   setrepliedMsgDetails,
   FlashListRef,
@@ -60,19 +60,19 @@ const ChatCardV2 = ({
   setChatDetailsForTab,
   setActiveChannelTeamIdAction,
 }) => {
-//   const deviceType = useSelector(state => state.appInfoReducer.deviceType);
-const {deviceType,currentUserId,userIdAndDataMapping,parentMessage} = useCustomSelector((state:$ReduxCoreType)=>({
-    deviceType:state?.appInfo?.deviceType,
-    currentUserId:state?.allUsers?.currentUser?.id,
+  //   const deviceType = useSelector(state => state.appInfoReducer.deviceType);
+  const { deviceType, currentUserId, userIdAndDataMapping, parentMessage } = useCustomSelector((state: $ReduxCoreType) => ({
+    deviceType: state?.appInfo?.deviceType,
+    currentUserId: state?.allUsers?.currentUser?.id,
     userIdAndDataMapping: state?.allUsers?.userIdAndDataMapping,
-    parentMessage:state?.chats?.data[chat?.teamId]?.parentMessages[chat?.parentId]
-}))
-  const {colors, dark} = useTheme();
+    parentMessage: state?.chats?.data[chat?.teamId]?.parentMessages[chat?.parentId]
+  }))
+  const { colors, dark } = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const [optionsVisible, setOptionsVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const swipeableRef = useRef(null);
-  const {width} = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const [showMore, setShoreMore] = useState(false);
   const sameSender =
     typeof chat?.sameSender === 'string'
@@ -130,7 +130,7 @@ const {deviceType,currentUserId,userIdAndDataMapping,parentMessage} = useCustomS
   };
   const LeftSwipeActions = () => {
     return (
-      <View style={{width: '10%', justifyContent: 'center', zIndex: 0}}>
+      <View style={{ width: '10%', justifyContent: 'center', zIndex: 0 }}>
         <Icon name="reply" size={20} color={colors?.color} />
       </View>
     );
@@ -234,7 +234,7 @@ const {deviceType,currentUserId,userIdAndDataMapping,parentMessage} = useCustomS
       <GestureHandlerRootView>
         {channelType == 'DIRECT_MESSAGE' && !sameSender && (
           <View style={[sentByMe ? styles.sentByMe : styles?.received]}>
-            <Text style={{fontSize: 12, color: colors?.color}}>
+            <Text style={{ fontSize: 12, color: colors?.color }}>
               {formatTime(chat?.createdAt)}
             </Text>
           </View>
@@ -245,7 +245,7 @@ const {deviceType,currentUserId,userIdAndDataMapping,parentMessage} = useCustomS
           !sameSender &&
           SenderName == 'You' && (
             <View style={[sentByMe ? styles.sentByMe : styles?.received]}>
-              <Text style={{fontSize: 12, color: colors?.color}}>
+              <Text style={{ fontSize: 12, color: colors?.color }}>
                 {formatTime(chat?.createdAt)}
               </Text>
             </View>
@@ -256,10 +256,10 @@ const {deviceType,currentUserId,userIdAndDataMapping,parentMessage} = useCustomS
             marginTop: sameSender
               ? ms(0)
               : channelType == 'DIRECT_MESSAGE'
-              ? ms(0)
-              : SenderName == 'You'
-              ? ms(0)
-              : ms(10),
+                ? ms(0)
+                : SenderName == 'You'
+                  ? ms(0)
+                  : ms(10),
             marginBottom: index == 0 ? 10 : 3,
           }}>
           {SenderName != 'You' && channelType != 'DIRECT_MESSAGE' && (
@@ -294,7 +294,7 @@ const {deviceType,currentUserId,userIdAndDataMapping,parentMessage} = useCustomS
                     }}
                   />
                 ) : (
-                  <View style={{width: 35}}></View>
+                  <View style={{ width: 35 }}></View>
                 )}
               </View>
             </TouchableOpacity>
@@ -302,7 +302,7 @@ const {deviceType,currentUserId,userIdAndDataMapping,parentMessage} = useCustomS
           <TouchableOpacity
             activeOpacity={0.6}
             onLongPress={onLongPress}
-            style={{flex: 1}}>
+            style={{ flex: 1 }}>
             <Swipeable
               ref={swipeableRef}
               leftThreshold={40}
@@ -317,7 +317,7 @@ const {deviceType,currentUserId,userIdAndDataMapping,parentMessage} = useCustomS
                     flexWrap: 'wrap',
                   },
                 ]}>
-                <View style={{justifyContent: 'flex-end'}}>
+                <View style={{ justifyContent: 'flex-end' }}>
                   {chat?.randomId != null && (
                     <View
                       style={{
@@ -347,7 +347,7 @@ const {deviceType,currentUserId,userIdAndDataMapping,parentMessage} = useCustomS
                           <Text
                             style={[
                               styles.nameText,
-                              {marginRight: 5, color: textColor},
+                              { marginRight: 5, color: textColor },
                             ]}>
                             {SenderName}
                           </Text>
@@ -359,30 +359,29 @@ const {deviceType,currentUserId,userIdAndDataMapping,parentMessage} = useCustomS
                     {parentId != null && (
                       <TouchableOpacity
                         style={[styles.repliedContainer]}
-                        // onPress={() => {
-                        //   !optionsVisible
-                        //     ? handleRepliedMessagePress(
-                        //         chatState?.data[chat.teamId]?.parentMessages[
-                        //           parentId
-                        //         ],
-                        //         chatState,
-                        //         chat,
-                        //         FlashListRef,
-                        //       )
-                        //     : onLongPress();
-                        // }}
-                        // onLongPress={onLongPress}
-                        >
+                      // onPress={() => {
+                      //   !optionsVisible
+                      //     ? handleRepliedMessagePress(
+                      //         chatState?.data[chat.teamId]?.parentMessages[
+                      //           parentId
+                      //         ],
+                      //         chatState,
+                      //         chat,
+                      //         FlashListRef,
+                      //       )
+                      //     : onLongPress();
+                      // }}
+                      // onLongPress={onLongPress}
+                      >
                         {parentMessage
                           ?.attachment?.length > 0 ? (
-                          <Text style={{color: 'black'}}>
+                          <Text style={{ color: 'black' }}>
                             <Icon name="attach-file" size={ms(14)} /> attachment
                           </Text>
-                        ) : parentMessage.content?.includes('<span class="mention"') ? (
+                        ) : parentMessage?.content?.includes('<span class="mention"') ? (
                           <HTMLView
-                            value={`<div>${
-                            parentMessage.content
-                            }</div>`}
+                            value={`<div>${parentMessage?.content
+                              }</div>`}
                             renderNode={renderNode}
                             stylesheet={htmlStyles('black')}
                           />
@@ -395,8 +394,8 @@ const {deviceType,currentUserId,userIdAndDataMapping,parentMessage} = useCustomS
                               ),
                             }}
                             contentWidth={width}
-                            tagsStyles={{body: {color: 'black'}}}
-                            // renderers={renderers}
+                            tagsStyles={{ body: { color: 'black' } }}
+                          // renderers={renderers}
                           />
                         )}
                       </TouchableOpacity>
@@ -436,15 +435,15 @@ const {deviceType,currentUserId,userIdAndDataMapping,parentMessage} = useCustomS
                           source={{
                             html: !showMore
                               ? chat?.content
-                                  ?.slice(0, 400)
-                                  .replace(
-                                    emailRegex,
-                                    '<a href="mailTo:$&">$&</a>',
-                                  )
-                              : chat?.content?.replace(
+                                ?.slice(0, 400)
+                                .replace(
                                   emailRegex,
                                   '<a href="mailTo:$&">$&</a>',
-                                ),
+                                )
+                              : chat?.content?.replace(
+                                emailRegex,
+                                '<a href="mailTo:$&">$&</a>',
+                              ),
                           }}
                           contentWidth={width}
                           tagsStyles={tagsStyles(textColor, linkColor)}
@@ -494,7 +493,7 @@ const {deviceType,currentUserId,userIdAndDataMapping,parentMessage} = useCustomS
       <AddRemoveJoinedMsg
         senderName={SenderName}
         content={chat?.content}
-        // orgState={orgState}
+      // orgState={orgState}
       />
     );
   }
