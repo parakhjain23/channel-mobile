@@ -38,11 +38,11 @@ const ChannelDetailsScreen = ({
   const GREEN_COLOR = '#00A300';
   const channelIdAndDataMapping = channelsState?.channelIdAndDataMapping;
   const Purpose = channelIdAndDataMapping?.[teamId]?.purpose;
-  const CreatedBy = channelIdAndDataMapping[teamId]?.createdBy;
+  const CreatedBy = channelIdAndDataMapping?.[teamId]?.createdBy;
   const changeText = value => {
     setsearchValue(value);
   };
-  const fetchData = () => {
+    const fetchData = () => {
     if (searchValue?.length > 0) {
       getChannelsByQueryStartAction(
         searchValue,
@@ -219,7 +219,7 @@ const ChannelDetailsScreen = ({
           {searchValue?.length === 0 && (
             <View style={{flex: 1}}>
               <Text style={styles.header}>Members:</Text>
-              {channelIdAndDataMapping[teamId]?.userIds?.map((item, index) => {
+              {channelIdAndDataMapping?.[teamId]?.userIds?.map((item, index) => {
                 return <RenderItem item={item} index={index} key={index} />;
               })}
             </View>

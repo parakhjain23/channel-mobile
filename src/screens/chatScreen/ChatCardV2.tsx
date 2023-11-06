@@ -24,9 +24,9 @@ import Reactions from '../../components/Reactions';
 import ImageViewerComponent from './components/attachments/ImageViewerComponent';
 import JSONRenderer from './JSONRenderer';
 import Attachments from './components/attachments/RenderAttachments';
-import { ChatSenderName } from './components/ChatUtility';
 import { useCustomSelector } from '../../utils/deepCheckSelector';
 import { $ReduxCoreType } from '../../types/reduxCoreType';
+import { ChatSenderNameV2 } from './components/ChatUtilityV2';
 
 const AddRemoveJoinedMsg = React.memo(({ senderName, content }) => {
   const userIdAndDataMapping = useCustomSelector((state: $ReduxCoreType) => state?.allUsers?.userIdAndDataMapping)
@@ -115,7 +115,7 @@ const ChatCardV2 = ({
       return colors.receivedCardColor;
     }
   }, [colors, sentByMe]);
-  const SenderName = ChatSenderName(chat?.senderId);
+  const SenderName = ChatSenderNameV2(chat?.senderId);
   const linkColor = sentByMe
     ? colors.sentByMeLinkColor
     : colors.recivedLinkColor;

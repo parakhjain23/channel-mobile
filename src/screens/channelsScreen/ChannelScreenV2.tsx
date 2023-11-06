@@ -139,7 +139,7 @@ export const ChannelsScreenV2 = () => {
           backgroundColor: colors.primaryColor,
         }}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : null}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           keyboardVerticalOffset={offset}
           style={{ flex: 1, backgroundColor: colors.primaryColor }}
         >
@@ -173,6 +173,7 @@ export const ChannelsScreenV2 = () => {
                   searchValue={searchValue}
                   changeText={changeText}
                   isSearchFocus={false}
+                  setIsScrolling={setIsScrolling}
                 />
               </View>
             )}
