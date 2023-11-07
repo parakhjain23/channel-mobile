@@ -469,13 +469,6 @@ export const ChatScreenV2 = ({
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView style={styles.safeAreaView}>
         {!isScrolling && (
-          // <Header
-          //   chatHeaderTitle={chatHeaderTitle}
-          //   userId={reciverUserId || userId}
-          //   channelType={channelType}
-          //   teamId={teamId}
-          //   setChatDetailsForTab={setChatDetailsForTab}
-          // />
           <HeaderV2
             chatHeaderTitle={chatHeaderTitle}
             userId={reciverUserId}
