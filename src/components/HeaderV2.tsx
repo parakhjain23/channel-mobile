@@ -13,7 +13,7 @@ import { $ReduxCoreType } from '../types/reduxCoreType';
 import { appInfoReducer } from '../redux/reducers/app/AppInfoReducer';
 
 const HeaderComponent = ({
-//   chatHeaderTitle,
+  chatHeaderTitle,
   userId,
   channelType,
   teamId,
@@ -23,13 +23,13 @@ const HeaderComponent = ({
   // appInfoState,
   // setChatDetailsForTab,
 }) => {
-  const {colors} = useTheme();
-  const {accessToken,deviceType,channelState,allUserInfo}=useCustomSelector((state:$ReduxCoreType)=>({
-    accessToken:state.appInfo.accessToken,
+  const {deviceType,teamIdAndDataMapping,allUserInfo,userIdAndTeamMapping}=useCustomSelector((state:$ReduxCoreType)=>({
     deviceType:state.appInfo.deviceType,
-    channelState:state.channels.channels,
-    allUserInfo:state.allUsers
+    teamIdAndDataMapping:state.channels.teamIdAndDataMapping,
+    allUserInfo:state.allUsers,
+    userIdAndTeamMapping:state.channels.userIdAndTeamIdMapping
   }))
+  const {colors} = useTheme();
   // const accessToken = appInfo?.accessToken;
   // const deviceType = appInfo?.deviceType;
   const handleGoBack = () => {
@@ -65,12 +65,12 @@ const HeaderComponent = ({
       </View>
     );
   };
-  const onTitlePress = (chatHeaderTitle, userId, channelType, accessToken) => {
+  const onTitlePress = (chatHeaderTitle, userId, channelType, teamId) => {
     channelType === 'DIRECT_MESSAGE'
       ? RootNavigation.navigate('UserProfiles', {
           displayName: chatHeaderTitle,
           userId: userId,
-          setChatDetailsForTab: setChatDetailsForTab,
+          // setChatDetailsForTab: setChatDetailsForTab,
         })
       : RootNavigation.navigate('Channel Details', {
           channelName: chatHeaderTitle,
@@ -112,8 +112,7 @@ const HeaderComponent = ({
               chatHeaderTitle,
               userId,
               channelType,
-              accessToken,
-              teamId,
+              userIdAndTeamMapping.teamId
             );
           }}>
           <View
@@ -124,15 +123,16 @@ const HeaderComponent = ({
               marginTop: 1,
             }}>
             {channelType == 'DIRECT_MESSAGE' ? (
-              <UserImageComponent userId={userId} orgState={orgState} />
+              <UserImageComponent userId={userId} allUserInfo={allUserInfo}/>
             ) : (
-              console.log('gfksdhklh -00--0-0-sss', accessToken) || (
+              (
                 <ChannelHeaderImage
-                  allUserInfoState={allUserInfoState}
-                  // teamId={teamId}
+                  allUserInfo={allUserInfo}
+                  teamIdAndDataMapping={teamIdAndDataMapping}
+                  // allUserInfo={allUserInfo}
+                  teamId={teamId}
                   // orgState={orgState}
-                  // channelsState={channelsState}
-                  channelState={channelState}
+                  // channelState={channelState}
                 />
               )
             )}
@@ -158,15 +158,18 @@ const HeaderComponent = ({
 
 export const UserImageComponent = ({
   userId,
+  allUserInfo,
   width = 30,
   height = 30,
-  orgState,
+  // channelState,
 }) => {
   return (
     <FastImage
       source={{
-        uri: orgState?.userIdAndImageUrlMapping[userId]
-          ? orgState?.userIdAndImageUrlMapping[userId]
+        uri: allUserInfo.userIdAndDataMapping[userId]?.avatar        
+        ? allUserInfo.userIdAndDataMapping[userId]?.avatar 
+        // orgState?.userIdAndImageUrlMapping[userId]
+          // orgState?.userIdAndImageUrlMapping[userId]
           : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVe0cFaZ9e5Hm9X-tdWRLSvoZqg2bjemBABA&usqp=CAU',
         priority: FastImage.priority.normal,
       }}
@@ -179,27 +182,33 @@ export const UserImageComponent = ({
   );
 };
 const ChannelImageComponent = ({
-  allUserInfoState,
-  // teamId,
+  allUserInfo,
+  teamIdAndDataMapping,
+  // allUserInfoState,
+  teamId,
   // orgState,
   // channelsState,
-  channelState,
+  // channelState,
 
 }) => {
   const {colors} = useTheme();
-  console.log('images----', channelState);
+  // console.log('images----898998', teamIdAndDataMapping,"team id&&&&&&  ---",teamId);
   const userImagesArray =
-    channelState?.userIds || []
+  teamIdAndDataMapping?.[teamId]?.userIds || []
+    // console.log("image array---000000",userImagesArray)
+    
     // channelsState?.channelIdAndDataMapping?.[teamId]?.userIds || [];
-  let userImages = [];
-  for (let i = 0; userImages?.length != 7; i++) {
+  let usersImages = [];
+  for (let i = 0; usersImages?.length != 7; i++) {
     if (i > userImagesArray?.length) {
       break;
     }
     // const UserImage = orgState?.userIdAndImageUrlMapping[userImagesArray[i]];
-    const userImages=allUserInfoState?.userIdAndDataMapping[userImagesArray[i]]?.avatar
+    
+    const userImages=allUserInfo?.userIdAndDataMapping[userImagesArray[i]]?.avatar
     if (userImages) {
-      userImages?.push(userImagesArray[i]);
+      // console.log("katoon!!!!",userImages);
+      usersImages?.push(userImagesArray[i]);
     }
   }
 
@@ -221,12 +230,13 @@ const ChannelImageComponent = ({
           }}>
           {/* first Left Image  */}
           <View style={{marginTop: -5, marginRight: 3}}>
-            {userImages[5] != null && (
+            {usersImages[5] != null && (
               <UserImageComponent
-                userId={userImages[5]}
+                userId={usersImages[5]}
+                allUserInfo={allUserInfo}
                 width={8}
                 height={8}
-                orgState={orgState}
+                // orgState={State}
               />
             )}
           </View>
@@ -235,22 +245,24 @@ const ChannelImageComponent = ({
               style={{
                 alignItems: 'flex-end',
               }}>
-              {userImages[3] != null && (
+              {usersImages[3] != null && (
                 <UserImageComponent
-                  userId={userImages[3]}
+                  userId={usersImages[3]}
+                  allUserInfo={allUserInfo}
                   width={12}
                   height={12}
-                  orgState={orgState}
+                  // orgState={orgState}
                 />
               )}
             </View>
             <View style={{marginTop: 2, marginLeft: -3}}>
-              {userImages[1] != null && (
+              {usersImages[1] != null && (
                 <UserImageComponent
-                  userId={userImages[1]}
+                  userId={usersImages[1]}
+                  allUserInfo={allUserInfo}
                   width={14}
                   height={14}
-                  orgState={orgState}
+                  // orgState={orgState}
                 />
               )}
             </View>
@@ -258,24 +270,26 @@ const ChannelImageComponent = ({
         </View>
         {/* centered Image */}
         <View style={{marginHorizontal: 3}}>
-          {userImages[0] != null && (
+          {usersImages[0] != null && (
             <UserImageComponent
-              userId={userImages[0]}
+              userId={usersImages[0]}
+              allUserInfo={allUserInfo}
               width={28}
               height={28}
-              orgState={orgState}
+              // orgState={orgState}
             />
           )}
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View>
             <View style={{marginBottom: 1, marginLeft: 2}}>
-              {userImages[2] != null && (
+              {usersImages[2] != null && (
                 <UserImageComponent
-                  userId={userImages[2]}
+                  userId={usersImages[2]}
+                  allUserInfo={allUserInfo}
                   width={14}
                   height={14}
-                  orgState={orgState}
+                  // orgState={orgState}
                 />
               )}
             </View>
@@ -283,32 +297,34 @@ const ChannelImageComponent = ({
               style={{
                 alignItems: 'flex-start',
               }}>
-              {userImages[4] != null && (
+              {usersImages[4] != null && (
                 <UserImageComponent
-                  userId={userImages[4]}
+                  userId={usersImages[4]}
+                  allUserInfo={allUserInfo}
                   width={12}
                   height={12}
-                  orgState={orgState}
+                  // orgState={orgState}
                 />
               )}
             </View>
           </View>
           <View style={{marginBottom: -5}}>
-            {userImages[6] != null && (
+            {usersImages[6] != null && (
               <UserImageComponent
-                userId={userImages[6]}
+                userId={usersImages[6]}
+                allUserInfo={allUserInfo}
                 width={8}
                 height={8}
-                orgState={orgState}
+                // orgState={orgState}
               />
             )}
           </View>
         </View>
       </View>
-      {userImagesArray?.length - userImages?.length > 0 && (
+      {userImagesArray?.length - usersImages?.length > 0 && (
         <View style={{marginLeft: 3}}>
           <Text style={{color: colors?.color, fontSize: 8}}>
-            +{userImagesArray?.length - userImages?.length}
+            +{userImagesArray?.length - usersImages?.length}
           </Text>
         </View>
       )}
@@ -316,14 +332,27 @@ const ChannelImageComponent = ({
   );
 };
 
-const mapStateToProps = state => ({
-  userInfoState: state.userInfoReducer,
-  channelsState: state.channelsReducer,
-  orgState: state.orgsReducer,
-  appInfoState: state.appInfoReducer,
-});
+// const mapStateToProps = state => ({
+//   userInfoState: state.userInfoReducer,
+//   channelsState: state.channelsReducer,
+//   orgState: state.orgsReducer,
+//   appInfoState: state.appInfoReducer,
+// });
+// const mapStateToProps = state => ({
+//   userInfoState: state.userInfoReducer,
+//   channelsState: state.channelsReducer,
+//   orgState: state.orgsReducer,
+//   appInfoState: state.appInfoReducer,
+
+//   deviceType:state.appInfo.deviceType,
+//   channelState:state.channels.channels,
+//   allUserInfo:state.allUsers,
+//   teamId:state.channels.userIdAndTeamIdMapping
+// });
 export const ChannelHeaderImage = React.memo(ChannelImageComponent);
-export const Header = connect(
-  mapStateToProps,
-  null,
-)(React.memo(HeaderComponent));
+export const HeaderV2 = React.memo(HeaderComponent);
+
+// export const HeaderV2 = connect(
+//   // mapStateToProps,
+//   null,
+// )(React.memo(HeaderComponent));
