@@ -17,21 +17,14 @@ const HeaderComponent = ({
   userId,
   channelType,
   teamId,
-  // orgState,
-  // channelsState,
-  // userInfoState,
-  // appInfoState,
-  // setChatDetailsForTab,
 }) => {
-  const {deviceType,teamIdAndDataMapping,allUserInfo,userIdAndTeamMapping}=useCustomSelector((state:$ReduxCoreType)=>({
+  const {deviceType, teamIdAndDataMapping, allUserInfo, userIdAndTeamMapping } = useCustomSelector((state : $ReduxCoreType ) => ({
     deviceType:state.appInfo.deviceType,
     teamIdAndDataMapping:state.channels.teamIdAndDataMapping,
     allUserInfo:state.allUsers,
     userIdAndTeamMapping:state.channels.userIdAndTeamIdMapping
   }))
   const {colors} = useTheme();
-  // const accessToken = appInfo?.accessToken;
-  // const deviceType = appInfo?.deviceType;
   const handleGoBack = () => {
     RootNavigation?.goBack();
   };
@@ -129,10 +122,7 @@ const HeaderComponent = ({
                 <ChannelHeaderImage
                   allUserInfo={allUserInfo}
                   teamIdAndDataMapping={teamIdAndDataMapping}
-                  // allUserInfo={allUserInfo}
                   teamId={teamId}
-                  // orgState={orgState}
-                  // channelState={channelState}
                 />
               )
             )}
@@ -161,15 +151,12 @@ export const UserImageComponent = ({
   allUserInfo,
   width = 30,
   height = 30,
-  // channelState,
 }) => {
   return (
     <FastImage
       source={{
         uri: allUserInfo.userIdAndDataMapping[userId]?.avatar        
         ? allUserInfo.userIdAndDataMapping[userId]?.avatar 
-        // orgState?.userIdAndImageUrlMapping[userId]
-          // orgState?.userIdAndImageUrlMapping[userId]
           : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVe0cFaZ9e5Hm9X-tdWRLSvoZqg2bjemBABA&usqp=CAU',
         priority: FastImage.priority.normal,
       }}
@@ -184,30 +171,19 @@ export const UserImageComponent = ({
 const ChannelImageComponent = ({
   allUserInfo,
   teamIdAndDataMapping,
-  // allUserInfoState,
   teamId,
-  // orgState,
-  // channelsState,
-  // channelState,
 
 }) => {
   const {colors} = useTheme();
-  // console.log('images----898998', teamIdAndDataMapping,"team id&&&&&&  ---",teamId);
   const userImagesArray =
   teamIdAndDataMapping?.[teamId]?.userIds || []
-    // console.log("image array---000000",userImagesArray)
-    
-    // channelsState?.channelIdAndDataMapping?.[teamId]?.userIds || [];
   let usersImages = [];
   for (let i = 0; usersImages?.length != 7; i++) {
     if (i > userImagesArray?.length) {
       break;
     }
-    // const UserImage = orgState?.userIdAndImageUrlMapping[userImagesArray[i]];
-    
     const userImages=allUserInfo?.userIdAndDataMapping[userImagesArray[i]]?.avatar
     if (userImages) {
-      // console.log("katoon!!!!",userImages);
       usersImages?.push(userImagesArray[i]);
     }
   }
@@ -236,7 +212,6 @@ const ChannelImageComponent = ({
                 allUserInfo={allUserInfo}
                 width={8}
                 height={8}
-                // orgState={State}
               />
             )}
           </View>
@@ -251,7 +226,6 @@ const ChannelImageComponent = ({
                   allUserInfo={allUserInfo}
                   width={12}
                   height={12}
-                  // orgState={orgState}
                 />
               )}
             </View>
@@ -262,7 +236,6 @@ const ChannelImageComponent = ({
                   allUserInfo={allUserInfo}
                   width={14}
                   height={14}
-                  // orgState={orgState}
                 />
               )}
             </View>
@@ -276,7 +249,6 @@ const ChannelImageComponent = ({
               allUserInfo={allUserInfo}
               width={28}
               height={28}
-              // orgState={orgState}
             />
           )}
         </View>
@@ -289,7 +261,6 @@ const ChannelImageComponent = ({
                   allUserInfo={allUserInfo}
                   width={14}
                   height={14}
-                  // orgState={orgState}
                 />
               )}
             </View>
@@ -303,7 +274,6 @@ const ChannelImageComponent = ({
                   allUserInfo={allUserInfo}
                   width={12}
                   height={12}
-                  // orgState={orgState}
                 />
               )}
             </View>
@@ -315,7 +285,6 @@ const ChannelImageComponent = ({
                 allUserInfo={allUserInfo}
                 width={8}
                 height={8}
-                // orgState={orgState}
               />
             )}
           </View>
