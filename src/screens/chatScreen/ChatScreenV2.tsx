@@ -471,7 +471,7 @@ export const ChatScreenV2 = ({
         {!isScrolling && (
           <HeaderV2
             chatHeaderTitle={chatHeaderTitle}
-            userId={reciverUserId}
+            userId={reciverUserId || userId}
             channelType={channelType}
             teamId={teamId}
             // setChatDetailsForTab={setChatDetailsForTab}
