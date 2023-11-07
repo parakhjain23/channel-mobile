@@ -24,9 +24,9 @@ import Reactions from '../../components/Reactions';
 import ImageViewerComponent from './components/attachments/ImageViewerComponent';
 import JSONRenderer from './JSONRenderer';
 import Attachments from './components/attachments/RenderAttachments';
-import { ChatSenderName } from './components/ChatUtility';
 import { useCustomSelector } from '../../utils/deepCheckSelector';
 import { $ReduxCoreType } from '../../types/reduxCoreType';
+import { ChatSenderNameV2 } from './components/ChatUtilityV2';
 
 const AddRemoveJoinedMsg = React.memo(({ senderName, content }) => {
   const userIdAndDataMapping = useCustomSelector((state: $ReduxCoreType) => state?.allUsers?.userIdAndDataMapping)
@@ -115,7 +115,7 @@ const ChatCardV2 = ({
       return colors.receivedCardColor;
     }
   }, [colors, sentByMe]);
-  const SenderName = ChatSenderName(chat?.senderId);
+  const SenderName = ChatSenderNameV2(chat?.senderId);
   const linkColor = sentByMe
     ? colors.sentByMeLinkColor
     : colors.recivedLinkColor;
@@ -252,7 +252,7 @@ const ChatCardV2 = ({
           )}
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: sentByMe ? 'row-reverse' : 'row',
             marginTop: sameSender
               ? ms(0)
               : channelType == 'DIRECT_MESSAGE'
@@ -261,7 +261,7 @@ const ChatCardV2 = ({
                   ? ms(0)
                   : ms(10),
             marginBottom: index == 0 ? 10 : 3,
-          }}>
+                      }}>
           {SenderName != 'You' && channelType != 'DIRECT_MESSAGE' && (
             <TouchableOpacity
               onPress={async () => {
@@ -276,9 +276,8 @@ const ChatCardV2 = ({
               <View
                 style={{
                   justifyContent: 'flex-start',
-                  marginRight: 5,
-                  marginTop: 5,
-                }}>
+                  margin: 5,
+                  }}>
                 {!sameSender ? (
                   <FastImage
                     source={{
@@ -315,8 +314,8 @@ const ChatCardV2 = ({
                     flexDirection: 'row',
                     flex: 1,
                     flexWrap: 'wrap',
-                  },
-                ]}>
+                                      },
+                                  ]}>
                 <View style={{ justifyContent: 'flex-end' }}>
                   {chat?.randomId != null && (
                     <View

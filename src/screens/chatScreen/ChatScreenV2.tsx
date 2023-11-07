@@ -66,6 +66,7 @@ import { useCustomSelector } from '../../utils/deepCheckSelector';
 import { $ReduxCoreType } from '../../types/reduxCoreType';
 import { ChatCardMemoV2 } from './ChatCardV2';
 import { fetchMessagesStartV2 } from '../../reduxV2/chats/chatsSlice';
+import { HeaderV2 } from '../../components/HeaderV2';
 
 export const ChatScreenV2 = ({
   chatDetailsForTab,
@@ -468,12 +469,12 @@ export const ChatScreenV2 = ({
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView style={styles.safeAreaView}>
         {!isScrolling && (
-          <Header
+          <HeaderV2
             chatHeaderTitle={chatHeaderTitle}
             userId={reciverUserId || userId}
             channelType={channelType}
             teamId={teamId}
-            setChatDetailsForTab={setChatDetailsForTab}
+            // setChatDetailsForTab={setChatDetailsForTab}
           />
         )}
         <View style={styles.mainContainer}>
