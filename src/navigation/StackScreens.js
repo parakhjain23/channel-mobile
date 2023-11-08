@@ -3,6 +3,7 @@ import ChatScreen from '../screens/chatScreen/ChatScreen';
 import IpadScreen from '../screens/ipadScreen/IpadScreen';
 import UserProfile from '../screens/userProfiles/UserProfiles';
 import ChannelDetailsScreen from '../screens/channelDetails/ChannelDetails';
+import ChannelDetailsScreenV2 from '../screens/channelDetails/ChannelDetailsV2';
 import LoginScreen from '../screens/loginScreen/LoginScreen';
 import SelectWorkSpaceScreen from '../screens/selectWorkSpaceScreen/SelectWorkSpaceScreen';
 import { LoginScreenV2 } from '../screens/loginScreen/LoginScreenV2';
@@ -43,7 +44,7 @@ export const StackScreens = [
   },
   {
     name: 'Channel Details',
-    component: ChannelDetailsScreen,
+    component: ChannelDetailsScreenV2,
   },
 ];
 

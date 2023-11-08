@@ -173,7 +173,6 @@ export const ChannelsScreenV2 = () => {
                   searchValue={searchValue}
                   changeText={changeText}
                   isSearchFocus={false}
-                  setIsScrolling={setIsScrolling}
                 />
               </View>
             )}

@@ -3,7 +3,7 @@ import React from 'react';
 import {TextInput} from 'react-native-paper';
 import {useTheme} from '@react-navigation/native';
 
-const SearchBox = ({searchValue, changeText, textInputRef, setIsScrolling}) => {
+const SearchBox = ({searchValue, changeText, textInputRef}) => {
   const {colors} = useTheme();
   return (
     <TextInput
@@ -16,7 +16,6 @@ const SearchBox = ({searchValue, changeText, textInputRef, setIsScrolling}) => {
         borderColor: 'black',
         marginHorizontal: 1,
       }}
-      onBlur={()=>setIsScrolling(false)}
       textColor={colors?.textColor}
       underlineStyle={{backgroundColor: 'transparent'}}
       underlineColorAndroid="transparent"
