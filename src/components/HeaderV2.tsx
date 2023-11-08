@@ -18,11 +18,11 @@ const HeaderComponent = ({
   channelType,
   teamId,
 }) => {
-  const {deviceType, teamIdAndDataMapping, allUserInfo, userIdAndTeamMapping } = useCustomSelector((state : $ReduxCoreType ) => ({
+  const {deviceType, teamIdAndDataMapping, allUserInfo, userIdAndTeamIdMapping } = useCustomSelector((state : $ReduxCoreType ) => ({
     deviceType:state.appInfo.deviceType,
     teamIdAndDataMapping:state.channels.teamIdAndDataMapping,
     allUserInfo:state.allUsers,
-    userIdAndTeamMapping:state.channels.userIdAndTeamIdMapping
+    userIdAndTeamIdMapping:state.channels.userIdAndTeamIdMapping
   }))
   const {colors} = useTheme();
   const handleGoBack = () => {
@@ -105,7 +105,7 @@ const HeaderComponent = ({
               chatHeaderTitle,
               userId,
               channelType,
-              userIdAndTeamMapping.teamId
+              teamId
             );
           }}>
           <View
