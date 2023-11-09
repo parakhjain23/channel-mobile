@@ -67,6 +67,7 @@ import { $ReduxCoreType } from '../../types/reduxCoreType';
 import { ChatCardMemoV2 } from './ChatCardV2';
 import { fetchMessagesStartV2 } from '../../reduxV2/chats/chatsSlice';
 import { HeaderV2 } from '../../components/HeaderV2';
+import CSBottomComponent from './components/chatScreenBottomComponents/chatScreenBottomComponent';
 
 export const ChatScreenV2 = ({
   chatDetailsForTab,
@@ -474,7 +475,7 @@ export const ChatScreenV2 = ({
             userId={reciverUserId || userId}
             channelType={channelType}
             teamId={teamId}
-            // setChatDetailsForTab={setChatDetailsForTab}
+          // setChatDetailsForTab={setChatDetailsForTab}
           />
         )}
         <View style={styles.mainContainer}>
@@ -894,6 +895,7 @@ export const ChatScreenV2 = ({
                   </View>
                 </View>
               )} */}
+              <CSBottomComponent />
             </View>
           </KeyboardAvoidingView>
         </View>
@@ -977,3 +979,7 @@ export const ChatScreenV2 = ({
 //   mapStateToProps,
 //   mapDispatchToProps,
 // )(React.memo(ChatScreen));
+
+
+
+
