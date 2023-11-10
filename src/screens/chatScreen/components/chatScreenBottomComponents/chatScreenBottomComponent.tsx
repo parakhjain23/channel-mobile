@@ -39,21 +39,28 @@ import { listStyles } from '../attachments/AttachmentStyles';
 import { useDispatch } from 'react-redux';
 import { uploadRecording } from '../../VoicePicker';
 import { getChannelsByQueryStartV2 } from '../../../../reduxV2/searchedData/searchedDataSlice';
+import { sendMessageStartV2 } from '../../../../reduxV2/chats/chatsSlice';
 
 export default function CSBottomComponent({ 
     channelType ,
     teamId,
-    modalizeRef
+    modalizeRef,
+    repliedMsgDetails,
+    setrepliedMsgDetails
+
 }) {
     const { width } = useWindowDimensions();
     const { colors } = useTheme();
     const [showPlayer, setShowPlayer] = useState(false);
     const listStyle = listStyles(colors);
-    const { channelsState, userIdAndDataMapping, teamIdAndDataMapping, userIdAndTeamIdMapping, isInternetConnected, currentOrgId, currentUserId, accessToken, orgState, appState } = useCustomSelector((state: $ReduxCoreType) => ({
+    const { channelsState, currentUserId, orgState, appState, currentOrgId, accessToken } = useCustomSelector((state: $ReduxCoreType) => ({
         channelsState: state?.channels,
         currentUserId: state?.allUsers?.currentUser?.id,
         orgState: state?.orgs,
-        appState: state?.appInfo
+        appState: state?.appInfo,
+        currentOrgId: state?.orgs?.currentOrgId,
+        accessToken: state?.appInfo?.accessToken
+
     }))       
     const styles = makeStyles(colors);
     const { chatsData } = useCustomSelector((state: $ReduxCoreType) => ({
@@ -75,7 +82,7 @@ export default function CSBottomComponent({
     const [voiceAttachment, setvoiceAttachment] = useState('');
     const isMountedRef = useRef(true);
     const [replyOnMessage, setreplyOnMessage] = useState(false);
-    const [repliedMsgDetails, setrepliedMsgDetails] = useState('');
+    // const [repliedMsgDetails, setrepliedMsgDetails] = useState('');
     const date = useMemo(() => new Date(), []);
     const dispatch = useDispatch()
     const htmlStyles = {
@@ -172,36 +179,40 @@ export default function CSBottomComponent({
             attachment: showPlayer ? voiceAttachment : attachment,
             mentionsArr: mentionsArr,
             parentMessage: repliedMsgDetails?.content,
+            accessToken:accessToken
           };
-          setlocalMsgAction(messageContent);
+          // setlocalMsgAction(messageContent);
     
+          dispatch(sendMessageStartV2(messageContent))
           if (appState?.isInternetConnected || showPlayer) {
             let response;
             if (showPlayer) {
               response = await uploadRecording(recordingUrl, accessToken);
             }
-            sendMessageAction(
-              localMessage,
-              teamId,
-              currentOrgId,
-              currentUserId,
-              accessToken,
-              repliedMsgDetails?._id || null,
-              attachment?.length > 0 ? attachment : response || [],
-              mentionsArr,
-            );
+        console.log("send button pressed!!!!!!!!!!!!!!")
+            
+        // sendMessageAction(
+            //   localMessage,
+            //   teamId,
+            //   currentOrgId,
+            //   currentUserId,
+            //   accessToken,
+            //   repliedMsgDetails?._id || null,
+            //   attachment?.length > 0 ? attachment : response || [],
+            //   mentionsArr,
+            // );
           } else {
-            setGlobalMessageToSendAction({
-              content: localMessage,
-              teamId: teamId,
-              orgId: currentOrgId,
-              senderId: currentUserId,
-              userId: currentUserId,
-              accessToken: accessToken,
-              parentId: repliedMsgDetails?.id || null,
-              updatedAt: date,
-              mentionsArr: mentionsArr,
-            });
+            // setGlobalMessageToSendAction({
+            //   content: localMessage,
+            //   teamId: teamId,
+            //   orgId: currentOrgId,
+            //   senderId: currentUserId,
+            //   userId: currentUserId,
+            //   accessToken: accessToken,
+            //   parentId: repliedMsgDetails?.id || null,
+            //   updatedAt: date,
+            //   mentionsArr: mentionsArr,
+            // });
           }
         }
     
@@ -385,7 +396,7 @@ export default function CSBottomComponent({
                         />
                         <View style={{justifyContent: 'center'}}>
                           <TouchableOpacity
-                            // onPress={!action ? onSendPress : onSendWithAction}
+                            onPress={!action ? onSendPress : onSendWithAction}
                             style={{
                               backgroundColor: colors?.sentByMeCardColor,
                               borderRadius: 30,
@@ -510,9 +521,9 @@ export default function CSBottomComponent({
                               showPlayer ||
                               attachment?.length > 0 ? (
                                 <TouchableOpacity
-                                //   onPress={
-                                //     !action ? onSendPress : onSendWithAction
-                                //   }
+                                  onPress={
+                                    !action ? onSendPress : onSendWithAction
+                                  }
                                   style={{
                                     backgroundColor: colors?.sentByMeCardColor,
                                     borderRadius: 30,

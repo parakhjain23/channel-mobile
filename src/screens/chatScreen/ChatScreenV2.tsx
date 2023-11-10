@@ -86,7 +86,7 @@ export const ChatScreenV2 = ({
   setGlobalMessageToSendAction,
   getChannelsByQueryStartAction,
   //   channelsByQueryState,
-  setlocalMsgAction,
+  // setlocalMsgAction,
   resetUnreadCountAction,
   addUsersToChannelAction,
   removeUserFromChannelAction,
@@ -899,6 +899,8 @@ export const ChatScreenV2 = ({
                 channelType={channelType} 
                 teamId={teamId} 
                 modalizeRef={modalizeRef}
+                repliedMsgDetails={repliedMsgDetails} 
+                setrepliedMsgDetails={setrepliedMsgDetails}
                 />
             </View>
           </KeyboardAvoidingView>
