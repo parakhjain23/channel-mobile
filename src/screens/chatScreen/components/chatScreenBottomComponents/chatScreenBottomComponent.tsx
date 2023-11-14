@@ -39,7 +39,7 @@ import { listStyles } from '../attachments/AttachmentStyles';
 import { useDispatch } from 'react-redux';
 import { uploadRecording } from '../../VoicePicker';
 import { getChannelsByQueryStartV2 } from '../../../../reduxV2/searchedData/searchedDataSlice';
-import { sendMessageStartV2 } from '../../../../reduxV2/chats/chatsSlice';
+import { sendMessageStartV2, setlocalMsgActionV2 } from '../../../../reduxV2/chats/chatsSlice';
 
 export default function CSBottomComponent({ 
     channelType ,
@@ -183,24 +183,35 @@ export default function CSBottomComponent({
           };
           // setlocalMsgAction(messageContent);
     
-          dispatch(sendMessageStartV2(messageContent))
+          dispatch(setlocalMsgActionV2(messageContent))
           if (appState?.isInternetConnected || showPlayer) {
             let response;
             if (showPlayer) {
               response = await uploadRecording(recordingUrl, accessToken);
             }
-        console.log("send button pressed!!!!!!!!!!!!!!")
+        console.log("send button pressed!!!!!!!!!!!!!!,",localMessage,'\n',teamId,'\n',currentOrgId,'\n',currentUserId,'\n',accessToken,'\n')
             
         // sendMessageAction(
-            //   localMessage,
-            //   teamId,
-            //   currentOrgId,
-            //   currentUserId,
-            //   accessToken,
-            //   repliedMsgDetails?._id || null,
-            //   attachment?.length > 0 ? attachment : response || [],
-            //   mentionsArr,
-            // );
+        //       localMessage,
+        //       teamId,
+        //       currentOrgId,
+        //       currentUserId,
+        //       accessToken,
+        //       repliedMsgDetails?._id || null,
+        //       attachment?.length > 0 ? attachment : response || [],
+        //       mentionsArr,
+        //     );
+        dispatch(sendMessageStartV2({
+          message: localMessage,
+          teamId: teamId,
+          currentOrgId: currentOrgId,
+          currentUserId: currentUserId,
+          accessToken: accessToken,
+          parentId: repliedMsgDetails?._id || null,
+          attachment: attachment?.length > 0 ? attachment : response || [],
+          mentionsArr: mentionsArr,
+          skip: 0
+        }));
           } else {
             // setGlobalMessageToSendAction({
             //   content: localMessage,
@@ -217,12 +228,12 @@ export default function CSBottomComponent({
         }
     
         attachment?.length > 0 && setAttachment([]),
-          showOptions && setShowOptions(false),
-          mentionsArr?.length > 0 && setMentionsArr(''),
-          mentions?.length > 0 && setMentions([]),
-          replyOnMessage && setreplyOnMessage(false),
-          repliedMsgDetails && setrepliedMsgDetails(null),
-          showPlayer && setShowPlayer(false);
+        showOptions && setShowOptions(false),
+        mentionsArr?.length > 0 && setMentionsArr(''),
+        mentions?.length > 0 && setMentions([]),
+        replyOnMessage && setreplyOnMessage(false),
+        repliedMsgDetails && setrepliedMsgDetails(null),
+        showPlayer && setShowPlayer(false);
       };
 
     return (

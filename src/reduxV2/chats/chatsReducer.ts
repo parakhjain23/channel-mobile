@@ -6,7 +6,23 @@ export const initialState: $ChatsReducerType = {
     data: {},
     randomIdsArr: [],
 }
-
+interface MessageContent {
+  randomId: string,
+  content: string,
+  createdAt: string,
+  isLink: boolean,
+  mentions: any[],
+  orgId: string,
+  parentId: string,
+  senderId: string,
+  senderType: string,
+  teamId: string,
+  updatedAt: string,
+  attachment: any[],
+  mentionsArr: any[],
+  parentMessage: string,
+  accessToken:string
+}
 export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseReducers<$ChatsReducerType>>  = {
     updateChatState(state,action: actionType<any>){
         
@@ -18,38 +34,21 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
         console.log("inside fetch message success");
         const {messages,parentMessages}=modifyMessagesUtility(action?.payload)
         state.data[action.payload.teamId] = {
-            ...state.data[action.payload.teamId],
-            isLoading:false,
-            messages: action?.payload?.skip > 0 ? [...state.data[action.payload.teamId].messages,...messages] : messages,
-            parentMessages:{...state.data[action.payload.teamId].parentMessages,...parentMessages}
+          ...state.data[action.payload.teamId],
+          isLoading:false,
+          messages: action?.payload?.skip > 0 ? [...state.data[action.payload.teamId].messages,...messages] : messages,
+          parentMessages:{...state.data[action.payload.teamId].parentMessages,...parentMessages}
         }
     },
-    sendMessageStartV2(state,action:actionType<messagesType>){
-        // const {data}=addLocalMessagesUtility(state,action?.payload);
-        // state.data[data?.teamId] = {
-        //     ...state.data[action.payload.teamId],
-        //     messages : state?.data[data?.teamId]?.messages ? [data, ...state?.data[data?.teamId]?.messages] : [data],
-        //     parentMessages : data?.parentKey != undefined ? state?.data[data?.teamId]?.parentMessages ? {...data?.parentObj, ...state?.data[data?.teamId]?.parentMessages}
-        //             : data?.parentObj
-        //         : state?.data[data?.teamId]?.parentMessages,
-        // }
-        // state.randomIdsArr = state?.randomIdsArr?.length > 0 ? [...state?.randomIdsArr, data?.randomId] : [data?.randomId],
-        console.log("inside message send1",action.payload.accessToken);
-        console.log("inside message send2",action.payload.teamId);
-        console.log("inside message send3",action.payload.message);
-        console.log("inside message send4",action.payload.orgId);
-        console.log("inside message send5",action.payload.senderId);
-        console.log("inside message send6",action.payload.parentId);
-        console.log("inside message send7",action.payload.attachment);
-        console.log("inside message send8",action.payload.mentionsArr);
-        console.log("inside message send9",action.payload.content);
-
-        const {data} = action.payload;
-      const renderTextWithBreaks = (text:string) => {
+    setlocalMsgActionV2(state,action:actionType<{data:MessageContent}>){
+      const {data} = action.payload;
+      console.log("diwali--------->",action.payload)
+      
+      const renderTextWithBreaks = text => {
         const htmlString = text?.replace(/\n/g, '<br/>');
         return htmlString;
       };
-    //   data.content = renderTextWithBreaks(data?.content ?? '');
+      // data.content = renderTextWithBreaks(data?.content);
       let parentKey = data?.parentId;
       let parentObj = {};
       if (data?.parentMessage != undefined) {
@@ -60,15 +59,15 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
           }
         }
       }
-      if (
-        action?.payload?.message?.senderId !=
-        state?.data[action?.payload?.message?.teamId]?.messages[0]?.senderId
-      ) {
-        // data['sameSender'] = false;
-      } else {
-        // data['sameSender'] = true;
-      }
-    //   data['isSameDate'] = true;
+      // if (
+      //   action?.message?.senderId !=
+      //   state?.data[action?.message?.teamId]?.messages[0]?.senderId
+      // ) {
+      //   data['sameSender'] = false;
+      // } else {
+      //   data['sameSender'] = true;
+      // }
+      // data['isSameDate'] = true;
       return {
         ...state,
         data: {
@@ -91,7 +90,11 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
             ? [...state?.randomIdsArr, data?.randomId]
             : [data?.randomId],
       };
-
+    },
+    sendMessageStartV2(state,action:actionType<{message:string,teamId:string,currentOrgId:string,currentUserId:string,accessToken:string,parentId:string,attachment:any[],mentionsArr:any[],skip:number}>){
+      console.log("happy!!!@@@",action.payload.message)
+      
+      return initialState
     },
     resetChatState(){
         return initialState
