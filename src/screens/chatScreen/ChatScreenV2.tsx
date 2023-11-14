@@ -899,8 +899,8 @@ export const ChatScreenV2 = ({
                 channelType={channelType} 
                 teamId={teamId} 
                 modalizeRef={modalizeRef}
-                repliedMsgDetails={repliedMsgDetails} 
-                setrepliedMsgDetails={setrepliedMsgDetails}
+                // repliedMsgDetails={repliedMsgDetails}
+                // setrepliedMsgDetails={setrepliedMsgDetails}
                 />
             </View>
           </KeyboardAvoidingView>

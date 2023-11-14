@@ -45,9 +45,6 @@ export default function CSBottomComponent({
     channelType ,
     teamId,
     modalizeRef,
-    repliedMsgDetails,
-    setrepliedMsgDetails
-
 }) {
     const { width } = useWindowDimensions();
     const { colors } = useTheme();
@@ -82,7 +79,7 @@ export default function CSBottomComponent({
     const [voiceAttachment, setvoiceAttachment] = useState('');
     const isMountedRef = useRef(true);
     const [replyOnMessage, setreplyOnMessage] = useState(false);
-    // const [repliedMsgDetails, setrepliedMsgDetails] = useState('');
+    const [repliedMsgDetails, setrepliedMsgDetails] = useState('');
     const date = useMemo(() => new Date(), []);
     const dispatch = useDispatch()
     const htmlStyles = {
@@ -90,6 +87,40 @@ export default function CSBottomComponent({
           color: 'black',
         },
       };
+
+  //      useEffect(() => {
+  //   return () => {
+  //     // Set the mounted state to false when the component is unmounted
+  //     isMountedRef.current = false;
+  //     onStopRecord(setrecordingUrl, setvoiceAttachment, isMountedRef);
+  //     setisRecording(false);
+  //   };
+  // }, [navigationState]);
+
+    useEffect(() => {
+    if (repliedMsgDetails != '' && !showPlayer) {
+      textInputRef.current.focus();
+    }
+  }, [repliedMsgDetails]);
+
+  // useEffect(() => {
+  //   searchedChannel && textInputRef?.current?.focus();
+  //   const timeoutId = setTimeout(() => {
+  //     if (shouldResetUnreadCount) {
+  //       resetUnreadCountAction(
+  //         currentOrgId,
+  //         currentUserId,
+  //         teamId,
+  //         accessToken,
+  //         0,
+  //         0,
+  //       );
+  //     }
+  //   }, 1000);
+  //   return () => clearTimeout(timeoutId);
+  // }, [teamId]);
+
+
     function renderNode(node, index, siblings, parent, defaultRenderer) {
         const attribs = node?.attribs;
         if (attribs?.class === 'mention') {
@@ -189,8 +220,6 @@ export default function CSBottomComponent({
             if (showPlayer) {
               response = await uploadRecording(recordingUrl, accessToken);
             }
-        console.log("send button pressed!!!!!!!!!!!!!!,",localMessage,'\n',teamId,'\n',currentOrgId,'\n',currentUserId,'\n',accessToken,'\n')
-            
         // sendMessageAction(
         //       localMessage,
         //       teamId,

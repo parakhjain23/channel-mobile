@@ -42,12 +42,10 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
     },
     setlocalMsgActionV2(state,action:actionType<{data:MessageContent}>){
       const {data} = action.payload;
-      console.log("diwali--------->",action.payload)
-      
-      const renderTextWithBreaks = text => {
-        const htmlString = text?.replace(/\n/g, '<br/>');
-        return htmlString;
-      };
+      // const renderTextWithBreaks = text => {
+      //   const htmlString = text?.replace(/\n/g, '<br/>');
+      //   return htmlString;
+      // };
       // data.content = renderTextWithBreaks(data?.content);
       let parentKey = data?.parentId;
       let parentObj = {};
@@ -92,9 +90,8 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
       };
     },
     sendMessageStartV2(state,action:actionType<{message:string,teamId:string,currentOrgId:string,currentUserId:string,accessToken:string,parentId:string,attachment:any[],mentionsArr:any[],skip:number}>){
-      console.log("happy!!!@@@",action.payload.message)
-      
-      return initialState
+
+      // return initialState
     },
     resetChatState(){
         return initialState

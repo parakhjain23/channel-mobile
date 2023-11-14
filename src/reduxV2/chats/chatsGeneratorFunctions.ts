@@ -21,20 +21,7 @@ export function* getMessages(action:actionType<{teamId:string,accessToken:string
   
   export function* sendMessages(action:actionType<{message:string,teamId:string,orgId:string,senderId:string,accessToken:string,parentId:string,attachment:any[],mentionsArr:any[]}>){
     try {
-      console.log("send message start v2 api call  %%%",action.payload.message);
       var response = yield call(sendMessageApi,action?.payload?.message,action?.payload?.teamId,action?.payload?.orgId,action?.payload?.senderId,action?.payload?.accessToken,action?.payload?.parentId,action?.payload?.attachment,action?.payload?.mentionsArr);
-    
-    // yield call(
-    //   sendMessageApi,
-    //   action.payload.message,
-    //   action.payload.teamId,
-    //   action.payload.orgId,
-    //   action.payload.senderId,
-    //   action.payload.accessToken,
-    //   action.payload.parentId,
-    //   action.payload.attachment,
-    //   action.payload.mentionsArr,
-    // );
   } catch (error) {
     console.warn(error);
   }

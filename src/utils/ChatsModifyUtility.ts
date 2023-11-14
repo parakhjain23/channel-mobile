@@ -1,3 +1,5 @@
+import { MessageContent } from "../reduxV2/chats/chatsReducer";
+
 export function modifyMessagesUtility(action:{messages:[],parentMessages:[],skip:number}){
     var tempParentMessages = {};
     var parentId = null;
@@ -48,13 +50,14 @@ export function modifyMessagesUtility(action:{messages:[],parentMessages:[],skip
     return {parentMessages:tempParentMessages,messages:action?.messages}
 }
 
-// export function addLocalMessagesUtility(state,action:{messagesType}){
-  // const {data} = action.messagesType;
+export function addLocalMessagesUtility(action:{message:MessageContent}){
+  // const {data} = action?.data;
+  
   // const renderTextWithBreaks = text => {
   //   const htmlString = text?.replace(/\n/g, '<br/>');
   //   return htmlString;
   // };
-  // data.content = renderTextWithBreaks(data?.content);
+  // // data.content = renderTextWithBreaks(data?.content);
   // let parentKey = data?.parentId;
   // let parentObj = {};
   // if (data?.parentMessage != undefined) {
@@ -66,13 +69,13 @@ export function modifyMessagesUtility(action:{messages:[],parentMessages:[],skip
   //   }
   // }
   // if (
-  //   action?.messagesType?.senderId !=
-  //   state?.data[action?.messagesType?.teamId]?.messages[0]?.senderId
+  //   data?.content?.senderId !=
+  //   state?.data[data?.message?.teamId]?.messages[0]?.senderId
   // ) {
   //   data['sameSender'] = false;
   // } else {
   //   data['sameSender'] = true;
   // }
   // data['isSameDate'] = true;
-  // return data;
-// }
+  // return {data:action?.MessageContent,parentKey:parentKey,parentObj:parentObj};
+}
