@@ -195,7 +195,7 @@ export default function CSBottomComponent({
         onChangeMessage('');
         if (localMessage?.trim() !== '' || showPlayer || attachment?.length > 0) {
           const randomId = uuid.v4();
-          const messageContent = {
+          const data = {
             randomId: randomId,
             content: localMessage,
             createdAt: date,
@@ -210,12 +210,10 @@ export default function CSBottomComponent({
             attachment: showPlayer ? voiceAttachment : attachment,
             mentionsArr: mentionsArr,
             parentMessage: repliedMsgDetails?.content,
-            accessToken:accessToken
           };
           // setlocalMsgAction(messageContent);
             // console.log("send button pressed!")
-            
-          dispatch(setlocalMsgActionV2(messageContent))
+          dispatch(setlocalMsgActionV2({data,type: "ADD_LOCAL_MESSAGE"}))
           if (appState?.isInternetConnected || showPlayer) {
             let response;
             if (showPlayer) {

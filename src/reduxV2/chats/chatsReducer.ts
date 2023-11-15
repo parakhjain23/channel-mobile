@@ -39,35 +39,10 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
           messages: action?.payload?.skip > 0 ? [...state.data[action.payload.teamId].messages,...messages] : messages,
           parentMessages:{...state.data[action.payload.teamId].parentMessages,...parentMessages}
         }
-    },
-    setlocalMsgActionV2(state,action:actionType<MessageContent>){
-      // console.log("set local msg reducer called---->  \n ",action?.payload)
-      
-      const {data} = action.payload;
-      // const renderTextWithBreaks = text => {
-      //   const htmlString = text?.replace(/\n/g, '<br/>');
-      //   return htmlString;
-      // };
-      // data.content = renderTextWithBreaks(data?.content);
-      let parentKey = data?.parentId;
-      let parentObj = {};
-      if (data?.parentMessage != undefined) {
-        for (let i = 0; i < state?.data[data?.teamId]?.messages?.length; i++) {
-          if (state?.data[data?.teamId]?.messages[i]?._id == data?.parentId) {
-            parentObj[parentKey] = state?.data[data?.teamId]?.messages[i];
-            break;
-          }
-        }
-      }
-      // if (
-      //   action?.message?.senderId !=
-      //   state?.data[action?.message?.teamId]?.messages[0]?.senderId
-      // ) {
-      //   data['sameSender'] = false;
-      // } else {
-      //   data['sameSender'] = true;
-      // }
-      // data['isSameDate'] = true;
+      },
+      setlocalMsgActionV2(state,action:actionType<MessageContent>){
+        // console.log("set local msg reducer called---->  \n ",action?.payload)
+        const {data,parentKey,parentObj}=addLocalMessagesUtility(state,action?.payload)
       return {
         ...state,
         data: {
