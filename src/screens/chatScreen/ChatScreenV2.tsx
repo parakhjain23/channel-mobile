@@ -899,6 +899,13 @@ export const ChatScreenV2 = ({
                 channelType={channelType} 
                 teamId={teamId} 
                 modalizeRef={modalizeRef}
+                // replyOnMessage={replyOnMessage}
+                // setreplyOnMessage={setreplyOnMessage}
+                // showActions={showActions} 
+                // setShowActions={setShowActions}
+                // currentSelectChatCard={currentSelectChatCard} 
+                // setCurrentSelectedChatCard={setCurrentSelectedChatCard}
+                // FlashListRef={FlashListRef}
                 // repliedMsgDetails={repliedMsgDetails}
                 // setrepliedMsgDetails={setrepliedMsgDetails}
                 />

@@ -40,24 +40,33 @@ import { useDispatch } from 'react-redux';
 import { uploadRecording } from '../../VoicePicker';
 import { getChannelsByQueryStartV2 } from '../../../../reduxV2/searchedData/searchedDataSlice';
 import { sendMessageStartV2, setlocalMsgActionV2 } from '../../../../reduxV2/chats/chatsSlice';
+import ActionModal from '../../components/actionModal/ActionModal';
 
 export default function CSBottomComponent({ 
     channelType ,
     teamId,
     modalizeRef,
+    // replyOnMessage,
+    // setreplyOnMessage
+    // showActions,
+    // setShowActions,
+    // currentSelectChatCard,
+    // setCurrentSelectedChatCard,
+    // FlashListRef
 }) {
     const { width } = useWindowDimensions();
     const { colors } = useTheme();
     const [showPlayer, setShowPlayer] = useState(false);
     const listStyle = listStyles(colors);
-    const { channelsState, currentUserId, orgState, appState, currentOrgId, accessToken } = useCustomSelector((state: $ReduxCoreType) => ({
+    const { channelsState, currentUserId, orgState, appState, currentOrgId, accessToken, userInfoState, chatState } = useCustomSelector((state: $ReduxCoreType) => ({
         channelsState: state?.channels,
         currentUserId: state?.allUsers?.currentUser?.id,
         orgState: state?.orgs,
         appState: state?.appInfo,
         currentOrgId: state?.orgs?.currentOrgId,
-        accessToken: state?.appInfo?.accessToken
-
+        accessToken: state?.appInfo?.accessToken,
+        userInfoState:state?.allUsers,
+        chatState:state?.chats
     }))       
     const styles = makeStyles(colors);
     const { chatsData } = useCustomSelector((state: $ReduxCoreType) => ({
@@ -97,6 +106,24 @@ export default function CSBottomComponent({
   //   };
   // }, [navigationState]);
 
+    // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('beforeRemove', e => {
+  //     e.preventDefault();
+  //     if (message.length > 0) {
+  //       draftMessageAction(
+  //         message,
+  //         teamId,
+  //         accessToken,
+  //         currentOrgId,
+  //         currentUserId,
+  //       );
+  //     }
+  //     navigation.dispatch(e.data.action); // Allow the screen to be removed
+  //   });
+
+  //   return () => unsubscribe();
+  // }, [navigation, message]);
+
     useEffect(() => {
     if (repliedMsgDetails != '' && !showPlayer) {
       textInputRef.current.focus();
@@ -119,6 +146,14 @@ export default function CSBottomComponent({
   //   }, 1000);
   //   return () => clearTimeout(timeoutId);
   // }, [teamId]);
+
+  // useEffect(() => {
+  //   if (channelsByQueryState?.mentionChannels) {
+  //     setMentions(channelsByQueryState?.mentionChannels);
+  //   } else {
+  //     setMentions([]);
+  //   }
+  // }, [channelsByQueryState?.mentionChannels]);
 
 
     function renderNode(node, index, siblings, parent, defaultRenderer) {
@@ -267,46 +302,62 @@ export default function CSBottomComponent({
 
         <SafeAreaView>
         {attachmentLoading && (
-            <AnimatedLottieView
+          <AnimatedLottieView
             source={require('../../../../assests/images/attachments/uploading.json')}
             loop
             autoPlay
             style={styles.attachmentLoading}
-            />
+          />
         )}
+        {/* {showActions && (
+          <ActionModal
+            setShowActions={setShowActions}
+            chat={currentSelectChatCard}
+            userInfoState={userInfoState}
+            orgState={orgState}
+            // deleteMessageAction={deleteMessageAction}
+            chatState={chatState}
+            setreplyOnMessage={setreplyOnMessage}
+            setrepliedMsgDetails={setrepliedMsgDetails}
+            FlashListRef={FlashListRef}
+            channelType={channelType}
+            setCurrentSelectedChatCard={setCurrentSelectedChatCard}
+            currentSelectChatCard={currentSelectChatCard}
+          />
+        )} */}
         {(channelType == 'CHANNEL' ||
-                channelType == 'PUBLIC' ||
-                channelType == 'PRIVATE') &&
-              !channelsState?.teamIdAndDataMapping?.[teamId]?.userIds?.includes(currentUserId) ? (
-                <View>
-                  <Divider />
-                  <TouchableOpacity
-                    // onPress={() =>
-                    //   joinChannelAction(
-                    //     currentOrgId,
-                    //     teamId,
-                    //     currentUserId,
-                    //     accessToken,
-                    //   )
-                    // }
+          channelType == 'PUBLIC' ||
+          channelType == 'PRIVATE') &&
+            !channelsState?.teamIdAndDataMapping?.[teamId]?.userIds?.includes(currentUserId) ? (
+              <View>
+                <Divider />
+                <TouchableOpacity
+                  // onPress={() =>
+                  //   joinChannelAction(
+                  //     currentOrgId,
+                  //     teamId,
+                  //     currentUserId,
+                  //     accessToken,
+                  //   )
+                  // }
+                  style={{
+                    borderWidth: 1,
+                    borderColor: '#50C878',
+                    borderRadius: 5,
+                    alignSelf: 'center',
+                    marginVertical: 15,
+                    paddingHorizontal: 20,
+                  }}>
+                  <Text
                     style={{
-                      borderWidth: 1,
-                      borderColor: '#50C878',
-                      borderRadius: 5,
-                      alignSelf: 'center',
-                      marginVertical: 15,
-                      paddingHorizontal: 20,
+                      margin: 10,
+                      fontSize: 16,
+                      color: colors.textColor,
                     }}>
-                    <Text
-                      style={{
-                        margin: 10,
-                        fontSize: 16,
-                        color: colors.textColor,
-                      }}>
-                      Join this channel
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+                    Join this channel
+                  </Text>
+                </TouchableOpacity>
+              </View>
               ) : (
                 <View style={styles.bottomContainer}>
                   <View
