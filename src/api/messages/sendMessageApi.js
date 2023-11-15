@@ -29,14 +29,6 @@ export const sendMessageApi = async (
   attachment,
   mentionsArr = [],
 ) => {
-  console.log("sendmessageapi block : ----","\nmessage : ",message,
-  "\n teamId : ",teamId,
-  "\n orgId : ",orgId,
-  "\n senderId : ",senderId,
-  "\n token : ",token,
-  "\n parentId : ",parentId,
-  "\n attachment : ",attachment,
-  "\n mentionsArr : ",mentionsArr = [],)
   let mentionsArrToSend = [];
   try {
     const regex = /(https?:\/\/[^\s]+)/g;
@@ -82,7 +74,6 @@ export const sendMessageApi = async (
       }),
     });
     const result = await response.json();
-    console.log("api result________",result);
   } catch (error) {
     console.warn(error);
   }
