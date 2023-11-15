@@ -66,8 +66,10 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
             : [data?.randomId],
       };
     },
-    sendMessageStartV2(state,action:actionType<{message:string,teamId:string,currentOrgId:string,currentUserId:string,accessToken:string,parentId:string,attachment:any[],mentionsArr:any[],skip:number}>){
+    sendMessageStartV2(state,action:actionType<{message:string,teamId:string,orgId:string,senderId:string,token:string,parentId:string,attachment:any[],mentionsArr:any[]}>){
       // console.log("send msg start reducer called----;;;;;\n",action?.payload);
+
+      console.log("inside reducer------>",action.payload);
       
       // return initialState
     },

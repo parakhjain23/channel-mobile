@@ -232,13 +232,12 @@ export default function CSBottomComponent({
         dispatch(sendMessageStartV2({
           message: localMessage,
           teamId: teamId,
-          currentOrgId: currentOrgId,
-          currentUserId: currentUserId,
-          accessToken: accessToken,
+          orgId: currentOrgId,
+          senderId: currentUserId,
+          token: accessToken,
           parentId: repliedMsgDetails?._id || null,
           attachment: attachment?.length > 0 ? attachment : response || [],
-          mentionsArr: mentionsArr,
-          skip: 0
+          mentionsArr: mentionsArr
         }));
           } else {
             // setGlobalMessageToSendAction({
