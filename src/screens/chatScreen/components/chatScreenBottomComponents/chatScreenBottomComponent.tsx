@@ -213,7 +213,8 @@ export default function CSBottomComponent({
             accessToken:accessToken
           };
           // setlocalMsgAction(messageContent);
-    
+            // console.log("send button pressed!")
+            
           dispatch(setlocalMsgActionV2(messageContent))
           if (appState?.isInternetConnected || showPlayer) {
             let response;

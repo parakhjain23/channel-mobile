@@ -40,7 +40,9 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
           parentMessages:{...state.data[action.payload.teamId].parentMessages,...parentMessages}
         }
     },
-    setlocalMsgActionV2(state,action:actionType<{data:MessageContent}>){
+    setlocalMsgActionV2(state,action:actionType<MessageContent>){
+      // console.log("set local msg reducer called---->  \n ",action?.payload)
+      
       const {data} = action.payload;
       // const renderTextWithBreaks = text => {
       //   const htmlString = text?.replace(/\n/g, '<br/>');
@@ -90,7 +92,8 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
       };
     },
     sendMessageStartV2(state,action:actionType<{message:string,teamId:string,currentOrgId:string,currentUserId:string,accessToken:string,parentId:string,attachment:any[],mentionsArr:any[],skip:number}>){
-
+      // console.log("send msg start reducer called----;;;;;\n",action?.payload);
+      
       // return initialState
     },
     resetChatState(){
