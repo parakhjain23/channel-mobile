@@ -10,7 +10,7 @@ const StoreAppWrapperV2 = () => {
   const [showSplashScreen, setShowSplashScreen] = useState(true);
   const { accessToken, currentOrgId } = useCustomSelector((state: $ReduxCoreType) => ({
     accessToken: state?.appInfo?.accessToken,
-    currentOrgId: state?.appInfo?.currentOrgId
+    currentOrgId: state?.orgs?.currentOrgId
   }))
   const dispatch = useDispatch();
 

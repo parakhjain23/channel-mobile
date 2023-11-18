@@ -5,6 +5,7 @@ import ChatSaga from "./chats/chatsSaga";
 import AllUserSaga from "./allUsers/allUsersSaga";
 import SearchedDataSaga from "./searchedData/searchedDataSaga";
 import OrgsSaga from "./orgs/orgsSaga";
+import SocketSaga from "../redux/saga/SocketSaga";
 
 export default function* rootSaga() {
     yield all([
@@ -12,13 +13,13 @@ export default function* rootSaga() {
       // fork(ChatSaga),
       // fork(UserSaga),
       // fork(ChannelSaga),
-      // fork(SocketSaga),
       fork(AllUserSaga),
       fork(AppInfoSaga),
       fork(OrgsSaga),
       fork(ChannelsSaga),
       fork(ChatSaga),
-      fork(SearchedDataSaga)
+      fork(SearchedDataSaga),
+      fork(SocketSaga),
     ]);
   }
   
