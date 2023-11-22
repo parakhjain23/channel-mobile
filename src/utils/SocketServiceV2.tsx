@@ -12,6 +12,7 @@ import {deleteMessageSuccess} from '../redux/actions/chat/DeleteChatAction';
 import {newUserJoinedAOrg} from '../redux/actions/org/GetAllUsersOfOrg';
 import {socketStatus} from '../redux/actions/socket/socketActions';
 import {store} from '../redux/Store';
+import { addNewMessageV2 } from '../reduxV2/chats/chatsSlice';
 import { $ReduxCoreType } from '../types/reduxCoreType';
 import { useCustomSelector } from './deepCheckSelector';
 import {handleNotification} from './HandleNotification';
@@ -52,8 +53,13 @@ const SocketServiceV2 = (socket,dispatch,accessToken,currentOrgId,channels,allUs
       newData.isActivity = false;
     }
     dispatch(
-      addNewMessage(newData, allUsers?.currentUser?.id),
-      
+    //   addNewMessage(newData, allUsers?.currentUser?.id),
+        addNewMessageV2({
+            teamId: newData?.teamId,
+            message: newData,
+            parentMessage: newData?.parentMessage,
+            userid: allUsers?.currentUser?.id,
+        })
     );
     newData?.content == 'closed this channel' && newData?.isActivity
       ? null

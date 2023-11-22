@@ -40,7 +40,7 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
           parentMessages:{...state.data[action.payload.teamId].parentMessages,...parentMessages}
         }
       },
-      setlocalMsgActionV2(state,action:actionType<MessageContent>){
+    setlocalMsgActionV2(state,action:actionType<MessageContent>){
         // console.log("set local msg reducer called---->  \n ",action?.payload)
         const {data,parentKey,parentObj}=addLocalMessagesUtility(state,action?.payload)
       return {
@@ -73,6 +73,15 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
       
       // return initialState
     },
+
+    addNewMessageV2(state,action:actionType<{teamId:string,message:{},parentMessage:{},userid:string}>){
+      // console.log("data 87887878787878--------------1",action?.payload?.userid);
+      // console.log("data 87887878787878--------------2",action?.payload?.teamId);
+      // console.log("data 87887878787878--------------3",action?.payload?.message);
+      // console.log("data 87887878787878--------------4",action?.payload?.parentMessage);
+      
+    },
+
     resetChatState(){
         return initialState
     }
