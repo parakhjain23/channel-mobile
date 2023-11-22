@@ -25,7 +25,7 @@ const App = () => {
         {/* <InternetConnection />
         <NotificationSetup />
         <StoreAppWrapper /> */}
-        {/* <SocketInit /> */}
+        <SocketInit />
         <InternetConnectionV2/>
         {/* <NotificationSetup /> */}
         <StoreAppWrapperV2 />

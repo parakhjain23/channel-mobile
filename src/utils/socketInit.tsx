@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 import { SOCKET_URL } from "../api/baseUrls/baseUrls";
 import { $ReduxCoreType } from "../types/reduxCoreType";
 import { useCustomSelector } from "./deepCheckSelector";
+import SocketService from "./SocketService";
 function socketactions(socket) {
     socket.on('chat/message created',(data)=>{
         console.log("socket working !!!working!!!!",data);
@@ -43,7 +44,8 @@ const { accessToken, currentOrgId } = useCustomSelector((state: $ReduxCoreType) 
             console.log("connecreedd$$$$");
             
         })
-        socketactions(socket);
+        // socketactions(socket);
+        SocketService(socket)
     },
     [accessToken,currentOrgId]);
     

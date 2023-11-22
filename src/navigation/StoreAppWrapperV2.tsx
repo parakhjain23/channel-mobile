@@ -8,19 +8,19 @@ import { SplashScreenComponentV2 } from '../screens/splashScreen/SplashScreenV2'
 
 const StoreAppWrapperV2 = () => {
   const [showSplashScreen, setShowSplashScreen] = useState(true);
-  const { accessToken, currentOrgId } = useCustomSelector((state: $ReduxCoreType) => ({
-    accessToken: state?.appInfo?.accessToken,
-    currentOrgId: state?.orgs?.currentOrgId
-  }))
-  const dispatch = useDispatch();
+  // const { accessToken, currentOrgId } = useCustomSelector((state: $ReduxCoreType) => ({
+  //   accessToken: state?.appInfo?.accessToken,
+  //   currentOrgId: state?.orgs?.currentOrgId
+  // }))
+  // const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (accessToken) {
-      dispatch(
-        initializeSocket(accessToken, currentOrgId),
-      );
-    }
-  }, [accessToken, currentOrgId]);
+  // useEffect(() => {
+  //   if (accessToken) {
+  //     dispatch(
+  //       initializeSocket(accessToken, currentOrgId),
+  //     );
+  //   }
+  // }, [accessToken, currentOrgId]);
 
   return showSplashScreen ? (
     <SplashScreenComponentV2 setShowSplashScreen={setShowSplashScreen} />
