@@ -6,6 +6,8 @@ import AllUserSaga from "./allUsers/allUsersSaga";
 import SearchedDataSaga from "./searchedData/searchedDataSaga";
 import OrgsSaga from "./orgs/orgsSaga";
 import SocketSaga from "../redux/saga/SocketSaga";
+import { socketGenerator } from "./socket/socketGeneratorFunctions";
+import socketSaga from "./socket/socketSaga";
 
 export default function* rootSaga() {
     yield all([
@@ -19,7 +21,9 @@ export default function* rootSaga() {
       fork(ChannelsSaga),
       fork(ChatSaga),
       fork(SearchedDataSaga),
-      fork(SocketSaga),
+      // fork(SocketSaga),
+      // socketGenerator()
+      fork(socketSaga)
     ]);
   }
   
