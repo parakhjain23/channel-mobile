@@ -1,10 +1,10 @@
 import { takeLatest } from "redux-saga/effects";
-import { sendMessages } from "./chatsGeneratorFunctions";
+import { sendMessage } from "./chatsGeneratorFunctions";
 import { getMessages } from "./chatsGeneratorFunctions";
 
 function* ChatSaga() {
   yield takeLatest('chats/fetchMessagesStartV2',getMessages)
-  yield takeLatest('chats/sendMessageStartV2', sendMessages);
+  yield takeLatest('chats/sendMessageStartV2', sendMessage);
     // yield takeLatest(Actions.SAVE_TOKEN, getUserDetails);
     // yield takeLatest(Actions.GET_SPACE_TOKEN_START, getSpaceAccessToken);
     // yield takeLatest(Actions.SELECT_INITIAL_ORG_ID, getAllUsersOfOrg);

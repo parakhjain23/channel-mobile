@@ -6,23 +6,7 @@ export const initialState: $ChatsReducerType = {
     data: {},
     randomIdsArr: [],
 }
-interface MessageContent {
-  randomId: string,
-  content: string,
-  createdAt: string,
-  isLink: boolean,
-  mentions: any[],
-  orgId: string,
-  parentId: string,
-  senderId: string,
-  senderType: string,
-  teamId: string,
-  updatedAt: string,
-  attachment: any[],
-  mentionsArr: any[],
-  parentMessage: string,
-  accessToken:string
-}
+
 export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseReducers<$ChatsReducerType>>  = {
     updateChatState(state,action: actionType<any>){
         
@@ -40,7 +24,7 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
           parentMessages:{...state.data[action.payload.teamId].parentMessages,...parentMessages}
         }
       },
-      setlocalMsgActionV2(state,action:actionType<MessageContent>){
+      setlocalMsgActionV2(state,action:actionType<messagesType>){
         // console.log("set local msg reducer called---->  \n ",action?.payload)
         const {data,parentKey,parentObj}=addLocalMessagesUtility(state,action?.payload)
       return {
@@ -66,10 +50,10 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
             : [data?.randomId],
       };
     },
-    sendMessageStartV2(state,action:actionType<{message:string,teamId:string,orgId:string,senderId:string,token:string,parentId:string,attachment:any[],mentionsArr:any[]}>){
+    sendMessageStartV2(state,action:actionType<messagesType>){
       // console.log("send msg start reducer called----;;;;;\n",action?.payload);
 
-      console.log("inside reducer------>",action.payload);
+      console.log("inside reducer------>55",action.payload);
       
       // return initialState
     },

@@ -13,7 +13,7 @@ export interface chatDataTypes{
     }
 }
 
-export interface $messagesType{
+export interface messagesType{
     __v: number,
     _id: string,
     attachment: any[],

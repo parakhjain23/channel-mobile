@@ -2,8 +2,10 @@ import { call, put } from "redux-saga/effects";
 import { getMessagesOfTeamApi } from "../../api/messages/getMessagesOfTeamApi";
 import { fetchMessagesSuccessV2 } from "./chatsSlice";
 import { actionType } from "../../types/actionDataType";
-import { SendMassagePayload } from "./chatsReducer";
-import { sendMessageApi } from "../../api/messages/sendMessageApi";
+// import { SendMassagePayload } from "./chatsReducer";
+// import { sendMessageApi } from "../../api/messages/sendMessageApi";
+import { messagesType } from "../../types/ChatsReducerType";
+import { sendMessageApiV2 } from "../../api/messages/sendMessageApiV2";
 
 export function* getMessages(action:actionType<{teamId:string,accessToken:string,skip:number}>) {
     try {
@@ -19,11 +21,11 @@ export function* getMessages(action:actionType<{teamId:string,accessToken:string
     }
   }
   
-  export function* sendMessages(action:actionType<{message:string,teamId:string,orgId:string,senderId:string,token:string,parentId:string,attachment:any[],mentionsArr:any[]}>){
+  export function* sendMessage(action:actionType<messagesType>){
     try {
       // console.log("inside saga called--------)))\n" ,action?.payload);
       
-      var response = yield call(sendMessageApi,action?.payload?.message,action?.payload?.teamId,action?.payload?.orgId,action?.payload?.senderId,action?.payload?.token,action?.payload?.parentId,action?.payload?.attachment,action?.payload?.mentionsArr);
+      var response = yield call(sendMessageApiV2,action?.payload);
       
   } catch (error) {
     console.warn(error);
