@@ -6,7 +6,7 @@ import { createSocket } from "../../utils/Socket";
 
 
 
-export function* socketGenerator({accessToken,orgId}){
+export function* socketGeneratorFunction({accessToken,orgId}){
     try {
         const socket = yield call(createSocket,accessToken,orgId);
         const socketChannel = yield call(createSocketChannel,socket);
@@ -14,6 +14,20 @@ export function* socketGenerator({accessToken,orgId}){
         while(true){
             try {
                 const payload = yield take(socketChannel);
+                switch (payload?.type) {
+                    case "connect":
+                            console.log("connect switch#%$@$^%$^$^@$#");        
+                        break;
+                    case "chat/message created":
+
+                        break;
+                    default:
+                        console.log("chat/message created");
+                        
+                        break;
+                }
+                console.log("palpp;'k]k",payload);
+                
             } catch (error) {
                 
             }
@@ -26,18 +40,27 @@ export function* socketGenerator({accessToken,orgId}){
 
 export function createSocketChannel(socket){
     return eventChannel(emit => {
-        const chatHandler = ()=>{
-            console.log("message created handler runsss!!!");
+
+        const eventHandlers = {
+            'connect' : () => {
+                console.log("connected!!!");
+            },
+            'disconnect' : () => {
+                console.log("disconnect!^^^^^^^^!!");
+            },
+            'chat/message created' : (data) => {
+                emit({ type:"chat/message created", data : data });
+            }
         }
-        socket.on('connect',()=>{console.log("connected!!!",socket);
-        })
-        socket.on('disconnect',()=>{console.log("disconnect!^^^^^^^^!!");
-        })
-        socket.on('chat/message created',chatHandler)
+
+        Object.keys(eventHandlers).forEach( eventName  => {
+            socket.on(eventName, eventHandlers[eventName]);
+        });
         
-        const unsub = ()=>{
-            socket.off('chat/message created',chatHandler);
+        return ()=>{
+            Object.keys(eventHandlers).forEach( eventName  => {
+                socket.off(eventName, eventHandlers[eventName]);
+            });
         }
-        return unsub;
     });
 }

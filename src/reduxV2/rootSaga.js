@@ -23,7 +23,7 @@ export default function* rootSaga() {
       fork(SearchedDataSaga),
       // fork(SocketSaga),
       // socketGenerator()
-      // fork(socketSaga)
+      fork(socketSaga)
     ]);
   }
   

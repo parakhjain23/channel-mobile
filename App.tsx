@@ -11,7 +11,7 @@ import { persistor, store } from './src/reduxV2/store';
 import { InternetConnectionV2 } from './src/utils/InternetConnectionV2';
 import NotificationSetup from './src/utils/NotificationSetup';
 import StoreAppWrapperV2 from './src/navigation/StoreAppWrapperV2';
-import SocketInit from './src/utils/socketInit';
+// import SocketInit from './src/utils/socketInit';
 
 const App = () => {
   useEffect(() => {
@@ -25,7 +25,7 @@ const App = () => {
         {/* <InternetConnection />
         <NotificationSetup />
         <StoreAppWrapper /> */}
-        <SocketInit />
+        {/* <SocketInit /> */}
         <InternetConnectionV2/>
         {/* <NotificationSetup /> */}
         <StoreAppWrapperV2 />
