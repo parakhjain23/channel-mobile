@@ -257,24 +257,21 @@ const ChannelDetailsScreenV2 = ({
     </ScrollView>
   );
 };
-const mapStateToProps = state => ({
-  userInfoState: state.userInfoReducer,
-  channelsState: state.channelsReducer,
-  orgsState: state.orgsReducer,
-  appInfoState: state.appInfoReduer,
-//   channelsByQueryState: state.channelsByQueryReducer,
-});
-const mapDispatchToProps = dispatch => {
-  return {
-    // getChannelsByQueryStartAction: (query, userToken, orgId) =>
-    //   dispatch(getChannelsByQueryStart(query, userToken, orgId)),
-    removeUserFromChannelAction: (userIds, teamId, orgId, accessToken) =>
-      dispatch(removeUserFromChannelStart(userIds, teamId, orgId, accessToken)),
-    addUsersToChannelAction: (userIds, teamId, orgId, accessToken) =>
-      dispatch(addUserToChannelStart(userIds, teamId, orgId, accessToken)),
-  };
-};
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ChannelDetailsScreenV2);
+// const mapStateToProps = state => ({
+//   userInfoState: state.userInfoReducer,
+//   channelsState: state.channelsReducer,
+//   orgsState: state.orgsReducer,
+//   appInfoState: state.appInfoReduer,
+// //   channelsByQueryState: state.channelsByQueryReducer,
+// });
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     // getChannelsByQueryStartAction: (query, userToken, orgId) =>
+//     //   dispatch(getChannelsByQueryStart(query, userToken, orgId)),
+//     removeUserFromChannelAction: (userIds, teamId, orgId, accessToken) =>
+//       dispatch(removeUserFromChannelStart(userIds, teamId, orgId, accessToken)),
+//     addUsersToChannelAction: (userIds, teamId, orgId, accessToken) =>
+//       dispatch(addUserToChannelStart(userIds, teamId, orgId, accessToken)),
+//   };
+// };
+export default ChannelDetailsScreenV2;

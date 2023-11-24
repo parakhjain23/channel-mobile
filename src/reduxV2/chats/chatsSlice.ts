@@ -10,7 +10,9 @@ export const {
   updateChatState,
   resetChatState,
   fetchMessagesStartV2,
-  fetchMessagesSuccessV2
+  fetchMessagesSuccessV2,
+  setlocalMsgActionV2,
+  sendMessageStartV2
  } = chatsSlice.actions
 
 export default chatsSlice.reducer

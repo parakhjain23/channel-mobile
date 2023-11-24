@@ -1,3 +1,5 @@
+import { MessageContent } from "../reduxV2/chats/chatsReducer";
+
 export function modifyMessagesUtility(action:{messages:[],parentMessages:[],skip:number}){
     var tempParentMessages = {};
     var parentId = null;
@@ -46,4 +48,33 @@ export function modifyMessagesUtility(action:{messages:[],parentMessages:[],skip
     }
 
     return {parentMessages:tempParentMessages,messages:action?.messages}
+}
+
+export function addLocalMessagesUtility(state,action:{message:MessageContent}){
+  const {data} = action;
+  const renderTextWithBreaks = text => {
+    const htmlString = text?.replace(/\n/g, '<br/>');
+    return htmlString;
+  };
+  data.content = renderTextWithBreaks(data?.content);
+  let parentKey = data?.parentId;
+  let parentObj = {};
+  if (data?.parentMessage != undefined) {
+    for (let i = 0; i < state?.data[data?.teamId]?.messages?.length; i++) {
+      if (state?.data[data?.teamId]?.messages[i]?._id == data?.parentId) {
+        parentObj[parentKey] = state?.data[data?.teamId]?.messages[i];
+        break;
+      }
+    }
+  }
+  if (
+    action?.message?.senderId !=
+    state?.data[action?.message?.teamId]?.messages[0]?.senderId
+  ) {
+    data['sameSender'] = false;
+  } else {
+    data['sameSender'] = true;
+  }
+  data['isSameDate'] = true;
+  return {data:data,parentKey:parentKey,parentObj:parentObj}
 }

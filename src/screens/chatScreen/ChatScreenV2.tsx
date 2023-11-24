@@ -86,7 +86,7 @@ export const ChatScreenV2 = ({
   setGlobalMessageToSendAction,
   getChannelsByQueryStartAction,
   //   channelsByQueryState,
-  setlocalMsgAction,
+  // setlocalMsgAction,
   resetUnreadCountAction,
   addUsersToChannelAction,
   removeUserFromChannelAction,
@@ -480,7 +480,7 @@ export const ChatScreenV2 = ({
         )}
         <View style={styles.mainContainer}>
           <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : null}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={searchedChannel ? 75 : offset}
             style={{ flex: 1 }}>
             <View style={styles.outerContainer}>
@@ -895,7 +895,20 @@ export const ChatScreenV2 = ({
                   </View>
                 </View>
               )} */}
-              <CSBottomComponent />
+              <CSBottomComponent 
+                channelType={channelType} 
+                teamId={teamId} 
+                modalizeRef={modalizeRef}
+                // replyOnMessage={replyOnMessage}
+                // setreplyOnMessage={setreplyOnMessage}
+                // showActions={showActions} 
+                // setShowActions={setShowActions}
+                // currentSelectChatCard={currentSelectChatCard} 
+                // setCurrentSelectedChatCard={setCurrentSelectedChatCard}
+                // FlashListRef={FlashListRef}
+                // repliedMsgDetails={repliedMsgDetails}
+                // setrepliedMsgDetails={setrepliedMsgDetails}
+                />
             </View>
           </KeyboardAvoidingView>
         </View>
