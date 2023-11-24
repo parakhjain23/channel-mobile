@@ -1,8 +1,8 @@
+import { useDispatch } from "react-redux";
 import { eventChannel } from "redux-saga";
-import { call, take } from "redux-saga/effects";
-import { $ReduxCoreType } from "../../types/reduxCoreType";
-import { useCustomSelector } from "../../utils/deepCheckSelector";
+import { call, put, select, take } from "redux-saga/effects";
 import { createSocket } from "../../utils/Socket";
+import { addNewMessageV2 } from "../chats/chatsSlice";
 
 
 
@@ -16,17 +16,79 @@ export function* socketGeneratorFunction({accessToken,orgId}){
                 const payload = yield take(socketChannel);
                 switch (payload?.type) {
                     case "connect":
-                            console.log("connect switch#%$@$^%$^$^@$#");        
+                        console.log("connect =-=-");        
                         break;
                     case "chat/message created":
-
+                        console.log("inside chat msg switch case``````````~~~~~~~",payload?.data);
+                        
+                        // if (
+                        //     store.getState()?.channelsReducer?.teamIdAndTypeMapping[data?.teamId] ==
+                        //     undefined
+                        //   ) {
+                        //     store.dispatch(
+                        //       getChannelByTeamIdStart(
+                        //         store.getState()?.userInfoReducer?.accessToken,
+                        //         data?.teamId,
+                        //         store.getState()?.userInfoReducer?.user?.id,
+                        //       ),
+                        //     );
+                        //   }
+                        var newData = payload?.data;
+                        if (!('isActivity' in newData)) {
+                        newData.isActivity = false;
+                        }
+                        yield put((addNewMessageV2({
+                            messageObject : newData,
+                            userid: yield select( state => state?.allUsers?.currentUser?.id)
+                        })))
+                        //   newData?.content == 'closed this channel' && newData?.isActivity
+                        //     ? null
+                        //     : store.getState()?.channelsReducer?.activeChannelTeamId !=
+                        //       newData?.teamId
+                        //     ? (store.getState()?.channelsReducer?.recentChannels?.[0]?._id !=
+                        //         newData?.teamId &&
+                        //         store.dispatch(
+                        //           moveChannelToTop(
+                        //             [newData?.teamId],
+                        //             newData?.senderId,
+                        //             store.getState()?.userInfoReducer?.user?.id,
+                        //           ),
+                        //         ),
+                        //       store.dispatch(
+                        //         increaseUnreadCount(
+                        //           [newData?.teamId],
+                        //           newData?.senderId,
+                        //           store.getState()?.userInfoReducer?.user?.id,
+                        //         ),
+                        //       ))
+                        //     : store.getState()?.channelsReducer?.recentChannels?.[0]?._id !=
+                        //         newData?.teamId &&
+                        //       store.dispatch(
+                        //         moveChannelToTop(
+                        //           [newData?.teamId],
+                        //           newData?.senderId,
+                        //           store.getState()?.userInfoReducer?.user?.id,
+                        //         ),
+                        //       );
+                        //   if (newData?.senderId != store.getState()?.userInfoReducer?.user?.id) {
+                        //     PlayLocalSoundFile();
+                        //     if (
+                        //       newData?.teamId !=
+                        //       store.getState()?.channelsReducer?.activeChannelTeamId
+                        //     ) {
+                        //       handleNotification(
+                        //         newData,
+                        //         'events',
+                        //         store.getState()?.orgsReducer?.userIdAndDisplayNameMapping,
+                        //       );
+                        //     }
+                        //   }
                         break;
                     default:
-                        console.log("chat/message created");
+                        console.log("not registered event!!!");
                         
                         break;
                 }
-                console.log("palpp;'k]k",payload);
                 
             } catch (error) {
                 

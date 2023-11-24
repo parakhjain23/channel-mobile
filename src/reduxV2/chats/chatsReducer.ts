@@ -1,7 +1,7 @@
 import { SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit'
 import { actionType } from '../../types/actionDataType'
 import { $ChatsReducerType, messagesType } from '../../types/ChatsReducerType'
-import { addLocalMessagesUtility, modifyMessagesUtility } from '../../utils/ChatsModifyUtility'
+import { addLocalMessagesUtility, addNewMessageUtility, modifyMessagesUtility } from '../../utils/ChatsModifyUtility'
 export const initialState: $ChatsReducerType = {
     data: {},
     randomIdsArr: [],
@@ -74,12 +74,33 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
       // return initialState
     },
 
-    addNewMessageV2(state,action:actionType<{teamId:string,message:{},parentMessage:{},userid:string}>){
+    addNewMessageV2(state,action:actionType<{messageObject:{},userid:string}>){
       // console.log("data 87887878787878--------------1",action?.payload?.userid);
-      // console.log("data 87887878787878--------------2",action?.payload?.teamId);
-      // console.log("data 87887878787878--------------3",action?.payload?.message);
-      // console.log("data 87887878787878--------------4",action?.payload?.parentMessage);
+      // console.log("data 87887878787878--------------2",action?.payload?.messageObject?.teamId);
+      // console.log("data 87887878787878--------------3",action?.payload?.messageObject);
+      // console.log("data 87887878787878--------------4",action?.payload?.messageObject?.parentMessage);
+      const {tempParentMessage, parentId} = addNewMessageUtility(state,action?.payload);
+      console.log("utility value   :      ",tempParentMessage,"-0-00-0-00-0-0- ***************      ",parentId);
       
+      return {
+        ...state,
+        data: {
+          ...state?.data,
+          [action?.payload?.messageObject?.teamId]: {
+            ...state?.data[action?.payload?.messageObject?.teamId],
+            messages: state?.data[action?.payload?.messageObject?.teamId]?.messages
+              ? [action?.payload?.messageObject, ...state?.data[action?.payload?.messageObject?.teamId]?.messages]
+              : [action?.payload?.messageObject],
+            parentMessages:
+              state?.data[action?.payload?.messageObject?.teamId]?.parentMessages == undefined
+                ? tempParentMessage
+                : {
+                    ...state.data[action?.payload?.messageObject?.teamId]?.parentMessages,
+                    [parentId]: tempParentMessage[parentId],
+                  },
+          },
+        },
+      };
     },
 
     resetChatState(){

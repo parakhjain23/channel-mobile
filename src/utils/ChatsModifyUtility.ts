@@ -78,3 +78,74 @@ export function addLocalMessagesUtility(state,action:{message:MessageContent}){
   data['isSameDate'] = true;
   return {data:data,parentKey:parentKey,parentObj:parentObj}
 }
+
+export function addNewMessageUtility(state,action:{messageObject:{},userid:string}){
+  console.log("inside utility$$$$$$$$-:",action?.messageObject);
+  
+  if (
+    action?.messageObject?.senderId == action?.userid &&
+    state?.randomIdsArr?.length > 0
+  ) {
+    console.log("inside if condt");
+    
+    action.messageObject['randomId'] = state?.randomIdsArr[0];
+    state?.randomIdsArr?.shift();
+    for (
+      let i = 0;
+      i < state?.data[action?.messageObject?.teamId]?.messages?.length;
+      i++
+    ) {
+      if (
+        state?.data[action?.messageObject?.teamId]?.messages[i]?.randomId ==
+        action?.messageObject?.randomId
+      ) {
+        state?.data[action?.messageObject?.teamId]?.messages?.splice(i, 1);
+        action.messageObject['randomId'] = null;
+        break;
+      }
+    }
+  }
+  const currentCreatedAt = new Date(action?.messageObject?.createdAt);
+  const prevCreatedAt = new Date(
+    state?.data[action?.messageObject?.teamId]?.messages[0]?.createdAt,
+  );
+  const timeDiff = Math.abs(prevCreatedAt - currentCreatedAt);
+  const minutesDiff = Math.floor(timeDiff / (1000 * 60));
+  if (
+    action?.messageObject?.senderId !=
+    state?.data[action?.messageObject?.teamId]?.messages[0]?.senderId
+  ) {
+    action.messageObject['sameSender'] = false;
+  } else if (minutesDiff > 5) {
+    action.messageObject['sameSender'] = false;
+  } else {
+    action.messageObject['sameSender'] = true;
+  }
+  const date = new Date(action?.messageObject?.updatedAt);
+  const prevsDate = new Date(
+    state?.data[action?.messageObject?.teamId]?.messages[0]?.updatedAt,
+  );
+  const isSameDate = prevsDate?.toDateString() === date.toDateString();
+  let displayDate = date?.toDateString();
+  if (!isSameDate) {
+    const prevDateString = date?.toDateString();
+    displayDate = `${prevDateString}`;
+    if (state.data[action?.messageObject?.teamId])
+      state.data[action?.messageObject?.teamId].messages[0].isSameDate = false;
+    if (state.data[action?.messageObject?.teamId])
+      state.data[action?.messageObject?.teamId].messages[0].timeToShow =
+        displayDate;
+    action.messageObject['isSameDate'] = true;
+    action.messageObject['timeToShow'] = '';
+  } else {
+    action.messageObject['isSameDate'] = true;
+    action.messageObject['timeToShow'] = '';
+  }
+  var tempParentMessage = {};
+  var parentId = null;
+  parentId = action?.messageObject?.parentMessage?._id;
+  tempParentMessage[parentId] = action?.messageObject?.parentMessage;
+  
+  return {tempParentMessage:tempParentMessage,parentId:parentId}
+
+}
