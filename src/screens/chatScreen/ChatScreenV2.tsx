@@ -117,12 +117,10 @@ export const ChatScreenV2 = ({
   //       ? chatDetailsForTab?.channelName
   //       :teamIdAndDataMapping[teamId].name;
   // } else {
-  console.log("inside else", route.params);
 
   var { teamId, reciverUserId, channelType, searchedChannel, chatHeaderTitle } =
     route.params;
   // }
-  console.log(teamId, reciverUserId, "teamid in chatscreen");
 
   if (teamId == undefined) {
     // when i dont have teamid with searched USER it handles that case create team ki api se data aakr state me add ho jata he waaha se yaha utha leta hu
@@ -895,20 +893,20 @@ export const ChatScreenV2 = ({
                   </View>
                 </View>
               )} */}
-              <CSBottomComponent 
-                channelType={channelType} 
-                teamId={teamId} 
+              <CSBottomComponent
+                channelType={channelType}
+                teamId={teamId}
                 modalizeRef={modalizeRef}
-                // replyOnMessage={replyOnMessage}
-                // setreplyOnMessage={setreplyOnMessage}
-                // showActions={showActions} 
-                // setShowActions={setShowActions}
-                // currentSelectChatCard={currentSelectChatCard} 
-                // setCurrentSelectedChatCard={setCurrentSelectedChatCard}
-                // FlashListRef={FlashListRef}
-                // repliedMsgDetails={repliedMsgDetails}
-                // setrepliedMsgDetails={setrepliedMsgDetails}
-                />
+              // replyOnMessage={replyOnMessage}
+              // setreplyOnMessage={setreplyOnMessage}
+              // showActions={showActions} 
+              // setShowActions={setShowActions}
+              // currentSelectChatCard={currentSelectChatCard} 
+              // setCurrentSelectedChatCard={setCurrentSelectedChatCard}
+              // FlashListRef={FlashListRef}
+              // repliedMsgDetails={repliedMsgDetails}
+              // setrepliedMsgDetails={setrepliedMsgDetails}
+              />
             </View>
           </KeyboardAvoidingView>
         </View>

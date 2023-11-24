@@ -3,24 +3,35 @@ import { eventChannel } from "redux-saga";
 import { call, put, select, take } from "redux-saga/effects";
 import { createSocket } from "../../utils/Socket";
 import { addNewMessageV2 } from "../chats/chatsSlice";
+import { actionType } from "../../types/actionDataType";
+import { socketEventsEnums } from "../../redux/Enums";
+import { $ReduxCoreType } from "../../types/reduxCoreType";
 
 
 
-export function* socketGeneratorFunction({accessToken,orgId}){
+export function* socketGeneratorFunction(action: actionType<{ accessToken: string, orgId: string }>) {
     try {
-        const socket = yield call(createSocket,accessToken,orgId);
-        const socketChannel = yield call(createSocketChannel,socket);
+        const { accessToken, orgId } = action.payload
+        const socket = yield call(createSocket, accessToken, orgId);
+        const socketChannel = yield call(createSocketChannel, socket);
 
-        while(true){
+        while (true) {
             try {
+                const { userId, activeChannelId } = yield select((state: $ReduxCoreType) => ({
+                    userId: state?.allUsers?.currentUser?.id,
+                    activeChannelId: state?.appInfo?.activeChannelId
+                }))
                 const payload = yield take(socketChannel);
+
                 switch (payload?.type) {
-                    case "connect":
-                        console.log("connect =-=-");        
+                    case socketEventsEnums.connect:
+                        console.log("connect =-=-");
                         break;
-                    case "chat/message created":
-                        console.log("inside chat msg switch case``````````~~~~~~~",payload?.data);
-                        
+                    case socketEventsEnums.disconnect:
+                        console.log("disconnect --==-==-");
+
+                    case socketEventsEnums["chat/message created"]:
+                        const messageObj = payload?.data
                         // if (
                         //     store.getState()?.channelsReducer?.teamIdAndTypeMapping[data?.teamId] ==
                         //     undefined
@@ -33,51 +44,50 @@ export function* socketGeneratorFunction({accessToken,orgId}){
                         //       ),
                         //     );
                         //   }
-                        var newData = payload?.data;
-                        if (!('isActivity' in newData)) {
-                        newData.isActivity = false;
+                        if (!('isActivity' in messageObj)) {
+                            messageObj.isActivity = false;
                         }
                         yield put((addNewMessageV2({
-                            messageObject : newData,
-                            userid: yield select( state => state?.allUsers?.currentUser?.id)
+                            messageObject: messageObj,
+                            userId: userId
                         })))
-                        //   newData?.content == 'closed this channel' && newData?.isActivity
+                        //   messageObj?.content == 'closed this channel' && messageObj?.isActivity
                         //     ? null
                         //     : store.getState()?.channelsReducer?.activeChannelTeamId !=
-                        //       newData?.teamId
+                        //       messageObj?.teamId
                         //     ? (store.getState()?.channelsReducer?.recentChannels?.[0]?._id !=
-                        //         newData?.teamId &&
+                        //         messageObj?.teamId &&
                         //         store.dispatch(
                         //           moveChannelToTop(
-                        //             [newData?.teamId],
-                        //             newData?.senderId,
+                        //             [messageObj?.teamId],
+                        //             messageObj?.senderId,
                         //             store.getState()?.userInfoReducer?.user?.id,
                         //           ),
                         //         ),
                         //       store.dispatch(
                         //         increaseUnreadCount(
-                        //           [newData?.teamId],
-                        //           newData?.senderId,
+                        //           [messageObj?.teamId],
+                        //           messageObj?.senderId,
                         //           store.getState()?.userInfoReducer?.user?.id,
                         //         ),
                         //       ))
                         //     : store.getState()?.channelsReducer?.recentChannels?.[0]?._id !=
-                        //         newData?.teamId &&
+                        //         messageObj?.teamId &&
                         //       store.dispatch(
                         //         moveChannelToTop(
-                        //           [newData?.teamId],
-                        //           newData?.senderId,
+                        //           [messageObj?.teamId],
+                        //           messageObj?.senderId,
                         //           store.getState()?.userInfoReducer?.user?.id,
                         //         ),
                         //       );
-                        //   if (newData?.senderId != store.getState()?.userInfoReducer?.user?.id) {
+                        //   if (messageObj?.senderId != store.getState()?.userInfoReducer?.user?.id) {
                         //     PlayLocalSoundFile();
                         //     if (
-                        //       newData?.teamId !=
+                        //       messageObj?.teamId !=
                         //       store.getState()?.channelsReducer?.activeChannelTeamId
                         //     ) {
                         //       handleNotification(
-                        //         newData,
+                        //         messageObj,
                         //         'events',
                         //         store.getState()?.orgsReducer?.userIdAndDisplayNameMapping,
                         //       );
@@ -86,42 +96,29 @@ export function* socketGeneratorFunction({accessToken,orgId}){
                         break;
                     default:
                         console.log("not registered event!!!");
-                        
+
                         break;
                 }
-                
+
             } catch (error) {
-                
+
             }
         }
     } catch (error) {
-        console.log("socket $$",error);
+        console.log("socket $$", error);
     }
 }
 
 
-export function createSocketChannel(socket){
+export function createSocketChannel(socket) {
     return eventChannel(emit => {
-
-        const eventHandlers = {
-            'connect' : () => {
-                console.log("connected!!!");
-            },
-            'disconnect' : () => {
-                console.log("disconnect!^^^^^^^^!!");
-            },
-            'chat/message created' : (data) => {
-                emit({ type:"chat/message created", data : data });
-            }
-        }
-
-        Object.keys(eventHandlers).forEach( eventName  => {
-            socket.on(eventName, eventHandlers[eventName]);
+        Object.keys(socketEventsEnums).forEach(eventName => {
+            socket.on(eventName, (data: any) => emit({ type: eventName, data: data }))
         });
-        
-        return ()=>{
-            Object.keys(eventHandlers).forEach( eventName  => {
-                socket.off(eventName, eventHandlers[eventName]);
+
+        return () => {
+            Object.keys(socketEventsEnums).forEach(eventName => {
+                socket.off(eventName);
             });
         }
     });

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import uuid from 'react-native-uuid';
 import {
   KeyboardAvoidingView,
@@ -15,52 +15,52 @@ import {
   Keyboard,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import ListFooterComponent from '../../components/ListFooterComponent';
-import {setActiveChannelTeamId} from '../../redux/actions/channels/SetActiveChannelId';
+import { setActiveChannelTeamId } from '../../redux/actions/channels/SetActiveChannelId';
 import {
   getChatsStart,
   sendMessageStart,
   setGlobalMessageToSend,
 } from '../../redux/actions/chat/ChatActions';
-import {deleteMessageStart} from '../../redux/actions/chat/DeleteChatAction';
-import {ChatCardMemo} from './ChatCard';
-import {getChannelsByQueryStart} from '../../redux/actions/channels/ChannelsByQueryAction';
-import {makeStyles} from './Styles';
+import { deleteMessageStart } from '../../redux/actions/chat/DeleteChatAction';
+import { ChatCardMemo } from './ChatCard';
+import { getChannelsByQueryStart } from '../../redux/actions/channels/ChannelsByQueryAction';
+import { makeStyles } from './Styles';
 import {
   useNavigation,
   useNavigationState,
   useTheme,
 } from '@react-navigation/native';
 import AnimatedLottieView from 'lottie-react-native';
-import {ms} from 'react-native-size-matters';
-import {setLocalMsgStart} from '../../redux/actions/chat/LocalMessageActions';
-import {resetUnreadCountStart} from '../../redux/actions/channels/ChannelsAction';
+import { ms } from 'react-native-size-matters';
+import { setLocalMsgStart } from '../../redux/actions/chat/LocalMessageActions';
+import { resetUnreadCountStart } from '../../redux/actions/channels/ChannelsAction';
 import HTMLView from 'react-native-htmlview';
 import RenderHTML from 'react-native-render-html';
-import {tagsStyles} from './HtmlStyles';
-import {onStartRecord, onStopRecord} from './VoiceRecording';
-import {uploadRecording} from './VoicePicker';
+import { tagsStyles } from './HtmlStyles';
+import { onStartRecord, onStopRecord } from './VoiceRecording';
+import { uploadRecording } from './VoicePicker';
 import {
   addUserToChannelStart,
   removeUserFromChannelStart,
 } from '../../redux/actions/channelActivities/inviteUserToChannelAction';
-import {ACTIVITIES, DEVICE_TYPES} from '../../constants/Constants';
+import { ACTIVITIES, DEVICE_TYPES } from '../../constants/Constants';
 import ScrollDownButton from '../../components/ScrollDownButton';
 import AudioRecordingPlayer from '../../components/AudioRecorderPlayer';
 import FirstTabChatScreen from './FirstTabChatScreen';
 import ActivityList from './components/acitivityList/ActivityList';
 import MentionList from './components/mentionList/MentionList';
 import ActionModal from './components/actionModal/ActionModal';
-import {Button, Divider} from 'react-native-paper';
-import {listStyles} from './components/attachments/AttachmentStyles';
+import { Button, Divider } from 'react-native-paper';
+import { listStyles } from './components/attachments/AttachmentStyles';
 import AttachmentOptionsModal from './components/attachments/AttachmentOptionsModal';
-import {addDraftMessage} from '../../redux/actions/chat/DraftMessageAction';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {Header} from '../../components/Header';
-import {joinChannelStart} from '../../redux/actions/channels/JoinChannelActions';
-import {AnimatedFlashList} from '@shopify/flash-list';
-import {LOCAL_PATH} from '../../utils/Path';
+import { addDraftMessage } from '../../redux/actions/chat/DraftMessageAction';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Header } from '../../components/Header';
+import { joinChannelStart } from '../../redux/actions/channels/JoinChannelActions';
+import { AnimatedFlashList } from '@shopify/flash-list';
+import { LOCAL_PATH } from '../../utils/Path';
 import Attachments from './components/attachments/RenderAttachments';
 
 const ChatScreen = ({
@@ -96,10 +96,10 @@ const ChatScreen = ({
       channelType === 'DIRECT_MESSAGE'
         ? orgState?.userIdAndDisplayNameMapping[userId]
         : chatDetailsForTab?.searchedChannel
-        ? chatDetailsForTab?.channelName
-        : channelsState?.teamIdAndNameMapping[teamId];
+          ? chatDetailsForTab?.channelName
+          : channelsState?.teamIdAndNameMapping[teamId];
   } else {
-    var {teamId, reciverUserId, channelType, searchedChannel, chatHeaderTitle} =
+    var { teamId, reciverUserId, channelType, searchedChannel, chatHeaderTitle } =
       route.params;
   }
 
@@ -132,7 +132,7 @@ const ChatScreen = ({
     }
   }, [networkState?.isInternetConnected, teamId, chatDetailsForTab]);
 
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const styles = makeStyles(colors);
   const listStyle = listStyles(colors);
   const [replyOnMessage, setreplyOnMessage] = useState(false);
@@ -152,10 +152,10 @@ const ChatScreen = ({
   const FlashListRef = useRef(null);
   const textInputRef = useRef(null);
   const scrollY = new Animated.Value(0);
-  const {height} = Dimensions.get('window');
+  const { height } = Dimensions.get('window');
   const offset = height * 0.12;
   const screenHeight = Dimensions.get('window').height;
-  const {width} = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const date = useMemo(() => new Date(), []);
   const [recordingUrl, setrecordingUrl] = useState('');
   const [isRecording, setisRecording] = useState(false);
@@ -273,14 +273,14 @@ const ChatScreen = ({
   );
 
   const scrollToBottom = () => {
-    FlashListRef?.current?.scrollToOffset({animating: true, offset: 0});
+    FlashListRef?.current?.scrollToOffset({ animating: true, offset: 0 });
   };
 
   const onScroll = Animated.event(
-    [{nativeEvent: {contentOffset: {y: scrollY}}}],
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
     {
       useNativeDriver: true,
-      listener: ({nativeEvent}) => {
+      listener: ({ nativeEvent }) => {
         const offsetY = nativeEvent.contentOffset.y;
         setIsScrolling(offsetY >= 0.7 * screenHeight);
       },
@@ -293,7 +293,7 @@ const ChatScreen = ({
   );
 
   const renderItem = useCallback(
-    ({item, index}) => {
+    ({ item, index }) => {
       // console.log(index);
       return (
         <ChatCardMemo
@@ -328,7 +328,7 @@ const ChatScreen = ({
       return (
         <Text
           key={index}
-          style={{color: 'black', textDecorationLine: 'underline'}}>
+          style={{ color: 'black', textDecorationLine: 'underline' }}>
           @{dataValue}
         </Text>
       );
@@ -437,7 +437,7 @@ const ChatScreen = ({
   };
 
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView style={styles.safeAreaView}>
         {!isScrolling && (
           <Header
@@ -452,13 +452,13 @@ const ChatScreen = ({
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : null}
             keyboardVerticalOffset={searchedChannel ? 75 : offset}
-            style={{flex: 1}}>
+            style={{ flex: 1 }}>
             <View style={styles.outerContainer}>
               <View style={styles.messageListContainer}>
                 {teamId == undefined ||
-                chatState?.data[teamId]?.isloading == true ? (
+                  chatState?.data[teamId]?.isloading == true ? (
                   <View style={styles.loadingContainer}>
-                    <Text style={{color: colors?.color, textAlign: 'center'}}>
+                    <Text style={{ color: colors?.color, textAlign: 'center' }}>
                       Loading...
                     </Text>
                   </View>
@@ -532,9 +532,9 @@ const ChatScreen = ({
               {(channelType == 'CHANNEL' ||
                 channelType == 'PUBLIC' ||
                 channelType == 'PRIVATE') &&
-              !channelsState?.channelIdAndDataMapping[
-                teamId
-              ]?.userIds?.includes(currentUserId) ? (
+                !channelsState?.channelIdAndDataMapping[
+                  teamId
+                ]?.userIds?.includes(currentUserId) ? (
                 <View>
                   <Divider />
                   <TouchableOpacity
@@ -599,55 +599,53 @@ const ChatScreen = ({
                       })}
 
                     {replyOnMessage &&
-                      (console.log(repliedMsgDetails, '=-=-'),
-                      (
-                        <TouchableOpacity
-                          activeOpacity={0.9}
-                          onPress={() => {
-                            setreplyOnMessage(false);
-                            setrepliedMsgDetails(null);
-                          }}>
-                          <View style={styles.replyMessageInInput}>
-                            {repliedMsgDetails?.content?.includes(
-                              '<span class="mention"',
-                            ) ? (
-                              <HTMLView
-                                value={`<div>${repliedMsgDetails?.content}</div>`}
-                                renderNode={renderNode}
-                                stylesheet={htmlStyles}
-                              />
-                            ) : repliedMsgDetails?.attachment?.length > 0 &&
-                              typeof repliedMsgDetails?.attachment !=
-                                'string' ? (
-                              <Attachments
-                                attachment={repliedMsgDetails?.attachment}
-                              />
-                            ) : (
-                              <RenderHTML
-                                source={{
-                                  html: repliedMsgDetails?.content?.replace(
-                                    emailRegex,
-                                    '<span>$&</span>',
-                                  ),
-                                }}
-                                contentWidth={width}
-                                tagsStyles={tagsStyles('black', 'black')}
-                              />
-                            )}
-                            <MaterialIcons
-                              name="cancel"
-                              size={ms(16)}
-                              color="black"
-                              style={{
-                                position: 'absolute',
-                                top: ms(5),
-                                right: ms(5),
-                                zIndex: 1,
-                              }}
+                      <TouchableOpacity
+                        activeOpacity={0.9}
+                        onPress={() => {
+                          setreplyOnMessage(false);
+                          setrepliedMsgDetails(null);
+                        }}>
+                        <View style={styles.replyMessageInInput}>
+                          {repliedMsgDetails?.content?.includes(
+                            '<span class="mention"',
+                          ) ? (
+                            <HTMLView
+                              value={`<div>${repliedMsgDetails?.content}</div>`}
+                              renderNode={renderNode}
+                              stylesheet={htmlStyles}
                             />
-                          </View>
-                        </TouchableOpacity>
-                      ))}
+                          ) : repliedMsgDetails?.attachment?.length > 0 &&
+                            typeof repliedMsgDetails?.attachment !=
+                            'string' ? (
+                            <Attachments
+                              attachment={repliedMsgDetails?.attachment}
+                            />
+                          ) : (
+                            <RenderHTML
+                              source={{
+                                html: repliedMsgDetails?.content?.replace(
+                                  emailRegex,
+                                  '<span>$&</span>',
+                                ),
+                              }}
+                              contentWidth={width}
+                              tagsStyles={tagsStyles('black', 'black')}
+                            />
+                          )}
+                          <MaterialIcons
+                            name="cancel"
+                            size={ms(16)}
+                            color="black"
+                            style={{
+                              position: 'absolute',
+                              top: ms(5),
+                              right: ms(5),
+                              zIndex: 1,
+                            }}
+                          />
+                        </View>
+                      </TouchableOpacity>
+                    }
 
                     {showMention && (
                       <MentionList
@@ -687,7 +685,7 @@ const ChatScreen = ({
                             setShowPlayer(false);
                           }}
                         />
-                        <View style={{justifyContent: 'center'}}>
+                        <View style={{ justifyContent: 'center' }}>
                           <TouchableOpacity
                             onPress={!action ? onSendPress : onSendWithAction}
                             style={{
@@ -719,7 +717,7 @@ const ChatScreen = ({
                               margin: 4,
                             }}>
                             <TouchableOpacity
-                              style={{flex: 1, alignItems: 'center'}}
+                              style={{ flex: 1, alignItems: 'center' }}
                               onPress={() => {
                                 onStopRecord(
                                   setrecordingUrl,
@@ -799,7 +797,7 @@ const ChatScreen = ({
                                 replyOnMessage
                                   ? styles.inputWithReply
                                   : styles.inputWithoutReply,
-                                {color: colors.textColor},
+                                { color: colors.textColor },
                               ]}
                             />
                             <View
@@ -809,8 +807,8 @@ const ChatScreen = ({
                                 marginBottom: 3,
                               }}>
                               {message?.length > 0 ||
-                              showPlayer ||
-                              attachment?.length > 0 ? (
+                                showPlayer ||
+                                attachment?.length > 0 ? (
                                 <TouchableOpacity
                                   onPress={
                                     !action ? onSendPress : onSendWithAction

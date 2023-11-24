@@ -61,6 +61,8 @@ const ChatCardV2 = ({
   setActiveChannelTeamIdAction,
 }) => {
   //   const deviceType = useSelector(state => state.appInfoReducer.deviceType);
+  chat?.randomId && console.log(chat, "-0-0-0--", typeof (chat?.randomId), chat?.randomId);
+
   const { deviceType, currentUserId, userIdAndDataMapping, parentMessage } = useCustomSelector((state: $ReduxCoreType) => ({
     deviceType: state?.appInfo?.deviceType,
     currentUserId: state?.allUsers?.currentUser?.id,
@@ -142,7 +144,6 @@ const ChatCardV2 = ({
       fontSize: 16,
     },
   });
-
   const handleListItemPress = (
     teamId,
     channelType,
@@ -261,7 +262,7 @@ const ChatCardV2 = ({
                   ? ms(0)
                   : ms(10),
             marginBottom: index == 0 ? 10 : 3,
-                      }}>
+          }}>
           {SenderName != 'You' && channelType != 'DIRECT_MESSAGE' && (
             <TouchableOpacity
               onPress={async () => {
@@ -277,7 +278,7 @@ const ChatCardV2 = ({
                 style={{
                   justifyContent: 'flex-start',
                   margin: 5,
-                  }}>
+                }}>
                 {!sameSender ? (
                   <FastImage
                     source={{
@@ -314,10 +315,10 @@ const ChatCardV2 = ({
                     flexDirection: 'row',
                     flex: 1,
                     flexWrap: 'wrap',
-                                      },
-                                  ]}>
+                  },
+                ]}>
                 <View style={{ justifyContent: 'flex-end' }}>
-                  {chat?.randomId != null && (
+                  {chat?.randomId && (
                     <View
                       style={{
                         width: 20,

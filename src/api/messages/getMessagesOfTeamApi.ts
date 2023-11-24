@@ -6,8 +6,6 @@ export const getMessagesOfTeamApi = async (
   skip: number,
 ): Promise<any> => {
   try {
-    console.log(teamId, token, skip, "-0-0-0-0-0-0-0-0-0-0-0-s");
-
     var response = await fetch(
       `${CHAT_SERVER_URL}/chat//message?teamId=${teamId}&deleted=false&$limit=30&$paginate=false&parentMessages=true&$skip=${skip}`,
       {

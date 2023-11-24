@@ -1,19 +1,19 @@
-export interface $ChatsReducerType{
+export interface $ChatsReducerType {
     data: chatDataTypes,
     randomIdsArr: [],
 }
 
-export interface chatDataTypes{
-    [key:string]:{
-        isLoading:boolean,
-        messages:messagesType[],
-        parentMessages:{[key:string]:any},
-        draftMessages:{[key:string]:any},
-        messagesToSendOnInternetReconnet:any
+export interface chatDataTypes {
+    [key: string]: {
+        isLoading: boolean,
+        messages: messagesType[],
+        parentMessages: { [key: string]: any },
+        draftMessages: { [key: string]: any },
+        messagesToSendOnInternetReconnet: any
     }
 }
 
-export interface $messagesType{
+export interface messagesType {
     __v: number,
     _id: string,
     attachment: any[],
