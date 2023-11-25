@@ -115,3 +115,10 @@ export const CHANNEL_PATCHED_EVENT = 'CHANNEL_PATCHED_EVENT';
 //REACTIONS
 export const REACTIONS_START = 'REACTIONS_START';
 export const REACTIONS_SUCCESS = 'REACTIONS_SUCCESS';
+
+//SOCKET EVENTS
+export const socketEventsEnums = {
+  connect: "connect",
+  disconnect: "disconnect",
+  "chat/message created": "chat/message created"
+}

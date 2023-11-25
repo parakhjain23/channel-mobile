@@ -23,6 +23,9 @@ export const reducers: ValidateSliceCaseReducers<$AppInfoReducerType, SliceCaseR
         state.accessToken = action.payload.accessToken
         state.isAuthenticated = true
     },
+    initializeSocketV2(state, action : actionType<{accessToken: string, orgId: string}>){
+        state.isSocketConnected = false
+    },
     resetAppInfoState() {
         return initialState
     }

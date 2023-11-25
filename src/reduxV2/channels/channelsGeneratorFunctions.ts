@@ -15,7 +15,6 @@ export function* getChannelsV2(data: { accessToken: string, orgId: string, userI
 
 export function* getRecentChannelsV2(data: { accessToken: string, orgId: string, userId: string  , userName:string}) {
   try {
-    console.log("get all recent channels")
     var response = yield call(getRecenctChannelsApi,data.accessToken, data.orgId, data.userId);
     yield put(getAllRecentChannelSuccessV2({recentChannels:response,userId:data.userId , userName:data.userName}));
     // yield put(getChannelDetailsStart(accessToken, orgId, userId));

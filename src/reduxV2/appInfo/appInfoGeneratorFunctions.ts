@@ -4,7 +4,6 @@ import { getSpaceAccessTokenApi } from '../../api/spaceAccessTokenApi/SpaceAcces
 import { getSpaceTokenSuccessV2, updateAppInfoState } from './appInfoSlice';
 
 export function* getSpaceAccessTokenV2(action: actionType<{ firebaseToken: string }>) {
-  console.log("first")
   try {
     var response = yield call(getSpaceAccessTokenApi, action?.payload?.firebaseToken);
     yield put(getSpaceTokenSuccessV2({ accessToken: response?.accessToken }))

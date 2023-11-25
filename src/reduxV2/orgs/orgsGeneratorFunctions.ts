@@ -5,7 +5,6 @@ import { getAllUsersOfOrgApi } from "../../api/getAllUsersofOrgApi/getAllUsers";
 import { getAllUsersSuccessV2 } from "../allUsers/allUsersSlice";
 
 export function* getAllOrgsV2(accessToken: string) {
-  console.log("inside get all orgs")
   try {
     var response = yield call(fetchOrgsApi, accessToken)
     console.log(response)
@@ -21,7 +20,6 @@ export function* getAllOrgsV2(accessToken: string) {
 
 export function* getAllUsersOfOrgV2(data: { accessToken: string, orgId: string }) {
   try {
-    console.log("get all users of orgs")
     var response = yield call(getAllUsersOfOrgApi, data?.accessToken, data?.orgId)
     yield put(getAllUsersSuccessV2(response))
   } catch (error) {

@@ -2,6 +2,7 @@ import { takeLatest } from "redux-saga/effects";
 import { getSpaceAccessTokenV2 } from "./appInfoGeneratorFunctions";
 import { getUserDetailsV2 } from "../allUsers/allUserGeneratorFunctions";
 import { getDataFromAccessToken } from "../multiTaskGeneratorFunctions";
+import { socketGeneratorFunction } from "../socket/socketGeneratorFunction";
 
 function* AppInfoSaga() {
     // yield takeLatest(Actions.SAVE_TOKEN, getUserDetails);
@@ -11,6 +12,7 @@ function* AppInfoSaga() {
     // yield takeLatest(Actions.UPDATE_USER_DETAILS_START, updateUserDetails);
     yield takeLatest('appInfo/getSpaceTokenStartV2',getSpaceAccessTokenV2)
     yield takeLatest('appInfo/getSpaceTokenSuccessV2',getDataFromAccessToken)
+    yield takeLatest('appInfo/initializeSocketV2',socketGeneratorFunction)
   }
   
   export default AppInfoSaga;
