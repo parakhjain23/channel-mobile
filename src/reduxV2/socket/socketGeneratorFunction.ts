@@ -25,14 +25,11 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
 
                 switch (payload?.type) {
                     case socketEventsEnums.connect:
-                        console.log("connect =-=-");
                         break;
                     case socketEventsEnums.disconnect:
-                        console.log("disconnect --==-==-");
                         break;
                     case socketEventsEnums["chat/message created"]:
                         const messageObj = payload?.data
-                        console.log(messageObj, "event message", messageObj?.requestId);
 
                         // if (
                         //     store.getState()?.channelsReducer?.teamIdAndTypeMapping[data?.teamId] ==
@@ -97,7 +94,6 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
                         //   }
                         break;
                     default:
-                        console.log("not registered event!!!");
 
                         break;
                 }

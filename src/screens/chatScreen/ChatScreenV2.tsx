@@ -134,7 +134,6 @@ export const ChatScreenV2 = ({
   const { chatsData } = useCustomSelector((state: $ReduxCoreType) => ({
     chatsData: state?.chats?.data[teamId]
   }))
-  console.log("chatsDAta", chatsData?.messages?.length);
 
   useEffect(() => {
     const fetchData = () => {

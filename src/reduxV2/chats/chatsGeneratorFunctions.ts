@@ -25,11 +25,11 @@ export function* sendMessage(action: actionType<messagesType>) {
     const { isInternetConnected } = yield select((state: $ReduxCoreType) => ({
       isInternetConnected: state?.appInfo?.isInternetConnected
     }));
-    if (isInternetConnected) {
-      yield call(sendMessageApiV2, action?.payload?.data);
-    } else {
+    // if (isInternetConnected) {
+    yield call(sendMessageApiV2, action?.payload?.data);
+    // } else {
 
-    }
+    // }
   }
   catch (error) {
     console.warn(error);

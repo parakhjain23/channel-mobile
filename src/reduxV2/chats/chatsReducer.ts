@@ -16,7 +16,6 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
     state.data[action.payload.teamId] = { ...state.data[action.payload.teamId], isLoading: true, parentMessages: {} }
   },
   fetchMessagesSuccessV2(state, action: actionType<{ messages: [], parentMessages: [], skip: number, teamId: string }>) {
-    console.log("inside fetch message success");
     const { messages, parentMessages } = modifyMessagesUtility(action?.payload)
     state.data[action.payload.teamId] = {
       ...state.data[action.payload.teamId],
@@ -52,7 +51,6 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
   sendMessageStartV2(state, action: actionType<messagesType>) {
 
     const { data, parentKey, parentObj } = addLocalMessagesUtility(state, action?.payload)
-    console.log(data, "local message data", data?.requestId);
 
 
     return {
@@ -83,19 +81,15 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
       state.data[teamId].messages = [message]
     }
     if (senderId == currentUserId) {
-      console.log("inside first if");
       for (
         let i = 0;
         i < state?.data[teamId]?.messages?.length;
         i++
       ) {
-        console.log("inside loop", state?.data[teamId]?.messages[i].requestId, requestId);
         if (
           state?.data[teamId]?.messages[i].requestId == requestId
         ) {
-          console.log("inside if");
           state.data[teamId].messages[i] = { ...message, showClock: false }
-          console.log(state.data[teamId].messages[i], "-0-0-0-0-0-0-0-0-0-");
           break;
         }
       }
