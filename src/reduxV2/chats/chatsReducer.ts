@@ -2,9 +2,10 @@ import { SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit'
 import { actionType } from '../../types/actionDataType'
 import { $ChatsReducerType, messagesType } from '../../types/ChatsReducerType'
 import { addLocalMessagesUtility, addNewMessageUtility, modifyMessagesUtility } from '../../utils/ChatsModifyUtility'
+import uuid from 'react-native-uuid';
 export const initialState: $ChatsReducerType = {
     data: {},
-    randomIdsArr: [],
+    // randomIdsArr: [],
 }
 
 export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseReducers<$ChatsReducerType>>  = {
@@ -25,33 +26,54 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
         }
     },
     setlocalMsgActionV2(state, action: actionType<messagesType>) {
-        const { data, parentKey, parentObj } = addLocalMessagesUtility(state, action?.payload)
-    
-        return {
-          ...state,
-          data: {
-            ...state?.data,
-            [data?.teamId]: {
-              ...state?.data[data?.teamId],
-              messages: state?.data[data?.teamId]?.messages
-                ? [data, ...state?.data[data?.teamId]?.messages]
-                : [data],
-              parentMessages:
-                parentKey != undefined
-                  ? state?.data[data?.teamId]?.parentMessages
-                    ? { ...parentObj, ...state?.data[data?.teamId]?.parentMessages }
-                    : parentObj
-                  : state?.data[data?.teamId]?.parentMessages,
-            },
-          },
-          randomIdsArr:
-            state?.randomIdsArr?.length > 0
-              ? [...state?.randomIdsArr, data?.randomId]
-              : [data?.randomId],
-        };
+        // const randomId = uuid.v4();
+        // const { data, parentKey, parentObj } = addLocalMessagesUtility(state, action?.payload)
+        // data['requestId']=randomId;
+        
+        // return {
+        //   ...state,
+        //   data: {
+        //     ...state?.data,
+        //     [data?.teamId]: {
+        //       ...state?.data[data?.teamId],
+        //       messages: state?.data[data?.teamId]?.messages
+        //         ? [data, ...state?.data[data?.teamId]?.messages]
+        //         : [data],
+        //       parentMessages:
+        //         parentKey != undefined
+        //           ? state?.data[data?.teamId]?.parentMessages
+        //             ? { ...parentObj, ...state?.data[data?.teamId]?.parentMessages }
+        //             : parentObj
+        //           : state?.data[data?.teamId]?.parentMessages,
+        //     },
+        //   }
+        // };
     },
     sendMessageStartV2(state, action: actionType<messagesType>) {
+      const randomId = uuid.v4();
+      const { data, parentKey, parentObj } = addLocalMessagesUtility(state, action?.payload)
+      data['requestId']=randomId;
+
+      return {
+        ...state,
+        data: {
+          ...state?.data,
+          [data?.teamId]: {
+            ...state?.data[data?.teamId],
+            messages: state?.data[data?.teamId]?.messages
+              ? [data, ...state?.data[data?.teamId]?.messages]
+              : [data],
+            parentMessages:
+              parentKey != undefined
+                ? state?.data[data?.teamId]?.parentMessages
+                  ? { ...parentObj, ...state?.data[data?.teamId]?.parentMessages }
+                  : parentObj
+                : state?.data[data?.teamId]?.parentMessages,
+          },
+        }
+      };
     },
+    
     addNewMessageV2(state, action: actionType<{ messageObject: messagesType, userId: string }>) {
       const { tempParentMessage, parentId, message } = addNewMessageUtility(state, action?.payload);
       const teamId = message?.teamId

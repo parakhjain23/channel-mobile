@@ -19,7 +19,7 @@ import {
     useTheme,
   } from '@react-navigation/native';
 import { Button, Divider } from 'react-native-paper';
-import uuid from 'react-native-uuid';
+// import uuid from 'react-native-uuid';
 import { onStartRecord, onStopRecord } from '../../VoiceRecording';
 import HTMLView from 'react-native-htmlview';
 import Attachments from '../attachments/RenderAttachments';
@@ -229,9 +229,9 @@ export default function CSBottomComponent({
         const localMessage = message;
         onChangeMessage('');
         if (localMessage?.trim() !== '' || showPlayer || attachment?.length > 0) {
-          const randomId = uuid.v4();
+          // const randomId = uuid.v4();
           const data = {
-            randomId: randomId,
+            accessToken,
             content: localMessage,
             createdAt: date,
             isLink: false,
@@ -248,12 +248,12 @@ export default function CSBottomComponent({
           };
           // setlocalMsgAction(messageContent);
             // console.log("send button pressed!")
-          dispatch(setlocalMsgActionV2({data,type: "ADD_LOCAL_MESSAGE"}))
-          if (appState?.isInternetConnected || showPlayer) {
-            let response;
-            if (showPlayer) {
-              response = await uploadRecording(recordingUrl, accessToken);
-            }
+          // dispatch(setlocalMsgActionV2({data,type: "ADD_LOCAL_MESSAGE"}))
+          // if (appState?.isInternetConnected || showPlayer) {
+          //   let response;
+          //   if (showPlayer) {
+          //     response = await uploadRecording(recordingUrl, accessToken);
+          //   }
         // sendMessageAction(
         //       localMessage,
         //       teamId,
@@ -264,17 +264,16 @@ export default function CSBottomComponent({
         //       attachment?.length > 0 ? attachment : response || [],
         //       mentionsArr,
         //     );
-        dispatch(sendMessageStartV2({
-          message: localMessage,
-          teamId: teamId,
-          orgId: currentOrgId,
-          senderId: currentUserId,
-          token: accessToken,
-          parentId: repliedMsgDetails?._id || null,
-          attachment: attachment?.length > 0 ? attachment : response || [],
-          mentionsArr: mentionsArr
-        }));
-          } else {
+        dispatch(sendMessageStartV2({data,type: "ADD_LOCAL_MESSAGE"}));
+        // content: localMessage,
+        // teamId: teamId,
+        // orgId: currentOrgId,
+        // senderId: currentUserId,
+        // token: accessToken,
+        // parentId: repliedMsgDetails?._id || null,
+        // attachment: attachment?.length > 0 ? attachment : response || [],
+        // mentionsArr: mentionsArr,
+          // } else {
             // setGlobalMessageToSendAction({
             //   content: localMessage,
             //   teamId: teamId,
@@ -286,7 +285,7 @@ export default function CSBottomComponent({
             //   updatedAt: date,
             //   mentionsArr: mentionsArr,
             // });
-          }
+          // }
         }
     
         attachment?.length > 0 && setAttachment([]),

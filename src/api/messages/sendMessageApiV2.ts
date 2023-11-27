@@ -1,5 +1,8 @@
 import base64 from 'react-native-base64';
+import { useSelector } from 'react-redux';
+import { select } from 'redux-saga/effects';
 import { messagesType } from '../../types/ChatsReducerType';
+import { $ReduxCoreType } from '../../types/reduxCoreType';
 import {CHAT_SERVER_URL} from '../baseUrls/baseUrls';
 
 function mentionHTML(userId, teamId, type, match, username, mentionsArrToSend) {
@@ -21,22 +24,22 @@ const renderTextWithBreaks = text => {
 };
 
 export const sendMessageApiV2 = async (
-  messageObj:messagesType
+  data:messagesType
 ) => {
   let mentionsArrToSend = [];
   try {
     const regex = /(https?:\/\/[^\s]+)/g;
-    messageObj?.message.replace(regex, '<a href="$1">$1</a>');
+    data?.content.replace(regex, '<a href="$1">$1</a>');
     const mentionRegex = /@(\w+)/g;
     // Replace mentions with HTML tags
 
     let mentionIndex = 0;
-    if (messageObj?.mentionsArr?.length > 0) {
-      messageObj?.message?.replace(mentionRegex, (match, username) => {
+    if (data?.mentionsArr?.length > 0) {
+      data?.content?.replace(mentionRegex, (match, username) => {
         const mentionHtml = mentionHTML(
-          messageObj?.mentionsArr[mentionIndex]?.userId,
-          messageObj?.mentionsArr[mentionIndex]?.teamId,
-          messageObj?.mentionsArr[mentionIndex]?.type,
+          data?.mentionsArr[mentionIndex]?.userId,
+          data?.mentionsArr[mentionIndex]?.teamId,
+          data?.mentionsArr[mentionIndex]?.type,
           match,
           username,
           mentionsArrToSend,
@@ -45,23 +48,23 @@ export const sendMessageApiV2 = async (
         return mentionHtml;
       });
     }
-    renderTextWithBreaks(messageObj?.message);
+    renderTextWithBreaks(data?.content);
 
     var response = await fetch(`${CHAT_SERVER_URL}/chat/message`, {
       method: 'POST',
       headers: {
-        Authorization: messageObj?.token,
+        Authorization: data?.accessToken,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        attachment: messageObj?.attachment,
-        content: messageObj?.message,
+        attachment: data?.attachment,
+        content: data?.content,
         mentions: mentionsArrToSend || [],
-        teamId: messageObj?.teamId,
-        requestId: '73d31f2e-9039-401c-83cd-909953c264f1',
-        orgId: messageObj?.orgId,
-        senderId: messageObj?.senderId,
-        parentId: messageObj?.parentId,
+        teamId: data?.teamId,
+        requestId: data?.requestId,
+        orgId: data?.orgId,
+        senderId: data?.senderId,
+        parentId: data?.parentId,
         createdAt: '2022-05-23T07:02:37.051Z',
         appId: '62b53b61b5b4a2001fb9af37',
         senderType: 'USER',
