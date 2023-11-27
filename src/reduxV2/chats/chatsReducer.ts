@@ -1,7 +1,7 @@
 import { SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit'
 import { actionType } from '../../types/actionDataType'
 import { $ChatsReducerType, messagesType } from '../../types/ChatsReducerType'
-import { addLocalMessagesUtility, modifyMessagesUtility } from '../../utils/ChatsModifyUtility'
+import { addLocalMessagesUtility, addNewMessageUtility, modifyMessagesUtility } from '../../utils/ChatsModifyUtility'
 export const initialState: $ChatsReducerType = {
     data: {},
     randomIdsArr: [],
@@ -23,39 +23,57 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
           messages: action?.payload?.skip > 0 ? [...state.data[action.payload.teamId].messages,...messages] : messages,
           parentMessages:{...state.data[action.payload.teamId].parentMessages,...parentMessages}
         }
-      },
-      setlocalMsgActionV2(state,action:actionType<messagesType>){
-        // console.log("set local msg reducer called---->  \n ",action?.payload)
-        const {data,parentKey,parentObj}=addLocalMessagesUtility(state,action?.payload)
+    },
+    setlocalMsgActionV2(state, action: actionType<messagesType>) {
+        const { data, parentKey, parentObj } = addLocalMessagesUtility(state, action?.payload)
+    
+        return {
+          ...state,
+          data: {
+            ...state?.data,
+            [data?.teamId]: {
+              ...state?.data[data?.teamId],
+              messages: state?.data[data?.teamId]?.messages
+                ? [data, ...state?.data[data?.teamId]?.messages]
+                : [data],
+              parentMessages:
+                parentKey != undefined
+                  ? state?.data[data?.teamId]?.parentMessages
+                    ? { ...parentObj, ...state?.data[data?.teamId]?.parentMessages }
+                    : parentObj
+                  : state?.data[data?.teamId]?.parentMessages,
+            },
+          },
+          randomIdsArr:
+            state?.randomIdsArr?.length > 0
+              ? [...state?.randomIdsArr, data?.randomId]
+              : [data?.randomId],
+        };
+    },
+    sendMessageStartV2(state, action: actionType<messagesType>) {
+    },
+    addNewMessageV2(state, action: actionType<{ messageObject: messagesType, userId: string }>) {
+      const { tempParentMessage, parentId, message } = addNewMessageUtility(state, action?.payload);
+      const teamId = message?.teamId
       return {
         ...state,
         data: {
           ...state?.data,
-          [data?.teamId]: {
-            ...state?.data[data?.teamId],
-            messages: state?.data[data?.teamId]?.messages
-              ? [data, ...state?.data[data?.teamId]?.messages]
-              : [data],
+          [teamId]: {
+            ...state?.data[teamId],
+            messages: state?.data[teamId]?.messages
+              ? [message, ...state?.data[teamId]?.messages]
+              : [message],
             parentMessages:
-              parentKey != undefined
-                ? state?.data[data?.teamId]?.parentMessages
-                  ? {...parentObj, ...state?.data[data?.teamId]?.parentMessages}
-                  : parentObj
-                : state?.data[data?.teamId]?.parentMessages,
+              state?.data[teamId]?.parentMessages == undefined
+                ? tempParentMessage
+                : {
+                  ...state.data[teamId]?.parentMessages,
+                  [parentId]: tempParentMessage[parentId],
+                },
           },
         },
-        randomIdsArr:
-          state?.randomIdsArr?.length > 0
-            ? [...state?.randomIdsArr, data?.randomId]
-            : [data?.randomId],
       };
-    },
-    sendMessageStartV2(state,action:actionType<messagesType>){
-      // console.log("send msg start reducer called----;;;;;\n",action?.payload);
-
-      console.log("inside reducer------>55",action.payload);
-      
-      // return initialState
     },
     resetChatState(){
         return initialState

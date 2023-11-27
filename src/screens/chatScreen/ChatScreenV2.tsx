@@ -117,7 +117,6 @@ export const ChatScreenV2 = ({
   //       ? chatDetailsForTab?.channelName
   //       :teamIdAndDataMapping[teamId].name;
   // } else {
-  console.log("inside else", route.params);
 
   var { teamId, reciverUserId, channelType, searchedChannel, chatHeaderTitle } =
     route.params;

@@ -34,8 +34,7 @@ export function channelDataMappingUtility(data: { channels: channelDetailType[],
   var {channels, userId, userName} = data;
 
   channels.forEach(channel => {
-    console.log(channel);
-    
+
     const {_id, type, userIds} = channel;
     if (type === 'DIRECT_MESSAGE') {
       let dmUserId = userIds?.find(id => id !== userId);

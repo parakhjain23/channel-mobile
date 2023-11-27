@@ -10,6 +10,7 @@ export const {
   updateAppInfoState,
   getSpaceTokenStartV2,
   getSpaceTokenSuccessV2,
+  initializeSocketV2,
   resetAppInfoState,
  } = appInfoSlice.actions
 
