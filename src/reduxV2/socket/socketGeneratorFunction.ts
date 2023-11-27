@@ -32,6 +32,8 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
                         break;
                     case socketEventsEnums["chat/message created"]:
                         const messageObj = payload?.data
+                        console.log(messageObj, "event message", messageObj?.requestId);
+
                         // if (
                         //     store.getState()?.channelsReducer?.teamIdAndTypeMapping[data?.teamId] ==
                         //     undefined
@@ -118,7 +120,7 @@ export function createSocketChannel(socket) {
 
         return () => {
             Object.keys(socketEventsEnums).forEach(eventName => {
-                socket.off(eventName,(data: any) => emit({ type: eventName, data: data }));
+                socket.off(eventName, (data: any) => emit({ type: eventName, data: data }));
             });
         }
     });
