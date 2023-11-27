@@ -25,7 +25,7 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
           parentMessages:{...state.data[action.payload.teamId].parentMessages,...parentMessages}
         }
     },
-    setlocalMsgActionV2(state, action: actionType<messagesType>) {
+    // setlocalMsgActionV2(state, action: actionType<messagesType>) {
         // const randomId = uuid.v4();
         // const { data, parentKey, parentObj } = addLocalMessagesUtility(state, action?.payload)
         // data['requestId']=randomId;
@@ -48,7 +48,7 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
         //     },
         //   }
         // };
-    },
+    // },
     sendMessageStartV2(state, action: actionType<messagesType>) {
       const randomId = uuid.v4();
       const { data, parentKey, parentObj } = addLocalMessagesUtility(state, action?.payload)
@@ -73,7 +73,7 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
         }
       };
     },
-    
+
     addNewMessageV2(state, action: actionType<{ messageObject: messagesType, userId: string }>) {
       const { tempParentMessage, parentId, message } = addNewMessageUtility(state, action?.payload);
       const teamId = message?.teamId

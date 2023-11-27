@@ -317,7 +317,7 @@ const ChatCardV2 = ({
                                       },
                                   ]}>
                 <View style={{ justifyContent: 'flex-end' }}>
-                  {chat?.randomId != null && (
+                  {chat?.showClock && (
                     <View
                       style={{
                         width: 20,

@@ -73,6 +73,7 @@ export function addLocalMessagesUtility(state,action:{message:messagesType}){
     data['sameSender'] = true;
   }
   data['isSameDate'] = true;
+  data['showClock'] = true;
   return {data:data,parentKey:parentKey,parentObj:parentObj}
 }
 export function addNewMessageUtility(state, payload: { messageObject: messagesType, userId: string }) {
@@ -80,22 +81,22 @@ export function addNewMessageUtility(state, payload: { messageObject: messagesTy
   const { senderId, teamId } = payload?.messageObject
   const allMessages = [...state?.data[teamId]?.messages]
   if (
-    senderId == currentUserId &&
-    state?.randomIdsArr?.length > 0
-  ) {
-    payload.messageObject['randomId'] = state?.randomIdsArr[0];
-    state?.randomIdsArr?.shift();
-    for (
-      let i = 0;
-      i < allMessages?.length;
-      i++
+    senderId == currentUserId 
+    // && state?.randomIdsArr?.length > 0
     ) {
+      // payload.messageObject['randomId'] = state?.randomIdsArr[0];
+      // state?.randomIdsArr?.shift();
+      for (
+        let i = 0;
+        i < allMessages?.length;
+        i++
+        ) {
       if (
-        allMessages[i]?.randomId ==
-        payload?.messageObject?.randomId
+        allMessages[i].showClock == payload?.messageObject?.["showClock"]
       ) {
-        allMessages?.splice(i, 1);
-        payload.messageObject['randomId'] = null;
+        // allMessages?.splice(i, 1);
+        // payload.messageObject['randomId'] = null;
+        payload.messageObject["showClock"]=false;
         break;
       }
     }
