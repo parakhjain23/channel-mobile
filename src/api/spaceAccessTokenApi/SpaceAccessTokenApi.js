@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {CHAT_SERVER_URL} from '../baseUrls/baseUrls';
 
 export const getSpaceAccessTokenApi = async firebaseToken => {
@@ -12,6 +13,7 @@ export const getSpaceAccessTokenApi = async firebaseToken => {
       }),
     });
     var result = await response.json();
+    await AsyncStorage.setItem("accessToken",result.accessToken)
     return result;
   } catch (error) {
     console.warn(error);

@@ -1,6 +1,7 @@
 import base64 from 'react-native-base64';
 import { useSelector } from 'react-redux';
 import { select } from 'redux-saga/effects';
+import { sendMsgApi } from '../../../INTERCEPTOR';
 import { messagesType } from '../../types/ChatsReducerType';
 import { $ReduxCoreType } from '../../types/reduxCoreType';
 import {CHAT_SERVER_URL} from '../baseUrls/baseUrls';
@@ -50,13 +51,9 @@ export const sendMessageApiV2 = async (
     }
     renderTextWithBreaks(data?.content);
 
-    var response = await fetch(`${CHAT_SERVER_URL}/chat/message`, {
-      method: 'POST',
-      headers: {
-        Authorization: data?.accessToken,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    var response = 
+    await sendMsgApi(
+      JSON.stringify({
         attachment: data?.attachment,
         content: data?.content,
         mentions: mentionsArrToSend || [],
@@ -68,9 +65,32 @@ export const sendMessageApiV2 = async (
         createdAt: '2022-05-23T07:02:37.051Z',
         appId: '62b53b61b5b4a2001fb9af37',
         senderType: 'USER',
-      }),
-    });
-    const result = await response.json();
+      })
+    );
+  //   console.log("messagdatae",response);
+    
+    // fetch(`${CHAT_SERVER_URL}/chat/message`, {
+    //   method: 'POST',
+    //   headers: {
+    //     Authorization: data?.accessToken,
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     attachment: data?.attachment,
+    //     content: data?.content,
+    //     mentions: mentionsArrToSend || [],
+    //     teamId: data?.teamId,
+    //     requestId: data?.requestId,
+    //     orgId: data?.orgId,
+    //     senderId: data?.senderId,
+    //     parentId: data?.parentId,
+    //     createdAt: '2022-05-23T07:02:37.051Z',
+    //     appId: '62b53b61b5b4a2001fb9af37',
+    //     senderType: 'USER',
+    //   }),
+    // });
+    // const result = await response.json();
+    
   } catch (error) {
     console.warn(error);
   }

@@ -8,7 +8,7 @@ import { $ReduxCoreType } from "../../types/reduxCoreType";
 
 export function* getMessages(action: actionType<{ teamId: string, accessToken: string, skip: number }>) {
   try {
-    var response = yield call(getMessagesOfTeamApi, action?.payload?.teamId, action?.payload?.accessToken, action?.payload?.skip);
+    var response = yield call(getMessagesOfTeamApi, action?.payload?.teamId, action?.payload?.skip);
     yield put(fetchMessagesSuccessV2({
       messages: response?.messages,
       parentMessages: response?.parentMessages,
