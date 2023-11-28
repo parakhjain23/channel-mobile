@@ -156,7 +156,7 @@ export const ChatScreenV2 = ({
   const { colors } = useTheme();
   const styles = makeStyles(colors);
   const listStyle = listStyles(colors);
-  const [replyOnMessage, setreplyOnMessage] = useState(false);
+  // const [replyOnMessage, setreplyOnMessage] = useState(false);
   const [repliedMsgDetails, setrepliedMsgDetails] = useState('');
   const [showActions, setShowActions] = useState(false);
   const [currentSelectChatCard, setCurrentSelectedChatCard] = useState('');
@@ -324,7 +324,7 @@ export const ChatScreenV2 = ({
           // networkState={networkState}
           deleteMessageAction={deleteMessageAction}
           // chatState={chatState}
-          setreplyOnMessage={setreplyOnMessage}
+          // setreplyOnMessage={setreplyOnMessage}
           setrepliedMsgDetails={setrepliedMsgDetails}
           FlashListRef={FlashListRef}
           channelType={channelType}
@@ -450,8 +450,8 @@ export const ChatScreenV2 = ({
       showOptions && setShowOptions(false),
       mentionsArr?.length > 0 && setMentionsArr(''),
       mentions?.length > 0 && setMentions([]),
-      replyOnMessage && setreplyOnMessage(false),
-      repliedMsgDetails && setrepliedMsgDetails(null),
+      // replyOnMessage && setreplyOnMessage(false),
+      repliedMsgDetails && setrepliedMsgDetails({chat:null,replyOnMessage:false}),
       showPlayer && setShowPlayer(false);
   };
 
@@ -895,15 +895,15 @@ export const ChatScreenV2 = ({
                 channelType={channelType}
                 teamId={teamId}
                 modalizeRef={modalizeRef}
-              // replyOnMessage={replyOnMessage}
-              // setreplyOnMessage={setreplyOnMessage}
+                repliedMsgDetails={repliedMsgDetails}
+                setrepliedMsgDetails={setrepliedMsgDetails}
+                // replyOnMessage={replyOnMessage}
+                // setreplyOnMessage={setreplyOnMessage}
               // showActions={showActions} 
               // setShowActions={setShowActions}
               // currentSelectChatCard={currentSelectChatCard} 
               // setCurrentSelectedChatCard={setCurrentSelectedChatCard}
               // FlashListRef={FlashListRef}
-              // repliedMsgDetails={repliedMsgDetails}
-              // setrepliedMsgDetails={setrepliedMsgDetails}
               />
             </View>
           </KeyboardAvoidingView>

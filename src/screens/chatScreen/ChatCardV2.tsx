@@ -50,7 +50,7 @@ const ChatCardV2 = ({
   //   userInfoState,
   //   orgState,
   //   chatState,
-  setreplyOnMessage,
+  // setreplyOnMessage,
   setrepliedMsgDetails,
   FlashListRef,
   channelType,
@@ -124,8 +124,8 @@ const ChatCardV2 = ({
 
   const swipeFromLeftOpen = () => {
     Vibration.vibrate(30);
-    setrepliedMsgDetails(chat);
-    setreplyOnMessage(true);
+    setrepliedMsgDetails({chat:chat,replyOnMessage:true});
+    // setreplyOnMessage(true);
     swipeableRef?.current?.close();
   };
   const LeftSwipeActions = () => {

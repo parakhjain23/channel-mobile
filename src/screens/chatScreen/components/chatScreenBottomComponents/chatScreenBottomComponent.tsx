@@ -46,8 +46,10 @@ export default function CSBottomComponent({
     channelType ,
     teamId,
     modalizeRef,
+    repliedMsgDetails, 
+    setrepliedMsgDetails
     // replyOnMessage,
-    // setreplyOnMessage
+    // setreplyOnMessage,
     // showActions,
     // setShowActions,
     // currentSelectChatCard,
@@ -87,8 +89,8 @@ export default function CSBottomComponent({
     const [recordingUrl, setrecordingUrl] = useState('');
     const [voiceAttachment, setvoiceAttachment] = useState('');
     const isMountedRef = useRef(true);
-    const [replyOnMessage, setreplyOnMessage] = useState(false);
-    const [repliedMsgDetails, setrepliedMsgDetails] = useState('');
+    // const [replyOnMessage, setreplyOnMessage] = useState(false);
+    // const [repliedMsgDetails, setrepliedMsgDetails] = useState('');
     const date = useMemo(() => new Date(), []);
     const dispatch = useDispatch()
     const htmlStyles = {
@@ -125,10 +127,10 @@ export default function CSBottomComponent({
   // }, [navigation, message]);
 
     useEffect(() => {
-    if (repliedMsgDetails != '' && !showPlayer) {
+    if (repliedMsgDetails?.chat != '' && !showPlayer) {
       textInputRef.current.focus();
     }
-  }, [repliedMsgDetails]);
+  }, [repliedMsgDetails?.chat]);
 
   // useEffect(() => {
   //   searchedChannel && textInputRef?.current?.focus();
@@ -237,14 +239,14 @@ export default function CSBottomComponent({
             isLink: false,
             mentions: mentionsArr,
             orgId: currentOrgId,
-            parentId: repliedMsgDetails?._id,
+            parentId: repliedMsgDetails?.chat?._id,
             senderId: currentUserId,
             senderType: 'APP',
             teamId: teamId,
             updatedAt: date,
             attachment: showPlayer ? voiceAttachment : attachment,
             mentionsArr: mentionsArr,
-            parentMessage: repliedMsgDetails?.content,
+            parentMessage: repliedMsgDetails?.chat?.content,
           };
           // setlocalMsgAction(messageContent);
             // console.log("send button pressed!")
@@ -292,8 +294,8 @@ export default function CSBottomComponent({
         showOptions && setShowOptions(false),
         mentionsArr?.length > 0 && setMentionsArr(''),
         mentions?.length > 0 && setMentions([]),
-        replyOnMessage && setreplyOnMessage(false),
-        repliedMsgDetails && setrepliedMsgDetails(null),
+        // replyOnMessage && setreplyOnMessage(false),
+        repliedMsgDetails?.chat && setrepliedMsgDetails({chat:null,replyOnMessage:false}),
         showPlayer && setShowPlayer(false);
       };
 
@@ -361,7 +363,7 @@ export default function CSBottomComponent({
                 <View style={styles.bottomContainer}>
                   <View
                     style={[
-                      replyOnMessage && styles.inputWithReplyContainer,
+                      repliedMsgDetails?.replyOnMessage && styles.inputWithReplyContainer,
                       {
                         width: '100%',
                         alignSelf: 'center',
@@ -391,35 +393,35 @@ export default function CSBottomComponent({
                         );
                       })}
 
-                    {replyOnMessage &&
-                      (console.log(repliedMsgDetails, '=-=-'),
+                    {repliedMsgDetails?.replyOnMessage &&
+                      (console.log('reply--',repliedMsgDetails),
                       (
                         <TouchableOpacity
                           activeOpacity={0.9}
                           onPress={() => {
-                            setreplyOnMessage(false);
-                            setrepliedMsgDetails(null);
+                            // setreplyOnMessage(false);
+                            setrepliedMsgDetails({chat:null,replyOnMessage:false});
                           }}
                           >
                           <View style={styles.replyMessageInInput}>
-                            {repliedMsgDetails?.content?.includes(
+                            {repliedMsgDetails?.chat?.content?.includes(
                               '<span class="mention"',
                             ) ? (
                               <HTMLView
-                                value={`<div>${repliedMsgDetails?.content}</div>`}
+                                value={`<div>${repliedMsgDetails?.chat?.content}</div>`}
                                 renderNode={renderNode}
                                 stylesheet={htmlStyles}
                               />
-                            ) : repliedMsgDetails?.attachment?.length > 0 &&
-                              typeof repliedMsgDetails?.attachment !=
+                            ) : repliedMsgDetails?.chat?.attachment?.length > 0 &&
+                              typeof repliedMsgDetails?.chat?.attachment !=
                                 'string' ? (
                               <Attachments
-                                attachment={repliedMsgDetails?.attachment}
+                                attachment={repliedMsgDetails?.chat?.attachment}
                               />
                             ) : (
                               <RenderHTML
                                 source={{
-                                  html: repliedMsgDetails?.content?.replace(
+                                  html: repliedMsgDetails?.chat?.content?.replace(
                                     emailRegex,
                                     '<span>$&</span>',
                                   ),
@@ -593,7 +595,7 @@ export default function CSBottomComponent({
                               placeholderTextColor={colors.textColor}
                               value={message}
                               style={[
-                                replyOnMessage
+                                repliedMsgDetails?.replyOnMessage
                                   ? styles.inputWithReply
                                   : styles.inputWithoutReply,
                                 {color: colors.textColor},
