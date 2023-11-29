@@ -394,7 +394,7 @@ export default function CSBottomComponent({
                       })}
 
                     {repliedMsgDetails?.replyOnMessage &&
-                      (console.log('reply--',repliedMsgDetails),
+                      (console.log('reply--'),
                       (
                         <TouchableOpacity
                           activeOpacity={0.9}

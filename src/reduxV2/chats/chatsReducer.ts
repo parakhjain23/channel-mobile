@@ -13,7 +13,7 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
 
   },
   fetchMessagesStartV2(state, action: actionType<{ teamId: string, accessToken: string, skip: number }>) {
-    state.data[action.payload.teamId] = { ...state.data[action.payload.teamId], isLoading: true, parentMessages: {} }
+    state.data[action.payload.teamId] = { ...state.data[action.payload.teamId], isLoading: true, parentMessages: {...state.data[action.payload.teamId]?.parentMessages} }
   },
   fetchMessagesSuccessV2(state, action: actionType<{ messages: [], parentMessages: [], skip: number, teamId: string }>) {
     const { messages, parentMessages } = modifyMessagesUtility(action?.payload)
@@ -94,7 +94,7 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
         }
       }
     }
-    state.data[teamId].parentMessages = state?.data[teamId]?.parentMessages ? { ...state.data[teamId]?.parentMessages, [parentId]: parentMessage } : parentMessage
+    state.data[teamId].parentMessages = state?.data[teamId]?.parentMessages ? { ...parentMessage,...state.data[teamId]?.parentMessages } : parentMessage
     // return {
     //   ...state,
     //   data: {
