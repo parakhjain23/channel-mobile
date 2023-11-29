@@ -1,5 +1,5 @@
 import { draftMsgApi } from "../../../INTERCEPTOR";
-import { CHAT_SERVER_URL } from "../baseUrls/baseUrls";
+// import { CHAT_SERVER_URL } from "../baseUrls/baseUrls";
 
 export const draftMessageApi = async (
   message: string | any,

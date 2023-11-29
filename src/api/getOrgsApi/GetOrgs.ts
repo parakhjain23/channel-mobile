@@ -1,9 +1,9 @@
 import { getOrgsApi } from "../../../INTERCEPTOR";
-import { CHAT_SERVER_URL } from "../baseUrls/baseUrls";
+// import { CHAT_SERVER_URL } from "../baseUrls/baseUrls";
 
 export const fetchOrgsApi = async (): Promise<any[]> => {
     try {
-      const response = await getOrgsApi()
+      const response = await getOrgsApi();
       // await fetch(`${CHAT_SERVER_URL}/users?followedOrgs=true`, {
       //   method: 'GET',
       //   headers: {

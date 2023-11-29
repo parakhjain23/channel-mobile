@@ -4,7 +4,7 @@ import { select } from 'redux-saga/effects';
 import { sendMsgApi } from '../../../INTERCEPTOR';
 import { messagesType } from '../../types/ChatsReducerType';
 import { $ReduxCoreType } from '../../types/reduxCoreType';
-import {CHAT_SERVER_URL} from '../baseUrls/baseUrls';
+// import {CHAT_SERVER_URL} from '../baseUrls/baseUrls';
 
 function mentionHTML(userId, teamId, type, match, username, mentionsArrToSend) {
   if (username == 'channel') {
@@ -24,9 +24,7 @@ const renderTextWithBreaks = text => {
   return htmlString;
 };
 
-export const sendMessageApiV2 = async (
-  data:messagesType
-) => {
+export const sendMessageApiV2 = async ( data:messagesType ):Promise<void> => {
   let mentionsArrToSend = [];
   try {
     const regex = /(https?:\/\/[^\s]+)/g;
