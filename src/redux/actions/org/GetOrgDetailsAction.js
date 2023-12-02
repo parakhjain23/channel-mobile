@@ -1,5 +1,5 @@
 import {put, call} from 'redux-saga/effects';
-import { fetchOrgsApi } from '../../../api/getOrgsApi/GetOrgs';
+import { fetchOrgsApi } from '../../../api/getOrgsApi/OrgsApi';
 import * as Actions from '../../Enums';
 
 export function* getOrgDetails({accessToken}){

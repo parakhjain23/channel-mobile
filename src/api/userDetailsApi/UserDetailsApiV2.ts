@@ -1,4 +1,4 @@
-import { getUserDetailsApi, searchUserProfileApi } from "../../../INTERCEPTOR";
+import { spaceServerApi } from "../../../INTERCEPTOR";
 
 export const getUserDetailsV2Api = async ():Promise<any[]> => {
     try {
@@ -18,3 +18,13 @@ export const getUserDetailsV2Api = async ():Promise<any[]> => {
 //     console.warn(error);
 //   }
 // };
+
+
+const getUserDetailsApi = () => {
+  return spaceServerApi.get(`/users?getCurrentUser=true`);
+}
+
+// future use 
+// const searchUserProfileApi = (userId:string) => {
+//   return spaceServerApi.get(`/users/${userId}`);
+// }

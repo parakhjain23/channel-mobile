@@ -1,9 +1,6 @@
 import { call, put } from "redux-saga/effects";
-import { getChannelsApi } from "../../api/channelsApi/getChannels";
 import { getAllChannelsSuccessV2, getAllRecentChannelSuccessV2 } from "./channelsSlice";
-import { getRecenctChannelsApi } from "../../api/channelsApi/GetRecentChannelsApi";
-import { getChannelsV2Api } from "../../api/channelsApi/getChannelsV2";
-import { getRecenctChannelsV2Api } from "../../api/channelsApi/GetRecentChannelsV2Api";
+import { getChannelsV2Api, getRecenctChannelsV2Api } from "../../api/channelsApi/ChannelsApiV2";
 
 export function* getChannelsV2(data: { accessToken: string, orgId: string, userId: string  , userName:string}) {
   try {
