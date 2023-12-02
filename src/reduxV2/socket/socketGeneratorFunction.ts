@@ -6,6 +6,7 @@ import { addNewMessageV2 } from "../chats/chatsSlice";
 import { actionType } from "../../types/actionDataType";
 import { socketEventsEnums } from "../../redux/Enums";
 import { $ReduxCoreType } from "../../types/reduxCoreType";
+import { handleNotification } from "../../utils/HandleNotification";
 
 
 
@@ -17,9 +18,10 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
 
         while (true) {
             try {
-                const { userId, activeChannelId } = yield select((state: $ReduxCoreType) => ({
+                const { userId, activeChannelId  } = yield select((state: $ReduxCoreType) => ({
                     userId: state?.allUsers?.currentUser?.id,
-                    activeChannelId: state?.appInfo?.activeChannelId
+                    activeChannelId: state?.appInfo?.activeChannelId,
+
                 }))
                 const payload = yield take(socketChannel);
 
@@ -29,6 +31,8 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
                     case socketEventsEnums.disconnect:
                         break;
                     case socketEventsEnums["chat/message created"]:
+                        console.log("message created$$");
+                        
                         const messageObj = payload?.data
 
                         // if (
@@ -79,18 +83,12 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
                         //           store.getState()?.userInfoReducer?.user?.id,
                         //         ),
                         //       );
-                        //   if (messageObj?.senderId != store.getState()?.userInfoReducer?.user?.id) {
-                        //     PlayLocalSoundFile();
-                        //     if (
-                        //       messageObj?.teamId !=
-                        //       store.getState()?.channelsReducer?.activeChannelTeamId
-                        //     ) {
-                        //       handleNotification(
-                        //         messageObj,
-                        //         'events',
-                        //         store.getState()?.orgsReducer?.userIdAndDisplayNameMapping,
-                        //       );
-                        //     }
+                        //   if (messageObj?.senderId != userId) {
+                            // PlayLocd3alSoundFile();
+                            // if ( messageObj?.teamId != activeChannelId ) {
+                                // console.log("inside iff,channelid->",activeChannelId,"senderid-->",messageObj?.senderId,"userid-->",userId);
+                            yield call(handleNotification,messageObj,'events',[]);
+                            // }
                         //   }
                         break;
                     default:

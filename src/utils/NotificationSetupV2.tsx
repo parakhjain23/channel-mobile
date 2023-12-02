@@ -24,22 +24,32 @@ import {
   moveChannelToTop,
   resetUnreadCountStart,
 } from '../redux/actions/channels/ChannelsAction';
-import {connect} from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
 import {setCurrentOrgId} from '../redux/actions/org/intialOrgId';
 import {storage} from '../redux/reducers/Index';
+import { useCustomSelector } from './deepCheckSelector';
+import { $ReduxCoreType } from '../types/reduxCoreType';
+import { subscribeToNotificationsV2 } from '../reduxV2/appInfo/appInfoSlice';
 
 export const NotificationSetupV2 = ({
 //   userInfoState,
 //   resetUnreadCountAction,
 //   resetChatsAction,
 }) => {
-  const   
+  const { accessToken, userInfoState, orgInfoState, teamIdAndDataMapping, userIdAndDataMapping }= useCustomSelector((state:$ReduxCoreType) => ({
+    accessToken : state?.appInfo?.accessToken,
+    userInfoState : state?.allUsers?.currentUser,
+    orgInfoState : state?.orgs,
+    teamIdAndDataMapping : state?.channels?.teamIdAndDataMapping,
+    userIdAndDataMapping : state?.allUsers?.userIdAndDataMapping
+  })) 
   useEffect(() => {
-    if (store.getState()?.userInfoReducer?.accessToken) {
+    if (accessToken) {
       setNotificationListeners();
       initPushNotification();
     }
-  }, [userInfoState.accessToken]);
+  }, [accessToken]);
+  const dispatch = useDispatch();
   const initPushNotification = async () => {
     try {
       await Notifee.requestPermission();
@@ -99,12 +109,13 @@ export const NotificationSetupV2 = ({
   };
   const setNotificationListeners = async () => {
     try {
+      // const dispatch=useDispatch();
       const token = await messaging().getToken();
       await storage.set('FCM_TOKEN', token);
       const FCM_TOKEN = await storage.getString('FCM_TOKEN');
-      if (store.getState().userInfoReducer?.accessToken) {
-        store.dispatch(
-          subscribeToNotifications(userInfoState?.accessToken, FCM_TOKEN),
+      if (accessToken) {
+        (
+          dispatch(subscribeToNotificationsV2({accessToken, deviceId:FCM_TOKEN}))
         );
       }
       // });
@@ -114,18 +125,22 @@ export const NotificationSetupV2 = ({
         }
       });
       messaging().onMessage(async message => {
-        if (message?.data?.senderId != userInfoState.user?.id) {
+        console.log("inside msg");
+        
+        if (message?.data?.senderId != userInfoState?.id) {
           // handleNotificationFirebase(message);
+          
           handleNotification(message, 'firebase');
           if (
-            message?.data?.orgId != store?.getState()?.orgsReducer?.currentOrgId
+            message?.data?.orgId != orgInfoState?.currentOrgId
           ) {
-            await store?.dispatch(
-              increaseCountOnOrgCard(
-                message?.data?.orgId,
-                message?.data?.teamId,
-              ),
-            );
+            
+            // await store?.dispatch(
+            //   increaseCountOnOrgCard(
+            //     message?.data?.orgId,
+            //     message?.data?.teamId,
+            //   ),
+            // );
           }
         }
       });
@@ -134,7 +149,7 @@ export const NotificationSetupV2 = ({
       });
       messaging().setBackgroundMessageHandler(async message => {
         if (
-          message?.data?.senderId != store.getState()?.userInfoReducer?.user?.id
+          message?.data?.senderId != userInfoState?.id
         ) {
           handleNotification(message, 'firebase');
         }
@@ -142,19 +157,19 @@ export const NotificationSetupV2 = ({
       const rMessage = await messaging().getInitialNotification();
       if (rMessage) {
         if (
-          rMessage?.data?.orgId != store?.getState()?.orgsReducer?.currentOrgId
+          rMessage?.data?.orgId != orgInfoState?.currentOrgId
         ) {
-          await store.dispatch(
-            setCurrentOrgId(
-              store?.getState()?.userInfoReducer?.accessToken,
-              rMessage?.data?.orgId,
-              store?.getState()?.userInfoReducer?.user?.id,
-              store?.getState()?.userInfoReducer?.user?.displayName
-                ? store?.getState()?.userInfoReducer?.user?.displayName
-                : store?.getState()?.userInfoReducer?.user?.firstName,
-            ),
-          );
-          await store.dispatch(removeCountOnOrgCard(rMessage?.data?.orgId));
+          // await store.dispatch(
+          //   setCurrentOrgId(
+          //     store?.getState()?.userInfoReducer?.accessToken,
+          //     rMessage?.data?.orgId,
+          //     store?.getState()?.userInfoReducer?.user?.id,
+          //     store?.getState()?.userInfoReducer?.user?.displayName
+          //       ? store?.getState()?.userInfoReducer?.user?.displayName
+          //       : store?.getState()?.userInfoReducer?.user?.firstName,
+          //   ),
+          // );
+          // await store.dispatch(removeCountOnOrgCard(rMessage?.data?.orgId));
 
           setTimeout(() => {
             openChat(rMessage, 'RMESSAGE SWITCH ORG ');
@@ -176,19 +191,19 @@ export const NotificationSetupV2 = ({
     if (event?.type == 1) {
       const message = event?.detail?.notification;
       if (
-        message?.data?.orgId != store?.getState()?.orgsReducer?.currentOrgId
+        message?.data?.orgId != orgInfoState?.currentOrgId
       ) {
-        await store.dispatch(
-          setCurrentOrgId(
-            store?.getState()?.userInfoReducer?.accessToken,
-            message?.data?.orgId,
-            store?.getState()?.userInfoReducer?.user?.id,
-            store?.getState()?.userInfoReducer?.user?.displayName
-              ? store?.getState()?.userInfoReducer?.user?.displayName
-              : store?.getState()?.userInfoReducer?.user?.firstName,
-          ),
-        );
-        await store.dispatch(removeCountOnOrgCard(message?.data?.orgId));
+        // await store.dispatch(
+        //   setCurrentOrgId(
+        //     store?.getState()?.userInfoReducer?.accessToken,
+        //     message?.data?.orgId,
+        //     store?.getState()?.userInfoReducer?.user?.id,
+        //     store?.getState()?.userInfoReducer?.user?.displayName
+        //       ? store?.getState()?.userInfoReducer?.user?.displayName
+        //       : store?.getState()?.userInfoReducer?.user?.firstName,
+        //   ),
+        // );
+        // await store.dispatch(removeCountOnOrgCard(message?.data?.orgId));
 
         setTimeout(() => {
           openChat(message, 'from action listiner ');
@@ -199,12 +214,12 @@ export const NotificationSetupV2 = ({
     }
     switch (event?.detail?.pressAction?.id) {
       case 'mark_as_read':
-        resetUnreadCountAction(
-          event?.detail?.notification?.data?.orgId,
-          userInfoState?.user?.id,
-          event?.detail?.notification?.data?.teamId,
-          userInfoState?.user?.accessToken,
-        );
+        // resetUnreadCountAction(
+        //   event?.detail?.notification?.data?.orgId,
+        //   userInfoState?.user?.id,
+        //   event?.detail?.notification?.data?.teamId,
+        //   userInfoState?.user?.accessToken,
+        // );
         Notifee.cancelNotification(event?.detail?.notification?.id);
         break;
       case 'reply':
@@ -214,9 +229,9 @@ export const NotificationSetupV2 = ({
         var senderId = event?.detail?.notification?.data?.senderId;
         var token = store.getState().userInfoReducer?.accessToken;
         var parentId = event?.detail?.notification?.data?.parentId;
-        store.dispatch(
-          sendMessageStart(message, teamId, orgId, senderId, token, parentId),
-        );
+        // store.dispatch(
+        //   sendMessageStart(message, teamId, orgId, senderId, token, parentId),
+        // );
         Notifee.cancelNotification(event?.detail?.notification?.id);
         break;
       default:
@@ -227,19 +242,19 @@ export const NotificationSetupV2 = ({
     try {
       var teamId = message?.data?.teamId;
       var name = null;
-      store.getState()?.channelsReducer?.teamIdAndTypeMapping[teamId] ==
+      teamIdAndDataMapping?.[teamId]?.type ==
       'DIRECT_MESSAGE'
         ? (name =
-            store.getState().orgsReducer?.userIdAndDisplayNameMapping[
+            userIdAndDataMapping?.[
               message?.data?.senderId
-            ])
+            ]?.displayName)
         : (name =
-            store.getState()?.channelsReducer?.teamIdAndNameMapping[teamId]);
+            teamIdAndDataMapping?.[teamId]?.name);
       RootNavigation?.navigate('Chat', {
         chatHeaderTitle: name,
         teamId: teamId,
         channelType:
-          store.getState()?.channelsReducer?.teamIdAndTypeMapping[teamId],
+          teamIdAndDataMapping?.[teamId]?.type,
         userId: message?.data?.senderId,
         reciverUserId: message?.data?.senderId,
       });
