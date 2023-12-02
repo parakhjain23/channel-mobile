@@ -1,9 +1,8 @@
 import { call, put } from "redux-saga/effects";
-import { fetchOrgsApi } from "../../api/getOrgsApi/GetOrgs";
+import { fetchOrgsApi } from "../../api/getOrgsApi/OrgsApi";
 import { getAllOrgsSuccessV2, updateOrgsState } from "./orgsSlice";
-import { getAllUsersOfOrgApi } from "../../api/getAllUsersofOrgApi/getAllUsers";
 import { getAllUsersSuccessV2 } from "../allUsers/allUsersSlice";
-import { getAllUsersV2 } from "../../api/getAllUsersofOrgApi/getAllUsersV2";
+import { getAllUsersV2 } from "../../api/getAllUsersofOrgApi/AllUsersOfOrgApiV2";
 
 export function* getAllOrgsV2(accessToken: string) {
   try {

@@ -1,9 +1,7 @@
 import { put, call } from 'redux-saga/effects';
 import { actionType } from '../../types/actionDataType';
-import { getChannelsByQueryApi } from '../../api/channelsApi/GetChannelsByQueryApi';
 import { getChannelsByQuerySuccessV2 } from './searchedDataSlice';
-import { getChannelsByQueryV2Api } from '../../api/channelsApi/GetChannelsByQueryV2Api';
-
+import { getChannelsByQueryV2Api } from '../../api/channelsApi/ChannelsApiV2';
 
 export function* getChannelsByQueryV2(action: actionType<{ query: string; accessToken: string; orgId: string }>) {
     try {

@@ -7,6 +7,8 @@ import { actionType } from "../../types/actionDataType";
 import { socketEventsEnums } from "../../redux/Enums";
 import { $ReduxCoreType } from "../../types/reduxCoreType";
 import { handleNotification } from "../../utils/HandleNotification";
+import { PlayLocalSoundFile } from "../../utils/Sounds";
+import { handleNotificationV2 } from "../../utils/HandleNotificationV2";
 
 
 
@@ -18,10 +20,10 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
 
         while (true) {
             try {
-                const { userId, activeChannelId  } = yield select((state: $ReduxCoreType) => ({
+                const { userId, activeChannelId, userIdAndDataMapping  } = yield select((state: $ReduxCoreType) => ({
                     userId: state?.allUsers?.currentUser?.id,
                     activeChannelId: state?.appInfo?.activeChannelId,
-
+                    userIdAndDataMapping: state?.allUsers?.userIdAndDataMapping
                 }))
                 const payload = yield take(socketChannel);
 
@@ -83,11 +85,25 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
                         //           store.getState()?.userInfoReducer?.user?.id,
                         //         ),
                         //       );
+                        if (messageObj?.senderId != userId) {
+                            PlayLocalSoundFile();
+                            if (
+                              messageObj?.teamId !=
+                              activeChannelId
+                            ) {
+                            //   handleNotification(
+                            //     newData,
+                            //     'events',
+                            //     store.getState()?.orgsReducer?.userIdAndDisplayNameMapping,
+                            //   );
+                            yield call(handleNotificationV2,messageObj,'events',userIdAndDataMapping?.[userId]?.displayName);
+                            }
+                          }
                         //   if (messageObj?.senderId != userId) {
                             // PlayLocd3alSoundFile();
                             // if ( messageObj?.teamId != activeChannelId ) {
                                 // console.log("inside iff,channelid->",activeChannelId,"senderid-->",messageObj?.senderId,"userid-->",userId);
-                            yield call(handleNotification,messageObj,'events',[]);
+                            
                             // }
                         //   }
                         break;

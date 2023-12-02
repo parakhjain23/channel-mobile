@@ -1,7 +1,7 @@
 import base64 from 'react-native-base64';
 import { useSelector } from 'react-redux';
 import { select } from 'redux-saga/effects';
-import { sendMsgApi } from '../../../INTERCEPTOR';
+import { spaceServerApi } from '../../../INTERCEPTOR';
 import { messagesType } from '../../types/ChatsReducerType';
 import { $ReduxCoreType } from '../../types/reduxCoreType';
 // import {CHAT_SERVER_URL} from '../baseUrls/baseUrls';
@@ -88,11 +88,12 @@ export const sendMessageApiV2 = async ( data:messagesType ):Promise<void> => {
     //   }),
     // });
     // const result = await response.json();
-    
   } catch (error) {
     console.warn(error);
   }
 };
+
+
 // export const sendGlobalMessageApi = async messageObj => {
 //   try {
 //     const mentionRegex = /@(\w+)/g;
@@ -142,3 +143,109 @@ export const sendMessageApiV2 = async ( data:messagesType ):Promise<void> => {
 //     console.warn(error);
 //   }
 // };
+
+
+export const deleteMessageApi = async (token: string, msgId: string | number): Promise<any> => {
+  try {
+    const response = await delMsgApi(JSON.stringify({deleted: true}),msgId);
+    // const response = await fetch(`${CHAT_SERVER_URL}/chat/message/${msgId}`, {
+    //   method: 'PATCH',
+    //   headers: {
+    //     Authorization: token,
+    //     'Content-Type': 'application/json',
+    //   },
+      // body: JSON.stringify({
+      //   deleted: true,
+      // }),
+    // });
+    // const result = await response.json();
+    return response;
+  } catch (error) {
+    console.warn(error);
+  }
+};
+
+
+export const getMessagesOfTeamApi = async (teamId: string, skip: number): Promise<any> => {
+  try {
+    var response = await getMsgOfTeamApi(teamId,skip);
+    // await fetch(
+      //   `${CHAT_SERVER_URL}/chat//message?teamId=${teamId}&deleted=false&$limit=30&$paginate=false&parentMessages=true&$skip=${skip}`,
+      //   {
+        //     method: 'GET',
+        //     headers: {
+          //       Authorization: token,
+          //     },
+          //   },
+          // );
+          // var result = await response.json();
+          // console.log("api interceptor ",response.data);d
+    return response?.data;
+  } catch (error) {
+    console.warn(error);
+  }
+};
+
+// for future use 
+// export const draftMessageApi = async (message: string | any, teamId: string, accessToken: string, orgId: string, userId: string): Promise<void> => {
+//   try {
+//     await draftMsgApi(
+//       JSON.stringify({
+//         draftAttachments: [],
+//         draftMessage: message,
+//         eventType: 'DraftHistoryUpdate',
+//         orgId: orgId,
+//         teamId: teamId,
+//         userId: userId,
+//       }),
+//       orgId,
+//       userId,
+//       teamId 
+//     )
+//     // await fetch(
+//     //   `${CHAT_SERVER_URL}/chat/teamUser?orgId=${orgId}&userId=${userId}&teamId=${teamId}`,
+//     //   {
+//     //     method: 'PATCH',
+//     //     headers: {
+//     //       Authorization: accessToken,
+//     //       'Content-Type': 'application/json',
+//     //     },
+//     //     body: JSON.stringify({
+//     //       draftAttachments: [],
+//     //       draftMessage: message,
+//     //       eventType: 'DraftHistoryUpdate',
+//     //       orgId: orgId,
+//     //       teamId: teamId,
+//     //       userId: userId,
+//     //     }),
+//     //   }
+//     // );
+//   } catch (error) {
+//     console.warn(error);
+//   }
+// };
+
+
+
+// api end points
+
+
+
+const sendMsgApi = (body:string) => {
+  return spaceServerApi.post('/chat/message',body);
+};
+
+const delMsgApi = (body:string, msgId:string) => {
+  return spaceServerApi.patch(`/chat/message/${msgId}`, body);
+};
+
+const getMsgOfTeamApi = (teamId:string, skip:number) => {
+  return spaceServerApi.get(`/chat//message?teamId=${teamId}&deleted=false&$limit=30&$paginate=false&parentMessages=true&$skip=${skip}`);
+}
+
+//not working in new redux (for future use)
+// const draftMsgApi = (body:string, orgId:string, userId:string, teamId:string) => {
+//   return spaceServerApi.patch(`/chat/teamUser?orgId=${orgId}&userId=${userId}&teamId=${teamId}`,body);
+// }
+
+
