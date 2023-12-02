@@ -10,9 +10,9 @@ export const getChannelsV2Api = async (orgId:string, userId:string):Promise<any[
 };
 
 
-export const getRecenctChannelsV2Api = async (orgId:string, userId:string):Promise<any[]> => {
+export const getRecentChannelsV2Api = async (orgId:string, userId:string):Promise<any[]> => {
   try {
-    var response = await getRecenctChannelsApi(orgId, userId); 
+    var response = await getRecentChannelsApi(orgId, userId);
     return response?.data;
   } catch (error) {
     console.warn(error);
@@ -62,7 +62,7 @@ const getChannelsApi = (orgId:string, userId:string) => {
 }
 
 
-const getRecenctChannelsApi = (orgId:string, userId:string) => {
+const getRecentChannelsApi = (orgId:string, userId:string) => {
   return spaceServerApi.get(`/chat/teamUser?$sort[lastUpdatedAt]=-1&orgId=${orgId}&userId=${userId}&$paginate=false`);
 }
 
