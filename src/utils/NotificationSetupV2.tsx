@@ -30,6 +30,8 @@ import {storage} from '../redux/reducers/Index';
 import { useCustomSelector } from './deepCheckSelector';
 import { $ReduxCoreType } from '../types/reduxCoreType';
 import { subscribeToNotificationsV2 } from '../reduxV2/appInfo/appInfoSlice';
+import { handleNotificationV2 } from './HandleNotificationV2';
+import { sendMessageStartV2 } from '../reduxV2/chats/chatsSlice';
 
 export const NotificationSetupV2 = ({
 //   userInfoState,
@@ -125,12 +127,10 @@ export const NotificationSetupV2 = ({
         }
       });
       messaging().onMessage(async message => {
-        console.log("inside msg");
-        
         if (message?.data?.senderId != userInfoState?.id) {
           // handleNotificationFirebase(message);
           
-          handleNotification(message, 'firebase');
+          handleNotificationV2(message, 'firebase');
           if (
             message?.data?.orgId != orgInfoState?.currentOrgId
           ) {
@@ -151,7 +151,7 @@ export const NotificationSetupV2 = ({
         if (
           message?.data?.senderId != userInfoState?.id
         ) {
-          handleNotification(message, 'firebase');
+          handleNotificationV2(message, 'firebase');
         }
       });
       const rMessage = await messaging().getInitialNotification();
@@ -227,11 +227,20 @@ export const NotificationSetupV2 = ({
         var teamId = event?.detail?.notification?.data?.teamId;
         var orgId = event?.detail?.notification?.data?.orgId;
         var senderId = event?.detail?.notification?.data?.senderId;
-        var token = store.getState().userInfoReducer?.accessToken;
+        // var token = store.getState().userInfoReducer?.accessToken;
         var parentId = event?.detail?.notification?.data?.parentId;
+        var data={
+          content:message,
+          teamId:teamId,
+          orgId:orgId,
+          senderId:senderId,
+          accessToken:accessToken,
+          parentId:parentId
+        }
         // store.dispatch(
         //   sendMessageStart(message, teamId, orgId, senderId, token, parentId),
         // );
+        dispatch(sendMessageStartV2({data,type: "ADD_LOCAL_MESSAGE"}));
         Notifee.cancelNotification(event?.detail?.notification?.id);
         break;
       default:

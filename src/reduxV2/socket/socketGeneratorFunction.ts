@@ -20,12 +20,12 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
 
         while (true) {
             try {
+                const payload = yield take(socketChannel);
                 const { userId, activeChannelId, userIdAndDataMapping  } = yield select((state: $ReduxCoreType) => ({
                     userId: state?.allUsers?.currentUser?.id,
                     activeChannelId: state?.appInfo?.activeChannelId,
                     userIdAndDataMapping: state?.allUsers?.userIdAndDataMapping
                 }))
-                const payload = yield take(socketChannel);
 
                 switch (payload?.type) {
                     case socketEventsEnums.connect:
@@ -34,7 +34,6 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
                         break;
                     case socketEventsEnums["chat/message created"]:
                         console.log("message created$$");
-                        
                         const messageObj = payload?.data
 
                         // if (
@@ -52,10 +51,13 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
                         if (!('isActivity' in messageObj)) {
                             messageObj.isActivity = false;
                         }
-                        yield put((addNewMessageV2({
-                            messageObject: messageObj,
-                            userId: userId
-                        })))
+                        try{
+                            yield put((addNewMessageV2({ messageObject: messageObj, userId: userId })))
+                        }
+                        catch(error)
+                        {
+                            console.warn(error);
+                        }
                         //   messageObj?.content == 'closed this channel' && messageObj?.isActivity
                         //     ? null
                         //     : store.getState()?.channelsReducer?.activeChannelTeamId !=
@@ -85,27 +87,25 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
                         //           store.getState()?.userInfoReducer?.user?.id,
                         //         ),
                         //       );
-                        if (messageObj?.senderId != userId) {
+                        // if (messageObj?.senderId != userId) {
+                        //     PlayLocalSoundFile();
+                        //     if (
+                        //       messageObj?.teamId !=
+                        //       activeChannelId
+                        //     ) {
+                        //     //   handleNotification(
+                        //     //     newData,
+                        //     //     'events',
+                        //     //     store.getState()?.orgsReducer?.userIdAndDisplayNameMapping,
+                        //     //   );
+                        //     }
+                        //   }
+                          if (messageObj?.senderId != userId) {
                             PlayLocalSoundFile();
-                            if (
-                              messageObj?.teamId !=
-                              activeChannelId
-                            ) {
-                            //   handleNotification(
-                            //     newData,
-                            //     'events',
-                            //     store.getState()?.orgsReducer?.userIdAndDisplayNameMapping,
-                            //   );
-                            yield call(handleNotificationV2,messageObj,'events',userIdAndDataMapping?.[userId]?.displayName);
+                            if ( messageObj?.teamId != activeChannelId ) {
+                                yield call(handleNotificationV2,messageObj,'events',userIdAndDataMapping?.[userId]?.displayName);
                             }
                           }
-                        //   if (messageObj?.senderId != userId) {
-                            // PlayLocd3alSoundFile();
-                            // if ( messageObj?.teamId != activeChannelId ) {
-                                // console.log("inside iff,channelid->",activeChannelId,"senderid-->",messageObj?.senderId,"userid-->",userId);
-                            
-                            // }
-                        //   }
                         break;
                     default:
 

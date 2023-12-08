@@ -68,6 +68,7 @@ import { ChatCardMemoV2 } from './ChatCardV2';
 import { fetchMessagesStartV2 } from '../../reduxV2/chats/chatsSlice';
 import { HeaderV2 } from '../../components/HeaderV2';
 import CSBottomComponent from './components/chatScreenBottomComponents/chatScreenBottomComponent';
+import { updateAppInfoState } from '../../reduxV2/appInfo/appInfoSlice';
 
 export const ChatScreenV2 = ({
   chatDetailsForTab,
@@ -141,6 +142,7 @@ export const ChatScreenV2 = ({
         // chatState?.data?.[teamId]?.messages[0]?.['_id'],
       ))
       // setActiveChannelTeamIdAction(teamId);
+      dispatch(updateAppInfoState({ activeChannelId: teamId }))
     };
     if (
       !chatsData?.messages ||

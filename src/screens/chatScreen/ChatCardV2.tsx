@@ -16,7 +16,7 @@ import { RenderHTML } from 'react-native-render-html';
 import * as RootNavigation from '../../navigation/RootNavigation';
 import { tagsStyles } from './HtmlStyles';
 import { DEVICE_TYPES } from '../../constants/Constants';
-import { connect, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { setActiveChannelTeamId } from '../../redux/actions/channels/SetActiveChannelId';
 import { formatTime } from '../../utils/FormatTime';
 import FastImage from 'react-native-fast-image';
@@ -27,6 +27,7 @@ import Attachments from './components/attachments/RenderAttachments';
 import { useCustomSelector } from '../../utils/deepCheckSelector';
 import { $ReduxCoreType } from '../../types/reduxCoreType';
 import { ChatSenderNameV2 } from './components/ChatUtilityV2';
+import { updateAppInfoState } from '../../reduxV2/appInfo/appInfoSlice';
 
 const AddRemoveJoinedMsg = React.memo(({ senderName, content }) => {
   const userIdAndDataMapping = useCustomSelector((state: $ReduxCoreType) => state?.allUsers?.userIdAndDataMapping)
@@ -67,6 +68,7 @@ const ChatCardV2 = ({
     userIdAndDataMapping: state?.allUsers?.userIdAndDataMapping,
     parentMessage: state?.chats?.data[chat?.teamId]?.parentMessages[chat?.parentId]
   }))
+  const dispatch=useDispatch();
   const { colors, dark } = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const [optionsVisible, setOptionsVisible] = useState(false);
@@ -176,7 +178,8 @@ const ChatCardV2 = ({
         searchedChannel: false,
       });
     }
-    setActiveChannelTeamIdAction(teamId);
+    dispatch(updateAppInfoState({ activeChannelId: teamId }));
+    // setActiveChannelTeamIdAction(teamId);
   };
   function renderNode(node, index, siblings, parent, defaultRenderer) {
     if (node.attribs?.class == 'mention') {
