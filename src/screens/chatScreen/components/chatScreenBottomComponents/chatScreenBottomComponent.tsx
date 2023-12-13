@@ -179,12 +179,13 @@ export default function CSBottomComponent({
           onChangeMessage(text);
           const words = text.split(' ');
           const currentWord = words[words.length - 1];
+          
           if (currentWord.startsWith('@')) {
-            await dispatch(getChannelsByQueryStartV2(
-              currentWord.slice(1).toString(),
-              currentUserId.toString(),
-              currentOrgId.toString(),
-            ));
+            await dispatch(getChannelsByQueryStartV2({
+              query : currentWord.slice(1).toString(),
+              accessToken: accessToken,
+              orgId: currentOrgId
+            }));
             // setMentions(channelsByQueryState?.mentionChannels);
             setshowMention(true);
           } else if (

@@ -176,7 +176,7 @@ export const ChatScreenV2 = ({
   const textInputRef = useRef(null);
   const scrollY = new Animated.Value(0);
   const { height } = Dimensions.get('window');
-  const offset = height * 0.12;
+  const offset = height * 0.14;
   const screenHeight = Dimensions.get('window').height;
   const { width } = useWindowDimensions();
   const date = useMemo(() => new Date(), []);
@@ -479,7 +479,7 @@ export const ChatScreenV2 = ({
         <View style={styles.mainContainer}>
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            keyboardVerticalOffset={searchedChannel ? 75 : offset}
+            keyboardVerticalOffset={offset}
             style={{ flex: 1 }}>
             <View style={styles.outerContainer}>
               <View style={styles.messageListContainer}>
