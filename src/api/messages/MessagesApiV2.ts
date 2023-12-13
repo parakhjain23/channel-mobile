@@ -49,22 +49,20 @@ export const sendMessageApiV2 = async ( data:messagesType ):Promise<void> => {
     }
     renderTextWithBreaks(data?.content);
 
-    var response = 
-    await sendMsgApi(
-      JSON.stringify({
-        attachment: data?.attachment,
-        content: data?.content,
-        mentions: mentionsArrToSend || [],
-        teamId: data?.teamId,
-        requestId: data?.requestId,
-        orgId: data?.orgId,
-        senderId: data?.senderId,
-        parentId: data?.parentId,
-        createdAt: '2022-05-23T07:02:37.051Z',
-        appId: '62b53b61b5b4a2001fb9af37',
-        senderType: 'USER',
-      })
-    );
+    var response = await spaceServerApi.post('/chat/message',
+        JSON.stringify({
+          attachment: data?.attachment,
+          content: data?.content,
+          mentions: mentionsArrToSend || [],
+          teamId: data?.teamId,
+          requestId: data?.requestId,
+          orgId: data?.orgId,
+          senderId: data?.senderId,
+          parentId: data?.parentId,
+          createdAt: '2022-05-23T07:02:37.051Z',
+          appId: '62b53b61b5b4a2001fb9af37',
+          senderType: 'USER',
+        }));
   //   console.log("messagdatae",response);
     
     // fetch(`${CHAT_SERVER_URL}/chat/message`, {
@@ -147,7 +145,7 @@ export const sendMessageApiV2 = async ( data:messagesType ):Promise<void> => {
 
 export const deleteMessageApi = async (token: string, msgId: string | number): Promise<any> => {
   try {
-    const response = await delMsgApi(JSON.stringify({deleted: true}),msgId);
+    const response = await spaceServerApi.patch(`/chat/message/${msgId}`, JSON.stringify({deleted: true}));
     // const response = await fetch(`${CHAT_SERVER_URL}/chat/message/${msgId}`, {
     //   method: 'PATCH',
     //   headers: {
@@ -168,7 +166,7 @@ export const deleteMessageApi = async (token: string, msgId: string | number): P
 
 export const getMessagesOfTeamApi = async (teamId: string, skip: number): Promise<any> => {
   try {
-    var response = await getMsgOfTeamApi(teamId,skip);
+    var response = await spaceServerApi.get(`/chat//message?teamId=${teamId}&deleted=false&$limit=30&$paginate=false&parentMessages=true&$skip=${skip}`);
     // await fetch(
       //   `${CHAT_SERVER_URL}/chat//message?teamId=${teamId}&deleted=false&$limit=30&$paginate=false&parentMessages=true&$skip=${skip}`,
       //   {
@@ -179,7 +177,7 @@ export const getMessagesOfTeamApi = async (teamId: string, skip: number): Promis
           //   },
           // );
           // var result = await response.json();
-          // console.log("api interceptor ",response.data);d
+          // console.log("api interceptor ",response.data);
     return response?.data;
   } catch (error) {
     console.warn(error);
@@ -187,65 +185,36 @@ export const getMessagesOfTeamApi = async (teamId: string, skip: number): Promis
 };
 
 // for future use 
-// export const draftMessageApi = async (message: string | any, teamId: string, accessToken: string, orgId: string, userId: string): Promise<void> => {
-//   try {
-//     await draftMsgApi(
-//       JSON.stringify({
-//         draftAttachments: [],
-//         draftMessage: message,
-//         eventType: 'DraftHistoryUpdate',
-//         orgId: orgId,
-//         teamId: teamId,
-//         userId: userId,
-//       }),
-//       orgId,
-//       userId,
-//       teamId 
-//     )
-//     // await fetch(
-//     //   `${CHAT_SERVER_URL}/chat/teamUser?orgId=${orgId}&userId=${userId}&teamId=${teamId}`,
-//     //   {
-//     //     method: 'PATCH',
-//     //     headers: {
-//     //       Authorization: accessToken,
-//     //       'Content-Type': 'application/json',
-//     //     },
-//     //     body: JSON.stringify({
-//     //       draftAttachments: [],
-//     //       draftMessage: message,
-//     //       eventType: 'DraftHistoryUpdate',
-//     //       orgId: orgId,
-//     //       teamId: teamId,
-//     //       userId: userId,
-//     //     }),
-//     //   }
-//     // );
-//   } catch (error) {
-//     console.warn(error);
-//   }
-// };
-
-
-
-// api end points
-
-
-
-const sendMsgApi = (body:string) => {
-  return spaceServerApi.post('/chat/message',body);
+export const draftMessageApi = async (message: string | any, teamId: string, accessToken: string, orgId: string, userId: string): Promise<void> => {
+  try {
+    await spaceServerApi.patch(`/chat/teamUser?orgId=${orgId}&userId=${userId}&teamId=${teamId}`,
+        JSON.stringify({
+          draftAttachments: [],
+          draftMessage: message,
+          eventType: 'DraftHistoryUpdate',
+          orgId: orgId,
+          teamId: teamId,
+          userId: userId,
+        }));
+    // await fetch(
+    //   `${CHAT_SERVER_URL}/chat/teamUser?orgId=${orgId}&userId=${userId}&teamId=${teamId}`,
+    //   {
+    //     method: 'PATCH',
+    //     headers: {
+    //       Authorization: accessToken,
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       draftAttachments: [],
+    //       draftMessage: message,
+    //       eventType: 'DraftHistoryUpdate',
+    //       orgId: orgId,
+    //       teamId: teamId,
+    //       userId: userId,
+    //     }),
+    //   }
+    // );
+  } catch (error) {
+    console.warn(error);
+  }
 };
-
-const delMsgApi = (body:string, msgId:string) => {
-  return spaceServerApi.patch(`/chat/message/${msgId}`, body);
-};
-
-const getMsgOfTeamApi = (teamId:string, skip:number) => {
-  return spaceServerApi.get(`/chat//message?teamId=${teamId}&deleted=false&$limit=30&$paginate=false&parentMessages=true&$skip=${skip}`);
-}
-
-//not working in new redux (for future use)
-// const draftMsgApi = (body:string, orgId:string, userId:string, teamId:string) => {
-//   return spaceServerApi.patch(`/chat/teamUser?orgId=${orgId}&userId=${userId}&teamId=${teamId}`,body);
-// }
-
-
