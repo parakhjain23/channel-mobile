@@ -1,7 +1,7 @@
 import { spaceServerApi } from "../../../INTERCEPTOR";
 export const fetchOrgsApi = async (): Promise<any[]> => {
     try {
-      const response = await getOrgsApi();
+      const response = await spaceServerApi.get(`/users?followedOrgs=true`);
       // await fetch(`${CHAT_SERVER_URL}/users?followedOrgs=true`, {
       //   method: 'GET',
       //   headers: {
@@ -15,6 +15,3 @@ export const fetchOrgsApi = async (): Promise<any[]> => {
     }
   };  
 
-  const getOrgsApi = () => {
-    return spaceServerApi.get(`/users?followedOrgs=true`);
-  }
