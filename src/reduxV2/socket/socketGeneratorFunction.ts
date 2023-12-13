@@ -25,13 +25,12 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
 
                 switch (payload?.type) {
                     case socketEventsEnums.connect:
-                        console.log("connect =-=-");
                         break;
                     case socketEventsEnums.disconnect:
-                        console.log("disconnect --==-==-");
                         break;
                     case socketEventsEnums["chat/message created"]:
                         const messageObj = payload?.data
+
                         // if (
                         //     store.getState()?.channelsReducer?.teamIdAndTypeMapping[data?.teamId] ==
                         //     undefined
@@ -95,7 +94,6 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
                         //   }
                         break;
                     default:
-                        console.log("not registered event!!!");
 
                         break;
                 }
@@ -118,7 +116,7 @@ export function createSocketChannel(socket) {
 
         return () => {
             Object.keys(socketEventsEnums).forEach(eventName => {
-                socket.off(eventName,(data: any) => emit({ type: eventName, data: data }));
+                socket.off(eventName, (data: any) => emit({ type: eventName, data: data }));
             });
         }
     });

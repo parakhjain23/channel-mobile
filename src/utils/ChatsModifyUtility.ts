@@ -1,4 +1,5 @@
 import { messagesType } from "../types/ChatsReducerType";
+import uuid from 'react-native-uuid';
 export function modifyMessagesUtility(action: { messages: [], parentMessages: [], skip: number }) {
   var tempParentMessages = {};
   var parentId = null;
@@ -47,8 +48,8 @@ export function modifyMessagesUtility(action: { messages: [], parentMessages: []
   }
   return { parentMessages: tempParentMessages, messages: action?.messages }
 }
-export function addLocalMessagesUtility(state,action:{message:messagesType}){
-  const {data} = action;
+export function addLocalMessagesUtility(state, action: { message: messagesType }) {
+  const { data } = action;
   const renderTextWithBreaks = text => {
     const htmlString = text?.replace(/\n/g, '<br/>');
     return htmlString;
@@ -73,42 +74,21 @@ export function addLocalMessagesUtility(state,action:{message:messagesType}){
     data['sameSender'] = true;
   }
   data['isSameDate'] = true;
-  return {data:data,parentKey:parentKey,parentObj:parentObj}
+  data['showClock'] = true;
+  data.requestId = uuid.v4();
+  return { data: data, parentKey: parentKey, parentObj: parentObj }
 }
-export function addNewMessageUtility(state, payload: { messageObject: messagesType, userId: string }) {
-  const currentUserId = payload?.userId
+export function modifyEventMessageUtility(state, payload: { messageObject: messagesType, userId: string }) {
   const { senderId, teamId } = payload?.messageObject
-  const allMessages = [...state?.data[teamId]?.messages]
-  if (
-    senderId == currentUserId &&
-    state?.randomIdsArr?.length > 0
-  ) {
-    payload.messageObject['randomId'] = state?.randomIdsArr[0];
-    state?.randomIdsArr?.shift();
-    for (
-      let i = 0;
-      i < allMessages?.length;
-      i++
-    ) {
-      if (
-        allMessages[i]?.randomId ==
-        payload?.messageObject?.randomId
-      ) {
-        allMessages?.splice(i, 1);
-        payload.messageObject['randomId'] = null;
-        break;
-      }
-    }
-  }
   const currentCreatedAt = new Date(payload?.messageObject?.createdAt);
   const prevCreatedAt = new Date(
-    allMessages[0]?.createdAt,
+    state?.data[teamId]?.messages[0]?.createdAt,
   );
   const timeDiff = Math.abs(prevCreatedAt - currentCreatedAt);
   const minutesDiff = Math.floor(timeDiff / (1000 * 60));
   if (
     senderId !=
-    allMessages[0]?.senderId
+    state?.data[teamId]?.messages[0]?.senderId
   ) {
     payload.messageObject['sameSender'] = false;
   } else if (minutesDiff > 5) {
@@ -118,18 +98,20 @@ export function addNewMessageUtility(state, payload: { messageObject: messagesTy
   }
   const date = new Date(payload?.messageObject?.updatedAt);
   const prevsDate = new Date(
-    allMessages[0]?.updatedAt,
+    state?.data[teamId]?.messages[0]?.updatedAt,
   );
   const isSameDate = prevsDate?.toDateString() === date.toDateString();
   let displayDate = date?.toDateString();
   if (!isSameDate) {
     const prevDateString = date?.toDateString();
     displayDate = `${prevDateString}`;
-    if (state.data[teamId])
+    if (state.data[teamId]) {
       state.data[teamId].messages[0].isSameDate = false;
-    if (state.data[teamId])
+    }
+    if (state.data[teamId]) {
       state.data[teamId].messages[0].timeToShow =
         displayDate;
+    }
     payload.messageObject['isSameDate'] = true;
     payload.messageObject['timeToShow'] = '';
   } else {
@@ -139,5 +121,7 @@ export function addNewMessageUtility(state, payload: { messageObject: messagesTy
   var tempParentMessage = {};
   var parentId = payload?.messageObject?.parentMessage?._id;
   tempParentMessage[parentId] = payload?.messageObject?.parentMessage;
-  return { tempParentMessage: tempParentMessage, parentId: parentId, message: payload?.messageObject }
+
+
+  return { parentMessage: tempParentMessage, message: payload?.messageObject }
 }

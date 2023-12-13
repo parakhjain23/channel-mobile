@@ -121,7 +121,6 @@ export const ChatScreenV2 = ({
   var { teamId, reciverUserId, channelType, searchedChannel, chatHeaderTitle } =
     route.params;
   // }
-  console.log(teamId, reciverUserId, "teamid in chatscreen");
 
   if (teamId == undefined) {
     // when i dont have teamid with searched USER it handles that case create team ki api se data aakr state me add ho jata he waaha se yaha utha leta hu
@@ -135,8 +134,6 @@ export const ChatScreenV2 = ({
   const { chatsData } = useCustomSelector((state: $ReduxCoreType) => ({
     chatsData: state?.chats?.data[teamId]
   }))
-
-  console.log("chatsDAta", chatsData?.messages?.length);
 
   useEffect(() => {
     const fetchData = () => {
@@ -159,7 +156,7 @@ export const ChatScreenV2 = ({
   const { colors } = useTheme();
   const styles = makeStyles(colors);
   const listStyle = listStyles(colors);
-  const [replyOnMessage, setreplyOnMessage] = useState(false);
+  // const [replyOnMessage, setreplyOnMessage] = useState(false);
   const [repliedMsgDetails, setrepliedMsgDetails] = useState('');
   const [showActions, setShowActions] = useState(false);
   const [currentSelectChatCard, setCurrentSelectedChatCard] = useState('');
@@ -327,7 +324,7 @@ export const ChatScreenV2 = ({
           // networkState={networkState}
           deleteMessageAction={deleteMessageAction}
           // chatState={chatState}
-          setreplyOnMessage={setreplyOnMessage}
+          // setreplyOnMessage={setreplyOnMessage}
           setrepliedMsgDetails={setrepliedMsgDetails}
           FlashListRef={FlashListRef}
           channelType={channelType}
@@ -453,8 +450,8 @@ export const ChatScreenV2 = ({
       showOptions && setShowOptions(false),
       mentionsArr?.length > 0 && setMentionsArr(''),
       mentions?.length > 0 && setMentions([]),
-      replyOnMessage && setreplyOnMessage(false),
-      repliedMsgDetails && setrepliedMsgDetails(null),
+      // replyOnMessage && setreplyOnMessage(false),
+      repliedMsgDetails && setrepliedMsgDetails({chat:null,replyOnMessage:false}),
       showPlayer && setShowPlayer(false);
   };
 
@@ -894,20 +891,20 @@ export const ChatScreenV2 = ({
                   </View>
                 </View>
               )} */}
-              <CSBottomComponent 
-                channelType={channelType} 
-                teamId={teamId} 
+              <CSBottomComponent
+                channelType={channelType}
+                teamId={teamId}
                 modalizeRef={modalizeRef}
+                repliedMsgDetails={repliedMsgDetails}
+                setrepliedMsgDetails={setrepliedMsgDetails}
                 // replyOnMessage={replyOnMessage}
                 // setreplyOnMessage={setreplyOnMessage}
-                // showActions={showActions} 
-                // setShowActions={setShowActions}
-                // currentSelectChatCard={currentSelectChatCard} 
-                // setCurrentSelectedChatCard={setCurrentSelectedChatCard}
-                // FlashListRef={FlashListRef}
-                // repliedMsgDetails={repliedMsgDetails}
-                // setrepliedMsgDetails={setrepliedMsgDetails}
-                />
+              // showActions={showActions} 
+              // setShowActions={setShowActions}
+              // currentSelectChatCard={currentSelectChatCard} 
+              // setCurrentSelectedChatCard={setCurrentSelectedChatCard}
+              // FlashListRef={FlashListRef}
+              />
             </View>
           </KeyboardAvoidingView>
         </View>
