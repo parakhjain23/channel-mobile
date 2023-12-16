@@ -16,12 +16,12 @@ import {
   Vibration,
   Platform,
 } from 'react-native';
-import {useNavigation, useTheme} from '@react-navigation/native';
+import { useNavigation, useTheme } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as RootNavigation from '../../../navigation/RootNavigation';
-import {GestureHandlerRootView, Swipeable} from 'react-native-gesture-handler';
-import {DEVICE_TYPES} from '../../../constants/Constants';
-import {RightSwipeAction} from './RightActionsForChatCard';
+import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
+import { DEVICE_TYPES } from '../../../constants/Constants';
+import { RightSwipeAction } from './RightActionsForChatCard';
 import FastImage from 'react-native-fast-image';
 import {
   PanGestureHandler,
@@ -36,14 +36,14 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {makeStyles} from '../ChannelCardStyles';
-import {useCustomSelector} from '../../../utils/deepCheckSelector';
-import {$ReduxCoreType} from '../../../types/reduxCoreType';
+import { makeStyles } from '../ChannelCardStyles';
+import { useCustomSelector } from '../../../utils/deepCheckSelector';
+import { $ReduxCoreType } from '../../../types/reduxCoreType';
 const TouchableItem =
   Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity;
 
 const LIST_ITEM_HEIGHT = 60;
-const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const TRANSLATE_X_THRESHOLD = -SCREEN_WIDTH * 0.4;
 
 const ChannelCard = ({
@@ -52,6 +52,8 @@ const ChannelCard = ({
   // closeChannelAction,
   setChatDetailsForTab,
 }) => {
+  console.log("channel card =-=-=-=");
+
   const navigation = useNavigation();
   const {
     deviceType,
@@ -83,7 +85,7 @@ const ChannelCard = ({
     });
   };
 
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const styles = makeStyles(colors);
   //   const userIdAndDisplayNameMapping = orgsState?.userIdAndDisplayNameMapping;
   //   const userIdAndNameMapping = orgsState?.userIdAndNameMapping;
@@ -101,7 +103,7 @@ const ChannelCard = ({
     item?.type === 'DIRECT_MESSAGE'
       ? userIdAndDataMapping[userId]
         ? userIdAndDataMapping[userId].displayName ||
-          userIdAndDataMapping[userId].fullName
+        userIdAndDataMapping[userId].fullName
         : 'Loading...'
       : item?.name;
   // item?.type == 'DIRECT_MESSAGE' && console.log("=-=-=-=--=,",Name,userIdAndDataMapping[userId].avatar);
@@ -110,8 +112,8 @@ const ChannelCard = ({
     item?.type === 'DIRECT_MESSAGE'
       ? 'user'
       : item?.type === 'PRIVATE'
-      ? 'lock'
-      : 'hashtag';
+        ? 'lock'
+        : 'hashtag';
 
   //   const unread = useMemo(() => {
   //     const unreadCount = teamIdAndUnreadCountMapping?.[item?._id] || 0;
@@ -229,7 +231,7 @@ const ChannelCard = ({
     const opacity = withTiming(
       translateX.value < TRANSLATE_X_THRESHOLD ? 1 : 0,
     );
-    return {opacity};
+    return { opacity };
   });
 
   const rTaskContainerStyle = useAnimatedStyle(() => {
@@ -247,14 +249,14 @@ const ChannelCard = ({
           style={[
             styles.iconContainer,
             rIconContainerStyle,
-            {height: LIST_ITEM_HEIGHT, width: LIST_ITEM_HEIGHT},
+            { height: LIST_ITEM_HEIGHT, width: LIST_ITEM_HEIGHT },
           ]}>
           <FontAwesome5
             name={'eye-slash'}
             size={LIST_ITEM_HEIGHT * 0.3}
             color={'red'}
           />
-          <Text style={{color: 'red', fontSize: 8}}>Mark as Unread</Text>
+          <Text style={{ color: 'red', fontSize: 8 }}>Mark as Unread</Text>
         </Animated.View>
         <PanGestureHandler
           failOffsetY={[-5, 5]}
@@ -262,7 +264,7 @@ const ChannelCard = ({
           // simultaneousHandlers={simultaneousHandlers}
           onGestureEvent={panGesture}>
           <Animated.View
-            style={[styles.task, rStyle, {minHeight: LIST_ITEM_HEIGHT}]}>
+            style={[styles.task, rStyle, { minHeight: LIST_ITEM_HEIGHT }]}>
             <View style={styles.cardStyle}>
               {item?.type === 'DIRECT_MESSAGE' || item?.type === 'PERSONAL' ? (
                 <FastImage
@@ -280,7 +282,7 @@ const ChannelCard = ({
                 </View>
               )}
               <Text style={styles.taskTitle}>{Name}</Text>
-              <View style={{marginLeft: 'auto', marginRight: 10}}>
+              <View style={{ marginLeft: 'auto', marginRight: 10 }}>
                 {/* {teamIdAndUnreadCountMapping?.[item?._id] > 0 ? (
                   <View style={styles.unreadButton}>
                     <Text style={styles.unreadButtonText}>

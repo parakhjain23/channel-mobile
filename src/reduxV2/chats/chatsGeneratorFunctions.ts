@@ -25,7 +25,7 @@ export function* sendMessage(action: actionType<messagesType>) {
       isInternetConnected: state?.appInfo?.isInternetConnected
     }));
     // if (isInternetConnected) {
-    yield call(sendMessageApiV2, action?.payload?.data);
+    yield call(sendMessageApiV2, action?.payload);
     // } else {
 
     // }

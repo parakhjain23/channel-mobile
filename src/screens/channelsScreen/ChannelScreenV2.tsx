@@ -39,10 +39,12 @@ import { SearchedChannelsListV2 } from './components/SearchedChannelListV2';
 import { getChannelsByQueryStartV2 } from '../../reduxV2/searchedData/searchedDataSlice';
 
 export const ChannelsScreenV2 = () => {
+  console.log("CHANNEL SCREEN -0-0-0-0-0-0-0-0-0-0");
+
   const { colors } = useTheme();
   const dispatch = useDispatch();
   const modalizeRef = useRef(null);
-  const isFocused = useIsFocused();
+  // const isFocused = useIsFocused();
   const scrollY = useRef(new Animated.Value(0));
   const { height } = Dimensions.get('window');
   const [searchValue, setsearchValue] = useState('');
@@ -81,14 +83,14 @@ export const ChannelsScreenV2 = () => {
     [scrollY?.current, height, setIsScrolling],
   );
 
-  useEffect(() => {
-    if (isFocused) {
-      searchValue && setsearchValue('')
-      activeChannelId && setTimeout(() => {
-        dispatch(updateAppInfoState({ activeChannelId: '' }));
-      }, 400);
-    }
-  }, [isFocused]);
+  // useEffect(() => {
+  //   if (isFocused) {
+  //     searchValue && setsearchValue('')
+  //     activeChannelId && setTimeout(() => {
+  //       dispatch(updateAppInfoState({ activeChannelId: '' }));
+  //     }, 400);
+  //   }
+  // }, [isFocused]);
 
   const handleSearchValueChange = async () => {
     dispatch(getChannelsByQueryStartV2({

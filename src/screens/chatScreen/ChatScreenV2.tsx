@@ -95,7 +95,7 @@ export const ChatScreenV2 = ({
   joinChannelAction,
 }) => {
   // var teamId:string, channelType, chatHeaderTitle, userId;
-
+  console.log("CHAT SCREEN");
   const dispatch = useDispatch()
   const { deviceType, userIdAndDataMapping, teamIdAndDataMapping, userIdAndTeamIdMapping, isInternetConnected, currentOrgId, currentUserId, accessToken } = useCustomSelector((state: $ReduxCoreType) => ({
     deviceType: state?.appInfo?.deviceType,
@@ -137,6 +137,8 @@ export const ChatScreenV2 = ({
   }))
 
   useEffect(() => {
+    console.log("CHAT SCREEEN MOUNTED");
+
     const fetchData = () => {
       dispatch(fetchMessagesStartV2({ teamId: teamId, accessToken: accessToken, skip: 0 }
         // chatState?.data?.[teamId]?.messages[0]?.['_id'],
@@ -187,7 +189,7 @@ export const ChatScreenV2 = ({
   const [Activities, setActivities] = useState(false);
   const [action, setaction] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
-  const navigationState = useNavigationState(state => state);
+  // const navigationState = useNavigationState(state => state);
   const isMountedRef = useRef(true);
   const modalizeRef = useRef(null);
   const navigation = useNavigation();
@@ -453,7 +455,7 @@ export const ChatScreenV2 = ({
       mentionsArr?.length > 0 && setMentionsArr(''),
       mentions?.length > 0 && setMentions([]),
       // replyOnMessage && setreplyOnMessage(false),
-      repliedMsgDetails && setrepliedMsgDetails({chat:null,replyOnMessage:false}),
+      repliedMsgDetails && setrepliedMsgDetails({ chat: null, replyOnMessage: false }),
       showPlayer && setShowPlayer(false);
   };
 
@@ -899,8 +901,8 @@ export const ChatScreenV2 = ({
                 modalizeRef={modalizeRef}
                 repliedMsgDetails={repliedMsgDetails}
                 setrepliedMsgDetails={setrepliedMsgDetails}
-                // replyOnMessage={replyOnMessage}
-                // setreplyOnMessage={setreplyOnMessage}
+              // replyOnMessage={replyOnMessage}
+              // setreplyOnMessage={setreplyOnMessage}
               // showActions={showActions} 
               // setShowActions={setShowActions}
               // currentSelectChatCard={currentSelectChatCard} 
