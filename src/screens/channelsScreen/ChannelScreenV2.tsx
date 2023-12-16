@@ -59,7 +59,7 @@ export const ChannelsScreenV2 = () => {
     deviceType,
     channels,
     recentChannels,
-    activeChannelId,
+    // activeChannelId,
     searchedChannelsLength
   } = useCustomSelector((state: $ReduxCoreType) => ({
     currentOrgId: state?.orgs?.currentOrgId,
@@ -68,7 +68,7 @@ export const ChannelsScreenV2 = () => {
     deviceType: state?.appInfo?.deviceType,
     channels: state?.channels?.channels,
     recentChannels: state?.channels?.recentChannels,
-    activeChannelId: state?.appInfo?.activeChannelId,
+    // activeChannelId: state?.appInfo?.activeChannelId,
     searchedChannelsLength: state?.searchedData?.searchedChannels?.length
   }));
 
