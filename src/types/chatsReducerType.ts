@@ -36,3 +36,10 @@ export interface messagesType {
     updatedAt: string
     requestId: string
 }
+
+export interface attachmentObject {
+    modalizeRef :any,
+    accessToken:string,
+    setAttachment:(attachment:[])=>void,
+    setAttachmentLoading: (attachmentLoading:boolean)=>void,
+}
