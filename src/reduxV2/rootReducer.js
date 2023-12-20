@@ -8,37 +8,38 @@ import searchedDataReducer from './searchedData/searchedDataSlice'
 import persistReducer from "redux-persist/es/persistReducer";
 import { combineReducers } from "redux";
 const persistConfig = {
-    key: 'root',
-    storage: AsyncStorage,
-    whitelist: [
-      'appInfo',
-      'orgs',
-      'channels',
-      'chats',
-      'searchedData',
-      'allUsers',
-      'searchedUserInfoReducer',
-    ],
-  };
-  
-  const rootReducer = combineReducers({
-    // USER REDUCER
-    // userInfoReducer,
-    // orgsReducer,
-    // channelsReducer,
-    // chatReducer,
-    // socketReducer,
-    // channelsByQueryReducer,
-    // networkReducer,
-    // appInfoReducer,
-    // searchedUserInfoReducer,
-    allUsers : allUsersReducer,
-    appInfo : appInfoReducer,
-    channels : channelsReducer,
-    chats : chatsReducer,
-    orgs : orgsReducer,
-    searchedData : searchedDataReducer
-  });
-  
-  const persistedReducer = persistReducer(persistConfig, rootReducer);
-  export default persistedReducer;
+  key: 'root',
+  storage: AsyncStorage,
+  whitelist: [
+    'appInfo',
+    'orgs',
+    'channels',
+    'chats',
+    'searchedData',
+    'allUsers',
+    'searchedUserInfoReducer',
+    'allUsersReducer'
+  ],
+};
+
+const rootReducer = combineReducers({
+  // USER REDUCER
+  // userInfoReducer,
+  // orgsReducer,
+  // channelsReducer,
+  // chatReducer,
+  // socketReducer,
+  // channelsByQueryReducer,
+  // networkReducer,
+  // appInfoReducer,
+  // searchedUserInfoReducer,
+  allUsers: allUsersReducer,
+  appInfo: appInfoReducer,
+  channels: channelsReducer,
+  chats: chatsReducer,
+  orgs: orgsReducer,
+  searchedData: searchedDataReducer
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+export default persistedReducer;

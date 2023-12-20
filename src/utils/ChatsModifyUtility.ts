@@ -48,35 +48,34 @@ export function modifyMessagesUtility(action: { messages: [], parentMessages: []
   }
   return { parentMessages: tempParentMessages, messages: action?.messages }
 }
-export function addLocalMessagesUtility(state, action: { message: messagesType }) {
-  const { data } = action;
+export function addLocalMessagesUtility(state, messageObj: messagesType) {
   const renderTextWithBreaks = text => {
     const htmlString = text?.replace(/\n/g, '<br/>');
     return htmlString;
   };
-  data.content = renderTextWithBreaks(data?.content);
-  let parentKey = data?.parentId;
+  messageObj.content = renderTextWithBreaks(messageObj?.content);
+  let parentKey = messageObj?.parentId;
   let parentObj = {};
-  if (data?.parentMessage != undefined) {
-    for (let i = 0; i < state?.data[data?.teamId]?.messages?.length; i++) {
-      if (state?.data[data?.teamId]?.messages[i]?._id == data?.parentId) {
-        parentObj[parentKey] = state?.data[data?.teamId]?.messages[i];
+  if (messageObj?.parentMessage != undefined) {
+    for (let i = 0; i < state?.data[messageObj?.teamId]?.messages?.length; i++) {
+      if (state?.data[messageObj?.teamId]?.messages[i]?._id == messageObj?.parentId) {
+        parentObj[parentKey] = state?.data[messageObj?.teamId]?.messages[i];
         break;
       }
     }
   }
   if (
-    action?.message?.senderId !=
-    state?.data[action?.message?.teamId]?.messages[0]?.senderId
+    messageObj?.senderId !=
+    state?.data[messageObj?.teamId]?.messages[0]?.senderId
   ) {
-    data['sameSender'] = false;
+    messageObj['sameSender'] = false;
   } else {
-    data['sameSender'] = true;
+    messageObj['sameSender'] = true;
   }
-  data['isSameDate'] = true;
-  data['showClock'] = true;
-  data.requestId = uuid.v4();
-  return { data: data, parentKey: parentKey, parentObj: parentObj }
+  messageObj['isSameDate'] = true;
+  messageObj['showClock'] = true;
+  messageObj.requestId = uuid.v4();
+  return { data: messageObj, parentKey: parentKey, parentObj: parentObj }
 }
 export function modifyEventMessageUtility(state, payload: { messageObject: messagesType, userId: string }) {
   const { senderId, teamId } = payload?.messageObject

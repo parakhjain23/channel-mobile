@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
-  ActivityIndicator,
   View,
   Animated,
   KeyboardAvoidingView,
@@ -8,33 +7,19 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import { connect, useDispatch } from 'react-redux';
-import { getChannelsStart } from '../../redux/actions/channels/ChannelsAction';
+import { useDispatch } from 'react-redux';
 import SearchBox from '../../components/searchBox';
-import { useIsFocused, useNavigation, useTheme } from '@react-navigation/native';
+import { useTheme } from '@react-navigation/native';
 import { DEVICE_TYPES } from '../../constants/Constants';
-import { createNewChannelStart } from '../../redux/actions/channels/CreateNewChannelAction';
-import { getChannelsByQueryStart } from '../../redux/actions/channels/ChannelsByQueryAction';
-import { createNewDmChannelStart } from '../../redux/actions/channels/CreateNewDmChannelAction';
-import {
-  resetActiveChannelTeamId,
-  setActiveChannelTeamId,
-} from '../../redux/actions/channels/SetActiveChannelId';
 import NoChannelsFound from './components/NoChannelsFound';
 import NoInternetComponent from '../../components/NoInternetComponent';
-import { getAllUsersOfOrgStart } from '../../redux/actions/org/GetAllUsersOfOrg';
-import { getChatsReset } from '../../redux/actions/chat/ChatActions';
-import SearchChannelList from './components/SearchChannelList';
-import RecentChannelsList from './components/RecentChannelsList';
 import { AddFabButton, SearchFabButton } from './components/AddAndSearchFab';
 import { CreateChannelModal } from './components/CreateChannelComponent';
 import { Throttling } from '../../utils/Throttling';
 import { useCustomSelector } from '../../utils/deepCheckSelector';
 import { $ReduxCoreType } from '../../types/reduxCoreType';
 import { RecentChannelsListComponentV2 } from './components/RecentChannelsListV2';
-import { updateAppInfoState } from '../../reduxV2/appInfo/appInfoSlice';
 import { setCurrentOrgIdV2 } from '../../reduxV2/orgs/orgsSlice';
-import { getChannelsByQueryApi } from '../../api/channelsApi/GetChannelsByQueryApi';
 import { SearchedChannelsListV2 } from './components/SearchedChannelListV2';
 import { getChannelsByQueryStartV2 } from '../../reduxV2/searchedData/searchedDataSlice';
 
@@ -42,31 +27,27 @@ export const ChannelsScreenV2 = () => {
   const { colors } = useTheme();
   const dispatch = useDispatch();
   const modalizeRef = useRef(null);
-  const isFocused = useIsFocused();
+  // const isFocused = useIsFocused();
   const scrollY = useRef(new Animated.Value(0));
   const { height } = Dimensions.get('window');
   const [searchValue, setsearchValue] = useState('');
   const [isScrolling, setIsScrolling] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const textInputRef = useRef(null);
-  const offset = height * 0.12;
+  const offset = height * 0.14;
   const {
     currentOrgId,
     currentUser,
-    accessToken,
     deviceType,
     channels,
     recentChannels,
-    activeChannelId,
     searchedChannelsLength
   } = useCustomSelector((state: $ReduxCoreType) => ({
     currentOrgId: state?.orgs?.currentOrgId,
     currentUser: state?.allUsers?.currentUser,
-    accessToken: state?.appInfo?.accessToken,
     deviceType: state?.appInfo?.deviceType,
     channels: state?.channels?.channels,
     recentChannels: state?.channels?.recentChannels,
-    activeChannelId: state?.appInfo?.activeChannelId,
     searchedChannelsLength: state?.searchedData?.searchedChannels?.length
   }));
 
@@ -81,19 +62,9 @@ export const ChannelsScreenV2 = () => {
     [scrollY?.current, height, setIsScrolling],
   );
 
-  useEffect(() => {
-    if (isFocused) {
-      searchValue && setsearchValue('')
-      activeChannelId && setTimeout(() => {
-        dispatch(updateAppInfoState({ activeChannelId: '' }));
-      }, 400);
-    }
-  }, [isFocused]);
-
   const handleSearchValueChange = async () => {
     dispatch(getChannelsByQueryStartV2({
       query: searchValue,
-      accessToken: accessToken,
       orgId: currentOrgId
     }))
   };
@@ -102,7 +73,6 @@ export const ChannelsScreenV2 = () => {
     setRefreshing(true);
     dispatch(
       setCurrentOrgIdV2({
-        accessToken: accessToken,
         orgId: currentOrgId,
         userId: currentUser.id,
         userName: currentUser.displayName

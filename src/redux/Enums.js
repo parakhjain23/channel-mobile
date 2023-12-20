@@ -120,5 +120,7 @@ export const REACTIONS_SUCCESS = 'REACTIONS_SUCCESS';
 export const socketEventsEnums = {
   connect: "connect",
   disconnect: "disconnect",
-  "chat/message created": "chat/message created"
+  "chat/message created": "chat/message created",
+  "chat/team updated": "chat/team updated",
+  "chat/team patched": "chat/team patched"
 }
