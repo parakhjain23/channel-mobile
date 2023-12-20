@@ -21,7 +21,7 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
         while (true) {
             try {
                 const payload = yield take(socketChannel);
-                const { userId, activeChannelId, userIdAndDataMapping  } = yield select((state: $ReduxCoreType) => ({
+                const { userId, activeChannelId, userIdAndDataMapping } = yield select((state: $ReduxCoreType) => ({
                     userId: state?.allUsers?.currentUser?.id,
                     activeChannelId: state?.appInfo?.activeChannelId,
                     userIdAndDataMapping: state?.allUsers?.userIdAndDataMapping
@@ -51,11 +51,10 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
                         if (!('isActivity' in messageObj)) {
                             messageObj.isActivity = false;
                         }
-                        try{
+                        try {
                             yield put((addNewMessageV2({ messageObject: messageObj, userId: userId })))
                         }
-                        catch(error)
-                        {
+                        catch (error) {
                             console.warn(error);
                         }
                         //   messageObj?.content == 'closed this channel' && messageObj?.isActivity
@@ -100,13 +99,18 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
                         //     //   );
                         //     }
                         //   }
-                          if (messageObj?.senderId != userId) {
+                        if (messageObj?.senderId != userId) {
                             PlayLocalSoundFile();
-                            if ( messageObj?.teamId != activeChannelId ) {
-                                yield call(handleNotificationV2,messageObj,'events',userIdAndDataMapping?.[userId]?.displayName);
+                            if (messageObj?.teamId != activeChannelId) {
+                                yield call(handleNotificationV2, messageObj, 'events', userIdAndDataMapping?.[userId]?.displayName);
                             }
-                          }
+                        }
                         break;
+
+                    case socketEventsEnums["chat/team updated"]:
+                        console.log(payload?.data, "PATCHED")
+                    case socketEventsEnums["chat/team patched"]:
+                        console.log(payload?.data, "UPDATED")
                     default:
 
                         break;
