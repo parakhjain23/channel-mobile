@@ -1,7 +1,6 @@
 import {View, Text} from 'react-native';
 import React, {useEffect} from 'react';
 import {Modalize} from 'react-native-modalize';
-import AttachmentOptions from './AttachmentOptions';
 import {useTheme} from '@react-navigation/native';
 import {listStyles} from './AttachmentStyles';
 import AttachmentOptionsV2 from './AttachmentOptionsV2';

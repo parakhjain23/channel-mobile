@@ -76,9 +76,7 @@ export default function CSBottomComponent({
         chatsData: state?.chats?.data[teamId]
       }))
     const path = LOCAL_PATH;
-    // const [attachment, setAttachment] = useState([]);
     const textInputRef = useRef(null);
-    // const [attachmentLoading, setAttachmentLoading] = useState(false);
     const [isRecording, setisRecording] = useState(false);
     const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
     const [showOptions, setShowOptions] = useState(false);
