@@ -4,6 +4,7 @@ import { actionType } from "../../types/actionDataType";
 import { messagesType } from "../../types/ChatsReducerType";
 import { getMessagesOfTeamApi, sendMessageApiV2 } from "../../api/messages/MessagesApiV2";
 import { $ReduxCoreType } from "../../types/reduxCoreType";
+import { updateAppInfoState } from "../appInfo/appInfoSlice";
 
 export function* getMessages(action: actionType<{ teamId: string, accessToken: string, skip: number }>) {
   try {
@@ -14,6 +15,7 @@ export function* getMessages(action: actionType<{ teamId: string, accessToken: s
       teamId: action?.payload?.teamId,
       skip: action?.payload?.skip
     }));
+    yield put(updateAppInfoState({ activeChannelId: action?.payload?.teamId }));
   } catch (error) {
     console.warn(error);
   }

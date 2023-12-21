@@ -143,7 +143,7 @@ export const ChatScreenV2 = ({
         // chatState?.data?.[teamId]?.messages[0]?.['_id'],
       ))
       // setActiveChannelTeamIdAction(teamId);
-      dispatch(updateAppInfoState({ activeChannelId: teamId }))
+      // dispatch(updateAppInfoState({ activeChannelId: teamId }))
     };
     if (
       !chatsData?.messages ||

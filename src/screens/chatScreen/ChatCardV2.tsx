@@ -178,7 +178,7 @@ const ChatCardV2 = ({
         searchedChannel: false,
       });
     }
-    dispatch(updateAppInfoState({ activeChannelId: teamId }));
+    // dispatch(updateAppInfoState({ activeChannelId: teamId }));
     // setActiveChannelTeamIdAction(teamId);
   };
   function renderNode(node, index, siblings, parent, defaultRenderer) {
