@@ -55,8 +55,6 @@ export const getChannelsByQueryV2Api = async (query:string, orgId:string):Promis
 
 export const resetUnreadCountV2Api = async (orgId:string, userId:string, teamId:string, badgeCount:number, unreadCount: number):Promise<any[]> => {
   try {
-    console.log("api pr data-->",badgeCount,"fff  un",unreadCount, "==oid ",orgId,"user ",userId,"team-",teamId);
-    
     var response = await spaceServerApi.patch(`/chat/teamUser?orgId=${orgId}&userId=${userId}&teamId=${teamId}`,
       JSON.stringify({
           unreadCount: unreadCount,
