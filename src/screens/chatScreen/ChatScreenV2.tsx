@@ -68,6 +68,8 @@ import { ChatCardMemoV2 } from './ChatCardV2';
 import { fetchMessagesStartV2 } from '../../reduxV2/chats/chatsSlice';
 import { HeaderV2 } from '../../components/HeaderV2';
 import CSBottomComponent from './components/chatScreenBottomComponents/chatScreenBottomComponent';
+import { updateAppInfoState } from '../../reduxV2/appInfo/appInfoSlice';
+import AttachmentOptionsModalV2 from './components/attachments/AttachmentOptionsModalV2';
 
 export const ChatScreenV2 = ({
   chatDetailsForTab,
@@ -141,6 +143,7 @@ export const ChatScreenV2 = ({
         // chatState?.data?.[teamId]?.messages[0]?.['_id'],
       ))
       // setActiveChannelTeamIdAction(teamId);
+      dispatch(updateAppInfoState({ activeChannelId: teamId }))
     };
     if (
       !chatsData?.messages ||
@@ -174,7 +177,7 @@ export const ChatScreenV2 = ({
   const textInputRef = useRef(null);
   const scrollY = new Animated.Value(0);
   const { height } = Dimensions.get('window');
-  const offset = height * 0.12;
+  const offset = height * 0.14;
   const screenHeight = Dimensions.get('window').height;
   const { width } = useWindowDimensions();
   const date = useMemo(() => new Date(), []);
@@ -375,85 +378,85 @@ export const ChatScreenV2 = ({
     },
   };
 
-  const onSendWithAction = () => {
-    onChangeMessage('');
-    const hasMentions = mentionsArr?.length > 0;
-    if (action == ACTIVITIES[0]?.name && hasMentions) {
-      addUsersToChannelAction(mentionsArr, teamId, currentOrgId, accessToken);
-    } else if (action == ACTIVITIES[1]?.name && hasMentions) {
-      removeUserFromChannelAction(
-        mentionsArr,
-        teamId,
-        currentOrgId,
-        accessToken,
-      );
-    }
-    setaction('');
-    setMentions([]);
-    setMentionsArr([]);
-  };
+  // const onSendWithAction = () => {
+  //   onChangeMessage('');
+  //   const hasMentions = mentionsArr?.length > 0;
+  //   if (action == ACTIVITIES[0]?.name && hasMentions) {
+  //     addUsersToChannelAction(mentionsArr, teamId, currentOrgId, accessToken);
+  //   } else if (action == ACTIVITIES[1]?.name && hasMentions) {
+  //     removeUserFromChannelAction(
+  //       mentionsArr,
+  //       teamId,
+  //       currentOrgId,
+  //       accessToken,
+  //     );
+  //   }
+  //   setaction('');
+  //   setMentions([]);
+  //   setMentionsArr([]);
+  // };
 
-  const onSendPress = async () => {
-    const localMessage = message;
-    onChangeMessage('');
-    if (localMessage?.trim() !== '' || showPlayer || attachment?.length > 0) {
-      const randomId = uuid.v4();
-      const messageContent = {
-        randomId: randomId,
-        content: localMessage,
-        createdAt: date,
-        isLink: false,
-        mentions: mentionsArr,
-        orgId: currentOrgId,
-        parentId: repliedMsgDetails?._id,
-        senderId: currentUserId,
-        senderType: 'APP',
-        teamId: teamId,
-        updatedAt: date,
-        attachment: showPlayer ? voiceAttachment : attachment,
-        mentionsArr: mentionsArr,
-        parentMessage: repliedMsgDetails?.content,
-      };
-      setlocalMsgAction(messageContent);
+  // const onSendPress = async () => {
+  //   const localMessage = message;
+  //   onChangeMessage('');
+  //   if (localMessage?.trim() !== '' || showPlayer || attachment?.length > 0) {
+  //     const randomId = uuid.v4();
+  //     const messageContent = {
+  //       randomId: randomId,
+  //       content: localMessage,
+  //       createdAt: date,
+  //       isLink: false,
+  //       mentions: mentionsArr,
+  //       orgId: currentOrgId,
+  //       parentId: repliedMsgDetails?._id,
+  //       senderId: currentUserId,
+  //       senderType: 'APP',
+  //       teamId: teamId,
+  //       updatedAt: date,
+  //       attachment: showPlayer ? voiceAttachment : attachment,
+  //       mentionsArr: mentionsArr,
+  //       parentMessage: repliedMsgDetails?.content,
+  //     };
+  //     setlocalMsgAction(messageContent);
 
-      if (networkState?.isInternetConnected || showPlayer) {
-        let response;
-        if (showPlayer) {
-          response = await uploadRecording(recordingUrl, accessToken);
-        }
-        sendMessageAction(
-          localMessage,
-          teamId,
-          currentOrgId,
-          currentUserId,
-          accessToken,
-          repliedMsgDetails?._id || null,
-          attachment?.length > 0 ? attachment : response || [],
-          mentionsArr,
-        );
-      } else {
-        setGlobalMessageToSendAction({
-          content: localMessage,
-          teamId: teamId,
-          orgId: currentOrgId,
-          senderId: currentUserId,
-          userId: currentUserId,
-          accessToken: accessToken,
-          parentId: repliedMsgDetails?.id || null,
-          updatedAt: date,
-          mentionsArr: mentionsArr,
-        });
-      }
-    }
+  //     if (networkState?.isInternetConnected || showPlayer) {
+  //       let response;
+  //       if (showPlayer) {
+  //         response = await uploadRecording(recordingUrl, accessToken);
+  //       }
+  //       sendMessageAction(
+  //         localMessage,
+  //         teamId,
+  //         currentOrgId,
+  //         currentUserId,
+  //         accessToken,
+  //         repliedMsgDetails?._id || null,
+  //         attachment?.length > 0 ? attachment : response || [],
+  //         mentionsArr,
+  //       );
+  //     } else {
+  //       setGlobalMessageToSendAction({
+  //         content: localMessage,
+  //         teamId: teamId,
+  //         orgId: currentOrgId,
+  //         senderId: currentUserId,
+  //         userId: currentUserId,
+  //         accessToken: accessToken,
+  //         parentId: repliedMsgDetails?.id || null,
+  //         updatedAt: date,
+  //         mentionsArr: mentionsArr,
+  //       });
+  //     }
+  //   }
 
-    attachment?.length > 0 && setAttachment([]),
-      showOptions && setShowOptions(false),
-      mentionsArr?.length > 0 && setMentionsArr(''),
-      mentions?.length > 0 && setMentions([]),
-      // replyOnMessage && setreplyOnMessage(false),
-      repliedMsgDetails && setrepliedMsgDetails({chat:null,replyOnMessage:false}),
-      showPlayer && setShowPlayer(false);
-  };
+  //   attachment?.length > 0 && setAttachment([]),
+  //     showOptions && setShowOptions(false),
+  //     mentionsArr?.length > 0 && setMentionsArr(''),
+  //     mentions?.length > 0 && setMentions([]),
+  //     // replyOnMessage && setreplyOnMessage(false),
+  //     repliedMsgDetails && setrepliedMsgDetails({chat:null,replyOnMessage:false}),
+  //     showPlayer && setShowPlayer(false);
+  // };
 
   const AttachmentObject = {
     modalizeRef,
@@ -465,7 +468,7 @@ export const ChatScreenV2 = ({
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView style={styles.safeAreaView}>
-        {!isScrolling && (
+        {(
           <HeaderV2
             chatHeaderTitle={chatHeaderTitle}
             userId={reciverUserId || userId}
@@ -528,7 +531,7 @@ export const ChatScreenV2 = ({
                   isNewMessage={false}
                 />
               </View>
-              {/* 
+              
               {attachmentLoading && (
                 <AnimatedLottieView
                   source={require('../../assests/images/attachments/uploading.json')}
@@ -536,7 +539,7 @@ export const ChatScreenV2 = ({
                   autoPlay
                   style={styles.attachmentLoading}
                 />
-              )} */}
+              )}
 
               {/* {showActions && (
                 <ActionModal
@@ -897,6 +900,8 @@ export const ChatScreenV2 = ({
                 modalizeRef={modalizeRef}
                 repliedMsgDetails={repliedMsgDetails}
                 setrepliedMsgDetails={setrepliedMsgDetails}
+                setAttachment={setAttachment}
+                attachment={attachment}
                 // replyOnMessage={replyOnMessage}
                 // setreplyOnMessage={setreplyOnMessage}
               // showActions={showActions} 
@@ -909,7 +914,7 @@ export const ChatScreenV2 = ({
           </KeyboardAvoidingView>
         </View>
       </SafeAreaView>
-      <AttachmentOptionsModal AttachmentObject={AttachmentObject} />
+      <AttachmentOptionsModalV2 AttachmentObject={AttachmentObject} />
     </GestureHandlerRootView>
   );
 };

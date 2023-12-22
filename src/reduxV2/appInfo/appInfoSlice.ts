@@ -11,6 +11,7 @@ export const {
   getSpaceTokenStartV2,
   getSpaceTokenSuccessV2,
   initializeSocketV2,
+  subscribeToNotificationsV2,
   resetAppInfoState,
  } = appInfoSlice.actions
 

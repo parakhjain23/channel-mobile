@@ -26,6 +26,8 @@ export const reducers: ValidateSliceCaseReducers<$AppInfoReducerType, SliceCaseR
     initializeSocketV2(state, action : actionType<{accessToken: string, orgId: string}>){
         state.isSocketConnected = false
     },
+    subscribeToNotificationsV2(state, action: actionType<{accessToken: string, deviceId: string}>){
+    },
     resetAppInfoState() {
         return initialState
     }

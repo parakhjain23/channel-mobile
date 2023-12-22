@@ -3,6 +3,7 @@ import { getSpaceAccessTokenV2 } from "./appInfoGeneratorFunctions";
 import { getUserDetailsV2 } from "../allUsers/allUserGeneratorFunctions";
 import { getDataFromAccessToken } from "../multiTaskGeneratorFunctions";
 import { socketGeneratorFunction } from "../socket/socketGeneratorFunction";
+import { notificationsV2 } from "../../api/notifications/NotificationApiV2";
 
 function* AppInfoSaga() {
     // yield takeLatest(Actions.SAVE_TOKEN, getUserDetails);
@@ -13,6 +14,7 @@ function* AppInfoSaga() {
     yield takeLatest('appInfo/getSpaceTokenStartV2',getSpaceAccessTokenV2)
     yield takeLatest('appInfo/getSpaceTokenSuccessV2',getDataFromAccessToken)
     yield takeLatest('appInfo/initializeSocketV2',socketGeneratorFunction)
+    yield takeLatest('appInfo/subscribeToNotificationsV2',notificationsV2)
   }
   
   export default AppInfoSaga;

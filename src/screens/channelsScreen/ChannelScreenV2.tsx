@@ -49,7 +49,7 @@ export const ChannelsScreenV2 = () => {
   const [isScrolling, setIsScrolling] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const textInputRef = useRef(null);
-  const offset = height * 0.12;
+  const offset = height * 0.14;
   const {
     currentOrgId,
     currentUser,

@@ -11,6 +11,7 @@ import { persistor, store } from './src/reduxV2/store';
 import { InternetConnectionV2 } from './src/utils/InternetConnectionV2';
 import NotificationSetup from './src/utils/NotificationSetup';
 import StoreAppWrapperV2 from './src/navigation/StoreAppWrapperV2';
+import { NotificationSetupV2 } from './src/utils/NotificationSetupV2';
 
 const App = () => {
   useEffect(() => {
@@ -26,7 +27,7 @@ const App = () => {
         <StoreAppWrapper /> */}
 
         <InternetConnectionV2/>
-        {/* <NotificationSetup /> */}
+        <NotificationSetupV2 />
         <StoreAppWrapperV2 />
       </PersistGate>
     </Provider>

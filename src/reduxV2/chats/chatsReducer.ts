@@ -94,6 +94,7 @@ export const reducers: ValidateSliceCaseReducers<$ChatsReducerType, SliceCaseRed
         }
       }
     }
+    state.data[teamId].messages = state?.data[teamId]?.messages?.length ? state?.data[teamId]?.messages : [message]
     state.data[teamId].parentMessages = state?.data[teamId]?.parentMessages ? { ...parentMessage,...state.data[teamId]?.parentMessages } : parentMessage
     // return {
     //   ...state,

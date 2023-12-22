@@ -6,6 +6,9 @@ import { addNewMessageV2 } from "../chats/chatsSlice";
 import { actionType } from "../../types/actionDataType";
 import { socketEventsEnums } from "../../redux/Enums";
 import { $ReduxCoreType } from "../../types/reduxCoreType";
+import { handleNotification } from "../../utils/HandleNotification";
+import { PlayLocalSoundFile } from "../../utils/Sounds";
+import { handleNotificationV2 } from "../../utils/HandleNotificationV2";
 
 
 
@@ -17,11 +20,12 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
 
         while (true) {
             try {
-                const { userId, activeChannelId } = yield select((state: $ReduxCoreType) => ({
-                    userId: state?.allUsers?.currentUser?.id,
-                    activeChannelId: state?.appInfo?.activeChannelId
-                }))
                 const payload = yield take(socketChannel);
+                const { userId, activeChannelId, userIdAndDataMapping  } = yield select((state: $ReduxCoreType) => ({
+                    userId: state?.allUsers?.currentUser?.id,
+                    activeChannelId: state?.appInfo?.activeChannelId,
+                    userIdAndDataMapping: state?.allUsers?.userIdAndDataMapping
+                }))
 
                 switch (payload?.type) {
                     case socketEventsEnums.connect:
@@ -29,6 +33,7 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
                     case socketEventsEnums.disconnect:
                         break;
                     case socketEventsEnums["chat/message created"]:
+                        console.log("message created$$");
                         const messageObj = payload?.data
 
                         // if (
@@ -46,10 +51,13 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
                         if (!('isActivity' in messageObj)) {
                             messageObj.isActivity = false;
                         }
-                        yield put((addNewMessageV2({
-                            messageObject: messageObj,
-                            userId: userId
-                        })))
+                        try{
+                            yield put((addNewMessageV2({ messageObject: messageObj, userId: userId })))
+                        }
+                        catch(error)
+                        {
+                            console.warn(error);
+                        }
                         //   messageObj?.content == 'closed this channel' && messageObj?.isActivity
                         //     ? null
                         //     : store.getState()?.channelsReducer?.activeChannelTeamId !=
@@ -79,19 +87,25 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
                         //           store.getState()?.userInfoReducer?.user?.id,
                         //         ),
                         //       );
-                        //   if (messageObj?.senderId != store.getState()?.userInfoReducer?.user?.id) {
+                        // if (messageObj?.senderId != userId) {
                         //     PlayLocalSoundFile();
                         //     if (
                         //       messageObj?.teamId !=
-                        //       store.getState()?.channelsReducer?.activeChannelTeamId
+                        //       activeChannelId
                         //     ) {
-                        //       handleNotification(
-                        //         messageObj,
-                        //         'events',
-                        //         store.getState()?.orgsReducer?.userIdAndDisplayNameMapping,
-                        //       );
+                        //     //   handleNotification(
+                        //     //     newData,
+                        //     //     'events',
+                        //     //     store.getState()?.orgsReducer?.userIdAndDisplayNameMapping,
+                        //     //   );
                         //     }
                         //   }
+                          if (messageObj?.senderId != userId) {
+                            PlayLocalSoundFile();
+                            if ( messageObj?.teamId != activeChannelId ) {
+                                yield call(handleNotificationV2,messageObj,'events',userIdAndDataMapping?.[userId]?.displayName);
+                            }
+                          }
                         break;
                     default:
 

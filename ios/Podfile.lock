@@ -495,6 +495,8 @@ PODS:
     - React-Core
   - react-native-document-picker (8.2.1):
     - React-Core
+  - react-native-flipper (0.212.0):
+    - React-Core
   - react-native-image-picker (5.7.0):
     - React-Core
   - react-native-mmkv (2.10.2):
@@ -752,6 +754,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-blob-util (from `../node_modules/react-native-blob-util`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
+  - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
@@ -891,6 +894,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-blob-util"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
+  react-native-flipper:
+    :path: "../node_modules/react-native-flipper"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-mmkv:
@@ -1039,6 +1044,7 @@ SPEC CHECKSUMS:
   React-logger: ef2269b3afa6ba868da90496c3e17a4ec4f4cee0
   react-native-blob-util: c5430d091e011b7fc57f888c356da2a2ff8dc8ad
   react-native-document-picker: 69ca2094d8780cfc1e7e613894d15290fdc54bba
+  react-native-flipper: 9c1957af24b76493ba74f46d000a5c1d485e7731
   react-native-image-picker: 3269f75c251cdcd61ab51b911dd30d6fff8c6169
   react-native-mmkv: 9ae7ca3977e8ef48dbf7f066974eb844c20b5fd7
   react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5

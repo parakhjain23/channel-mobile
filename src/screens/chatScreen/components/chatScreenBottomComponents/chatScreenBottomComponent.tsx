@@ -40,14 +40,15 @@ import { useDispatch } from 'react-redux';
 import { uploadRecording } from '../../VoicePicker';
 import { getChannelsByQueryStartV2 } from '../../../../reduxV2/searchedData/searchedDataSlice';
 import { sendMessageStartV2, setlocalMsgActionV2 } from '../../../../reduxV2/chats/chatsSlice';
-import ActionModal from '../../components/actionModal/ActionModal';
 
 export default function CSBottomComponent({ 
     channelType ,
     teamId,
     modalizeRef,
     repliedMsgDetails, 
-    setrepliedMsgDetails
+    setrepliedMsgDetails,
+    setAttachment,
+    attachment,
     // replyOnMessage,
     // setreplyOnMessage,
     // showActions,
@@ -75,9 +76,7 @@ export default function CSBottomComponent({
         chatsData: state?.chats?.data[teamId]
       }))
     const path = LOCAL_PATH;
-    const [attachment, setAttachment] = useState([]);
     const textInputRef = useRef(null);
-    const [attachmentLoading, setAttachmentLoading] = useState(false);
     const [isRecording, setisRecording] = useState(false);
     const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
     const [showOptions, setShowOptions] = useState(false);
@@ -179,12 +178,13 @@ export default function CSBottomComponent({
           onChangeMessage(text);
           const words = text.split(' ');
           const currentWord = words[words.length - 1];
+          
           if (currentWord.startsWith('@')) {
-            await dispatch(getChannelsByQueryStartV2(
-              currentWord.slice(1).toString(),
-              currentUserId.toString(),
-              currentOrgId.toString(),
-            ));
+            await dispatch(getChannelsByQueryStartV2({
+              query : currentWord.slice(1).toString(),
+              accessToken: accessToken,
+              orgId: currentOrgId
+            }));
             // setMentions(channelsByQueryState?.mentionChannels);
             setshowMention(true);
           } else if (
@@ -302,14 +302,14 @@ export default function CSBottomComponent({
     return (
 
         <SafeAreaView>
-        {attachmentLoading && (
+        {/* {attachmentLoading && (
           <AnimatedLottieView
             source={require('../../../../assests/images/attachments/uploading.json')}
             loop
             autoPlay
             style={styles.attachmentLoading}
           />
-        )}
+        )} */}
         {/* {showActions && (
           <ActionModal
             setShowActions={setShowActions}
