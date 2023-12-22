@@ -9,6 +9,7 @@ import { $ReduxCoreType } from "../../types/reduxCoreType";
 import { handleNotification } from "../../utils/HandleNotification";
 import { PlayLocalSoundFile } from "../../utils/Sounds";
 import { handleNotificationV2 } from "../../utils/HandleNotificationV2";
+import { incrementUnreadCountV2 } from "../channels/channelsSlice";
 
 
 
@@ -21,10 +22,11 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
         while (true) {
             try {
                 const payload = yield take(socketChannel);
-                const { userId, activeChannelId, userIdAndDataMapping  } = yield select((state: $ReduxCoreType) => ({
+                const { userId, activeChannelId, userIdAndDataMapping,recentChannels } = yield select((state: $ReduxCoreType) => ({
                     userId: state?.allUsers?.currentUser?.id,
                     activeChannelId: state?.appInfo?.activeChannelId,
-                    userIdAndDataMapping: state?.allUsers?.userIdAndDataMapping
+                    userIdAndDataMapping: state?.allUsers?.userIdAndDataMapping,
+                    recentChannels: state?.channels?.recentChannels
                 }))
 
                 switch (payload?.type) {
@@ -52,11 +54,26 @@ export function* socketGeneratorFunction(action: actionType<{ accessToken: strin
                             messageObj.isActivity = false;
                         }
                         try{
-                            yield put((addNewMessageV2({ messageObject: messageObj, userId: userId })))
+                            yield put(addNewMessageV2({ messageObject: messageObj, userId: userId }))
                         }
                         catch(error)
                         {
                             console.warn(error);
+                        }
+
+                        if(messageObj?.content == 'closed this channel' && messageObj?.isActivity){
+                            null
+                        }
+                        else if(activeChannelId != messageObj?.teamId){
+                            if(recentChannels?.[0]?._id != messageObj?.teamId){
+                                if(messageObj?.senderId != userId){
+                                    try {
+                                        yield put(incrementUnreadCountV2({channelId:[messageObj?.teamId]}))
+                                    } catch (error) {
+                                        
+                                    }
+                                }
+                            }
                         }
                         //   messageObj?.content == 'closed this channel' && messageObj?.isActivity
                         //     ? null

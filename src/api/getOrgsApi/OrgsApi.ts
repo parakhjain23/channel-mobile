@@ -15,3 +15,23 @@ export const fetchOrgsApi = async (): Promise<any[]> => {
     }
   };  
 
+
+export const fetchOrgsUnreadCountApi = async ()=>{
+    try {
+      const response = await spaceServerApi.get(`chat/teamUser?badgeCountByOrg=true`);
+      return response;
+    } catch (error) {
+      console.warn(error,"fetchOrgsUnreadCountApi failed");
+    }
+  }
+
+  // export const increaseOrgsUnreadCountApi = async (orgId:string,count:number)=>{
+  //   try {
+  //     const response = await spaceServerApi.put(`chat/teamUser?badgeCountByOrg=true`,
+  //     JSON.stringify({
+  //       [orgId]:count
+  //     }));
+  //   } catch (error) {
+  //     console.warn("error updating");
+  //   }
+  // }

@@ -32,18 +32,23 @@ import { $ReduxCoreType } from '../types/reduxCoreType';
 import { subscribeToNotificationsV2 } from '../reduxV2/appInfo/appInfoSlice';
 import { handleNotificationV2 } from './HandleNotificationV2';
 import { sendMessageStartV2 } from '../reduxV2/chats/chatsSlice';
+import { increaseCountOnOrgCardV2 } from '../reduxV2/orgs/orgsSlice';
+import { getAllOrgsUnreadCount } from '../reduxV2/orgs/orgsGeneratorFunctions';
+import { call } from 'redux-saga/effects';
+import { resetUnreadCountStartV2 } from '../reduxV2/channels/channelsSlice';
 
 export const NotificationSetupV2 = ({
 //   userInfoState,
 //   resetUnreadCountAction,
 //   resetChatsAction,
 }) => {
-  const { accessToken, userInfoState, orgInfoState, teamIdAndDataMapping, userIdAndDataMapping }= useCustomSelector((state:$ReduxCoreType) => ({
+  const { accessToken, userInfoState, orgInfoState, teamIdAndDataMapping, userIdAndDataMapping, orgsWithNewMessages }= useCustomSelector((state:$ReduxCoreType) => ({
     accessToken : state?.appInfo?.accessToken,
     userInfoState : state?.allUsers?.currentUser,
     orgInfoState : state?.orgs,
     teamIdAndDataMapping : state?.channels?.teamIdAndDataMapping,
-    userIdAndDataMapping : state?.allUsers?.userIdAndDataMapping
+    userIdAndDataMapping : state?.allUsers?.userIdAndDataMapping,
+    orgsWithNewMessages : state?.orgs?.orgsWithNewMessages
   })) 
   useEffect(() => {
     if (accessToken) {
@@ -134,7 +139,8 @@ export const NotificationSetupV2 = ({
           if (
             message?.data?.orgId != orgInfoState?.currentOrgId
           ) {
-            
+            var orgId = message?.data?.orgId;
+            dispatch(increaseCountOnOrgCardV2({orgId}))
             // await store?.dispatch(
             //   increaseCountOnOrgCard(
             //     message?.data?.orgId,
@@ -214,12 +220,20 @@ export const NotificationSetupV2 = ({
     }
     switch (event?.detail?.pressAction?.id) {
       case 'mark_as_read':
-        // resetUnreadCountAction(
-        //   event?.detail?.notification?.data?.orgId,
-        //   userInfoState?.user?.id,
-        //   event?.detail?.notification?.data?.teamId,
-        //   userInfoState?.user?.accessToken,
-        // );
+        dispatch(resetUnreadCountStartV2({
+          orgId:event?.detail?.notification?.data?.orgId,
+          userId: userInfoState?.id,
+          teamId: event?.detail?.notification?.data?.teamId,
+          badgeCount: 0,
+          unreadCount: 0
+        }));
+        // dispatch(resetUnreadCountStartV2({
+        //   orgId:event?.detail?.notification?.data?.orgId,
+        //   userId: userInfoState?.user?.id,
+        //   teamId: event?.detail?.notification?.data?.teamId,
+          // badgeCount: 0,
+          // unreadCount: 0
+        // }));
         Notifee.cancelNotification(event?.detail?.notification?.id);
         break;
       case 'reply':

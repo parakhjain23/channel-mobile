@@ -9,7 +9,9 @@ const orgsSlice = createSlice({
 export const {
    updateOrgsState ,
    setCurrentOrgIdV2 ,
-   getAllOrgsSuccessV2
+   getAllOrgsSuccessV2,
+   increaseCountOnOrgCardV2,
+   getAllOrgsUnreadCountSuccessV2
   } = orgsSlice.actions
 
 export default orgsSlice.reducer

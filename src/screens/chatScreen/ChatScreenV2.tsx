@@ -70,6 +70,7 @@ import { HeaderV2 } from '../../components/HeaderV2';
 import CSBottomComponent from './components/chatScreenBottomComponents/chatScreenBottomComponent';
 import { updateAppInfoState } from '../../reduxV2/appInfo/appInfoSlice';
 import AttachmentOptionsModalV2 from './components/attachments/AttachmentOptionsModalV2';
+import { resetUnreadCountStartV2 } from '../../reduxV2/channels/channelsSlice';
 
 export const ChatScreenV2 = ({
   chatDetailsForTab,
@@ -98,7 +99,7 @@ export const ChatScreenV2 = ({
   // var teamId:string, channelType, chatHeaderTitle, userId;
 
   const dispatch = useDispatch()
-  const { deviceType, userIdAndDataMapping, teamIdAndDataMapping, userIdAndTeamIdMapping, isInternetConnected, currentOrgId, currentUserId, accessToken } = useCustomSelector((state: $ReduxCoreType) => ({
+  const { deviceType, userIdAndDataMapping, teamIdAndDataMapping, userIdAndTeamIdMapping, isInternetConnected, currentOrgId, currentUserId, accessToken, unReadAndBadgeCountMapping } = useCustomSelector((state: $ReduxCoreType) => ({
     deviceType: state?.appInfo?.deviceType,
     userIdAndDataMapping: state?.allUsers?.userIdAndDataMapping,
     teamIdAndDataMapping: state?.channels?.teamIdAndDataMapping,
@@ -106,7 +107,8 @@ export const ChatScreenV2 = ({
     isInternetConnected: state?.appInfo?.isInternetConnected,
     currentOrgId: state?.orgs?.currentOrgId,
     currentUserId: state?.allUsers?.currentUser?.id,
-    accessToken: state?.appInfo?.accessToken
+    accessToken: state?.appInfo?.accessToken,
+    unReadAndBadgeCountMapping: state?.channels?.unReadAndBadgeCountMapping
   }))
   // if (deviceType === DEVICE_TYPES[1]) {
   //   userId = chatDetailsForTab?.userId;
@@ -199,9 +201,9 @@ export const ChatScreenV2 = ({
   //   const accessToken = userInfoState?.accessToken;
   //   const currentOrgId = orgState?.currentOrgId;
   const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
-  // const shouldResetUnreadCount =
-  //   teamIdAndUnreadCountMapping?.[teamId] > 0 ||
-  //   teamIdAndBadgeCountMapping?.[teamId] > 0;
+  const shouldResetUnreadCount =
+    unReadAndBadgeCountMapping?.[teamId]?.unreadCount > 0 ||
+    unReadAndBadgeCountMapping?.[teamId]?.badgeCount > 0;
   const skip = chatsData?.messages?.length ?? 0;
   const path = LOCAL_PATH;
   // useEffect(() => {
@@ -236,22 +238,29 @@ export const ChatScreenV2 = ({
   //   }
   // }, [repliedMsgDetails]);
 
-  // useEffect(() => {
-  //   searchedChannel && textInputRef?.current?.focus();
-  //   const timeoutId = setTimeout(() => {
-  //     if (shouldResetUnreadCount) {
-  //       resetUnreadCountAction(
-  //         currentOrgId,
-  //         currentUserId,
-  //         teamId,
-  //         accessToken,
-  //         0,
-  //         0,
-  //       );
-  //     }
-  //   }, 1000);
-  //   return () => clearTimeout(timeoutId);
-  // }, [teamId]);
+  useEffect(() => {
+    // searchedChannel && textInputRef?.current?.focus();
+    const timeoutId = setTimeout(() => {
+      if (shouldResetUnreadCount) {
+        dispatch(resetUnreadCountStartV2({
+          orgId:currentOrgId,
+          userId: currentUserId,
+          teamId: teamId,
+          badgeCount: 0,
+          unreadCount: 0
+        }));
+        // resetUnreadCountAction(
+        //   currentOrgId,
+        //   currentUserId,
+        //   teamId,
+        //   accessToken,
+        //   0,
+        //   0,
+        // );
+      }
+    }, 1000);
+    return () => clearTimeout(timeoutId);
+  }, [teamId]);
 
   // useEffect(() => {
   //   if (channelsByQueryState?.mentionChannels) {

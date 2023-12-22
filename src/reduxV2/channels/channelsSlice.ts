@@ -9,7 +9,10 @@ const channelsSlice = createSlice({
 export const { 
   updateChannelState,
   getAllChannelsSuccessV2,
-  getAllRecentChannelSuccessV2
+  getAllRecentChannelSuccessV2,
+  incrementUnreadCountV2,
+  resetUnreadCountStartV2,
+  resetUnreadCountSuccessV2
 } = channelsSlice.actions
 
 export default channelsSlice.reducer

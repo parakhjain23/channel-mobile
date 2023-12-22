@@ -28,21 +28,21 @@ import { setCurrentOrgIdV2 } from '../../reduxV2/orgs/orgsSlice';
 export const InsideDrawerScreenV2 = () => {
     const { colors } = useTheme();
     const dispatch = useDispatch()
-    const { orgs, currentUser, deviceType, accessToken } = useCustomSelector((state: $ReduxCoreType) => ({
+    const { orgs, currentUser, deviceType, accessToken, orgsWithNewMessages } = useCustomSelector((state: $ReduxCoreType) => ({
         orgs: state?.orgs?.orgs,
         currentUser: state?.allUsers?.currentUser,
         deviceType: state?.appInfo?.deviceType,
-        accessToken: state?.appInfo?.accessToken
+        accessToken: state?.appInfo?.accessToken,
+        orgsWithNewMessages: state?.orgs?.orgsWithNewMessages
     }))
     const OrgCard = ({ item }) => {
-        // var unreadCountObj = orgsState?.orgsWithNewMessages?.[item?.id];
-        // var count = undefined;
-        // if (unreadCountObj != undefined) {
-        //     count = Object.keys(unreadCountObj).length;
-        //     if (count > 9) {
-        //         count = '9+';
-        //     }
-        // } // todo handle later 
+        
+        var count = orgsWithNewMessages?.[item?.id];
+        if (count != undefined) {
+            if (count > 9) {
+                count = '9+';
+            }
+        } // todo handle later 
         return (
             <TouchableOpacity
                 onPress={async () => {
@@ -83,7 +83,7 @@ export const InsideDrawerScreenV2 = () => {
                         <Text style={{ color: colors.textColor }}>{item?.name}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        {/* {count != undefined && (
+                        {count != undefined && (
                             <View
                                 style={{
                                     backgroundColor: 'red',
@@ -98,7 +98,7 @@ export const InsideDrawerScreenV2 = () => {
                                     {count}
                                 </Text>
                             </View>
-                        )}  todo handle later  */}
+                        )}
                         <Icon name="chevron-right" color={colors.textColor} />
                     </View>
                 </View>

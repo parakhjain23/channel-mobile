@@ -39,6 +39,8 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {makeStyles} from '../ChannelCardStyles';
 import {useCustomSelector} from '../../../utils/deepCheckSelector';
 import {$ReduxCoreType} from '../../../types/reduxCoreType';
+import { useDispatch } from 'react-redux';
+import { resetUnreadCountStartV2 } from '../../../reduxV2/channels/channelsSlice';
 const TouchableItem =
   Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity;
 
@@ -60,6 +62,7 @@ const ChannelCard = ({
     userIdAndDataMapping,
     teamIdAndDataMapping,
     accessToken,
+    unReadAndBadgeCountMapping
   } = useCustomSelector((state: $ReduxCoreType) => ({
     deviceType: state?.appInfo?.deviceType,
     currentOrgId: state?.orgs?.currentOrgId,
@@ -67,6 +70,7 @@ const ChannelCard = ({
     userIdAndDataMapping: state?.allUsers?.userIdAndDataMapping,
     teamIdAndDataMapping: state?.channels?.teamIdAndDataMapping,
     accessToken: state?.appInfo?.accessToken,
+    unReadAndBadgeCountMapping: state?.channels?.unReadAndBadgeCountMapping
   }));
 
   const handleListItemPress = (
@@ -85,6 +89,7 @@ const ChannelCard = ({
 
   const {colors} = useTheme();
   const styles = makeStyles(colors);
+  const dispatch = useDispatch();
   //   const userIdAndDisplayNameMapping = orgsState?.userIdAndDisplayNameMapping;
   //   const userIdAndNameMapping = orgsState?.userIdAndNameMapping;
   //   const teamIdAndUnreadCountMapping =
@@ -113,11 +118,13 @@ const ChannelCard = ({
       ? 'lock'
       : 'hashtag';
 
-  //   const unread = useMemo(() => {
-  //     const unreadCount = teamIdAndUnreadCountMapping?.[item?._id] || 0;
-  //     const isHighlighted = highlightChannel?.[item?._id];
-  //     return unreadCount > 0 || isHighlighted;
-  //   }, [item?._id, teamIdAndUnreadCountMapping, highlightChannel]);
+    const unread = useMemo(() => {
+      const unreadCount = unReadAndBadgeCountMapping?.[item?._id]?.unreadCount || 0;
+      // const isHighlighted = highlightChannel?.[item?._id];
+      return unreadCount > 0 
+      // || isHighlighted;
+    }, [item?._id, unReadAndBadgeCountMapping]); 
+      // highlightChannel]);
 
   const onPress = useCallback(() => {
     if (deviceType === DEVICE_TYPES[1]) {
@@ -136,6 +143,7 @@ const ChannelCard = ({
     currentOrgId,
     item?._id,
     item?.type,
+    unReadAndBadgeCountMapping,
     // teamIdAndUnreadCountMapping,
     currentUserId,
     userId,
@@ -281,6 +289,16 @@ const ChannelCard = ({
               )}
               <Text style={styles.taskTitle}>{Name}</Text>
               <View style={{marginLeft: 'auto', marginRight: 10}}>
+                {unReadAndBadgeCountMapping?.[item?._id]?.unreadCount > 0 ? (
+                  <View style={styles.unreadButton}>
+                    <Text style={styles.unreadButtonText}>
+                      {unReadAndBadgeCountMapping?.[item?._id]?.unreadCount}
+                    </Text>
+                  </View>
+                ):(
+                  unReadAndBadgeCountMapping?.[item?._id]?.badgeCount > 0 && (
+                    <View style={styles.markUnreadButton} />
+                ))}
                 {/* {teamIdAndUnreadCountMapping?.[item?._id] > 0 ? (
                   <View style={styles.unreadButton}>
                     <Text style={styles.unreadButtonText}>
